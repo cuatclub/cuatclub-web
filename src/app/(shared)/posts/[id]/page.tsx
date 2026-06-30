@@ -10,6 +10,7 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import Image from "next/image";
 import { themeColor } from "../../../(organization)/posts/_components/PostCard";
+import Link from "next/link";
 
 const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = use(params);
@@ -84,6 +85,17 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 									</div>
 
 									<div className="flex flex-col gap-3 min-w-0">
+										{post && post.image ? (
+											<Image
+												src={post.image}
+												alt={post.title}
+												width={336}
+												height={400}
+												className="sm:hidden object-cover object-center lg:w-[336px] lg:h-[400px] bg-gray-400 rounded-[12px]"
+											/>
+										) : (
+											<div className="sm:hidden w-[336px] h-[400px] bg-gray-400 rounded-[12px]"></div>
+										)}
 										<h1 className="text-black leading-none">{post?.title}</h1>
 
 										<div className="flex flex-col gap-1">
@@ -147,16 +159,14 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 											alt={post.title}
 											width={336}
 											height={400}
-											className="object-cover object-center lg:w-[336px] lg:h-[400px] bg-gray-400 rounded-[12px]"
+											className="hidden sm:block object-cover object-center lg:w-[336px] lg:h-[400px] bg-gray-400 rounded-[12px]"
 										/>
 									) : (
-										<div className="w-[336px] h-[400px] bg-gray-400 rounded-[12px]"></div>
+										<div className="hidden sm:block w-[336px] h-[400px] bg-gray-400 rounded-[12px]"></div>
 									)}
-									<Button className="h-fit w-full text-lg">
-										<a href={post?.instaLink} target="_blank">
-											สมัครเลย
-										</a>
-									</Button>
+									<Link href={post?.instaLink ?? "#"} target="_blank" className="w-full">
+										<Button className="h-fit w-full text-lg">สมัครเลย</Button>
+									</Link>
 									{/* <div className="flex flex-1 gap-3">
                                     <div className="w-full flex items-center justify-center p-3 border border-stroke rounded-[12px] cursor-pointer">
                                         <MailPlus className="size-5 text-[#505050]" />
