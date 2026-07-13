@@ -18,7 +18,9 @@
     "preview": "next build && next start",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "db:seed": "tsx src/server/scripts/seed.ts"
+    "db:seed": "tsx src/server/scripts/seed.ts",
+    "db:seed:clubs": "tsx src/server/scripts/seed-clubs.ts",
+    "db:seed:clubs:clean": "tsx src/server/scripts/seed-clubs.ts --clean"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",
