@@ -4,6 +4,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/
 import { organizationServiceImpl } from "@/server/api/service/organization.service";
 import {
 	CreateOrganizationRequestSchema,
+	DiscoverClubsRequestSchema,
 	SetMineInterestsStepSchema,
 	UpdateMineInfoStepSchema,
 	UpdateMineSocialsStepSchema,
@@ -54,6 +55,20 @@ export const organizationRouter = createTRPCRouter({
 			if (error) return new TRPCError(getTRPCError(error));
 			return res;
 		}),
+
+	/**
+	 * Backs the `/clubs` discovery grid. Public: logged-out visitors get results, with
+	 * `isFollowing: false` throughout. Unlike `getAll`, this excludes banned and EVENT-category
+	 * rows and returns no owner `user` record.
+	 */
+	discover: publicProcedure.input(DiscoverClubsRequestSchema).query(async ({ ctx, input }) => {
+		const [res, error] = await organizationServiceImpl.discoverClubs(
+			input,
+			ctx.session?.user?.id ?? null,
+		);
+		if (error) throw new TRPCError(getTRPCError(error));
+		return res!;
+	}),
 
 	getMine: protectedProcedure.query(async ({ ctx }) => {
 		const [data, error] = await organizationServiceImpl.getMineByUserId(ctx.session.user.id);

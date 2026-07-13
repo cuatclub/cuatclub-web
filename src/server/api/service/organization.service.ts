@@ -3,6 +3,9 @@ import { randomUUID } from "crypto";
 import { db } from "@/server/db";
 import { ErrorCategory, ErrorWithCategory, type ErrorOrNull, PostgreSQLError } from "@/utils/error";
 import type {
+	ClubCardDTO,
+	DiscoverClubsRequest,
+	DiscoverClubsResponse,
 	Organization,
 	OrganizationMineDTO,
 	OrganizationWithUser,
@@ -12,14 +15,27 @@ import type {
 } from "@/server/api/dto/organization.dto";
 import { organization } from "@/server/db/organization";
 import { interestXOrganization } from "@/server/db/interestXOrganization";
+import { interest } from "@/server/db/interest";
+import { faculty } from "@/server/db/faculty";
+import { post } from "@/server/db/post";
+import { userXOrganization } from "@/server/db/userXOrganization";
 import { user } from "@/server/db/auth-schema";
-import { eq } from "drizzle-orm";
+import { and, asc, count, eq, exists, ilike, inArray, or, sql } from "drizzle-orm";
 import { userServiceImpl } from "@/server/api/service/user.service";
+
+/** Keep a literal `%` or `_` typed into the search box from acting as a LIKE wildcard. */
+function escapeLike(value: string): string {
+	return value.replace(/[\\%_]/g, (char) => `\\${char}`);
+}
 
 export interface IOrganizationService {
 	create(req: CreateOrganizationRequest, trx?: typeof db): Promise<[string | null, ErrorOrNull]>;
 	getByFilter(filter?: SQL): Promise<[OrganizationWithUser[] | [], ErrorOrNull]>;
 	getOneByFilter(filter: SQL): Promise<[OrganizationWithUser | null, ErrorOrNull]>;
+	discoverClubs(
+		req: DiscoverClubsRequest,
+		viewerId: string | null,
+	): Promise<[DiscoverClubsResponse | null, ErrorOrNull]>;
 	update(filter: SQL, update: Partial<Organization>, trx?: typeof db): Promise<ErrorOrNull>;
 	delete(filter: SQL): Promise<ErrorOrNull>;
 	getMineByUserId(userId: string): Promise<[OrganizationMineDTO | null, ErrorOrNull]>;
@@ -75,6 +91,147 @@ class OrganizationService implements IOrganizationService {
 		if (res instanceof Error) return [null, res];
 		if (!res) return [null, new ErrorWithCategory("Organization not found", ErrorCategory.ResourceNotFound)];
 		return [res as OrganizationWithUser, null];
+	}
+
+	async discoverClubs(
+		req: DiscoverClubsRequest,
+		viewerId: string | null,
+	): Promise<[DiscoverClubsResponse | null, ErrorOrNull]> {
+		const { facultyIds, interestIds, pageSize } = req;
+
+		// Visibility is enforced here, never in the client: `organization` also holds EVENT rows,
+		// and a banned club must not surface (it cannot be followed either — see the follow service).
+		const conditions: SQL[] = [eq(organization.category, "CLUB"), eq(organization.isBanned, false)];
+
+		const keyword = req.q?.trim();
+		if (keyword) {
+			const pattern = `%${escapeLike(keyword)}%`;
+			// ILIKE is case-insensitive for Latin and a no-op for Thai, which has no case.
+			conditions.push(or(ilike(organization.name, pattern), ilike(organization.bio, pattern))!);
+		}
+		if (facultyIds?.length) {
+			conditions.push(inArray(organization.facultyId, facultyIds));
+		}
+		if (interestIds?.length) {
+			// EXISTS rather than a join: a club matching two of the chosen interests must still be one row.
+			conditions.push(
+				exists(
+					db
+						.select({ one: sql`1` })
+						.from(interestXOrganization)
+						.where(
+							and(
+								eq(interestXOrganization.organizationId, organization.id),
+								inArray(interestXOrganization.interestId, interestIds),
+							),
+						),
+				),
+			);
+		}
+
+		const where = and(...conditions);
+
+		const totalRes = await db
+			.select({ value: count() })
+			.from(organization)
+			.where(where)
+			.catch((e) => {
+				console.log(e);
+				return new PostgreSQLError();
+			});
+
+		if (totalRes instanceof Error) return [null, totalRes];
+
+		const total = totalRes[0]?.value ?? 0;
+		if (total === 0) return [{ items: [], total: 0, page: 1, pageCount: 1 }, null];
+
+		const pageCount = Math.max(1, Math.ceil(total / pageSize));
+		// A page past the end (hand-typed URL) clamps to the last page rather than rendering nothing.
+		const page = Math.min(req.page, pageCount);
+
+		const followerCount = sql<number>`(
+			SELECT COUNT(*)::int FROM ${userXOrganization}
+			WHERE ${userXOrganization.organizationId} = ${organization.id}
+		)`;
+		const eventCount = sql<number>`(
+			SELECT COUNT(*)::int FROM ${post}
+			WHERE ${post.organizationId} = ${organization.id}
+		)`;
+		const isFollowing = viewerId
+			? sql<boolean>`EXISTS (
+				SELECT 1 FROM ${userXOrganization}
+				WHERE ${userXOrganization.organizationId} = ${organization.id}
+				  AND ${userXOrganization.userId} = ${viewerId}
+			)`
+			: sql<boolean>`FALSE`;
+
+		const rows = await db
+			.select({
+				id: organization.id,
+				name: organization.name,
+				image: organization.image,
+				bio: organization.bio,
+				facultyId: faculty.id,
+				facultyName: faculty.name,
+				followerCount: followerCount.mapWith(Number).as("follower_count"),
+				eventCount: eventCount.mapWith(Number).as("event_count"),
+				isFollowing: isFollowing.mapWith(Boolean).as("is_following"),
+			})
+			.from(organization)
+			.leftJoin(faculty, eq(organization.facultyId, faculty.id))
+			.where(where)
+			// Follower counts tie constantly, so name and id make the order total. Without a
+			// deterministic tiebreak Postgres may order tied rows differently between two
+			// LIMIT/OFFSET queries, and a club shows up on two pages — or on none.
+			.orderBy(sql`follower_count DESC, ${organization.name} ASC, ${organization.id} ASC`)
+			.limit(pageSize)
+			.offset((page - 1) * pageSize)
+			.catch((e) => {
+				console.log(e);
+				return new PostgreSQLError();
+			});
+
+		if (rows instanceof Error) return [null, rows];
+
+		const ids = rows.map((row) => row.id);
+		const interestRows = await db
+			.select({
+				organizationId: interestXOrganization.organizationId,
+				id: interest.id,
+				name: interest.name,
+				icon: interest.icon,
+			})
+			.from(interestXOrganization)
+			.innerJoin(interest, eq(interestXOrganization.interestId, interest.id))
+			.where(inArray(interestXOrganization.organizationId, ids))
+			.orderBy(asc(interest.name))
+			.catch((e) => {
+				console.log(e);
+				return new PostgreSQLError();
+			});
+
+		if (interestRows instanceof Error) return [null, interestRows];
+
+		const interestsByOrg = new Map<string, ClubCardDTO["interests"]>();
+		for (const row of interestRows) {
+			const list = interestsByOrg.get(row.organizationId) ?? [];
+			list.push({ id: row.id, name: row.name, icon: row.icon });
+			interestsByOrg.set(row.organizationId, list);
+		}
+
+		const items: ClubCardDTO[] = rows.map((row) => ({
+			id: row.id,
+			name: row.name,
+			image: row.image,
+			bio: row.bio,
+			faculty: row.facultyId && row.facultyName ? { id: row.facultyId, name: row.facultyName } : null,
+			interests: interestsByOrg.get(row.id) ?? [],
+			followerCount: row.followerCount,
+			eventCount: row.eventCount,
+			isFollowing: row.isFollowing,
+		}));
+
+		return [{ items, total, page, pageCount }, null];
 	}
 
 	async update(filter: SQL, update: Partial<Organization>, trx?: typeof db): Promise<ErrorOrNull> {

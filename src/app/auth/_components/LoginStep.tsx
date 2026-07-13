@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { defaultHomePathForRole, pendingOnboardingPath } from "@/lib/auth-paths";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
@@ -25,6 +25,16 @@ export default function LoginStep({ type, onBack, onNext }: LoginStepProps) {
     const [isLogin, setIsLogin] = useState(true);
     const [submitError, setSubmitError] = useState("");
     const router = useRouter();
+
+    // Where to land after signing in, when the user was sent here mid-task — following a club from
+    // /clubs, say. Read from the URL rather than useSearchParams: this component renders on pages
+    // with no Suspense boundary, and the value is only needed on submit, long after mount.
+    const [redirectTo, setRedirectTo] = useState<string | null>(null);
+    useEffect(() => {
+        const target = new URLSearchParams(window.location.search).get("redirect");
+        // Same-origin paths only. `//evil.com` is protocol-relative, not an internal route.
+        if (target?.startsWith("/") && !target.startsWith("//")) setRedirectTo(target);
+    }, []);
 
     const imageSrc =
         type === "attendee"
@@ -53,8 +63,9 @@ export default function LoginStep({ type, onBack, onNext }: LoginStepProps) {
                 const { data: sessionData } = await authClient.getSession();
                 const user = sessionData?.user;
                 const pending = pendingOnboardingPath(user ?? null);
+                // Onboarding still wins over any return path.
                 router.push(
-                    pending ?? defaultHomePathForRole(user?.role),
+                    pending ?? redirectTo ?? defaultHomePathForRole(user?.role),
                 );
             } else {
                 const { error } = await authClient.signUp.email({
@@ -79,7 +90,7 @@ export default function LoginStep({ type, onBack, onNext }: LoginStepProps) {
         try {
             const { error } = await authClient.signIn.social({
                 provider: "google",
-                callbackURL: "/",
+                callbackURL: redirectTo ?? "/",
             });
             if (error) throw new Error(error.message ?? "เข้าสู่ระบบด้วย Google ไม่สำเร็จ");
         } catch (e: unknown) {

@@ -85,3 +85,42 @@ export const SetMineInterestsStepSchema = z.object({
 export type UpdateMineInfoStepInput = z.infer<typeof UpdateMineInfoStepSchema>;
 export type UpdateMineSocialsStepInput = z.infer<typeof UpdateMineSocialsStepSchema>;
 export type SetMineInterestsStepInput = z.infer<typeof SetMineInterestsStepSchema>;
+
+/**
+ * Club discovery (`/clubs`).
+ *
+ * `interestIds` is what the UI labels "Category". It is NOT `organization.category`,
+ * which is the internal CLUB / EVENT enum and is never shown to students.
+ */
+export const DiscoverClubsRequestSchema = z.object({
+    q: z.string().trim().max(100).optional(),
+    facultyIds: z.array(z.string().min(1)).max(50).optional(),
+    interestIds: z.array(z.string().min(1)).max(50).optional(),
+    page: z.number().int().min(1).default(1),
+    pageSize: z.number().int().min(1).max(24).default(6),
+});
+
+export type DiscoverClubsRequest = z.infer<typeof DiscoverClubsRequestSchema>;
+
+/** One card in the discovery grid. Carries no owner/user fields — this is a public response. */
+export type ClubCardDTO = {
+    id: string;
+    name: string;
+    image: string | null;
+    bio: string | null;
+    faculty: { id: string; name: string } | null;
+    interests: Array<{ id: string; name: string; icon: string }>;
+    followerCount: number;
+    eventCount: number;
+    /** Always false for logged-out visitors. */
+    isFollowing: boolean;
+};
+
+export type DiscoverClubsResponse = {
+    items: ClubCardDTO[];
+    /** Clubs matching q + filters, across all pages. `0` is what drives the empty state. */
+    total: number;
+    /** Echoed back clamped: a page past the end returns the last page. */
+    page: number;
+    pageCount: number;
+};
