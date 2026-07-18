@@ -55,13 +55,13 @@ export const calendarItemRouter = createTRPCRouter({
 
 	create: protectedProcedure.input(CreateCalendarItemRequestSchema).mutation(async ({ input }) => {
 		const [res, error] = await calendarItemServiceImpl.create(input);
-		if (error) return new TRPCError(getTRPCError(error));
+		if (error) throw new TRPCError(getTRPCError(error));
 		return res;
 	}),
 
 	update: protectedProcedure.input(UpdateCalendarItemRequestSchema).mutation(async ({ input }) => {
 		const [res, error] = await calendarItemServiceImpl.update(eq(calendarItem.id, input.id), input);
-		if (error) return new TRPCError(getTRPCError(error));
+		if (error) throw new TRPCError(getTRPCError(error));
 		return res;
 	}),
 
@@ -73,7 +73,7 @@ export const calendarItemRouter = createTRPCRouter({
 		)
 		.mutation(async ({ input }) => {
 			const res = await calendarItemServiceImpl.delete(eq(calendarItem.id, input.id));
-			if (res) return new TRPCError(getTRPCError(res));
+			if (res) throw new TRPCError(getTRPCError(res));
 			return null;
 		}),
 });

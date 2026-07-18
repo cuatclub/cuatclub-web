@@ -1,8 +1,8 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CalendarCheck, CalendarPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import { getRemainingTime } from "@/lib/getRemainingTime";
@@ -11,21 +11,78 @@ import { Footer } from "@/components/ui/Footer";
 import Image from "next/image";
 import { themeColor } from "../../../(organization)/posts/_components/PostCard";
 import Link from "next/link";
+import { useSession } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 
 const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = use(params);
 	const router = useRouter();
+	const { data: session } = useSession();
+	const utils = api.useUtils();
+	const userId = session?.user.id ?? "";
 
 	// fetch data from post database
 	const { data: fetchedData, isLoading } = api.post.getOne.useQuery({ id });
 	const [tags, setTags] = useState<string[]>([]);
 	const [post, setPost] = useState<any>();
+	const [calendarNotice, setCalendarNotice] = useState<string | null>(null);
 	const { data: fetchedTags, isLoading: isLoadingTags } = api.interestXPost.getAllByPostId.useQuery(
 		{ postId: id },
 		{
 			enabled: !!id,
 		},
 	);
+	const { data: calendarItems } = api.calendarItem.getAllByUserId.useQuery(
+		{ userId },
+		{ enabled: !!userId },
+	);
+
+	const savedItem = useMemo(
+		() => (calendarItems ?? []).find((item) => item.postId === id),
+		[calendarItems, id],
+	);
+	const isSaved = !!savedItem;
+
+	const createCalendarItem = api.calendarItem.create.useMutation({
+		onSuccess: async () => {
+			await utils.calendarItem.getAllByUserId.invalidate({ userId });
+			setCalendarNotice("เพิ่มลงปฏิทินแล้ว");
+		},
+		onError: (err) => {
+			setCalendarNotice(err.message || "ไม่สามารถเพิ่มลงปฏิทินได้");
+		},
+	});
+	const deleteCalendarItem = api.calendarItem.delete.useMutation({
+		onSuccess: async () => {
+			await utils.calendarItem.getAllByUserId.invalidate({ userId });
+			setCalendarNotice("ลบออกจากปฏิทินแล้ว");
+		},
+		onError: (err) => {
+			setCalendarNotice(err.message || "ไม่สามารถลบออกจากปฏิทินได้");
+		},
+	});
+
+	const calendarBusy = createCalendarItem.isPending || deleteCalendarItem.isPending;
+
+	const handleToggleCalendar = async () => {
+		if (!userId || calendarBusy) return;
+		setCalendarNotice(null);
+		if (isSaved && savedItem?.id) {
+			await deleteCalendarItem.mutateAsync({ id: savedItem.id });
+			return;
+		}
+		try {
+			const res = await createCalendarItem.mutateAsync({ postId: id, userId });
+			// Router currently returns TRPCError objects instead of throwing on some failures.
+			if (res && typeof res === "object" && "code" in res) {
+				setCalendarNotice("กิจกรรมนี้อยู่ในปฏิทินแล้ว หรือเพิ่มไม่สำเร็จ");
+				await utils.calendarItem.getAllByUserId.invalidate({ userId });
+			}
+		} catch {
+			setCalendarNotice("กิจกรรมนี้อยู่ในปฏิทินแล้ว หรือเพิ่มไม่สำเร็จ");
+			await utils.calendarItem.getAllByUserId.invalidate({ userId });
+		}
+	};
 
 	useEffect(() => {
 		if (!fetchedData) {
@@ -167,17 +224,34 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 									<Link href={post?.instaLink ?? "#"} target="_blank" className="w-full">
 										<Button className="h-fit w-full text-lg">สมัครเลย</Button>
 									</Link>
-									{/* <div className="flex flex-1 gap-3">
-                                    <div className="w-full flex items-center justify-center p-3 border border-stroke rounded-[12px] cursor-pointer">
-                                        <MailPlus className="size-5 text-[#505050]" />
-                                    </div>
-                                    <div className="w-full flex items-center justify-center p-3 border border-stroke rounded-[12px] cursor-pointer">
-                                        <CalendarPlus className="size-5 text-[#505050]" />
-                                    </div>
-                                    <div className="w-full flex items-center justify-center p-3 border border-stroke rounded-[12px] cursor-pointer">
-                                        <Share2 className="size-5 text-[#505050]" />
-                                    </div>
-                                </div> */}
+									<button
+										type="button"
+										disabled={!userId || calendarBusy}
+										onClick={() => void handleToggleCalendar()}
+										className={cn(
+											"w-full flex items-center justify-center gap-2 p-3 border rounded-[12px] transition-colors disabled:opacity-60",
+											isSaved
+												? "border-primary bg-[#fff1f6] text-primary"
+												: "border-stroke text-[#505050] hover:border-primary hover:text-primary",
+										)}
+									>
+										{isSaved ? (
+											<>
+												<CalendarCheck className="size-5" />
+												<span className="font-medium">บันทึกแล้ว</span>
+											</>
+										) : (
+											<>
+												<CalendarPlus className="size-5" />
+												<span className="font-medium">
+													{calendarBusy ? "กำลังบันทึก..." : "เพิ่มลงปฏิทิน"}
+												</span>
+											</>
+										)}
+									</button>
+									{calendarNotice && (
+										<p className="w-full text-center text-sm text-text-gray">{calendarNotice}</p>
+									)}
 								</div>
 
 								<div className="md:flex flex-col gap-8 hidden min-w-0">
