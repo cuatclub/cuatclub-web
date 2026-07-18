@@ -75,7 +75,9 @@ export async function middleware(request: NextRequest) {
 
 	if (
 		pathname.startsWith("/feed") ||
+		pathname.startsWith("/clubs") ||
 		pathname.startsWith("/calendar") ||
+		pathname.startsWith("/profile") ||
 		pathname.startsWith("/admin") ||
 		pathname.startsWith("/create") ||
 		pathname.startsWith("/posts")

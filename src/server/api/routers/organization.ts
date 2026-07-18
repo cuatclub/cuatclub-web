@@ -48,12 +48,11 @@ export const organizationRouter = createTRPCRouter({
 			return res;
 		}),
 
-	getAll: publicProcedure
-		.query(async () => {
-			const [res, error] = await organizationServiceImpl.getByFilter();
-			if (error) return new TRPCError(getTRPCError(error));
-			return res;
-		}),
+	getAll: publicProcedure.query(async () => {
+		const [res, error] = await organizationServiceImpl.getByFilter();
+		if (error) throw new TRPCError(getTRPCError(error));
+		return res;
+	}),
 
 	getMine: protectedProcedure.query(async ({ ctx }) => {
 		const [data, error] = await organizationServiceImpl.getMineByUserId(ctx.session.user.id);

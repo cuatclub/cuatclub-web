@@ -50,7 +50,14 @@ class OrganizationService implements IOrganizationService {
 		const res = await db.query.organization
 			.findMany({
 				where: filter,
-				with: { user: true },
+				with: {
+					user: true,
+					interests: {
+						with: {
+							interest: true,
+						},
+					},
+				},
 			})
 			.catch((e) => {
 				console.log(e);
