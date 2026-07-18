@@ -14,6 +14,7 @@ import { signToken } from "@/server/utils/signedTokens";
 import { bulkSendMail } from "@/server/utils/mailer";
 import { ActivityCardMail } from "@/components/ui/ActivityCardMail";
 import { activityType } from "@/server/db/activityType";
+import { userXOrganization } from "@/server/db/userXOrganization";
 
 export interface IPostService {
 	create(req: CreatePostRequest, trx?: typeof db): Promise<[string | null, ErrorOrNull]>;
@@ -88,22 +89,52 @@ class PostService implements IPostService {
 			.from(interestXPost)
 			.where(eq(interestXPost.postId, postId));
 
-		if (postInterestRows.length === 0) return;
-
 		const postInterestIds = postInterestRows.map((r) => r.interestId);
 
-		const recipientRows = await db
+		const matchingInterestRecipients =
+			postInterestIds.length === 0
+				? []
+				: await db
+						.select({
+							userId: user.id,
+							email: user.email,
+							name: user.name,
+						})
+						.from(interestXUser)
+						.innerJoin(user, eq(interestXUser.userId, user.id))
+						.where(
+							and(
+								inArray(interestXUser.interestId, postInterestIds),
+								eq(user.isReceiveMail, true),
+								eq(user.notifyMatchingEvents, true),
+							),
+						);
+
+		const followedClubRecipients = await db
 			.select({
 				userId: user.id,
 				email: user.email,
 				name: user.name,
 			})
-			.from(interestXUser)
-			.innerJoin(user, eq(interestXUser.userId, user.id))
-			.where(and(inArray(interestXUser.interestId, postInterestIds), eq(user.isReceiveMail, true)));
+			.from(userXOrganization)
+			.innerJoin(user, eq(userXOrganization.userId, user.id))
+			.where(
+				and(
+					eq(userXOrganization.organizationId, organizationId),
+					eq(user.isReceiveMail, true),
+					eq(user.notifyClubUpdates, true),
+				),
+			);
 
-		// One email per user (same user may match multiple post interests).
-		const subscribers = [...new Map(recipientRows.map((r) => [r.userId, r])).values()];
+		// One email per user, even when they match multiple interests and follow the organization.
+		const subscribers = [
+			...new Map(
+				[...matchingInterestRecipients, ...followedClubRecipients].map((recipient) => [
+					recipient.userId,
+					recipient,
+				]),
+			).values(),
+		];
 
 		const orgUser = await db.query.organization.findFirst({
 			where: (organization, { eq }) => eq(organization.id, organizationId),
