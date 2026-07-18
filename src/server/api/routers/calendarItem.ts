@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { calendarItemServiceImpl } from "@/server/api/service/calendarItem.service";
 import { CreateCalendarItemRequestSchema, UpdateCalendarItemRequestSchema } from "@/server/api/dto/calendarItem.dto";
 import { getTRPCError } from "@/utils/error";
@@ -13,54 +13,51 @@ export const calendarItemRouter = createTRPCRouter({
 	getByMonth: protectedProcedure
 		.input(
 			z.object({
-				userId: z.string().uuid(),
 				month: z.number().gt(0).lt(13),
 				year: z.number().gte(0),
 			}),
 		)
-		.query(async ({ input }) => {
+		.query(async ({ ctx, input }) => {
 			const startDate = new Date(input.year, input.month - 1, 1);
 			const endDate = new Date(input.year, input.month, 0, 23, 59, 59); // day = 0 means the last day of the previous month and we specify 23:59:59 to make it the end of that day.
 			const [res, error] = await calendarItemServiceImpl.getByMonth(
-				and(eq(calendarItem.userId, input.userId), gte(post.date, startDate), lte(post.date, endDate)),
+				and(eq(calendarItem.userId, ctx.session.user.id), gte(post.date, startDate), lte(post.date, endDate)),
 			);
 
 			if (error) throw new TRPCError(getTRPCError(error));
 			return res;
 		}),
 
-	getOneByUserId: protectedProcedure
-		.input(
-			z.object({
-				userId: z.string().uuid(),
-			}),
-		)
-		.query(async ({ input }) => {
-			const [res, error] = await calendarItemServiceImpl.getOneByUserId(eq(calendarItem.userId, input.userId));
+	getOneByUserId: protectedProcedure.query(async ({ ctx }) => {
+			const [res, error] = await calendarItemServiceImpl.getOneByUserId(
+				eq(calendarItem.userId, ctx.session.user.id),
+			);
 			if (error) throw new TRPCError(getTRPCError(error));
 			return res;
-		}),
+	}),
 
-	getAllByUserId: protectedProcedure
-		.input(
-			z.object({
-				userId: z.string().uuid(),
-			}),
-		)
-		.query(async ({ input }) => {
-			const [res, error] = await calendarItemServiceImpl.getAllByUserId(eq(calendarItem.userId, input.userId));
+	getAllByUserId: protectedProcedure.query(async ({ ctx }) => {
+			const [res, error] = await calendarItemServiceImpl.getAllByUserId(
+				eq(calendarItem.userId, ctx.session.user.id),
+			);
 			if (error) throw new TRPCError(getTRPCError(error));
 			return res;
-		}),
+	}),
 
-	create: protectedProcedure.input(CreateCalendarItemRequestSchema).mutation(async ({ input }) => {
-		const [res, error] = await calendarItemServiceImpl.create(input);
+	create: protectedProcedure.input(CreateCalendarItemRequestSchema).mutation(async ({ ctx, input }) => {
+		const [res, error] = await calendarItemServiceImpl.create({
+			...input,
+			userId: ctx.session.user.id,
+		});
 		if (error) throw new TRPCError(getTRPCError(error));
 		return res;
 	}),
 
-	update: protectedProcedure.input(UpdateCalendarItemRequestSchema).mutation(async ({ input }) => {
-		const [res, error] = await calendarItemServiceImpl.update(eq(calendarItem.id, input.id), input);
+	update: protectedProcedure.input(UpdateCalendarItemRequestSchema).mutation(async ({ ctx, input }) => {
+		const [res, error] = await calendarItemServiceImpl.update(
+			and(eq(calendarItem.id, input.id), eq(calendarItem.userId, ctx.session.user.id))!,
+			input,
+		);
 		if (error) throw new TRPCError(getTRPCError(error));
 		return res;
 	}),
@@ -71,8 +68,10 @@ export const calendarItemRouter = createTRPCRouter({
 				id: z.string().uuid(),
 			}),
 		)
-		.mutation(async ({ input }) => {
-			const res = await calendarItemServiceImpl.delete(eq(calendarItem.id, input.id));
+		.mutation(async ({ ctx, input }) => {
+			const res = await calendarItemServiceImpl.delete(
+				and(eq(calendarItem.id, input.id), eq(calendarItem.userId, ctx.session.user.id))!,
+			);
 			if (res) throw new TRPCError(getTRPCError(res));
 			return null;
 		}),

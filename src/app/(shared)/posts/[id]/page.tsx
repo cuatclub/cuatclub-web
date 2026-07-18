@@ -38,10 +38,7 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 			enabled: !!id,
 		},
 	);
-	const { data: calendarItems } = api.calendarItem.getAllByUserId.useQuery(
-		{ userId },
-		{ enabled: !!userId },
-	);
+	const { data: calendarItems } = api.calendarItem.getAllByUserId.useQuery(undefined, { enabled: !!userId });
 
 	const savedItem = useMemo(
 		() => (calendarItems ?? []).find((item) => item.postId === id),
@@ -55,7 +52,7 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 
 	const createCalendarItem = api.calendarItem.create.useMutation({
 		onSuccess: async () => {
-			await utils.calendarItem.getAllByUserId.invalidate({ userId });
+			await utils.calendarItem.getAllByUserId.invalidate();
 			showCalendarNotice("เพิ่มลงปฏิทินแล้ว", "success");
 		},
 		onError: (err) => {
@@ -64,7 +61,7 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 	});
 	const deleteCalendarItem = api.calendarItem.delete.useMutation({
 		onSuccess: async () => {
-			await utils.calendarItem.getAllByUserId.invalidate({ userId });
+			await utils.calendarItem.getAllByUserId.invalidate();
 			showCalendarNotice("ลบออกจากปฏิทินแล้ว", "success");
 		},
 		onError: (err) => {
@@ -88,15 +85,10 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 			return;
 		}
 		try {
-			const res = await createCalendarItem.mutateAsync({ postId: id, userId });
-			// Router currently returns TRPCError objects instead of throwing on some failures.
-			if (res && typeof res === "object" && "code" in res) {
-				showCalendarNotice("กิจกรรมนี้อยู่ในปฏิทินแล้ว หรือเพิ่มไม่สำเร็จ", "error");
-				await utils.calendarItem.getAllByUserId.invalidate({ userId });
-			}
+			await createCalendarItem.mutateAsync({ postId: id });
 		} catch {
 			showCalendarNotice("กิจกรรมนี้อยู่ในปฏิทินแล้ว หรือเพิ่มไม่สำเร็จ", "error");
-			await utils.calendarItem.getAllByUserId.invalidate({ userId });
+			await utils.calendarItem.getAllByUserId.invalidate();
 		}
 	};
 
