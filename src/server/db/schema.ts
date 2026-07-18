@@ -4,6 +4,7 @@ export * from "./organization";
 export * from "./interest";
 export * from "./post";
 export * from "./calendarItem";
+export * from "./eventReminderDelivery";
 export * from "./userXOrganization";
 export * from "./interestXOrganization";
 export * from "./interestXUser";

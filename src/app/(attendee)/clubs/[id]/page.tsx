@@ -117,7 +117,7 @@ export default function ClubDetailPage({ params }: { params: Promise<{ id: strin
 							<div className="rounded-[24px] border border-stroke bg-white p-6 shadow-sm sm:p-8">
 								<h2 className="text-2xl font-bold">เกี่ยวกับชมรม</h2>
 								<p className="mt-4 whitespace-pre-wrap leading-7 text-[#666d75]">
-									{club.bio || "ยังไม่มีรายละเอียดชมรม"}
+									{club.bio ?? "ยังไม่มีรายละเอียดชมรม"}
 								</p>
 							</div>
 
