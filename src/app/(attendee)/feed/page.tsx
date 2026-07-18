@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { FeedCard } from "./_components/FeedCard";
+import { OrgFilterDropdown } from "./_components/OrgFilterDropdown";
 import { Dropdown } from "@/components/ui/Dropdown";
 import { Footer } from "@/components/ui/Footer";
 import { Navbar } from "@/components/ui/Navbar";
@@ -13,29 +14,45 @@ const SORT_OPTIONS = ["ใหม่ไปเก่า", "เก่าไปใ�
 
 export default function FeedPage() {
 	const [search, setSearch] = useState("");
-	const [debouncedSearch, setDebouncedSearch] = useState("");
 	const [choice, setChoice] = useState<string>("");
 	const [sortOpen, setSortOpen] = useState(false);
+	const [selectedOrgs, setSelectedOrgs] = useState<string[]>([]);
 
-	useEffect(() => {
-		const timer = setTimeout(() => setDebouncedSearch(search.trim()), 250);
-		return () => clearTimeout(timer);
-	}, [search]);
+	const { data: allPosts, isLoading } = api.post.getByFilter.useQuery({});
 
-	const createdByAsc = choice === "เก่าไปใหม่";
-	const useSearch = debouncedSearch.length > 0;
-
-	const allQuery = api.post.getByFilter.useQuery({}, { enabled: !useSearch });
-	const searchQuery = api.post.getBySearch.useQuery(
-		{ searchQuery: debouncedSearch, createdByAsc },
-		{ enabled: useSearch },
-	);
-
-	const isLoading = useSearch ? searchQuery.isLoading : allQuery.isLoading;
-	const rawPosts = useSearch ? (searchQuery.data ?? []) : (allQuery.data ?? []);
+	const orgNames = useMemo(() => {
+		const names = new Set<string>();
+		for (const event of allPosts ?? []) {
+			if ("name" in event && typeof event.name === "string" && event.name.trim()) {
+				names.add(event.name.trim());
+			}
+		}
+		return [...names].sort((a, b) => a.localeCompare(b, "th"));
+	}, [allPosts]);
 
 	const posts = useMemo(() => {
-		const list = [...rawPosts];
+		const query = search.trim().toLowerCase();
+		const orgSet = new Set(selectedOrgs);
+
+		let list = [...(allPosts ?? [])];
+
+		if (orgSet.size > 0) {
+			list = list.filter((event) => {
+				const name = "name" in event && typeof event.name === "string" ? event.name : "";
+				return orgSet.has(name);
+			});
+		}
+
+		if (query) {
+			list = list.filter((event) => {
+				const title = event.title.toLowerCase();
+				const description = (event.description ?? "").toLowerCase();
+				const name =
+					"name" in event && typeof event.name === "string" ? event.name.toLowerCase() : "";
+				return title.includes(query) || description.includes(query) || name.includes(query);
+			});
+		}
+
 		if (choice === "ใหม่ไปเก่า") {
 			list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 		} else if (choice === "เก่าไปใหม่") {
@@ -43,8 +60,32 @@ export default function FeedPage() {
 		} else if (choice === "ไล่ตามเดดไลน์") {
 			list.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 		}
+
 		return list;
-	}, [rawPosts, choice]);
+	}, [allPosts, search, selectedOrgs, choice]);
+
+	const sortDropdown = (
+		<Dropdown
+			itemClassName="cursor-pointer text-xs sm:text-sm lg:text-base"
+			className="min-w-[116px] w-fit h-[34px] sm:h-[40px] lg:h-[48px] rounded-[6px] text-text-gray text-xs sm:text-sm lg:text-base border-stroke hover:border-primary hover:bg-white hover:text-primary"
+			content={[...SORT_OPTIONS]}
+			value={choice}
+			icon={sortOpen ? <ChevronUp /> : <ChevronDown />}
+			onOpenChange={setSortOpen}
+			onValueChange={setChoice}
+		>
+			เรียงลำดับ
+		</Dropdown>
+	);
+
+	const orgFilter = (
+		<OrgFilterDropdown
+			options={orgNames}
+			value={selectedOrgs}
+			onChange={setSelectedOrgs}
+			className="h-[34px] w-[200px] sm:h-[40px] sm:w-[220px] lg:h-[48px] shrink-0 rounded-[6px] text-text-gray text-xs sm:text-sm lg:text-base border-stroke hover:border-primary hover:bg-white hover:text-primary"
+		/>
+	);
 
 	return (
 		<div>
@@ -53,17 +94,8 @@ export default function FeedPage() {
 				<div className="text-primary font-[600] text-[24px] sm:text-[28px]">สำรวจกิจกรรม</div>
 				<div className="flex flex-col items-end sm:flex-row sm:items-center gap-y-2 sm:gap-x-4">
 					<div className="sm:hidden flex gap-x-2 w-full justify-end">
-						<Dropdown
-							itemClassName="focus:bg-[#de5c8e4d] cursor-pointer text-xs sm:text-sm lg:text-base"
-							className="w-fit min-w-[116px] h-[34px] sm:h-[40px] lg:h-[48px] rounded-[6px] text-text-gray text-xs sm:text-sm lg:text-base border-stroke hover:border-primary hover:bg-white hover:text-primary"
-							content={[...SORT_OPTIONS]}
-							value={choice}
-							icon={sortOpen ? <ChevronUp /> : <ChevronDown />}
-							onOpenChange={setSortOpen}
-							onValueChange={setChoice}
-						>
-							เรียงลำดับ
-						</Dropdown>
+						{orgFilter}
+						{sortDropdown}
 					</div>
 					<div className="flex gap-x-4 w-full">
 						<SearchBar
@@ -73,17 +105,10 @@ export default function FeedPage() {
 							searchIconClassName="sm:left-4 sm:top-2 lg:top-3 sm:h-6 sm:w-6 h-5 w-5 top-2 left-4"
 							inputClassName="placeholder:text-text-gray h-[34px] sm:h-[40px] lg:h-[48px] lg:text-base sm:text-sm text-xs placeholder:lg:text-base placeholder:sm:text-sm placeholder:text-xs"
 						/>
-						<Dropdown
-							itemClassName="cursor-pointer text-xs sm:text-sm lg:text-base"
-							className="min-w-[138px] w-fit hidden sm:flex h-[34px] sm:h-[40px] lg:h-[48px] rounded-[6px] text-text-gray text-xs sm:text-sm lg:text-base border-stroke hover:border-primary hover:bg-white hover:text-primary"
-							content={[...SORT_OPTIONS]}
-							value={choice}
-							icon={sortOpen ? <ChevronUp /> : <ChevronDown />}
-							onOpenChange={setSortOpen}
-							onValueChange={setChoice}
-						>
-							เรียงลำดับ
-						</Dropdown>
+						<div className="hidden sm:flex gap-x-3 shrink-0">
+							{orgFilter}
+							{sortDropdown}
+						</div>
 					</div>
 				</div>
 

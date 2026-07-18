@@ -359,8 +359,8 @@ function ProfileBody(props: ProfileBodyProps) {
 	}
 
 	return (
-		<main className="mx-auto grid w-full max-w-[1240px] gap-8 px-5 py-8 sm:px-10 lg:grid-cols-[330px_minmax(0,1fr)] lg:px-12 lg:py-12">
-			<aside className="flex flex-col items-center text-center lg:sticky lg:top-28 lg:self-start">
+		<main className="mx-auto grid w-full max-w-[1240px] grid-cols-1 gap-8 px-5 py-8 sm:px-10 lg:grid-cols-[330px_minmax(0,1fr)] lg:items-start lg:px-12 lg:py-12">
+			<aside className="flex w-full flex-col items-center text-center lg:sticky lg:top-24 lg:z-10 lg:self-start">
 				<button
 					type="button"
 					className="mb-7 flex items-center gap-2 self-start text-sm font-medium text-[#858b92] transition-colors hover:text-primary"
@@ -445,10 +445,10 @@ function ProfileBody(props: ProfileBodyProps) {
 				currentPw={currentPw}
 				newPw={newPw}
 				confirmPw={confirmPw}
-			pwBusy={pwBusy}
-			pwError={pwError}
-			pwSuccess={pwSuccess}
-			setCurrentPw={setCurrentPw}
+				pwBusy={pwBusy}
+				pwError={pwError}
+				pwSuccess={pwSuccess}
+				setCurrentPw={setCurrentPw}
 				setNewPw={setNewPw}
 				setConfirmPw={setConfirmPw}
 				submitPw={submitPw}

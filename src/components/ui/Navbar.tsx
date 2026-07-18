@@ -22,10 +22,10 @@ export const Navbar = () => {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 	const orgImage = mine?.image?.trim();
-	const orgImageUsable =
-		orgImage && (orgImage.startsWith("http") || orgImage.startsWith("/")) ? orgImage : null;
+	const orgImageUsable = orgImage && (orgImage.startsWith("http") || orgImage.startsWith("/")) ? orgImage : null;
 	const userHttpImage = user?.image?.startsWith("http") ? user.image : null;
 	const avatarSrc = isOrg ? orgImageUsable : userHttpImage;
+	const profileHref = isOrg ? "/" : "/profile";
 
 	useEffect(() => {
 		setMobileMenuOpen(false);
@@ -45,8 +45,8 @@ export const Navbar = () => {
 	}, [mobileMenuOpen]);
 
 	return (
-		<div className="w-full sticky z-9999">
-			<nav className="shadow sticky top-0 z-9999 w-full">
+		<div className="w-full sticky top-0 z-9999 bg-white">
+			<nav className="shadow w-full">
 				<div className="py-2.5 sm:py-4 lg:px-25 sm:px-10 px-5 items-center flex justify-between">
 					<div className="flex items-center gap-7.5">
 						<Image
@@ -76,7 +76,7 @@ export const Navbar = () => {
 									ออกจากระบบ
 								</button>
 								<Link
-									href="/"
+									href={profileHref}
 									className={cn(
 										"relative block h-7 w-7 sm:h-10 sm:w-10 overflow-hidden rounded-full shrink-0",
 										avatarSrc
@@ -114,14 +114,14 @@ export const Navbar = () => {
 							</div>
 						) : (
 							<div className="flex items-center gap-6">
-							<Link href="/auth/attendee/login" className="text-[#757575] text-base">
-								เข้าสู่ระบบ
-							</Link>
-							<Link href="/auth/attendee/login">
-								<Button className="bg-[#DE5C8E] text-white px-6 py-2.5 rounded-full text-base">
-									ลงทะเบียน
-								</Button>
-							</Link>
+								<Link href="/auth/attendee/login" className="text-[#757575] text-base">
+									เข้าสู่ระบบ
+								</Link>
+								<Link href="/auth/attendee/login">
+									<Button className="bg-[#DE5C8E] text-white px-6 py-2.5 rounded-full text-base">
+										ลงทะเบียน
+									</Button>
+								</Link>
 							</div>
 						)}
 					</div>
@@ -133,9 +133,7 @@ export const Navbar = () => {
 					<div
 						className={cn(
 							"fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 lg:hidden",
-							mobileMenuOpen
-								? "pointer-events-auto opacity-100"
-								: "pointer-events-none opacity-0",
+							mobileMenuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
 						)}
 						aria-hidden
 						onClick={() => setMobileMenuOpen(false)}

@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft, CalendarCheck, CalendarPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -14,6 +15,11 @@ import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
+type CalendarNotice = {
+	message: string;
+	tone: "success" | "error";
+};
+
 const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = use(params);
 	const router = useRouter();
@@ -25,7 +31,7 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 	const { data: fetchedData, isLoading } = api.post.getOne.useQuery({ id });
 	const [tags, setTags] = useState<string[]>([]);
 	const [post, setPost] = useState<any>();
-	const [calendarNotice, setCalendarNotice] = useState<string | null>(null);
+	const [calendarNotice, setCalendarNotice] = useState<CalendarNotice | null>(null);
 	const { data: fetchedTags, isLoading: isLoadingTags } = api.interestXPost.getAllByPostId.useQuery(
 		{ postId: id },
 		{
@@ -43,26 +49,36 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 	);
 	const isSaved = !!savedItem;
 
+	const showCalendarNotice = (message: string, tone: CalendarNotice["tone"]) => {
+		setCalendarNotice({ message, tone });
+	};
+
 	const createCalendarItem = api.calendarItem.create.useMutation({
 		onSuccess: async () => {
 			await utils.calendarItem.getAllByUserId.invalidate({ userId });
-			setCalendarNotice("เพิ่มลงปฏิทินแล้ว");
+			showCalendarNotice("เพิ่มลงปฏิทินแล้ว", "success");
 		},
 		onError: (err) => {
-			setCalendarNotice(err.message || "ไม่สามารถเพิ่มลงปฏิทินได้");
+			showCalendarNotice(err.message || "ไม่สามารถเพิ่มลงปฏิทินได้", "error");
 		},
 	});
 	const deleteCalendarItem = api.calendarItem.delete.useMutation({
 		onSuccess: async () => {
 			await utils.calendarItem.getAllByUserId.invalidate({ userId });
-			setCalendarNotice("ลบออกจากปฏิทินแล้ว");
+			showCalendarNotice("ลบออกจากปฏิทินแล้ว", "success");
 		},
 		onError: (err) => {
-			setCalendarNotice(err.message || "ไม่สามารถลบออกจากปฏิทินได้");
+			showCalendarNotice(err.message || "ไม่สามารถลบออกจากปฏิทินได้", "error");
 		},
 	});
 
 	const calendarBusy = createCalendarItem.isPending || deleteCalendarItem.isPending;
+
+	useEffect(() => {
+		if (!calendarNotice) return;
+		const timer = setTimeout(() => setCalendarNotice(null), 2500);
+		return () => clearTimeout(timer);
+	}, [calendarNotice]);
 
 	const handleToggleCalendar = async () => {
 		if (!userId || calendarBusy) return;
@@ -75,11 +91,11 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 			const res = await createCalendarItem.mutateAsync({ postId: id, userId });
 			// Router currently returns TRPCError objects instead of throwing on some failures.
 			if (res && typeof res === "object" && "code" in res) {
-				setCalendarNotice("กิจกรรมนี้อยู่ในปฏิทินแล้ว หรือเพิ่มไม่สำเร็จ");
+				showCalendarNotice("กิจกรรมนี้อยู่ในปฏิทินแล้ว หรือเพิ่มไม่สำเร็จ", "error");
 				await utils.calendarItem.getAllByUserId.invalidate({ userId });
 			}
 		} catch {
-			setCalendarNotice("กิจกรรมนี้อยู่ในปฏิทินแล้ว หรือเพิ่มไม่สำเร็จ");
+			showCalendarNotice("กิจกรรมนี้อยู่ในปฏิทินแล้ว หรือเพิ่มไม่สำเร็จ", "error");
 			await utils.calendarItem.getAllByUserId.invalidate({ userId });
 		}
 	};
@@ -249,9 +265,25 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 											</>
 										)}
 									</button>
-									{calendarNotice && (
-										<p className="w-full text-center text-sm text-text-gray">{calendarNotice}</p>
-									)}
+									<AnimatePresence mode="wait">
+										{calendarNotice && (
+											<motion.p
+												key={calendarNotice.message}
+												initial={{ opacity: 0, y: 8, scale: 0.96 }}
+												animate={{ opacity: 1, y: 0, scale: 1 }}
+												exit={{ opacity: 0, y: -6, scale: 0.98 }}
+												transition={{ duration: 0.22, ease: "easeOut" }}
+												className={cn(
+													"w-full text-center text-sm font-medium",
+													calendarNotice.tone === "success"
+														? "text-green-600"
+														: "rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-red-600",
+												)}
+											>
+												{calendarNotice.message}
+											</motion.p>
+										)}
+									</AnimatePresence>
 								</div>
 
 								<div className="md:flex flex-col gap-8 hidden min-w-0">

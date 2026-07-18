@@ -24,7 +24,7 @@ const ClubCard = (props: ClubCardProps) => {
 	const { name, description, tag, imageUrl, categories, followed, followBusy, onToggleFollow } = props;
 
 	const followButtonClass = cn(
-		"items-center gap-1 cursor-pointer px-2.5 py-1.5 rounded-full border-2 transition-all disabled:opacity-60",
+		"inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap cursor-pointer px-3 py-1.5 rounded-full border-2 transition-all disabled:opacity-60",
 		followed
 			? "border-primary bg-primary text-white hover:bg-[#c94d7d] hover:border-[#c94d7d]"
 			: "border-primary bg-white text-primary hover:bg-primary hover:text-white",
@@ -33,7 +33,7 @@ const ClubCard = (props: ClubCardProps) => {
 	return (
 		<div className="w-full flex flex-col px-3 py-5 sm:p-4 gap-3 sm:gap-4 bg-white border border-stroke rounded-[12px]">
 			<div className="w-full flex items-center justify-between gap-2">
-				<div className="flex gap-2 sm:gap-3 items-center w-full min-w-0">
+				<div className="flex gap-2 sm:gap-3 items-center min-w-0 flex-1">
 					{imageUrl ? (
 						<Image
 							width={48}
@@ -55,10 +55,10 @@ const ClubCard = (props: ClubCardProps) => {
 					type="button"
 					disabled={followBusy}
 					onClick={onToggleFollow}
-					className={cn("hidden lg:flex", followButtonClass)}
+					className={cn("hidden lg:inline-flex", followButtonClass)}
 				>
-					<p>{followed ? "ติดตามแล้ว" : "ติดตาม"}</p>
-					{followed ? <Check size={16} /> : <Plus size={16} />}
+					<span>{followed ? "ติดตามแล้ว" : "ติดตาม"}</span>
+					{followed ? <Check size={16} className="shrink-0" /> : <Plus size={16} className="shrink-0" />}
 				</button>
 			</div>
 
@@ -82,10 +82,10 @@ const ClubCard = (props: ClubCardProps) => {
 				type="button"
 				disabled={followBusy}
 				onClick={onToggleFollow}
-				className={cn("flex justify-center lg:hidden", followButtonClass)}
+				className={cn("w-full justify-center lg:hidden text-sm sm:text-base", followButtonClass)}
 			>
-				<p className="text-sm sm:text-base">{followed ? "ติดตามแล้ว" : "ติดตาม"}</p>
-				{followed ? <Check size={16} /> : <Plus size={16} />}
+				<span>{followed ? "ติดตามแล้ว" : "ติดตาม"}</span>
+				{followed ? <Check size={16} className="shrink-0" /> : <Plus size={16} className="shrink-0" />}
 			</button>
 		</div>
 	);
