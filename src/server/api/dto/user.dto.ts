@@ -18,7 +18,19 @@ export const UpdateUserRequestSchema = z.object({
     image: z.string().optional(),
     facultyId: z.string().uuid().optional(),
     isReceiveMail: z.boolean().optional(),
+    notifyEventReminders: z.boolean().optional(),
+    notifyMatchingEvents: z.boolean().optional(),
+    notifyClubUpdates: z.boolean().optional(),
     username: z.string().optional(),
     password: z.string().optional(),
     role: z.enum(roleEnum.enumValues).optional(),
+});
+
+export const UpdateProfileRequestSchema = z.object({
+    name: z.string().min(1).optional(),
+    facultyId: z.string().uuid().nullable().optional(),
+    isReceiveMail: z.boolean().optional(),
+    notifyEventReminders: z.boolean().optional(),
+    notifyMatchingEvents: z.boolean().optional(),
+    notifyClubUpdates: z.boolean().optional(),
 });

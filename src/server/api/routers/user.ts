@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { UpdateUserRequestSchema } from "../dto/user.dto";
+import { UpdateUserRequestSchema, UpdateProfileRequestSchema } from "../dto/user.dto";
 import { createTRPCRouter, protectedProcedure, adminProcedure } from "../trpc";
 import { getTRPCError } from "@/utils/error";
 import { user } from "@/server/db/auth-schema";
@@ -76,9 +76,22 @@ export const userRouter = createTRPCRouter({
       image: record.image,
       facultyId: record.facultyId,
       isReceiveMail: record.isReceiveMail,
+      notifyEventReminders: record.notifyEventReminders,
+      notifyMatchingEvents: record.notifyMatchingEvents,
+      notifyClubUpdates: record.notifyClubUpdates,
       interests: record.interests.map((i) => i.interestId),
     };
   }),
+
+  /** Self-service profile + notification preferences update (settings page). */
+  updateProfile: protectedProcedure
+    .input(UpdateProfileRequestSchema)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const res = await userServiceImpl.update(eq(user.id, userId), input);
+      if (res) return new TRPCError(getTRPCError(res));
+      return null;
+    }),
 
   updateOnboardingInfo: protectedProcedure
     .input(
