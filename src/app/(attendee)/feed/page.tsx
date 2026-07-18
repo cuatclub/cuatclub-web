@@ -123,6 +123,7 @@ export default function FeedPage() {
 								key={event.id}
 								event={{
 									id: event.id,
+									organizationId: event.organizationId,
 									title: event.title,
 									image: event.image,
 									description: event.description,

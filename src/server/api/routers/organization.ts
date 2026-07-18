@@ -12,7 +12,7 @@ import {
 import { getTRPCError } from "@/utils/error";
 import { TRPCError } from "@trpc/server";
 import { organization } from "@/server/db/organization";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export const organizationRouter = createTRPCRouter({
 	create: protectedProcedure.input(CreateOrganizationRequestSchema).mutation(async ({ input }) => {
@@ -44,8 +44,35 @@ export const organizationRouter = createTRPCRouter({
 		.input(z.object({ id: z.string().uuid() }))
 		.query(async ({ input }) => {
 			const [res, error] = await organizationServiceImpl.getOneByFilter(eq(organization.id, input.id));
-			if (error) return new TRPCError(getTRPCError(error));
+			if (error) throw new TRPCError(getTRPCError(error));
 			return res;
+		}),
+
+	getClub: publicProcedure
+		.input(z.object({ id: z.string().uuid() }))
+		.query(async ({ input }) => {
+			const [res, error] = await organizationServiceImpl.getOneByFilter(
+				and(
+					eq(organization.id, input.id),
+					eq(organization.category, "CLUB"),
+					eq(organization.isBanned, false),
+				)!,
+			);
+			if (error) throw new TRPCError(getTRPCError(error));
+			return {
+				id: res!.id,
+				name: res!.name,
+				facultyId: res!.facultyId,
+				category: res!.category,
+				averageHoursPerWeek: res!.averageHoursPerWeek,
+				bio: res!.bio,
+				recruitmentPeriod: res!.recruitmentPeriod,
+				image: res!.image,
+				socials: res!.socials,
+				createdAt: res!.createdAt,
+				updatedAt: res!.updatedAt,
+				interests: res!.interests,
+			};
 		}),
 
 	getAll: publicProcedure.query(async () => {

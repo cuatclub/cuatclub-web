@@ -2,6 +2,7 @@
 
 import { Check, Plus } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export interface Category {
@@ -10,6 +11,7 @@ export interface Category {
 }
 
 export interface ClubCardProps {
+	id: string;
 	name: string;
 	description: string;
 	tag: string;
@@ -21,7 +23,8 @@ export interface ClubCardProps {
 }
 
 const ClubCard = (props: ClubCardProps) => {
-	const { name, description, tag, imageUrl, categories, followed, followBusy, onToggleFollow } = props;
+	const { id, name, description, tag, imageUrl, categories, followed, followBusy, onToggleFollow } = props;
+	const href = `/clubs/${id}`;
 
 	const followButtonClass = cn(
 		"inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap cursor-pointer px-3 py-1.5 rounded-full border-2 transition-all disabled:opacity-60",
@@ -33,7 +36,7 @@ const ClubCard = (props: ClubCardProps) => {
 	return (
 		<div className="w-full flex flex-col px-3 py-5 sm:p-4 gap-3 sm:gap-4 bg-white border border-stroke rounded-[12px]">
 			<div className="w-full flex items-center justify-between gap-2">
-				<div className="flex gap-2 sm:gap-3 items-center min-w-0 flex-1">
+				<Link href={href} className="flex gap-2 sm:gap-3 items-center min-w-0 flex-1 hover:text-primary">
 					{imageUrl ? (
 						<Image
 							width={48}
@@ -49,7 +52,7 @@ const ClubCard = (props: ClubCardProps) => {
 						<p className="font-semibold truncate">{name}</p>
 						<p className="text-text-gray text-[10px] sm:text-sm truncate">{tag || "—"}</p>
 					</div>
-				</div>
+				</Link>
 
 				<button
 					type="button"
@@ -62,9 +65,9 @@ const ClubCard = (props: ClubCardProps) => {
 				</button>
 			</div>
 
-			<p className="text-text-gray text-[10px] sm:text-sm w-full line-clamp-2">
+			<Link href={href} className="text-text-gray text-[10px] sm:text-sm w-full line-clamp-2 hover:text-primary">
 				{description || "ไม่มีคำอธิบาย"}
-			</p>
+			</Link>
 
 			<div className="flex gap-1 sm:gap-2 w-full flex-wrap items-center min-h-[24px]">
 				{categories.map((category, idx) => (
@@ -77,6 +80,10 @@ const ClubCard = (props: ClubCardProps) => {
 					</div>
 				))}
 			</div>
+
+			<Link href={href} className="text-center text-xs font-semibold text-primary hover:underline sm:text-sm">
+				ดูรายละเอียดชมรม
+			</Link>
 
 			<button
 				type="button"

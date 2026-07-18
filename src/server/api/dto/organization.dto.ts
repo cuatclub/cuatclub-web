@@ -1,9 +1,17 @@
 import { type organization, categoryEnum } from "@/server/db/organization";
 import { type User } from "@/server/api/dto/user.dto";
+import type { Interest } from "@/server/api/dto/interest.dto";
 import { z, type ZodSchema } from "zod";
 
 export type Organization = typeof organization.$inferSelect;
-export type OrganizationWithUser = Organization & { user: User };
+export type OrganizationWithUser = Organization & {
+	user: User;
+	interests: Array<{
+		interestId: string;
+		organizationId: string;
+		interest: Interest;
+	}>;
+};
 export type CategoryEnum = typeof categoryEnum.enumValues;
 
 export type CreateOrganizationRequest = Omit<typeof organization.$inferInsert, "id" | "createdAt" | "updatedAt">;

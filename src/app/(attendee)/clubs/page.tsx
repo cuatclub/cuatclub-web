@@ -82,6 +82,7 @@ export default function ClubsPage() {
 								return (
 									<ClubCard
 										key={club.id}
+										id={club.id}
 										name={club.name}
 										description={club.bio ?? ""}
 										tag={club.socials?.instagram ?? ""}

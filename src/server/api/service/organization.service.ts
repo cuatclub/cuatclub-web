@@ -72,7 +72,14 @@ class OrganizationService implements IOrganizationService {
 		const res = await db.query.organization
 			.findFirst({
 				where: filter,
-				with: { user: true },
+				with: {
+					user: true,
+					interests: {
+						with: {
+							interest: true,
+						},
+					},
+				},
 			})
 			.catch((e) => {
 				console.log(e);

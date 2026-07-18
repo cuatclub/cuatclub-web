@@ -131,7 +131,10 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 							<div className="flex flex-col md:flex-row gap-12">
 								<div className="flex flex-col gap-8 md:hidden">
 									<div className="w-full flex justify-between items-center">
-										<div className="flex gap-3 items-center">
+										<Link
+											href={post?.organizationId ? `/clubs/${post.organizationId}` : "/clubs"}
+											className="flex items-center gap-3 hover:text-primary"
+										>
 											{/* Organization Image */}
 											{post && post.userImage ? (
 												<Image
@@ -145,7 +148,7 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 												<div className="w-8 h-8 bg-gray-400 rounded-full"></div>
 											)}
 											<p className="">{post?.name}</p>
-										</div>
+										</Link>
 										{/* Todo: Follow Button */}
 									</div>
 
@@ -280,7 +283,10 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 
 								<div className="md:flex flex-col gap-8 hidden min-w-0">
 									<div className="w-full flex justify-between items-center">
-										<div className="flex gap-3 items-center">
+										<Link
+											href={post?.organizationId ? `/clubs/${post.organizationId}` : "/clubs"}
+											className="flex items-center gap-3 hover:text-primary"
+										>
 											{/* Organization Image */}
 											{post && post.userImage ? (
 												<Image
@@ -294,7 +300,7 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 												<div className="w-8 h-8 bg-gray-400 rounded-full"></div>
 											)}
 											<p className="">{post?.name}</p>
-										</div>
+										</Link>
 										{/* Todo: Follow Button */}
 									</div>
 

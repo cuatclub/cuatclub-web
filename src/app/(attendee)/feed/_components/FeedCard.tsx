@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 type FeedEvent = {
 	id: string;
+	organizationId: string;
 	title: string;
 	image: string;
 	description?: string | null;
@@ -55,7 +56,11 @@ export const FeedCard = ({ event }: { event: FeedEvent }) => {
 			</div>
 			<div className="min-w-0 h-[150px] sm:h-[193px] lg:h-[226px] flex-1 flex flex-col justify-between">
 				<div className="flex flex-col gap-y-[5px]">
-					<div className="flex items-center gap-2">
+					<Link
+						href={`/clubs/${event.organizationId}`}
+						onClick={(e) => e.stopPropagation()}
+						className="flex w-fit items-center gap-2 hover:text-primary"
+					>
 						{event.userImage ? (
 							<Image
 								src={event.userImage}
@@ -68,7 +73,7 @@ export const FeedCard = ({ event }: { event: FeedEvent }) => {
 							<div className="h-6 w-6 rounded-full bg-gray-200" />
 						)}
 						<span className="text-xs sm:text-sm text-text-gray line-clamp-1">{event.name ?? ""}</span>
-					</div>
+					</Link>
 					<div className="flex flex-col sm:flex-row sm:items-center sm:gap-x-4">
 						<div className="font-semibold lg:text-xl sm:text-lg text-xs line-clamp-1 sm:line-clamp-2">
 							{event.title}
