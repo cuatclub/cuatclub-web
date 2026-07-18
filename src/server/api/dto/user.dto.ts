@@ -28,6 +28,15 @@ export const UpdateUserRequestSchema = z.object({
 
 export const UpdateProfileRequestSchema = z.object({
     name: z.string().min(1).optional(),
+	username: z
+		.string()
+		.trim()
+		.min(3)
+		.max(30)
+		.regex(/^[\p{L}\p{N}_.-]+$/u, "Username may contain letters, numbers, dots, underscores, and hyphens")
+		.transform((value) => value.toLowerCase())
+		.nullable()
+		.optional(),
     facultyId: z.string().uuid().nullable().optional(),
     isReceiveMail: z.boolean().optional(),
     notifyEventReminders: z.boolean().optional(),

@@ -15,6 +15,7 @@ import { changePassword, signOut, useSession } from "@/lib/auth-client";
 
 type ProfileForm = {
 	name: string;
+	username: string;
 	facultyId: string;
 	isReceiveMail: boolean;
 	notifyEventReminders: boolean;
@@ -25,6 +26,7 @@ type ProfileForm = {
 
 const EMPTY_FORM: ProfileForm = {
 	name: "",
+	username: "",
 	facultyId: "",
 	isReceiveMail: false,
 	notifyEventReminders: true,
@@ -33,9 +35,27 @@ const EMPTY_FORM: ProfileForm = {
 	interests: [],
 };
 
+const ROLE_LABELS = {
+	ATTENDEE: "ผู้เข้าร่วม",
+	ORGANIZATION: "ผู้จัดกิจกรรม",
+	ADMIN: "ผู้ดูแลระบบ",
+} as const;
+
+const USERNAME_PATTERN = /^[\p{L}\p{N}_.-]+$/u;
+
+const formatMetadataDate = (value: Date | null) =>
+	value
+		? new Intl.DateTimeFormat("th-TH", {
+				day: "numeric",
+				month: "long",
+				year: "numeric",
+			}).format(new Date(value))
+		: "—";
+
 function sameProfile(a: ProfileForm, b: ProfileForm) {
 	return (
 		a.name === b.name &&
+		a.username === b.username &&
 		a.facultyId === b.facultyId &&
 		a.isReceiveMail === b.isReceiveMail &&
 		a.notifyEventReminders === b.notifyEventReminders &&
@@ -63,12 +83,14 @@ export default function ProfilePage() {
 
 	const updateProfile = api.user.updateProfile.useMutation();
 	const updateInterests = api.user.updateInterests.useMutation();
+	const setPassword = api.user.setPassword.useMutation();
 	const deleteUser = api.user.delete.useMutation();
 
 	useEffect(() => {
 		if (!me) return;
 		const next: ProfileForm = {
 			name: me.name ?? "",
+			username: me.username ?? "",
 			facultyId: me.facultyId ?? "",
 			isReceiveMail: me.isReceiveMail,
 			notifyEventReminders: me.notifyEventReminders,
@@ -89,7 +111,7 @@ export default function ProfilePage() {
 
 	const dirty = useMemo(() => !sameProfile(form, savedProfile), [form, savedProfile]);
 	const firstName = savedProfile.name.trim().split(/\s+/).find(Boolean) ?? "there";
-	const email = session?.user.email ?? "";
+	const email = me?.email ?? session?.user.email ?? "";
 	const avatarSrc = (me?.image ?? session?.user.image ?? "") || null;
 
 	const setField = <K extends keyof ProfileForm>(key: K, value: ProfileForm[K]) => {
@@ -121,6 +143,7 @@ export default function ProfilePage() {
 		try {
 			await updateProfile.mutateAsync({
 				name: form.name,
+				username: form.username.trim() || null,
 				facultyId: form.facultyId || null,
 				isReceiveMail: form.isReceiveMail,
 				notifyEventReminders: form.notifyEventReminders,
@@ -185,6 +208,10 @@ export default function ProfilePage() {
 				fullName={savedProfile.name}
 				facultyName={facultyName}
 				email={email}
+				role={me?.role ?? "ATTENDEE"}
+				createdAt={me?.createdAt ?? null}
+				updatedAt={me?.updatedAt ?? null}
+				hasPassword={me?.hasPassword ?? false}
 				avatarSrc={avatarSrc}
 				facultyNames={facultyNames}
 				interests={interests ?? []}
@@ -205,11 +232,16 @@ export default function ProfilePage() {
 				toggleInterest={toggleInterest}
 				onLogout={handleLogout}
 				onDelete={() => setDeleteOpen(true)}
-				onChangePassword={async (current, next) => {
+				onChangePassword={async (current, next, hasPassword) => {
 					try {
-						const res = await changePassword({ currentPassword: current, newPassword: next });
-						if (res.error) {
-							return { ok: false, error: res.error.message ?? "เปลี่ยนรหัสผ่านไม่สำเร็จ" };
+						if (hasPassword) {
+							const res = await changePassword({ currentPassword: current, newPassword: next });
+							if (res.error) {
+								return { ok: false, error: res.error.message ?? "เปลี่ยนรหัสผ่านไม่สำเร็จ" };
+							}
+						} else {
+							await setPassword.mutateAsync({ newPassword: next });
+							await utils.user.me.invalidate();
 						}
 						return { ok: true };
 					} catch (err) {
@@ -231,6 +263,10 @@ type ProfileBodyProps = {
 	fullName: string;
 	facultyName: string;
 	email: string;
+	role: "ATTENDEE" | "ORGANIZATION" | "ADMIN";
+	createdAt: Date | null;
+	updatedAt: Date | null;
+	hasPassword: boolean;
 	avatarSrc: string | null;
 	facultyNames: string[];
 	interests: { id: string; name: string; icon?: string | null }[];
@@ -245,7 +281,11 @@ type ProfileBodyProps = {
 	toggleInterest: (id: string) => void;
 	onLogout: () => void;
 	onDelete: () => void;
-	onChangePassword: (current: string, next: string) => Promise<{ ok: boolean; error?: string }>;
+	onChangePassword: (
+		current: string,
+		next: string,
+		hasPassword: boolean,
+	) => Promise<{ ok: boolean; error?: string }>;
 };
 
 function NotificationToggle({
@@ -298,6 +338,10 @@ function ProfileBody(props: ProfileBodyProps) {
 		fullName,
 		facultyName,
 		email,
+		role,
+		createdAt,
+		updatedAt,
+		hasPassword,
 		avatarSrc,
 		facultyNames,
 		interests,
@@ -325,7 +369,7 @@ function ProfileBody(props: ProfileBodyProps) {
 	const submitPw = async () => {
 		setPwError(null);
 		setPwSuccess(null);
-		if (!currentPw) {
+		if (hasPassword && !currentPw) {
 			setPwError("กรุณากรอกรหัสผ่านปัจจุบัน");
 			return;
 		}
@@ -338,13 +382,13 @@ function ProfileBody(props: ProfileBodyProps) {
 			return;
 		}
 		setPwBusy(true);
-		const res = await onChangePassword(currentPw, newPw);
+		const res = await onChangePassword(currentPw, newPw, hasPassword);
 		setPwBusy(false);
 		if (res.ok) {
 			setCurrentPw("");
 			setNewPw("");
 			setConfirmPw("");
-			setPwSuccess("เปลี่ยนรหัสผ่านสำเร็จ");
+			setPwSuccess(hasPassword ? "เปลี่ยนรหัสผ่านสำเร็จ" : "ตั้งรหัสผ่านสำเร็จ");
 		} else {
 			setPwError(res.error ?? "เปลี่ยนรหัสผ่านไม่สำเร็จ");
 		}
@@ -434,6 +478,10 @@ function ProfileBody(props: ProfileBodyProps) {
 				facultyNames={facultyNames}
 				facultyName={facultyName}
 				interests={interests}
+				role={role}
+				createdAt={createdAt}
+				updatedAt={updatedAt}
+				hasPassword={hasPassword}
 				dirty={dirty}
 				notice={notice}
 				saving={saving}
@@ -463,6 +511,10 @@ type ProfileSettingsProps = {
 	email: string;
 	facultyNames: string[];
 	facultyName: string;
+	role: "ATTENDEE" | "ORGANIZATION" | "ADMIN";
+	createdAt: Date | null;
+	updatedAt: Date | null;
+	hasPassword: boolean;
 	interests: { id: string; name: string; icon?: string | null }[];
 	dirty: boolean;
 	notice: string | null;
@@ -491,6 +543,10 @@ function ProfileSettings(props: ProfileSettingsProps) {
 		email,
 		facultyNames,
 		facultyName,
+		role,
+		createdAt,
+		updatedAt,
+		hasPassword,
 		interests,
 		dirty,
 		notice,
@@ -511,6 +567,11 @@ function ProfileSettings(props: ProfileSettingsProps) {
 		setConfirmPw,
 		submitPw,
 	} = props;
+	const usernameValid =
+		form.username.length === 0 ||
+		(form.username.trim().length >= 3 &&
+			form.username.trim().length <= 30 &&
+			USERNAME_PATTERN.test(form.username.trim()));
 
 	return (
 		<section className="min-w-0">
@@ -553,6 +614,26 @@ function ProfileSettings(props: ProfileSettingsProps) {
 						</label>
 
 						<label className="block">
+							<span className="text-sm font-semibold text-[#6e747b]">ชื่อผู้ใช้</span>
+							<Input
+								value={form.username}
+								disabled={!isEditing}
+								onChange={(e) => setField("username", e.target.value)}
+								placeholder="อย่างน้อย 3 ตัวอักษร"
+								aria-invalid={!usernameValid}
+								className={cn(
+									"mt-2 h-12 rounded-xl border-[#d9dce0] bg-[#fcfcfd] px-4 text-base text-[#3c4147] shadow-none disabled:opacity-100",
+									isEditing && "bg-white",
+								)}
+							/>
+							{!usernameValid && (
+								<p className="mt-1 text-xs text-red-500">
+									ใช้ตัวอักษร ตัวเลข จุด ขีดล่าง หรือขีดกลาง จำนวน 3–30 ตัว
+								</p>
+							)}
+						</label>
+
+						<label className="block">
 							<span className="text-sm font-semibold text-[#6e747b]">อีเมล</span>
 							<Input
 								value={email}
@@ -561,6 +642,21 @@ function ProfileSettings(props: ProfileSettingsProps) {
 								className="mt-2 h-12 rounded-xl border-[#e1e3e6] bg-[#f6f7f8] px-4 text-base text-[#777e86] shadow-none disabled:opacity-100"
 							/>
 						</label>
+
+						<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+							<div className="rounded-xl border border-[#e1e3e6] bg-[#f6f7f8] px-4 py-3">
+								<p className="text-xs font-semibold text-[#8a9198]">ประเภทบัญชี</p>
+								<p className="mt-1 text-sm text-[#3c4147]">{ROLE_LABELS[role]}</p>
+							</div>
+							<div className="rounded-xl border border-[#e1e3e6] bg-[#f6f7f8] px-4 py-3">
+								<p className="text-xs font-semibold text-[#8a9198]">สร้างบัญชีเมื่อ</p>
+								<p className="mt-1 text-sm text-[#3c4147]">{formatMetadataDate(createdAt)}</p>
+							</div>
+							<div className="rounded-xl border border-[#e1e3e6] bg-[#f6f7f8] px-4 py-3">
+								<p className="text-xs font-semibold text-[#8a9198]">อัปเดตล่าสุด</p>
+								<p className="mt-1 text-sm text-[#3c4147]">{formatMetadataDate(updatedAt)}</p>
+							</div>
+						</div>
 
 						<div className="rounded-2xl border border-[#edf0f2] bg-[#fafbfb] p-4">
 							<div className="flex items-start justify-between gap-4">
@@ -673,7 +769,9 @@ function ProfileSettings(props: ProfileSettingsProps) {
 						<Button
 							type="button"
 							className="h-11 rounded-full bg-primary px-8 text-white hover:bg-[#c94d7d]"
-							disabled={!dirty || !form.name.trim() || form.interests.length === 0 || saving}
+							disabled={
+								!dirty || !form.name.trim() || !usernameValid || form.interests.length === 0 || saving
+							}
 							onClick={() => void onSave()}
 						>
 							{saving ? "กำลังบันทึก..." : "บันทึกการเปลี่ยนแปลง"}
@@ -725,19 +823,28 @@ function ProfileSettings(props: ProfileSettingsProps) {
 			<div className="mt-6 rounded-[26px] border border-[#e3e5e8] bg-white p-5 shadow-[0_18px_50px_rgba(34,38,44,0.06)] sm:p-7 lg:p-8">
 				<div className="mb-5">
 					<p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#a1a7ae]">ความปลอดภัย</p>
-					<h3 className="mt-1 text-2xl font-bold text-[#34383d]">เปลี่ยนรหัสผ่าน</h3>
+					<h3 className="mt-1 text-2xl font-bold text-[#34383d]">
+						{hasPassword ? "เปลี่ยนรหัสผ่าน" : "ตั้งรหัสผ่าน"}
+					</h3>
+					{!hasPassword && (
+						<p className="mt-2 text-sm text-[#777e86]">
+							บัญชีนี้เข้าสู่ระบบผ่านผู้ให้บริการภายนอก คุณสามารถตั้งรหัสผ่านเพื่อเข้าสู่ระบบด้วยอีเมลได้
+						</p>
+					)}
 				</div>
 
 				<div className="grid gap-4 sm:grid-cols-2">
-					<label className="block sm:col-span-2">
-						<span className="text-sm font-semibold text-[#6e747b]">รหัสผ่านปัจจุบัน</span>
-						<Input
-							type="password"
-							value={currentPw}
-							onChange={(e) => setCurrentPw(e.target.value)}
-							className="mt-2 h-12 rounded-xl border-[#d9dce0] bg-white px-4 text-base text-[#3c4147] shadow-none"
-						/>
-					</label>
+					{hasPassword && (
+						<label className="block sm:col-span-2">
+							<span className="text-sm font-semibold text-[#6e747b]">รหัสผ่านปัจจุบัน</span>
+							<Input
+								type="password"
+								value={currentPw}
+								onChange={(e) => setCurrentPw(e.target.value)}
+								className="mt-2 h-12 rounded-xl border-[#d9dce0] bg-white px-4 text-base text-[#3c4147] shadow-none"
+							/>
+						</label>
+					)}
 					<label className="block">
 						<span className="text-sm font-semibold text-[#6e747b]">รหัสผ่านใหม่</span>
 						<Input
@@ -777,12 +884,10 @@ function ProfileSettings(props: ProfileSettingsProps) {
 						disabled={pwBusy}
 						onClick={() => void submitPw()}
 					>
-						{pwBusy ? "กำลังเปลี่ยน..." : "เปลี่ยนรหัสผ่าน"}
+						{pwBusy ? "กำลังบันทึก..." : hasPassword ? "เปลี่ยนรหัสผ่าน" : "ตั้งรหัสผ่าน"}
 					</Button>
 				</div>
 			</div>
 		</section>
 	);
 }
-
-
