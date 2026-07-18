@@ -19,6 +19,20 @@ export default function FeedPage() {
 	const [selectedOrgs, setSelectedOrgs] = useState<string[]>([]);
 
 	const { data: allPosts, isLoading } = api.post.getByFilter.useQuery({});
+	const postIds = useMemo(() => (allPosts ?? []).map((post) => post.id), [allPosts]);
+	const { data: allTags = [] } = api.interestXPost.getByPostIds.useQuery(
+		{ postIds },
+		{ enabled: postIds.length > 0 },
+	);
+	const tagsByPostId = useMemo(() => {
+		const grouped = new Map<string, typeof allTags>();
+		for (const tag of allTags) {
+			const tags = grouped.get(tag.postId) ?? [];
+			tags.push(tag);
+			grouped.set(tag.postId, tags);
+		}
+		return grouped;
+	}, [allTags]);
 
 	const orgNames = useMemo(() => {
 		const names = new Set<string>();
@@ -117,6 +131,7 @@ export default function FeedPage() {
 						{posts.map((event) => (
 							<FeedCard
 								key={event.id}
+								tags={tagsByPostId.get(event.id) ?? []}
 								event={{
 									id: event.id,
 									organizationId: event.organizationId,

@@ -4,13 +4,19 @@ import { ErrorCategory, ErrorWithCategory, type ErrorOrNull, PostgreSQLError } f
 import { interestXPost } from "@/server/db/interestXPost";
 import { interest } from "@/server/db/interest";
 import { post } from "@/server/db/post";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 
 export type InterestXPost = typeof interestXPost.$inferSelect;
 export type CreateInterestXPostRequest = typeof interestXPost.$inferInsert;
+export type PostInterestTag = {
+	postId: string;
+	interestId: string;
+	name: string;
+};
 
 export interface IInterestXPostService {
     getByFilter(filter?: SQL): Promise<[InterestXPost[], ErrorOrNull]>;
+	getByPostIds(postIds: string[]): Promise<[PostInterestTag[], ErrorOrNull]>;
     getOneByFilter(filter: SQL): Promise<[InterestXPost | null, ErrorOrNull]>;
     create(req: CreateInterestXPostRequest): Promise<[InterestXPost | null, ErrorOrNull]>;
     update(filter: SQL, update: Partial<InterestXPost>): Promise<ErrorOrNull>;
@@ -18,6 +24,22 @@ export interface IInterestXPostService {
 }
 
 class InterestXPostService implements IInterestXPostService {
+	async getByPostIds(postIds: string[]): Promise<[PostInterestTag[], ErrorOrNull]> {
+		const res = await db
+			.select({
+				postId: interestXPost.postId,
+				interestId: interestXPost.interestId,
+				name: interest.name,
+			})
+			.from(interestXPost)
+			.innerJoin(interest, eq(interestXPost.interestId, interest.id))
+			.where(inArray(interestXPost.postId, postIds))
+			.catch(() => new PostgreSQLError());
+
+		if (res instanceof Error) return [[], res];
+		return [res, null];
+	}
+
     async getByFilter(filter?: SQL): Promise<[InterestXPost[], ErrorOrNull]> {
         const res = await db
             .select()

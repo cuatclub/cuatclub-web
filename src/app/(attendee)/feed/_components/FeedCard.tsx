@@ -1,7 +1,6 @@
 "use client";
 
 import { themeColor } from "@/app/(organization)/posts/_components/PostCard";
-import { api } from "@/trpc/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,7 +18,12 @@ type FeedEvent = {
 	organizationImage?: string | null;
 };
 
-export const FeedCard = ({ event }: { event: FeedEvent }) => {
+type FeedTag = {
+	interestId: string;
+	name: string;
+};
+
+export const FeedCard = ({ event, tags }: { event: FeedEvent; tags: FeedTag[] }) => {
 	const router = useRouter();
 	const date = new Date(event.date);
 	const closeDate = Intl.DateTimeFormat("th-TH", {
@@ -27,11 +31,6 @@ export const FeedCard = ({ event }: { event: FeedEvent }) => {
 		month: "long",
 		year: "numeric",
 	}).format(date);
-
-	const { data: tags } = api.interestXPost.getAllByPostId.useQuery(
-		{ postId: event.id },
-		{ enabled: !!event.id },
-	);
 
 	return (
 		<div
@@ -88,15 +87,14 @@ export const FeedCard = ({ event }: { event: FeedEvent }) => {
 						)}
 					</div>
 					<div className="flex gap-x-2 gap-y-0.75 text-[0.75rem] h-[22px] sm:h-[26px] items-center text-white flex-wrap overflow-hidden">
-						{(tags ?? []).map((tag, idx) => {
-							const name = "name" in tag && typeof tag.name === "string" ? tag.name : tag.interestId;
+						{tags.map((tag, idx) => {
 							return (
 								<div
 									key={`${tag.interestId}-${idx}`}
 									className="text-[8px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-[6px] shrink-0"
 									style={{ backgroundColor: themeColor[idx % themeColor.length] }}
 								>
-									{name}
+									{tag.name}
 								</div>
 							);
 						})}

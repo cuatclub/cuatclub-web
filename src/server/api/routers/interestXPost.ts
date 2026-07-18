@@ -12,6 +12,14 @@ import { interestXPostServiceImpl } from "../service/interestXPost.service";
 import { interestXPost } from "@/server/db/interestXPost";
 
 export const interestXPostRouter = createTRPCRouter({
+  getByPostIds: protectedProcedure
+	.input(z.object({ postIds: z.array(z.string().uuid()).min(1).max(1000) }))
+	.query(async ({ input }) => {
+		const [res, error] = await interestXPostServiceImpl.getByPostIds(input.postIds);
+		if (error) throw new TRPCError(getTRPCError(error));
+		return res;
+	}),
+
   getAllByPostId: protectedProcedure
     .input(z.object({ postId: z.string().uuid() }))
     .query(async ({ input }) => {
