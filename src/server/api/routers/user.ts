@@ -89,7 +89,7 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
       const res = await userServiceImpl.update(eq(user.id, userId), input);
-      if (res) return new TRPCError(getTRPCError(res));
+      if (res) throw new TRPCError(getTRPCError(res));
       return null;
     }),
 
