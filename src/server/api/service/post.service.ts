@@ -194,7 +194,8 @@ class PostService implements IPostService {
 					...t.organization,
 					...t.user,
 					...t.post,
-					userImage: t.organization.image,
+					organizationName: t.organization.name,
+					organizationImage: t.organization.image,
 					image: t.post.image,
           activityTypeName: t.activity_type.name
 				});
@@ -246,7 +247,8 @@ class PostService implements IPostService {
 					...t.organization,
 					...t.user,
 					...t.post,
-					userImage: t.user.image,
+					organizationName: t.organization.name,
+					organizationImage: t.organization.image,
 					image: t.post.image,
 					id: t.post.id,
           activityTypeName: t.activity_type.name

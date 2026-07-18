@@ -136,10 +136,10 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 											className="flex items-center gap-3 hover:text-primary"
 										>
 											{/* Organization Image */}
-											{post && post.userImage ? (
+											{post && post.organizationImage ? (
 												<Image
-													src={post.userImage}
-													alt={post.name}
+													src={post.organizationImage}
+													alt={post.organizationName}
 													width={32}
 													height={32}
 													className="h-8 w-8 rounded-full object-cover object-center"
@@ -147,7 +147,7 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 											) : (
 												<div className="w-8 h-8 bg-gray-400 rounded-full"></div>
 											)}
-											<p className="">{post?.name}</p>
+											<p className="">{post?.organizationName}</p>
 										</Link>
 										{/* Todo: Follow Button */}
 									</div>
@@ -288,10 +288,10 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 											className="flex items-center gap-3 hover:text-primary"
 										>
 											{/* Organization Image */}
-											{post && post.userImage ? (
+											{post && post.organizationImage ? (
 												<Image
-													src={post.userImage}
-													alt={post.name}
+													src={post.organizationImage}
+													alt={post.organizationName}
 													width={32}
 													height={32}
 													className="h-8 w-8 rounded-full object-cover object-center"
@@ -299,7 +299,7 @@ const PostInfo = ({ params }: { params: Promise<{ id: string }> }) => {
 											) : (
 												<div className="w-8 h-8 bg-gray-400 rounded-full"></div>
 											)}
-											<p className="">{post?.name}</p>
+											<p className="">{post?.organizationName}</p>
 										</Link>
 										{/* Todo: Follow Button */}
 									</div>

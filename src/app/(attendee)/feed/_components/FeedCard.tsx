@@ -15,8 +15,8 @@ type FeedEvent = {
 	activityTypeName?: string | null;
 	instaLink?: string | null;
 	date: Date | string;
-	name?: string | null;
-	userImage?: string | null;
+	organizationName: string;
+	organizationImage?: string | null;
 };
 
 export const FeedCard = ({ event }: { event: FeedEvent }) => {
@@ -61,10 +61,10 @@ export const FeedCard = ({ event }: { event: FeedEvent }) => {
 						onClick={(e) => e.stopPropagation()}
 						className="flex w-fit items-center gap-2 hover:text-primary"
 					>
-						{event.userImage ? (
+						{event.organizationImage ? (
 							<Image
-								src={event.userImage}
-								alt={event.name ?? ""}
+								src={event.organizationImage}
+								alt={event.organizationName}
 								width={24}
 								height={24}
 								className="h-6 w-6 rounded-full object-cover object-center"
@@ -72,7 +72,7 @@ export const FeedCard = ({ event }: { event: FeedEvent }) => {
 						) : (
 							<div className="h-6 w-6 rounded-full bg-gray-200" />
 						)}
-						<span className="text-xs sm:text-sm text-text-gray line-clamp-1">{event.name ?? ""}</span>
+						<span className="text-xs sm:text-sm text-text-gray line-clamp-1">{event.organizationName}</span>
 					</Link>
 					<div className="flex flex-col sm:flex-row sm:items-center sm:gap-x-4">
 						<div className="font-semibold lg:text-xl sm:text-lg text-xs line-clamp-1 sm:line-clamp-2">

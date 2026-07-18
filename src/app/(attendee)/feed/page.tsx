@@ -23,8 +23,8 @@ export default function FeedPage() {
 	const orgNames = useMemo(() => {
 		const names = new Set<string>();
 		for (const event of allPosts ?? []) {
-			if ("name" in event && typeof event.name === "string" && event.name.trim()) {
-				names.add(event.name.trim());
+			if (typeof event.organizationName === "string" && event.organizationName.trim()) {
+				names.add(event.organizationName.trim());
 			}
 		}
 		return [...names].sort((a, b) => a.localeCompare(b, "th"));
@@ -37,18 +37,14 @@ export default function FeedPage() {
 		let list = [...(allPosts ?? [])];
 
 		if (orgSet.size > 0) {
-			list = list.filter((event) => {
-				const name = "name" in event && typeof event.name === "string" ? event.name : "";
-				return orgSet.has(name);
-			});
+			list = list.filter((event) => orgSet.has(event.organizationName));
 		}
 
 		if (query) {
 			list = list.filter((event) => {
 				const title = event.title.toLowerCase();
 				const description = (event.description ?? "").toLowerCase();
-				const name =
-					"name" in event && typeof event.name === "string" ? event.name.toLowerCase() : "";
+				const name = event.organizationName.toLowerCase();
 				return title.includes(query) || description.includes(query) || name.includes(query);
 			});
 		}
@@ -133,11 +129,8 @@ export default function FeedPage() {
 											: undefined,
 									instaLink: event.instaLink,
 									date: event.date,
-									name: "name" in event ? (event.name as string | null | undefined) : undefined,
-									userImage:
-										"userImage" in event
-											? (event.userImage as string | null | undefined)
-											: undefined,
+									organizationName: event.organizationName,
+									organizationImage: event.organizationImage,
 								}}
 							/>
 						))}
