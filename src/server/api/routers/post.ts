@@ -70,22 +70,20 @@ export const postRouter = createTRPCRouter({
 			z.object({
 				id: z.string().uuid().optional(),
 				userId: z.string().uuid().optional(), // can add more filter
-			})
+			}),
 		)
 		.query(async ({ input }) => {
+			let filter: ReturnType<typeof and> | ReturnType<typeof eq> | undefined;
 			if (input.id && input.userId) {
-				const [res, error] = await postServiceImpl.getByFilter(and(eq(post.id, input.id), eq(user.id, input.userId)));
-				if (error) throw new TRPCError(getTRPCError(error));
-				return res;
+				filter = and(eq(post.id, input.id), eq(user.id, input.userId));
 			} else if (input.id) {
-				const [res, error] = await postServiceImpl.getByFilter(eq(post.id, input.id));
-				if (error) throw new TRPCError(getTRPCError(error));
-				return res;
+				filter = eq(post.id, input.id);
 			} else if (input.userId) {
-				const [res, error] = await postServiceImpl.getByFilter(eq(user.id, input.userId));
-				if (error) throw new TRPCError(getTRPCError(error));
-				return res;
+				filter = eq(user.id, input.userId);
 			}
+			const [res, error] = await postServiceImpl.getByFilter(filter);
+			if (error) throw new TRPCError(getTRPCError(error));
+			return res;
 		}),
 
 	delete: protectedProcedure

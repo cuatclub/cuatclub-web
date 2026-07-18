@@ -16,7 +16,7 @@ export function pendingOnboardingPath(user: SessionUserLike | null): string | nu
 }
 
 export function defaultHomePathForRole(role: string | undefined): string {
-	if (role === "ATTENDEE") return "/calendar";
+	if (role === "ATTENDEE") return "/feed";
 	if (role === "ORGANIZATION") return "/posts";
 	if (role === "ADMIN") return "/admin/list";
 	// Unknown/missing role: do not send to /calendar (requireRole would bounce to login again).

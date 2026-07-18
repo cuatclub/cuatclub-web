@@ -74,7 +74,7 @@ export default function CategoryStep({
     await refetchSession({ query: { disableCookieCache: true } });
     await utils.user.me.invalidate();
     await utils.organization.getMine.invalidate();
-    router.push(type === "attendee" ? "/calendar" : "/posts");
+    router.push(type === "attendee" ? "/feed" : "/posts");
   };
   
   return (
