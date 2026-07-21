@@ -1,10 +1,10 @@
 import { TRPCError } from "@trpc/server";
-import { UpdateUserRequestSchema } from "../dto/user.dto";
+import { UpdateUserRequestSchema, UpdateProfileRequestSchema } from "../dto/user.dto";
 import { createTRPCRouter, protectedProcedure, adminProcedure } from "../trpc";
 import { getTRPCError } from "@/utils/error";
-import { user } from "@/server/db/auth-schema";
+import { account, user } from "@/server/db/auth-schema";
 import z from "zod";
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { userServiceImpl } from "@/server/api/service/user.service";
 import { db } from "@/server/db";
 import { interestXUser } from "@/server/db/interestXUser";
@@ -70,15 +70,73 @@ export const userRouter = createTRPCRouter({
       throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
     }
 
+	const credentialAccount = await db.query.account.findFirst({
+		where: and(eq(account.userId, userId), eq(account.providerId, "credential")),
+		columns: { password: true },
+	});
+
     return {
       id: record.id,
       name: record.name,
+	  username: record.username,
+	  email: record.email,
+	  role: record.role,
+	  createdAt: record.createdAt,
+	  updatedAt: record.updatedAt,
+	  hasPassword: !!credentialAccount?.password,
       image: record.image,
       facultyId: record.facultyId,
       isReceiveMail: record.isReceiveMail,
+      notifyEventReminders: record.notifyEventReminders,
+      notifyMatchingEvents: record.notifyMatchingEvents,
+      notifyClubUpdates: record.notifyClubUpdates,
       interests: record.interests.map((i) => i.interestId),
     };
   }),
+
+  /** Self-service profile + notification preferences update (settings page). */
+  updateProfile: protectedProcedure
+    .input(UpdateProfileRequestSchema)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+	  if (typeof input.username === "string") {
+		const [existingUsers, lookupError] = await userServiceImpl.getByFilter(
+			and(eq(user.username, input.username), ne(user.id, userId)),
+		);
+		if (lookupError) throw new TRPCError(getTRPCError(lookupError));
+		if (existingUsers.length > 0) {
+			throw new TRPCError({ code: "CONFLICT", message: "Username is already in use" });
+		}
+	  }
+      const res = await userServiceImpl.update(eq(user.id, userId), input);
+      if (res) throw new TRPCError(getTRPCError(res));
+      return null;
+    }),
+
+	setPassword: protectedProcedure
+		.input(z.object({ newPassword: z.string().min(8).max(128) }))
+		.mutation(async ({ ctx, input }) => {
+			const credentialAccount = await db.query.account.findFirst({
+				where: and(eq(account.userId, ctx.session.user.id), eq(account.providerId, "credential")),
+				columns: { password: true },
+			});
+			if (credentialAccount?.password) {
+				throw new TRPCError({ code: "CONFLICT", message: "This account already has a password" });
+			}
+
+			try {
+				await auth.api.setPassword({
+					headers: ctx.headers,
+					body: { newPassword: input.newPassword },
+				});
+				return null;
+			} catch (error) {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: error instanceof Error ? error.message : "Unable to set password",
+				});
+			}
+		}),
 
   updateOnboardingInfo: protectedProcedure
     .input(

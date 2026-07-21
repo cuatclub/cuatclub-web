@@ -108,7 +108,6 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>((
                 {isMultiDropdown && (
                     <MultiDropdown
                     content={categoryList}
-                    panelLabel="เลือกหมวดหมู่"
                     value={multiValue}
                     icon={IconComponent ? <IconComponent color="#949494" className="h-5 w-5 shrink-0 sm:h-6 sm:w-6" /> : undefined}
                     onMultiChange={(value) => onMultiDropdownChange?.(value)}

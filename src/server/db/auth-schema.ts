@@ -6,12 +6,17 @@ export const roleEnum = pgEnum("role", ["ATTENDEE", "ORGANIZATION", "ADMIN"]);
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").default("").notNull(),
+	username: text("username").unique(),
 	email: text("email").notNull().unique(),
 	emailVerified: boolean("email_verified").default(false),
 	image: text("image"),
 	createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 	facultyId: text("faculty_id").references(() => faculty.id),
 	isReceiveMail: boolean("is_receive_mail").default(false).notNull(),
+	/** Granular notification preferences; only meaningful when isReceiveMail is true. */
+	notifyEventReminders: boolean("notify_event_reminders").default(true).notNull(),
+	notifyMatchingEvents: boolean("notify_matching_events").default(true).notNull(),
+	notifyClubUpdates: boolean("notify_club_updates").default(true).notNull(),
 	role: roleEnum("role").default("ATTENDEE").notNull(),
 	/** Role-specific onboarding wizard finished; middleware uses role to pick redirect path. */
 	onboardingComplete: boolean("onboarding_complete").default(false).notNull(),

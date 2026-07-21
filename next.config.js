@@ -37,6 +37,11 @@ const config = {
 				hostname: "*.r2.dev",
 				pathname: "/**",
 			},
+			{
+				protocol: "https",
+				hostname: "cdn.cuatclub.com",
+				pathname: "/**",
+			},
 		],
 	},
 };

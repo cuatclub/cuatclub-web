@@ -36,8 +36,15 @@ export const PostCard = ({ event }: { event: any }) => {
                 }
             }}
         >
-            <div className="h-[191px] w-full sm:h-[190px] lg:h-[226px] sm:w-42.5 rounded-[12px] bg-primary shrink-0">
-                <Image className="h-full w-full object-cover rounded-[12px]" src={event.image} alt={event.title} width={42.5} height={42.5} />
+            <div className="relative h-[191px] w-full sm:h-[190px] lg:h-[226px] sm:w-42.5 rounded-[12px] bg-primary shrink-0 overflow-hidden">
+                <Image
+                    className="h-full w-full object-cover rounded-[12px]"
+                    src={event.image}
+                    alt={event.title}
+                    fill
+                    sizes="(max-width: 640px) 190px, (max-width: 1024px) 226px, 226px"
+                    quality={90}
+                />
             </div>
             <div className="min-w-0 h-[150px] sm:h-[193px] lg:h-[226px] flex-1 flex flex-col justify-between">
                 <div className="flex flex-col gap-y-[5px]">

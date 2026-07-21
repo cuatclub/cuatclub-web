@@ -70,11 +70,9 @@ const CalendarPage = () => {
 
   // Fetching Data
   const { data: session } = useSession();
-  const { data: fetchedData, isLoading } = api.calendarItem.getAllByUserId.useQuery({
-    userId: session?.user.id ?? ""
-  }, {
-    enabled: !!session?.user.id
-  });
+	const { data: fetchedData, isLoading } = api.calendarItem.getAllByUserId.useQuery(undefined, {
+		enabled: !!session?.user.id
+	});
 
 
   // Masking Data

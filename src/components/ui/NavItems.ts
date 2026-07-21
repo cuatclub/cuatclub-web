@@ -11,9 +11,7 @@ export const NavItemsOrg: NavItems[] = [
 ];
 
 export const NavItemsAtten: NavItems[] = [
-    // { label: "หน้าหลัก", href: "/"},
-    // { label: "กิจกรรม", href: "/activities" },
-    // { label: "ชมรม", href: "/clubs" },
-    // { label: "ปฏิทิน", href: "/calendar" },
-    // { label: "เกี่ยวกับเรา", href: "/about" },
+	{ label: "หน้าหลัก", href: "/feed" },
+	{ label: "ชมรม", href: "/clubs" },
+	{ label: "ปฏิทิน", href: "/calendar" },
 ];

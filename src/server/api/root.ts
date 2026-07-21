@@ -7,6 +7,7 @@ import { facultyRouter } from "@/server/api/routers/faculty";
 import { userRouter } from "@/server/api/routers/user";
 import { uploadRouter } from "@/server/api/routers/upload";
 import { activityTypeRouter } from "@/server/api/routers/activityType";
+import { userXOrganizationRouter } from "@/server/api/routers/userXOrganization";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 /**
@@ -24,6 +25,7 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   upload: uploadRouter,
   activityType: activityTypeRouter,
+  userXOrganization: userXOrganizationRouter,
 });
 
 // export type definition of API
