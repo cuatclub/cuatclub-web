@@ -208,12 +208,11 @@ class OrganizationService implements IOrganizationService {
 			.values({
 				id,
 				name: "ชมรม",
-				category: "CLUB",
+				categories: ["CLUB"],
 				userId,
 				isBanned: false,
 				bio: "",
 				recruitmentPeriod: {},
-				socials: { instagram: "", discord: "" },
 			})
 			.returning({ id: organization.id })
 			.catch((e) => {

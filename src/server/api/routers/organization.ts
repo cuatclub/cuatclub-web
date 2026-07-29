@@ -12,7 +12,7 @@ import {
 import { getTRPCError } from "@/utils/error";
 import { TRPCError } from "@trpc/server";
 import { organization } from "@/server/db/organization";
-import { and, eq } from "drizzle-orm";
+import { and, arrayContains, eq } from "drizzle-orm";
 
 export const organizationRouter = createTRPCRouter({
 	create: protectedProcedure.input(CreateOrganizationRequestSchema).mutation(async ({ input }) => {
@@ -54,7 +54,7 @@ export const organizationRouter = createTRPCRouter({
 			const [res, error] = await organizationServiceImpl.getOneByFilter(
 				and(
 					eq(organization.id, input.id),
-					eq(organization.category, "CLUB"),
+					arrayContains(organization.categories, ["CLUB"]),
 					eq(organization.isBanned, false),
 				)!,
 			);
@@ -63,7 +63,7 @@ export const organizationRouter = createTRPCRouter({
 				id: res!.id,
 				name: res!.name,
 				facultyId: res!.facultyId,
-				category: res!.category,
+				categories: res!.categories,
 				averageHoursPerWeek: res!.averageHoursPerWeek,
 				bio: res!.bio,
 				recruitmentPeriod: res!.recruitmentPeriod,

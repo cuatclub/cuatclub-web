@@ -29,31 +29,49 @@ const RecruitmentPeriodSchema = z.object({
 
 const SocialsSchema = z.object({
     signUpForm: z.string().optional(),
-    discord: z.string(),
-    instagram: z.string(),
+    discord: z.string().optional(),
+    instagram: z.string().optional(),
+    facebook: z.string().optional(),
+    tiktok: z.string().optional(),
+    line: z.string().optional(),
 });
+
+const OwnerContactSchema = z.object({
+    name: z.string().optional(),
+    email: z.string().optional(),
+    phone: z.string().optional(),
+    line: z.string().optional(),
+});
+
+const GallerySchema = z.array(z.string());
 
 export const CreateOrganizationRequestSchema: ZodSchema<CreateOrganizationRequest> = z.object({
     name: z.string().min(1),
-    category: z.enum(categoryEnum.enumValues),
+    categories: z.array(z.enum(categoryEnum.enumValues)),
     averageHoursPerWeek: SmallIntSchema.optional(),
     bio: z.string(),
+    detailedDescription: z.string().nullable().optional(),
+    gallery: GallerySchema.optional(),
     recruitmentPeriod: RecruitmentPeriodSchema,
     facultyId: z.string().nullable().optional(),
     userId: z.string().uuid(),
     isBanned: z.boolean(),
+    ownerContact: OwnerContactSchema.optional(),
     socials: SocialsSchema,
     image: z.string().nullable().optional(),
 });
 
 export const UpdateOrganizationRequestSchema = z.object({
     id: z.string().uuid(),
-    category: z.enum(categoryEnum.enumValues).optional(),
+    categories: z.array(z.enum(categoryEnum.enumValues)).optional(),
     averageHoursPerWeek: SmallIntSchema.optional(),
     bio: z.string().optional(),
+    detailedDescription: z.string().nullable().optional(),
+    gallery: GallerySchema.optional(),
     recruitmentPeriod: RecruitmentPeriodSchema.optional(),
     userId: z.string().uuid().optional(),
     isBanned: z.boolean().optional(),
+    ownerContact: OwnerContactSchema.optional(),
     socials: SocialsSchema.optional(),
     name: z.string().optional(),
     facultyId: z.string().nullable().optional(),
