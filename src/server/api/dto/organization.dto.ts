@@ -29,20 +29,35 @@ const RecruitmentPeriodSchema = z.object({
 
 const SocialsSchema = z.object({
     signUpForm: z.string().optional(),
-    discord: z.string(),
-    instagram: z.string(),
+    discord: z.string().optional(),
+    instagram: z.string().optional(),
+    facebook: z.string().optional(),
+    tiktok: z.string().optional(),
+    line: z.string().optional(),
 });
+
+const OwnerContactSchema = z.object({
+    name: z.string().optional(),
+    email: z.string().optional(),
+    phone: z.string().optional(),
+    line: z.string().optional(),
+});
+
+const GallerySchema = z.array(z.string());
 
 export const CreateOrganizationRequestSchema: ZodSchema<CreateOrganizationRequest> = z.object({
     name: z.string().min(1),
     category: z.enum(categoryEnum.enumValues),
     averageHoursPerWeek: SmallIntSchema.optional(),
     bio: z.string(),
+    detailedDescription: z.string().nullable().optional(),
+    gallery: GallerySchema.optional(),
     recruitmentPeriod: RecruitmentPeriodSchema,
     facultyId: z.string().nullable().optional(),
     userId: z.string().uuid(),
     isBanned: z.boolean(),
-    socials: SocialsSchema,
+    ownerContact: OwnerContactSchema.optional(),
+    socials: SocialsSchema.optional(),
     image: z.string().nullable().optional(),
 });
 
@@ -51,9 +66,12 @@ export const UpdateOrganizationRequestSchema = z.object({
     category: z.enum(categoryEnum.enumValues).optional(),
     averageHoursPerWeek: SmallIntSchema.optional(),
     bio: z.string().optional(),
+    detailedDescription: z.string().nullable().optional(),
+    gallery: GallerySchema.optional(),
     recruitmentPeriod: RecruitmentPeriodSchema.optional(),
     userId: z.string().uuid().optional(),
     isBanned: z.boolean().optional(),
+    ownerContact: OwnerContactSchema.optional(),
     socials: SocialsSchema.optional(),
     name: z.string().optional(),
     facultyId: z.string().nullable().optional(),
@@ -66,7 +84,10 @@ export type OrganizationMineDTO = {
     name: string;
     facultyId: string | null;
     bio: string | null;
+    detailedDescription: string | null;
+    gallery: string[];
     image: string | null;
+    ownerContact: Organization["ownerContact"];
     socials: Organization["socials"];
     interests: string[];
 };
@@ -80,8 +101,11 @@ export const UpdateMineInfoStepSchema = z.object({
 
 /** ขั้น Contact — socials */
 export const UpdateMineSocialsStepSchema = z.object({
-    instagram: z.string().min(1),
-    discord: z.string().min(1),
+    instagram: z.string().optional(),
+    discord: z.string().optional(),
+    facebook: z.string().optional(),
+    tiktok: z.string().optional(),
+    line: z.string().optional(),
     signUpForm: z.string().optional(),
 });
 
