@@ -165,7 +165,10 @@ class OrganizationService implements IOrganizationService {
 				name: res.name,
 				facultyId: res.facultyId,
 				bio: res.bio,
+				detailedDescription: res.detailedDescription,
+				gallery: res.gallery,
 				image: res.image,
+				ownerContact: res.ownerContact,
 				socials: res.socials,
 				interests: interestIds,
 			},
@@ -266,8 +269,11 @@ class OrganizationService implements IOrganizationService {
 
 		return this.update(eq(organization.id, org.id), {
 			socials: {
-				instagram: input.instagram,
-				discord: input.discord,
+				...(input.instagram?.trim() ? { instagram: input.instagram.trim() } : {}),
+				...(input.discord?.trim() ? { discord: input.discord.trim() } : {}),
+				...(input.facebook?.trim() ? { facebook: input.facebook.trim() } : {}),
+				...(input.tiktok?.trim() ? { tiktok: input.tiktok.trim() } : {}),
+				...(input.line?.trim() ? { line: input.line.trim() } : {}),
 				...(input.signUpForm?.trim() ? { signUpForm: input.signUpForm.trim() } : {}),
 			},
 		});

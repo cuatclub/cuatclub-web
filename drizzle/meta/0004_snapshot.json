@@ -1,5 +1,5 @@
 {
-  "id": "d3469066-3d8f-4cf9-bde5-91ce38387180",
+  "id": "6c1f9140-bd64-46e2-af1b-a889b9cf184a",
   "prevId": "d9e6d530-819b-4ab9-aac5-3fe94cfa2ff9",
   "version": "7",
   "dialect": "postgresql",
@@ -888,13 +888,12 @@
           "primaryKey": false,
           "notNull": false
         },
-        "categories": {
-          "name": "categories",
-          "type": "category[]",
+        "category": {
+          "name": "category",
+          "type": "category",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'"
+          "notNull": true
         },
         "average_hours_per_week": {
           "name": "average_hours_per_week",

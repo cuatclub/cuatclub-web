@@ -57,7 +57,7 @@ export const CreateOrganizationRequestSchema: ZodSchema<CreateOrganizationReques
     userId: z.string().uuid(),
     isBanned: z.boolean(),
     ownerContact: OwnerContactSchema.optional(),
-    socials: SocialsSchema,
+    socials: SocialsSchema.optional(),
     image: z.string().nullable().optional(),
 });
 
@@ -84,7 +84,10 @@ export type OrganizationMineDTO = {
     name: string;
     facultyId: string | null;
     bio: string | null;
+    detailedDescription: string | null;
+    gallery: string[];
     image: string | null;
+    ownerContact: Organization["ownerContact"];
     socials: Organization["socials"];
     interests: string[];
 };
@@ -98,8 +101,11 @@ export const UpdateMineInfoStepSchema = z.object({
 
 /** ขั้น Contact — socials */
 export const UpdateMineSocialsStepSchema = z.object({
-    instagram: z.string().min(1),
-    discord: z.string().min(1),
+    instagram: z.string().optional(),
+    discord: z.string().optional(),
+    facebook: z.string().optional(),
+    tiktok: z.string().optional(),
+    line: z.string().optional(),
     signUpForm: z.string().optional(),
 });
 
