@@ -47,7 +47,7 @@ const GallerySchema = z.array(z.string());
 
 export const CreateOrganizationRequestSchema: ZodSchema<CreateOrganizationRequest> = z.object({
     name: z.string().min(1),
-    categories: z.array(z.enum(categoryEnum.enumValues)),
+    category: z.enum(categoryEnum.enumValues),
     averageHoursPerWeek: SmallIntSchema.optional(),
     bio: z.string(),
     detailedDescription: z.string().nullable().optional(),
@@ -63,7 +63,7 @@ export const CreateOrganizationRequestSchema: ZodSchema<CreateOrganizationReques
 
 export const UpdateOrganizationRequestSchema = z.object({
     id: z.string().uuid(),
-    categories: z.array(z.enum(categoryEnum.enumValues)).optional(),
+    category: z.enum(categoryEnum.enumValues).optional(),
     averageHoursPerWeek: SmallIntSchema.optional(),
     bio: z.string().optional(),
     detailedDescription: z.string().nullable().optional(),

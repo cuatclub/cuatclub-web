@@ -36,6 +36,13 @@
       "when": 1785344769380,
       "tag": "0004_organization_profile_fields",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1785395674286,
+      "tag": "0005_organization_single_category",
+      "breakpoints": true
     }
   ]
 }

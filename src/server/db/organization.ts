@@ -8,7 +8,7 @@ export const organization = pgTable("organization", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	facultyId: text("faculty_id").references(() => faculty.id),
-	categories: categoryEnum("categories").array().default([]).notNull(),
+	category: categoryEnum("category").notNull(),
 	averageHoursPerWeek: smallint("average_hours_per_week"),
 	bio: text("bio"),
 	detailedDescription: text("detailed_description"),

@@ -208,7 +208,7 @@ class OrganizationService implements IOrganizationService {
 			.values({
 				id,
 				name: "ชมรม",
-				categories: ["CLUB"],
+				category: "CLUB",
 				userId,
 				isBanned: false,
 				bio: "",
