@@ -5,6 +5,6 @@ export default async function AttendeeGroupLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	await requireRole("ATTENDEE");
+	// await requireRole("ATTENDEE");
 	return children;
 }

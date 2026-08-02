@@ -30,6 +30,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 			<body>
 				<TRPCReactProvider>
 					<AuthProvider>{children}</AuthProvider>
+          {/* {children} */}
 				</TRPCReactProvider>
 			</body>
 		</html>

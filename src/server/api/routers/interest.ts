@@ -4,14 +4,14 @@ import {
   UpdateInterestRequestSchema,
 } from "../dto/interest.dto";
 import { interestServiceImpl } from "../service/interest.service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { getTRPCError } from "@/utils/error";
 import { eq } from "drizzle-orm";
 import { interest } from "@/server/db/interest";
 import z from "zod";
 
 export const interestRouter = createTRPCRouter({
-  getAll: protectedProcedure.query(async () => {
+  getAll: publicProcedure.query(async () => {
     const [res, error] = await interestServiceImpl.getByFilter();
     if (error) throw new TRPCError(getTRPCError(error));
     return res;

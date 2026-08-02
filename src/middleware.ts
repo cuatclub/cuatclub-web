@@ -52,69 +52,69 @@ async function getSessionUser(request: NextRequest): Promise<SessionUserLike | n
 }
 
 export async function middleware(request: NextRequest) {
-	const { pathname } = request.nextUrl;
-	const hasSession = hasBetterAuthSessionCookie(request);
-	const loginUrl = new URL(ATTENDEE_LOGIN_PATH, request.url);
+// 	const { pathname } = request.nextUrl;
+// 	const hasSession = hasBetterAuthSessionCookie(request);
+// 	const loginUrl = new URL(ATTENDEE_LOGIN_PATH, request.url);
 
-	if (pathname === "/auth" && !hasSession) {
-		return NextResponse.redirect(loginUrl);
-	}
+// 	if (pathname === "/auth" && !hasSession) {
+// 		return NextResponse.redirect(loginUrl);
+// 	}
 
-	if (pathname.startsWith("/posts")) {
-		if (!hasSession) {
-			return NextResponse.redirect(new URL("/", request.url));
-		}
-	}
+// 	if (pathname.startsWith("/posts")) {
+// 		if (!hasSession) {
+// 			return NextResponse.redirect(new URL("/", request.url));
+// 		}
+// 	}
 
-	if (pathname.startsWith("/auth/attendee/onboarding") || pathname.startsWith("/auth/organizer/onboarding")) {
-		if (!hasSession) {
-			return NextResponse.redirect(loginUrl);
-		}
-		return NextResponse.next();
-	}
+// 	if (pathname.startsWith("/auth/attendee/onboarding") || pathname.startsWith("/auth/organizer/onboarding")) {
+// 		if (!hasSession) {
+// 			return NextResponse.redirect(loginUrl);
+// 		}
+// 		return NextResponse.next();
+// 	}
 
-	if (
-		pathname.startsWith("/feed") ||
-		pathname.startsWith("/clubs") ||
-		pathname.startsWith("/calendar") ||
-		pathname.startsWith("/profile") ||
-		pathname.startsWith("/admin") ||
-		pathname.startsWith("/create") ||
-		pathname.startsWith("/posts")
-	) {
-		if (!hasSession) {
-			return NextResponse.redirect(loginUrl);
-		}
-	}
+// 	if (
+// 		pathname.startsWith("/feed") ||
+// 		pathname.startsWith("/clubs") ||
+// 		pathname.startsWith("/calendar") ||
+// 		pathname.startsWith("/profile") ||
+// 		pathname.startsWith("/admin") ||
+// 		pathname.startsWith("/create") ||
+// 		pathname.startsWith("/posts")
+// 	) {
+// 		if (!hasSession) {
+// 			return NextResponse.redirect(loginUrl);
+// 		}
+// 	}
 
-	const user = hasSession ? await getSessionUser(request) : null;
-	const onboardingTarget = pendingOnboardingPath(user);
+// 	const user = hasSession ? await getSessionUser(request) : null;
+// 	const onboardingTarget = pendingOnboardingPath(user);
 
-	if (pathname === "/") {
-		if (!hasSession) {
-			return NextResponse.redirect(loginUrl);
-		}
-		if (onboardingTarget) {
-			return NextResponse.redirect(new URL(onboardingTarget, request.url));
-		}
-		return redirectIfDifferent(request, defaultHomePathForRole(user?.role));
-	}
+// 	if (pathname === "/") {
+// 		if (!hasSession) {
+// 			return NextResponse.redirect(loginUrl);
+// 		}
+// 		if (onboardingTarget) {
+// 			return NextResponse.redirect(new URL(onboardingTarget, request.url));
+// 		}
+// 		return redirectIfDifferent(request, defaultHomePathForRole(user?.role));
+// 	}
 
-	const isLoginPage =
-		pathname === "/auth" ||
-		pathname.startsWith("/auth/attendee/login") ||
-		pathname.startsWith("/auth/organizer/login");
+// 	const isLoginPage =
+// 		pathname === "/auth" ||
+// 		pathname.startsWith("/auth/attendee/login") ||
+// 		pathname.startsWith("/auth/organizer/login");
 
-	if (isLoginPage && hasSession) {
-		if (onboardingTarget) {
-			return NextResponse.redirect(new URL(onboardingTarget, request.url));
-		}
-		return redirectIfDifferent(request, defaultHomePathForRole(user?.role));
-	}
+// 	if (isLoginPage && hasSession) {
+// 		if (onboardingTarget) {
+// 			return NextResponse.redirect(new URL(onboardingTarget, request.url));
+// 		}
+// 		return redirectIfDifferent(request, defaultHomePathForRole(user?.role));
+// 	}
 
-	if (hasSession && onboardingTarget && !pathname.startsWith(onboardingTarget)) {
-		return NextResponse.redirect(new URL(onboardingTarget, request.url));
-	}
+// 	if (hasSession && onboardingTarget && !pathname.startsWith(onboardingTarget)) {
+// 		return NextResponse.redirect(new URL(onboardingTarget, request.url));
+// 	}
 
 	return NextResponse.next();
 }
