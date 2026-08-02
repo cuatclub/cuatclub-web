@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import { api } from "@/trpc/react";
-import { buildInterestThemes, FALLBACK_THEME } from "@/app/(attendee)/clubs/_components/interest-theme.ts";
+import { buildInterestThemes, FALLBACK_THEME } from "@/app/(attendee)/clubs/_components/interest-theme";
 
 // Import our newly refactored components
 import { ClubHeader } from "@/app/(attendee)/clubs/[id]/_components/ClubHeader";
