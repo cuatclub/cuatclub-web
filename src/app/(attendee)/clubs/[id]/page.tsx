@@ -31,12 +31,16 @@ export default function ClubDetailPage({ params }: { params: Promise<{ id: strin
 	const interestsQuery = api.interest.getAll.useQuery();
 	
 	const { data: club, isLoading, error } = api.organization.getClub.useQuery({ id });
+  const facultiesQuery = api.faculty.getAll.useQuery();
 
-	if (club) {
-		console.log(club?.gallery);
-	}
+  const faculties = useMemo(
+      () => (facultiesQuery.data ?? []).map((row) => ({ id: row.id, name: row.name })),
+      [facultiesQuery.data],
+    );
 
-	const interests = useMemo(() => {
+  const facultyNames = new Map(faculties.map((row) => [row.id, row.name]));
+	
+  const interests = useMemo(() => {
 		const rows = (interestsQuery.data ?? []).map((row) => ({ id: row.id, name: row.name, icon: row.icon }));
 		const themes = buildInterestThemes(rows);
 		return rows.map((row) => ({ ...row, theme: themes.get(row.id) ?? FALLBACK_THEME }));
@@ -79,7 +83,7 @@ export default function ClubDetailPage({ params }: { params: Promise<{ id: strin
 				) : (
 					<div className="flex flex-col gap-10">
 						
-						<ClubHeader club={club} interests={interests} id={id}/>
+						<ClubHeader club={club} interests={interests} id={id} facultyName={facultyNames.get(club.facultyId ?? "") || "ไม่ระบุคณะ"} />
 
 						{/* Info Grid (Recruitment & Hours) */}
 						{/* <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

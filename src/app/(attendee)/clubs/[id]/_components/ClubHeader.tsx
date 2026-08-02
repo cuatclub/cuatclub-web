@@ -11,6 +11,7 @@ interface ClubHeaderProps {
 		name: string;
 		image?: string | null;
 		facultyId?: string | null;
+		facultyName?: string | null;
 		interests: Array<{
 			interest: {
 				id: string;
@@ -26,9 +27,10 @@ interface ClubHeaderProps {
 		};
 	}>;
   id: string;
+  facultyName: string;
 }
 
-export function ClubHeader({ club, interests, id }: ClubHeaderProps) {
+export function ClubHeader({ club, interests, facultyName }: ClubHeaderProps ) {
     // Follow / Unfollow logic
     // const utils = api.useUtils();
     // const { data: followedIds = [] } = api.userXOrganization.getMineFollowed.useQuery();
@@ -49,6 +51,8 @@ export function ClubHeader({ club, interests, id }: ClubHeaderProps) {
     // 		followMutation.mutate({ organizationId: id });
     // 	}
     // };
+
+	const facultyLabel = facultyName?.trim() || "ไม่ระบุคณะ";
 
 	return (
 		<section className="flex min-w-0 flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:gap-8 sm:text-left">
@@ -78,9 +82,9 @@ export function ClubHeader({ club, interests, id }: ClubHeaderProps) {
 						<Building2 className="h-5 w-5 shrink-0" />
 						<span 
 							className="truncate" 
-							title={club.facultyId ? "คณะวิศวกรรมศาสตร์" : "คณะวิศวกรรมศาสตร์"}
+							title={facultyLabel}
 						>
-							{club.facultyId ? "คณะวิศวกรรมศาสตร์" : "คณะวิศวกรรมศาสตร์"}
+							{facultyLabel}
 						</span>
 					</div>
 
