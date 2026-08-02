@@ -65,7 +65,8 @@ export const Navbar = () => {
 							))}
 						</div>
 					</div>
-					<div>
+          {/* hidden for first official launch */}
+					<div className="hidden">
 						{isLoggedIn ? (
 							<div className="flex items-center gap-6">
 								<button

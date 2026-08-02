@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
 import { facultyServiceImpl } from "../service/faculty.service";
 import {
   CreateFacultyRequestSchema,
@@ -11,7 +11,7 @@ import { faculty } from "@/server/db/faculty";
 import { eq } from "drizzle-orm";
 
 export const facultyRouter = createTRPCRouter({
-  getAll: protectedProcedure.query(async () => {
+  getAll: publicProcedure.query(async () => {
     const [res, error] = await facultyServiceImpl.getByFilter();
     if (error) throw new TRPCError(getTRPCError(error));
     return res;

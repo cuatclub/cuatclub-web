@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
 import { getTRPCError } from "@/utils/error";
 import { activityTypeServiceImpl } from "@/server/api/service/activityType.service";
 import { CreateActivityTypeRequestSchema, UpdateActivityTypeRequestSchema } from "@/server/api/dto/activityType.dto";
@@ -8,7 +8,7 @@ import { activityType } from "@/server/db/activityType";
 import { z } from "zod";
 
 export const activityTypeRouter = createTRPCRouter({
-    getAll: protectedProcedure.query(async () => {
+    getAll: publicProcedure.query(async () => {
         const [res, error] = await activityTypeServiceImpl.getByFilter()
         if (error) throw new TRPCError(getTRPCError(error))
         return res
