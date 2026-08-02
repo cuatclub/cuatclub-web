@@ -18,8 +18,9 @@ export const Footer = () => {
                         alt="logo" 
                         width={128}
                         height={64}
-                        className="h-22.5 lg:h-16 w-auto"/>  
-                    <div className="items-center flex gap-2">
+                        className="h-22.5 lg:h-16 w-auto"/>
+                    {/* hidden for first official launch */}
+                    <div className="hidden items-center flex gap-2">
                         <Image src="/images/github-logo.svg" alt="github" width={34} height={34}/>
                         <Link href="" target="_blank" className="text-black text-sm">available open source</Link>
                     </div>
