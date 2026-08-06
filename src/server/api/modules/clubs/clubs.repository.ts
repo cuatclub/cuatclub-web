@@ -2,7 +2,7 @@ import type { SQL } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { db } from "@/server/db";
 import { clubs } from "@/server/db/schema/clubs";
-import { type ErrorOrNull, ErrorWithCategory, ErrorCategory, PostgreSQLError } from "@/utils/error";
+import { type ErrorOrNull, ErrorWithCategory, ErrorCategory, PostgreSQLError } from "@/server/error";
 import type { ClubRow } from "@/server/api/modules/clubs/club.entity";
 import type { CreateClubRequest } from "@/server/api/modules/clubs/dto/create-club.dto";
 

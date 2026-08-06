@@ -1,6 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { listCategories } from "@/server/api/modules/categories/usecases/list-categories.usecase";
-import { getTRPCError } from "@/utils/error";
+import { getTRPCError } from "@/server/error";
 import { TRPCError } from "@trpc/server";
 
 export const categoriesRouter = createTRPCRouter({

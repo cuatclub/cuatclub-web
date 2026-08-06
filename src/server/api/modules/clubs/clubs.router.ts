@@ -8,7 +8,7 @@ import { CreateClubRequestSchema } from "@/server/api/modules/clubs/dto/create-c
 import { UpdateClubRequestSchema } from "@/server/api/modules/clubs/dto/update-club.dto";
 import { DeleteClubRequestSchema } from "@/server/api/modules/clubs/dto/delete-club.dto";
 import { GetClubByIdRequestSchema } from "@/server/api/modules/clubs/dto/get-club-by-id.dto";
-import { getTRPCError } from "@/utils/error";
+import { getTRPCError } from "@/server/error";
 import { TRPCError } from "@trpc/server";
 
 export const clubsRouter = createTRPCRouter({

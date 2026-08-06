@@ -3,7 +3,7 @@ import { eq, and } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { db } from "@/server/db";
 import { invitationCodes } from "@/server/db/schema/invitation-codes";
-import { type ErrorOrNull, ErrorWithCategory, ErrorCategory, PostgreSQLError } from "@/utils/error";
+import { type ErrorOrNull, ErrorWithCategory, ErrorCategory, PostgreSQLError } from "@/server/error";
 import type { InvitationCode } from "@/server/api/modules/invitation-codes/dto/issue-invitation-code.dto";
 
 type Trx = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];

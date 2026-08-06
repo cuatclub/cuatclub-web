@@ -4,7 +4,7 @@ import type {
 	ValidateInvitationCodeRequest,
 	ValidateInvitationCodeResult,
 } from "@/server/api/modules/invitation-codes/dto/validate-invitation-code.dto";
-import type { ErrorOrNull } from "@/utils/error";
+import type { ErrorOrNull } from "@/server/error";
 
 /** Read-only check. Does not mark the code as used — see consumeInvitationCode for that. */
 export const validateInvitationCode = async (

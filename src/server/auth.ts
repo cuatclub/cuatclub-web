@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env } from "@/config/env";
 import { db } from "@/server/db";
 import * as schema from "@/server/db/schema";
 import { betterAuth } from "better-auth";
@@ -24,6 +24,8 @@ export const auth = betterAuth({
 	},
 	emailAndPassword: {
 		enabled: true,
+		minPasswordLength: 8,
+		autoSignIn: true,
 	},
 	trustedOrigins: [new URL(env.BETTER_AUTH_URL).origin],
 	advanced: {

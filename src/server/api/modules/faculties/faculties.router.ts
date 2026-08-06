@@ -1,6 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { listFaculties } from "@/server/api/modules/faculties/usecases/list-faculties.usecase";
-import { getTRPCError } from "@/utils/error";
+import { getTRPCError } from "@/server/error";
 import { TRPCError } from "@trpc/server";
 
 export const facultiesRouter = createTRPCRouter({

@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { clubs } from "@/server/db/schema/clubs";
 import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import type { UpdateClubRequest } from "@/server/api/modules/clubs/dto/update-club.dto";
-import type { ErrorOrNull } from "@/utils/error";
+import type { ErrorOrNull } from "@/server/error";
 
 export const updateClub = async (req: UpdateClubRequest): Promise<ErrorOrNull> => {
 	const { id, ...rest } = req;

@@ -5,7 +5,7 @@ import { validateInvitationCode } from "@/server/api/modules/invitation-codes/us
 import { IssueInvitationCodeRequestSchema } from "@/server/api/modules/invitation-codes/dto/issue-invitation-code.dto";
 import { ListInvitationCodesRequestSchema } from "@/server/api/modules/invitation-codes/dto/list-invitation-codes.dto";
 import { ValidateInvitationCodeRequestSchema } from "@/server/api/modules/invitation-codes/dto/validate-invitation-code.dto";
-import { getTRPCError } from "@/utils/error";
+import { getTRPCError } from "@/server/error";
 import { TRPCError } from "@trpc/server";
 
 export const invitationCodesRouter = createTRPCRouter({

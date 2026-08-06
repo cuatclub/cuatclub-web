@@ -1,6 +1,6 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { randomUUID } from "crypto";
-import { env } from "@/env";
+import { env } from "@/config/env";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
 const EXT_MAP: Record<string, string> = {

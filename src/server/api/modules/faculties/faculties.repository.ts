@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { type ErrorOrNull, PostgreSQLError } from "@/utils/error";
+import { type ErrorOrNull, PostgreSQLError } from "@/server/error";
 import type { Faculty } from "@/server/api/modules/faculties/dto/list-faculties.dto";
 
 export interface IFacultiesRepository {

@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { type ErrorOrNull, PostgreSQLError } from "@/utils/error";
+import { type ErrorOrNull, PostgreSQLError } from "@/server/error";
 import type { Category } from "@/server/api/modules/categories/dto/list-categories.dto";
 
 export interface ICategoriesRepository {
