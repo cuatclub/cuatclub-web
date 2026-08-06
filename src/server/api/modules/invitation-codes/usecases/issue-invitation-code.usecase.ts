@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto";
-import { invitationCodesRepository } from "@/server/api/modules/invitationCodes/repository/invitationCodes.repository";
-import type { InvitationCode, IssueInvitationCodeRequest } from "@/server/api/modules/invitationCodes/dto/issueInvitationCode.dto";
+import { invitationCodesRepository } from "@/server/api/modules/invitation-codes/repository/invitation-codes.repository";
+import type { InvitationCode, IssueInvitationCodeRequest } from "@/server/api/modules/invitation-codes/dto/issue-invitation-code.dto";
 import type { ErrorOrNull } from "@/utils/error";
 
 const DEFAULT_EXPIRES_IN_DAYS = 30;

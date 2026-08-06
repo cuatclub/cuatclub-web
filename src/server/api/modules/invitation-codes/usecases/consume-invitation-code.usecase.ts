@@ -1,6 +1,6 @@
 import type { db } from "@/server/db";
-import { invitationCodesRepository } from "@/server/api/modules/invitationCodes/repository/invitationCodes.repository";
-import { evaluate } from "@/server/api/modules/invitationCodes/usecases/validateInvitationCode.usecase";
+import { invitationCodesRepository } from "@/server/api/modules/invitation-codes/repository/invitation-codes.repository";
+import { evaluate } from "@/server/api/modules/invitation-codes/usecases/validate-invitation-code.usecase";
 import { ErrorCategory, ErrorWithCategory, type ErrorOrNull } from "@/utils/error";
 
 type Trx = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];

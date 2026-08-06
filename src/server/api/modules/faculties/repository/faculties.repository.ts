@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
 import { type ErrorOrNull, PostgreSQLError } from "@/utils/error";
-import type { Faculty } from "@/server/api/modules/faculties/dto/listFaculties.dto";
+import type { Faculty } from "@/server/api/modules/faculties/dto/list-faculties.dto";
 
 export interface IFacultiesRepository {
 	findAll(): Promise<[Faculty[], ErrorOrNull]>;

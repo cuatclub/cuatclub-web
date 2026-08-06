@@ -1,5 +1,5 @@
 import { z, type ZodSchema } from "zod";
-import type { invitationCodes } from "@/server/db/invitationCodes";
+import type { invitationCodes } from "@/server/db/invitation-codes";
 
 export type InvitationCode = typeof invitationCodes.$inferSelect;
 

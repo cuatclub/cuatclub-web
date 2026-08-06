@@ -1,5 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { listFaculties } from "@/server/api/modules/faculties/usecases/listFaculties.usecase";
+import { listFaculties } from "@/server/api/modules/faculties/usecases/list-faculties.usecase";
 import { getTRPCError } from "@/utils/error";
 import { TRPCError } from "@trpc/server";
 

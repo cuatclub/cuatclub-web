@@ -1,15 +1,15 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
-import { registerClub } from "@/server/api/modules/clubs/usecases/registerClub.usecase";
-import { getMineClub } from "@/server/api/modules/clubs/usecases/getMineClub.usecase";
-import { updateMineClubInfo } from "@/server/api/modules/clubs/usecases/updateMineClubInfo.usecase";
-import { setMineClubCategories } from "@/server/api/modules/clubs/usecases/setMineClubCategories.usecase";
-import { listClubs } from "@/server/api/modules/clubs/usecases/listClubs.usecase";
-import { getClubById } from "@/server/api/modules/clubs/usecases/getClubById.usecase";
-import { RegisterClubRequestSchema } from "@/server/api/modules/clubs/dto/registerClub.dto";
-import { UpdateMineClubInfoRequestSchema } from "@/server/api/modules/clubs/dto/updateMineClubInfo.dto";
-import { SetMineClubCategoriesRequestSchema } from "@/server/api/modules/clubs/dto/setMineClubCategories.dto";
-import { ListClubsRequestSchema } from "@/server/api/modules/clubs/dto/listClubs.dto";
-import { GetClubByIdRequestSchema } from "@/server/api/modules/clubs/dto/getClubById.dto";
+import { registerClub } from "@/server/api/modules/clubs/usecases/register-club.usecase";
+import { getMineClub } from "@/server/api/modules/clubs/usecases/get-mine-club.usecase";
+import { updateMineClubInfo } from "@/server/api/modules/clubs/usecases/update-mine-club-info.usecase";
+import { setMineClubCategories } from "@/server/api/modules/clubs/usecases/set-mine-club-categories.usecase";
+import { listClubs } from "@/server/api/modules/clubs/usecases/list-clubs.usecase";
+import { getClubById } from "@/server/api/modules/clubs/usecases/get-club-by-id.usecase";
+import { RegisterClubRequestSchema } from "@/server/api/modules/clubs/dto/register-club.dto";
+import { UpdateMineClubInfoRequestSchema } from "@/server/api/modules/clubs/dto/update-mine-club-info.dto";
+import { SetMineClubCategoriesRequestSchema } from "@/server/api/modules/clubs/dto/set-mine-club-categories.dto";
+import { ListClubsRequestSchema } from "@/server/api/modules/clubs/dto/list-clubs.dto";
+import { GetClubByIdRequestSchema } from "@/server/api/modules/clubs/dto/get-club-by-id.dto";
 import { getTRPCError } from "@/utils/error";
 import { TRPCError } from "@trpc/server";
 

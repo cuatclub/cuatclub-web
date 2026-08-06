@@ -1,10 +1,10 @@
 import { createTRPCRouter, adminProcedure, publicProcedure } from "@/server/api/trpc";
-import { issueInvitationCode } from "@/server/api/modules/invitationCodes/usecases/issueInvitationCode.usecase";
-import { listInvitationCodes } from "@/server/api/modules/invitationCodes/usecases/listInvitationCodes.usecase";
-import { validateInvitationCode } from "@/server/api/modules/invitationCodes/usecases/validateInvitationCode.usecase";
-import { IssueInvitationCodeRequestSchema } from "@/server/api/modules/invitationCodes/dto/issueInvitationCode.dto";
-import { ListInvitationCodesRequestSchema } from "@/server/api/modules/invitationCodes/dto/listInvitationCodes.dto";
-import { ValidateInvitationCodeRequestSchema } from "@/server/api/modules/invitationCodes/dto/validateInvitationCode.dto";
+import { issueInvitationCode } from "@/server/api/modules/invitation-codes/usecases/issue-invitation-code.usecase";
+import { listInvitationCodes } from "@/server/api/modules/invitation-codes/usecases/list-invitation-codes.usecase";
+import { validateInvitationCode } from "@/server/api/modules/invitation-codes/usecases/validate-invitation-code.usecase";
+import { IssueInvitationCodeRequestSchema } from "@/server/api/modules/invitation-codes/dto/issue-invitation-code.dto";
+import { ListInvitationCodesRequestSchema } from "@/server/api/modules/invitation-codes/dto/list-invitation-codes.dto";
+import { ValidateInvitationCodeRequestSchema } from "@/server/api/modules/invitation-codes/dto/validate-invitation-code.dto";
 import { getTRPCError } from "@/utils/error";
 import { TRPCError } from "@trpc/server";
 

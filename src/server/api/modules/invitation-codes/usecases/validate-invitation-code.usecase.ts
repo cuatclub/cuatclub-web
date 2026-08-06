@@ -1,9 +1,9 @@
-import { invitationCodesRepository } from "@/server/api/modules/invitationCodes/repository/invitationCodes.repository";
-import type { InvitationCode } from "@/server/api/modules/invitationCodes/dto/issueInvitationCode.dto";
+import { invitationCodesRepository } from "@/server/api/modules/invitation-codes/repository/invitation-codes.repository";
+import type { InvitationCode } from "@/server/api/modules/invitation-codes/dto/issue-invitation-code.dto";
 import type {
 	ValidateInvitationCodeRequest,
 	ValidateInvitationCodeResult,
-} from "@/server/api/modules/invitationCodes/dto/validateInvitationCode.dto";
+} from "@/server/api/modules/invitation-codes/dto/validate-invitation-code.dto";
 import type { ErrorOrNull } from "@/utils/error";
 
 /** Read-only check. Does not mark the code as used — see consumeInvitationCode for that. */

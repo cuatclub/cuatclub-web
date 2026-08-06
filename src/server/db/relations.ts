@@ -4,7 +4,7 @@ import { faculty } from "./faculty";
 import { faculties } from "./faculties";
 import { categories } from "./categories";
 import { clubs } from "./clubs";
-import { clubCategories } from "./clubCategories";
+import { clubCategories } from "./club-categories";
 
 export const userRelations = relations(user, ({ one }) => ({
 	faculty: one(faculty, {

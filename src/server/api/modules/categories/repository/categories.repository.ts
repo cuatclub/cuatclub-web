@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
 import { type ErrorOrNull, PostgreSQLError } from "@/utils/error";
-import type { Category } from "@/server/api/modules/categories/dto/listCategories.dto";
+import type { Category } from "@/server/api/modules/categories/dto/list-categories.dto";
 
 export interface ICategoriesRepository {
 	findAll(): Promise<[Category[], ErrorOrNull]>;

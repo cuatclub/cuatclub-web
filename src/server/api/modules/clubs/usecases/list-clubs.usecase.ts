@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { clubs } from "@/server/db/clubs";
 import { clubsRepository } from "@/server/api/modules/clubs/repository/clubs.repository";
-import type { ListClubsRequest, ListClubsResult } from "@/server/api/modules/clubs/dto/listClubs.dto";
+import type { ListClubsRequest, ListClubsResult } from "@/server/api/modules/clubs/dto/list-clubs.dto";
 import type { ErrorOrNull } from "@/utils/error";
 
 /** Only surfaces `completed` clubs — pending/info_submitted are not yet public. */

@@ -3,9 +3,9 @@ import { db } from "@/server/db";
 import { user } from "@/server/db/auth-schema";
 import { auth } from "@/utils/auth";
 import { clubsRepository } from "@/server/api/modules/clubs/repository/clubs.repository";
-import { validateInvitationCode } from "@/server/api/modules/invitationCodes/usecases/validateInvitationCode.usecase";
-import { consumeInvitationCode } from "@/server/api/modules/invitationCodes/usecases/consumeInvitationCode.usecase";
-import type { RegisterClubRequest, RegisterClubResult } from "@/server/api/modules/clubs/dto/registerClub.dto";
+import { validateInvitationCode } from "@/server/api/modules/invitation-codes/usecases/validate-invitation-code.usecase";
+import { consumeInvitationCode } from "@/server/api/modules/invitation-codes/usecases/consume-invitation-code.usecase";
+import type { RegisterClubRequest, RegisterClubResult } from "@/server/api/modules/clubs/dto/register-club.dto";
 import { ErrorCategory, ErrorWithCategory, PostgreSQLError, type ErrorOrNull } from "@/utils/error";
 
 /**

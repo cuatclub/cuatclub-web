@@ -6,7 +6,7 @@ import { faculty } from "@/server/db/faculty";
 import { faculties } from "@/server/db/faculties";
 import { categories } from "@/server/db/categories";
 import { clubs } from "@/server/db/clubs";
-import { clubCategories } from "@/server/db/clubCategories";
+import { clubCategories } from "@/server/db/club-categories";
 import { user } from "@/server/db/auth-schema";
 import { auth } from "@/utils/auth";
 

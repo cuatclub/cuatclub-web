@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { db } from "@/server/db";
 import { clubs } from "@/server/db/clubs";
-import { clubCategories } from "@/server/db/clubCategories";
+import { clubCategories } from "@/server/db/club-categories";
 import { type ErrorOrNull, ErrorWithCategory, ErrorCategory, PostgreSQLError } from "@/utils/error";
 import type { ClubRow, ClubWithRelations } from "@/server/api/modules/clubs/entity/club.entity";
 

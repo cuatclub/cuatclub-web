@@ -44,5 +44,5 @@ export class Club {
 	}
 
 	// registration_status transition rules (pending -> info_submitted -> completed)
-	// are intentionally left unimplemented here — see usecases/updateMineClubInfo.usecase.ts.
+	// are intentionally left unimplemented here — see usecases/update-mine-club-info.usecase.ts.
 }
