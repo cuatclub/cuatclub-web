@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, uuid, smallint, jsonb, pgEnum } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
-import { user } from "./auth-schema";
+import { user } from "./user";
 import { faculties } from "./faculties";
 
 export const clubRegistrationStatusEnum = pgEnum("club_registration_status", [
@@ -19,7 +19,6 @@ export const clubs = pgTable(
 			.notNull()
 			.unique()
 			.references(() => user.id),
-		email: text("email").notNull().unique(),
 		registrationStatus: clubRegistrationStatusEnum("registration_status").notNull().default("PENDING"),
 		name: text("name"),
 		logoUrl: text("logo_url"),

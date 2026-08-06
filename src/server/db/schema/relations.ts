@@ -1,19 +1,11 @@
 import { relations } from "drizzle-orm";
-import { user } from "./auth-schema";
+import { user } from "./user";
 import { faculties } from "./faculties";
 import { categories } from "./categories";
 import { clubs } from "./clubs";
 import { clubCategories } from "./club-categories";
 
-export const userRelations = relations(user, ({ one }) => ({
-	faculty: one(faculties, {
-		fields: [user.facultyId],
-		references: [faculties.id],
-	}),
-}));
-
 export const facultiesRelations = relations(faculties, ({ many }) => ({
-	users: many(user),
 	clubs: many(clubs),
 }));
 

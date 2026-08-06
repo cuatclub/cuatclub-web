@@ -43,6 +43,13 @@
       "when": 1786000144014,
       "tag": "0005_wonderful_azazel",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786001424262,
+      "tag": "0006_mighty_scarecrow",
+      "breakpoints": true
     }
   ]
 }

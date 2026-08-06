@@ -7,7 +7,10 @@ import { categories } from "@/server/db/schema/categories";
 import { invitationCodes } from "@/server/db/schema/invitation-codes";
 import { clubs } from "@/server/db/schema/clubs";
 import { clubCategories } from "@/server/db/schema/club-categories";
-import { account, session, user, verification } from "@/server/db/schema/auth-schema";
+import { account } from "@/server/db/schema/account";
+import { session } from "@/server/db/schema/session";
+import { user } from "@/server/db/schema/user";
+import { verification } from "@/server/db/schema/verification";
 import { auth } from "@/utils/auth";
 
 const facultyNames = [
