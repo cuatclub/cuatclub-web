@@ -1,7 +1,7 @@
-import { categoriesRouter } from "@/server/api/modules/categories/controller";
-import { facultiesRouter } from "@/server/api/modules/faculties/controller";
-import { invitationCodesRouter } from "@/server/api/modules/invitation-codes/controller";
-import { clubsRouter } from "@/server/api/modules/clubs/controller";
+import { categoriesRouter } from "@/server/api/modules/categories/categories.router";
+import { facultiesRouter } from "@/server/api/modules/faculties/faculties.router";
+import { invitationCodesRouter } from "@/server/api/modules/invitation-codes/invitation-codes.router";
+import { clubsRouter } from "@/server/api/modules/clubs/clubs.router";
 import { userRouter } from "@/server/api/routers/user";
 import { uploadRouter } from "@/server/api/routers/upload";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
