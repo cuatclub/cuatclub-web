@@ -4,9 +4,9 @@ import { user } from "./auth-schema";
 import { faculties } from "./faculties";
 
 export const clubRegistrationStatusEnum = pgEnum("club_registration_status", [
-	"pending",
-	"info_submitted",
-	"completed",
+	"PENDING",
+	"INFO_SUBMITTED",
+	"COMPLETED",
 ]);
 
 export const clubs = pgTable(
@@ -20,7 +20,7 @@ export const clubs = pgTable(
 			.unique()
 			.references(() => user.id),
 		email: text("email").notNull().unique(),
-		registrationStatus: clubRegistrationStatusEnum("registration_status").notNull().default("pending"),
+		registrationStatus: clubRegistrationStatusEnum("registration_status").notNull().default("PENDING"),
 		name: text("name"),
 		logoUrl: text("logo_url"),
 		facultyId: smallint("faculty_id").references(() => faculties.id),
@@ -54,7 +54,7 @@ export const clubs = pgTable(
 		),
 		check(
 			"clubs_info_complete",
-			sql`${t.registrationStatus} = 'pending' OR (
+			sql`${t.registrationStatus} = 'PENDING' OR (
 				${t.name} IS NOT NULL AND
 				${t.logoUrl} IS NOT NULL AND
 				${t.facultyId} IS NOT NULL AND

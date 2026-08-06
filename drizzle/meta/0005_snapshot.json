@@ -1,5 +1,5 @@
 {
-  "id": "68bcb181-ac2b-46d0-a0c9-9423c8253227",
+  "id": "6bfa007c-c146-4f4c-afac-0f7d7c0bb3d7",
   "prevId": "6c1f9140-bd64-46e2-af1b-a889b9cf184a",
   "version": "7",
   "dialect": "postgresql",
@@ -538,7 +538,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'pending'"
+          "default": "'PENDING'"
         },
         "name": {
           "name": "name",
@@ -695,7 +695,7 @@
         },
         "clubs_info_complete": {
           "name": "clubs_info_complete",
-          "value": "\"clubs\".\"registration_status\" = 'pending' OR (\n\t\t\t\t\"clubs\".\"name\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"logo_url\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"faculty_id\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"short_description\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"long_description\" IS NOT NULL\n\t\t\t)"
+          "value": "\"clubs\".\"registration_status\" = 'PENDING' OR (\n\t\t\t\t\"clubs\".\"name\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"logo_url\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"faculty_id\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"short_description\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"long_description\" IS NOT NULL\n\t\t\t)"
         }
       },
       "isRLSEnabled": false
@@ -863,9 +863,9 @@
       "name": "club_registration_status",
       "schema": "public",
       "values": [
-        "pending",
-        "info_submitted",
-        "completed"
+        "PENDING",
+        "INFO_SUBMITTED",
+        "COMPLETED"
       ]
     }
   },

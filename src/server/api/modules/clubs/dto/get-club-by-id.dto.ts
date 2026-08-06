@@ -1,5 +1,5 @@
 import { z, type ZodSchema } from "zod";
-import type { ClubRow } from "@/server/api/modules/clubs/entity/club.entity";
+import type { ClubRow } from "@/server/api/modules/clubs/club.entity";
 
 export type GetClubByIdRequest = { id: string };
 

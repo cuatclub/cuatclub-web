@@ -197,7 +197,7 @@ async function seedClubs() {
       id: clubId,
       userId,
       email: clubSeed.email,
-      registrationStatus: "completed",
+      registrationStatus: "COMPLETED",
       name: clubSeed.name,
       logoUrl: clubSeed.logoUrl,
       facultyId: facultyByLabel.get(clubSeed.facultyName) ?? null,

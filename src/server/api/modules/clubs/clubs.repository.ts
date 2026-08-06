@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 import { db } from "@/server/db";
 import { clubs } from "@/server/db/clubs";
 import { type ErrorOrNull, ErrorWithCategory, ErrorCategory, PostgreSQLError } from "@/utils/error";
-import type { ClubRow } from "@/server/api/modules/clubs/entity/club.entity";
+import type { ClubRow } from "@/server/api/modules/clubs/club.entity";
 import type { CreateClubRequest } from "@/server/api/modules/clubs/dto/create-club.dto";
 
 export interface IClubsRepository {

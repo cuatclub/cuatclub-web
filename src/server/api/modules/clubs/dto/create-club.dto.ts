@@ -13,7 +13,7 @@ const ContactsSchema = z.object({
 export const CreateClubRequestSchema: ZodSchema<CreateClubRequest> = z.object({
 	userId: z.string(),
 	email: z.string().email(),
-	registrationStatus: z.enum(["pending", "info_submitted", "completed"]).optional(),
+	registrationStatus: z.enum(["PENDING", "INFO_SUBMITTED", "COMPLETED"]).optional(),
 	name: z.string().min(1).nullable().optional(),
 	logoUrl: z.string().min(1).nullable().optional(),
 	facultyId: z.number().int().nullable().optional(),

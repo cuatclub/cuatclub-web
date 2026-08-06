@@ -1,4 +1,4 @@
-CREATE TYPE "public"."club_registration_status" AS ENUM('pending', 'info_submitted', 'completed');--> statement-breakpoint
+CREATE TYPE "public"."club_registration_status" AS ENUM('PENDING', 'INFO_SUBMITTED', 'COMPLETED');--> statement-breakpoint
 ALTER TYPE "public"."role" ADD VALUE 'CLUB';--> statement-breakpoint
 CREATE TABLE "categories" (
 	"id" "smallserial" PRIMARY KEY NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE "clubs" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" text NOT NULL,
 	"email" text NOT NULL,
-	"registration_status" "club_registration_status" DEFAULT 'pending' NOT NULL,
+	"registration_status" "club_registration_status" DEFAULT 'PENDING' NOT NULL,
 	"name" text,
 	"logo_url" text,
 	"faculty_id" smallint,
@@ -34,7 +34,7 @@ CREATE TABLE "clubs" (
 	CONSTRAINT "clubs_image_urls_max5" CHECK (cardinality("clubs"."image_urls") <= 5),
 	CONSTRAINT "clubs_contacts_is_object" CHECK ("clubs"."contacts" IS NULL OR jsonb_typeof("clubs"."contacts") = 'object'),
 	CONSTRAINT "clubs_contacts_keys" CHECK ("clubs"."contacts" IS NULL OR "clubs"."contacts" - 'instagram' - 'facebook' - 'tiktok' - 'line_oa' = '{}'::jsonb),
-	CONSTRAINT "clubs_info_complete" CHECK ("clubs"."registration_status" = 'pending' OR (
+	CONSTRAINT "clubs_info_complete" CHECK ("clubs"."registration_status" = 'PENDING' OR (
 				"clubs"."name" IS NOT NULL AND
 				"clubs"."logo_url" IS NOT NULL AND
 				"clubs"."faculty_id" IS NOT NULL AND

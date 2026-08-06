@@ -165,7 +165,7 @@ async function main() {
 				id: clubId,
 				userId: clubUserId,
 				email: demoClub.email,
-				registrationStatus: "completed",
+				registrationStatus: "COMPLETED",
 				name: demoClub.name,
 				logoUrl: placeholderImage(demoClub.imageLabel, 200, 200),
 				facultyId,
@@ -180,7 +180,7 @@ async function main() {
 				.update(clubs)
 				.set({
 					name: demoClub.name,
-					registrationStatus: "completed",
+					registrationStatus: "COMPLETED",
 					logoUrl: placeholderImage(demoClub.imageLabel, 200, 200),
 					facultyId,
 					shortDescription: demoClub.shortDescription,
