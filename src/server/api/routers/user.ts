@@ -7,7 +7,6 @@ import z from "zod";
 import { and, eq, ne } from "drizzle-orm";
 import { userServiceImpl } from "@/server/api/service/user.service";
 import { db } from "@/server/db";
-import { interestXUser } from "@/server/db/interestXUser";
 import { auth } from "@/utils/auth";
 
 export const userRouter = createTRPCRouter({
@@ -58,11 +57,6 @@ export const userRouter = createTRPCRouter({
       where: eq(user.id, userId),
       with: {
         faculty: true,
-        interests: {
-          with: {
-            interest: true,
-          },
-        },
       },
     });
 
@@ -90,7 +84,6 @@ export const userRouter = createTRPCRouter({
       notifyEventReminders: record.notifyEventReminders,
       notifyMatchingEvents: record.notifyMatchingEvents,
       notifyClubUpdates: record.notifyClubUpdates,
-      interests: record.interests.map((i) => i.interestId),
     };
   }),
 
@@ -152,33 +145,6 @@ export const userRouter = createTRPCRouter({
 
       const res = await userServiceImpl.update(eq(user.id, userId), input);
       if (res) return new TRPCError(getTRPCError(res));
-      return null;
-    }),
-
-  updateInterests: protectedProcedure
-    .input(
-      z.object({
-        interests: z.array(z.string()).default([]),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id;
-
-      await db.transaction(async (tx) => {
-        await tx
-          .delete(interestXUser)
-          .where(eq(interestXUser.userId, userId));
-
-        if (input.interests.length > 0) {
-          await tx.insert(interestXUser).values(
-            input.interests.map((interestId) => ({
-              userId,
-              interestId,
-            })),
-          );
-        }
-      });
-
       return null;
     }),
 

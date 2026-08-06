@@ -1,22 +1,17 @@
 import "dotenv/config";
-import { randomUUID } from "crypto";
+import { randomUUID, randomBytes } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/server/db";
-import { activityType } from "@/server/db/activityType";
 import { faculty } from "@/server/db/faculty";
-import { interest } from "@/server/db/interest";
+import { faculties } from "@/server/db/faculties";
+import { categories } from "@/server/db/categories";
+import { invitationCodes } from "@/server/db/invitationCodes";
+import { clubs } from "@/server/db/clubs";
+import { clubCategories } from "@/server/db/clubCategories";
 import { account, session, user, verification } from "@/server/db/auth-schema";
-import { calendarItem } from "@/server/db/calendarItem";
-import { eventReminderDelivery } from "@/server/db/eventReminderDelivery";
-import { interestXOrganization } from "@/server/db/interestXOrganization";
-import { interestXPost } from "@/server/db/interestXPost";
-import { interestXUser } from "@/server/db/interestXUser";
-import { organization } from "@/server/db/organization";
-import { post } from "@/server/db/post";
-import { userXOrganization } from "@/server/db/userXOrganization";
 import { auth } from "@/utils/auth";
 
-const faculties = [
+const facultyNames = [
   "Allied Health Sciences",
   "Architecture",
   "Arts",
@@ -41,37 +36,22 @@ const faculties = [
   "Graduate School",
 ] as const;
 
-const interests = [
-  { name: "ธุรกิจ", icon: "BriefcaseBusiness" },
-  { name: "เทคโนโลยี", icon: "Cpu" },
-  { name: "แพทย์", icon: "HeartPulse" },
-  { name: "กีฬา", icon: "Volleyball" },
-  { name: "พัฒนาชุมชน", icon: "HandHeart" },
-  { name: "สารสนเทศ", icon: "Monitor" },
-  { name: "ศิลปะ", icon: "Palette" },
-  { name: "ดนตรี", icon: "Music" },
-  { name: "การศึกษา", icon: "GraduationCap" },
-] as const;
-
-const activityTypes = [
-  "สัมมนา / บรรยาย",
-  "วอร์คชอป / อบรม",
-  "การแข่งขัน",
-  "นิทรรศการ / งานแสดง",
-  "คอนเสิร์ต / การแสดง",
-  "กิจกรรมอาสา / ชุมชน",
-  "Networking",
-  "กิจกรรมกีฬา",
-  "งานเปิดรับสมัคร / รับสมาชิก",
-  "อื่นๆ",
+const categorySeeds = [
+  { label: "เทคโนโลยี", fontColor: "#1D4ED8", backgroundColor: "#DBEAFE" },
+  { label: "ธุรกิจ", fontColor: "#B45309", backgroundColor: "#FEF3C7" },
+  { label: "ศิลปะ", fontColor: "#7C3AED", backgroundColor: "#EDE9FE" },
+  { label: "ดนตรี", fontColor: "#BE185D", backgroundColor: "#FCE7F3" },
+  { label: "กีฬา", fontColor: "#047857", backgroundColor: "#D1FAE5" },
+  { label: "พัฒนาชุมชน", fontColor: "#B91C1C", backgroundColor: "#FEE2E2" },
+  { label: "วิชาการ", fontColor: "#1E3A8A", backgroundColor: "#E0E7FF" },
 ] as const;
 
 type SeedUser = {
   email: string;
   name: string;
   username: string;
-  role: "ATTENDEE" | "ORGANIZATION" | "ADMIN";
-  facultyName: (typeof faculties)[number];
+  role: "ATTENDEE" | "ADMIN";
+  facultyName: (typeof facultyNames)[number];
   password: string;
 };
 
@@ -85,38 +65,6 @@ const usersToSeed: SeedUser[] = [
     password: "Seed1234!",
   },
   {
-    email: "seed.organizer@example.com",
-    name: "Nara Pattanakul",
-    username: "nara.pattanakul",
-    role: "ORGANIZATION",
-    facultyName: "Engineering",
-    password: "Seed1234!",
-  },
-  {
-    email: "seed.music@example.com",
-    name: "Mina Siriporn",
-    username: "mina.siriporn",
-    role: "ORGANIZATION",
-    facultyName: "Arts",
-    password: "Seed1234!",
-  },
-  {
-    email: "seed.entrepreneur@example.com",
-    name: "Preecha Rattanakul",
-    username: "preecha.rattanakul",
-    role: "ORGANIZATION",
-    facultyName: "Commerce and Accountancy",
-    password: "Seed1234!",
-  },
-  {
-    email: "seed.sports@example.com",
-    name: "Korn Chaiyaporn",
-    username: "korn.chaiyaporn",
-    role: "ORGANIZATION",
-    facultyName: "Sports Science",
-    password: "Seed1234!",
-  },
-  {
     email: "seed.admin@example.com",
     name: "System Administrator",
     username: "system.admin",
@@ -126,38 +74,72 @@ const usersToSeed: SeedUser[] = [
   },
 ];
 
+type ClubSeed = {
+  email: string;
+  name: string;
+  facultyName: (typeof facultyNames)[number];
+  categoryLabels: Array<(typeof categorySeeds)[number]["label"]>;
+  shortDescription: string;
+  longDescription: string;
+  logoUrl: string;
+  imageUrls: string[];
+  contacts: { instagram?: string; facebook?: string; tiktok?: string; line_oa?: string };
+  password: string;
+};
+
+const clubsToSeed: ClubSeed[] = [
+  {
+    email: "seed.club.innovation@example.com",
+    name: "Chula Innovation Network",
+    facultyName: "Engineering",
+    categoryLabels: ["เทคโนโลยี", "ธุรกิจ"],
+    shortDescription: "ชมรมสตาร์ทอัพและนวัตกรรมที่ช่วยให้นิสิตพัฒนาโซลูชันจริง",
+    longDescription:
+      "เราจัดกิจกรรมที่ผสมผสานระหว่างเทคโนโลยี การออกแบบผลิตภัณฑ์ และการคิดเชิงธุรกิจ ผ่าน Hackathon, Design Sprint และ Product Clinic ที่มี mentor จากนักพัฒนาจริง",
+    logoUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=200&q=80",
+    imageUrls: ["https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80"],
+    contacts: { instagram: "chula.innovation", facebook: "ChulaInnovationNetwork" },
+    password: "Seed1234!",
+  },
+  {
+    email: "seed.club.music@example.com",
+    name: "The Sound Lab",
+    facultyName: "Arts",
+    categoryLabels: ["ดนตรี", "ศิลปะ"],
+    shortDescription: "คอมมูนิตี้นักดนตรีและครีเอทีฟที่เปิดพื้นที่ให้ลองสร้างเสียงใหม่ ๆ",
+    longDescription:
+      "The Sound Lab จัด Open Mic, studio sessions และ workshop ให้สมาชิกได้ฝึกซ้อมและสร้างผลงานร่วมกันอย่างใกล้ชิด",
+    logoUrl: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=200&q=80",
+    imageUrls: ["https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80"],
+    contacts: { instagram: "thesoundlab.cu", tiktok: "thesoundlab.th" },
+    password: "Seed1234!",
+  },
+];
+
 async function resetSeedData() {
   await db.transaction(async (tx) => {
-    await tx.delete(interestXUser).where(sql`true`);
-    await tx.delete(interestXOrganization).where(sql`true`);
-    await tx.delete(interestXPost).where(sql`true`);
-    await tx.delete(userXOrganization).where(sql`true`);
-    await tx.delete(calendarItem).where(sql`true`);
-    await tx.delete(eventReminderDelivery).where(sql`true`);
+    await tx.delete(clubCategories).where(sql`true`);
+    await tx.delete(clubs).where(sql`true`);
+    await tx.delete(invitationCodes).where(sql`true`);
     await tx.delete(session).where(sql`true`);
     await tx.delete(account).where(sql`true`);
     await tx.delete(verification).where(sql`true`);
-    await tx.delete(post).where(sql`true`);
-    await tx.delete(organization).where(sql`true`);
     await tx.delete(user).where(sql`true`);
-    await tx.delete(interest).where(sql`true`);
-    await tx.delete(activityType).where(sql`true`);
+    await tx.delete(categories).where(sql`true`);
+    await tx.delete(faculties).where(sql`true`);
     await tx.delete(faculty).where(sql`true`);
   });
 }
 
 async function seedBaseData() {
   await db.transaction(async (tx) => {
-    for (const name of faculties) {
+    for (const name of facultyNames) {
       await tx.insert(faculty).values({ id: randomUUID(), name });
+      await tx.insert(faculties).values({ label: name });
     }
 
-    for (const name of activityTypes) {
-      await tx.insert(activityType).values({ id: randomUUID(), name });
-    }
-
-    for (const item of interests) {
-      await tx.insert(interest).values({ id: randomUUID(), name: item.name, icon: item.icon });
+    for (const categorySeed of categorySeeds) {
+      await tx.insert(categories).values(categorySeed);
     }
   });
 }
@@ -183,9 +165,6 @@ async function seedUsers() {
         facultyId: facultyByName.get(seedUser.facultyName) ?? null,
         onboardingComplete: true,
         isReceiveMail: true,
-        notifyEventReminders: true,
-        notifyMatchingEvents: true,
-        notifyClubUpdates: true,
         emailVerified: true,
         role: seedUser.role,
       })
@@ -195,340 +174,80 @@ async function seedUsers() {
   }
 }
 
-async function seedOrganizationsAndContent() {
-  const facultyRows = await db.select({ id: faculty.id, name: faculty.name }).from(faculty);
-  const facultyByName = new Map(facultyRows.map((row) => [row.name, row.id]));
-  const interestRows = await db.select({ id: interest.id, name: interest.name }).from(interest);
-  const interestByName = new Map(interestRows.map((row) => [row.name, row.id]));
-  const activityRows = await db.select({ id: activityType.id, name: activityType.name }).from(activityType);
-  const activityByName = new Map(activityRows.map((row) => [row.name, row.id]));
+async function seedClubs() {
+  const facultiesRows = await db.select({ id: faculties.id, label: faculties.label }).from(faculties);
+  const facultyByLabel = new Map(facultiesRows.map((row) => [row.label, row.id]));
+  const categoryRows = await db.select({ id: categories.id, label: categories.label }).from(categories);
+  const categoryByLabel = new Map(categoryRows.map((row) => [row.label, row.id]));
 
-  const organizationSeeds = [
-    {
-      managerEmails: ["seed.organizer@example.com", "seed.music@example.com"],
-      name: "Chula Innovation Network",
-      facultyName: "Engineering",
-      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80",
-      bio: "ชมรมสตาร์ทอัพและนวัตกรรมบน campus ที่ช่วยให้นิสิตพัฒนาโซลูชันจริงสำหรับปัญหาชุมชน โดยเน้นการทำงานแบบทีมและการส่งมอบผลงานที่ใช้งานได้",
-      detailedDescription:
-        "เราจัดกิจกรรมที่ผสมผสานระหว่างการพัฒนาเทคโนโลยี การออกแบบผลิตภัณฑ์ และการคิดเชิงธุรกิจ เพื่อให้สมาชิกได้เรียนรู้การสร้างผลงานจากแนวคิดสู่การใช้งานจริง ผ่านโปรเจกต์ในรูปแบบ Hackathon, Design Sprint, และ Product Clinic ที่มี mentor จากนักพัฒนาจริงและผู้เชี่ยวชาญในวงการ",
-      gallery: [
-        "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
-        "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80",
-        "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
-      ],
-      socials: {
-        signUpForm: "https://example.com/forms/chula-innovation",
-        discord: "discord.gg/chula-innovation",
-        instagram: "chula.innovation",
-        facebook: "ChulaInnovationNetwork",
-        tiktok: "chula.inno.official",
-        line: "@chulainno",
+  for (const clubSeed of clubsToSeed) {
+    const result = await auth.api.signUpEmail({
+      body: {
+        email: clubSeed.email,
+        password: clubSeed.password,
+        name: clubSeed.name,
+        role: "CLUB",
       },
-      averageHoursPerWeek: 8,
-      recruitmentPeriod: { allYear: false, start: new Date("2026-08-01"), end: new Date("2026-12-15") },
-      interestNames: ["เทคโนโลยี", "ธุรกิจ", "พัฒนาชุมชน"],
-      posts: [
-        {
-          title: "Hackathon for Good 2026",
-          description: "แข่งขันสร้างสรรค์โปรเจกต์เพื่อชุมชนใน 48 ชั่วโมง พร้อมเวิร์กช็อปเตรียมตัวและรับ feedback จาก mentor จริง",
-          activityTypeName: "การแข่งขัน",
-          interestNames: ["เทคโนโลยี", "พัฒนาชุมชน"],
-          dateOffsetDays: 18,
-          image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=700&q=80",
-        },
-        {
-          title: "Product Design Sprint",
-          description: "เวิร์กช็อปออกแบบผลิตภัณฑ์สำหรับผู้เริ่มต้น พร้อมกรณีศึกษาและการนำเสนอให้กับผู้มีส่วนได้ส่วนเสีย",
-          activityTypeName: "วอร์คชอป / อบรม",
-          interestNames: ["เทคโนโลยี", "ศิลปะ"],
-          dateOffsetDays: 36,
-          image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&q=80",
-        },
-      ],
-    },
-    {
-      managerEmails: ["seed.music@example.com", "seed.organizer@example.com"],
-      name: "The Sound Lab",
-      facultyName: "Arts",
-      image: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=600&q=80",
-      bio: "คอมมูนิตี้นักดนตรีและครีเอทีฟที่เปิดพื้นที่ให้สมาชิกลองสร้างเสียงใหม่ ๆ ผ่านการแสดงสด การบันทึกเสียง และการทำงานร่วมกับศิลปินในวงการ",
-      detailedDescription:
-        "The Sound Lab เป็นพื้นที่สำหรับคนที่รักเสียงเพลงและครีเอทีฟที่อยากลองพัฒนาทักษะการแสดง การเรียบเรียงเพลง และการสร้างคอนเทนต์ด้วยตัวเอง เราจัด Open Mic, studio sessions, และ workshop ที่ให้สมาชิกได้ฝึกซ้อมและสร้างผลงานร่วมกันอย่างใกล้ชิด",
-      gallery: [
-        "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80",
-        "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=800&q=80",
-        "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&q=80",
-      ],
-      socials: {
-        signUpForm: "https://example.com/forms/the-sound-lab",
-        discord: "discord.gg/soundlab",
-        instagram: "thesoundlab.cu",
-        facebook: "TheSoundLabCU",
-        tiktok: "thesoundlab.th",
-        line: "@thesoundlab",
-      },
-      averageHoursPerWeek: 6,
-      recruitmentPeriod: { allYear: true },
-      interestNames: ["ดนตรี", "ศิลปะ", "การศึกษา"],
-      posts: [
-        {
-          title: "Open Mic Night",
-          description: "คืนแสดงสดสำหรับนักร้องและนักดนตรีสมัครเล่น โดยมีพื้นที่ให้แสดง 3 เพลงต่อทีม พร้อมการถ่ายภาพและอัปโหลดคลิปสั้นหลังงาน",
-          activityTypeName: "คอนเสิร์ต / การแสดง",
-          interestNames: ["ดนตรี", "ศิลปะ"],
-          dateOffsetDays: 6,
-          image: "https://images.unsplash.com/photo-1470229722913-7c090be32205?w=700&q=80",
-        },
-        {
-          title: "Studio Session & Songwriting Clinic",
-          description: "เวิร์กช็อปการเรียบเรียงเพลงและการบันทึกเสียงสำหรับผู้เริ่มต้นที่อยากสร้างผลงานจริง",
-          activityTypeName: "วอร์คชอป / อบรม",
-          interestNames: ["ดนตรี", "การศึกษา"],
-          dateOffsetDays: 24,
-          image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=700&q=80",
-        },
-      ],
-    },
-    {
-      managerEmails: ["seed.entrepreneur@example.com"],
-      name: "Catalyst Collective",
-      facultyName: "Commerce and Accountancy",
-      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80",
-      bio: "ชมรมผู้ประกอบการและนักธุรกิจรุ่นเยาว์ที่ช่วยให้นิสิตฝึกคิดเชิงกลยุทธ์และนำไอเดียสู่โมเดลธุรกิจที่จับต้องได้",
-      detailedDescription:
-        "Catalyst Collective จัดวงสนทนาและโครงการสำหรับคนที่อยากเรียนรู้เรื่อง startup, finance, และ product-market fit ผ่านเวที pitch night, workshop, และ mentor circle ที่เปิดโอกาสให้สมาชิกได้สร้างความสัมพันธ์กับนักธุรกิจและผู้ประกอบการในพื้นที่",
-      gallery: [
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80",
-        "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&q=80",
-      ],
-      socials: {
-        signUpForm: "https://example.com/forms/catalyst-collective",
-        instagram: "catalyst.collective",
-        facebook: "CatalystCollectiveCU",
-        line: "@catalystcu",
-      },
-      averageHoursPerWeek: 10,
-      recruitmentPeriod: { allYear: false, start: new Date("2026-09-01"), end: new Date("2026-11-30") },
-      interestNames: ["ธุรกิจ", "เทคโนโลยี", "การศึกษา"],
-      posts: [
-        {
-          title: "Startup Pitch Night",
-          description: "เวทีพิตช์ไอเดียธุรกิจแบบเรียลไทม์ พร้อม feedback จากผู้เชี่ยวชาญและเครือข่ายนักลงทุน",
-          activityTypeName: "Networking",
-          interestNames: ["ธุรกิจ", "เทคโนโลยี"],
-          dateOffsetDays: 14,
-          image: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=700&q=80",
-        },
-        {
-          title: "Finance 101 Seminar",
-          description: "สัมมนาเรื่องการจัดการเงินและทักษะการตัดสินใจทางการเงินสำหรับนักศึกษาในช่วงเริ่มต้น",
-          activityTypeName: "สัมมนา / บรรยาย",
-          interestNames: ["ธุรกิจ", "การศึกษา"],
-          dateOffsetDays: 27,
-          image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=700&q=80",
-        },
-      ],
-    },
-    {
-      managerEmails: ["seed.sports@example.com"],
-      name: "Pulse Athletics",
-      facultyName: "Sports Science",
-      image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=600&q=80",
-      bio: "ชมรมกีฬาและสุขภาพที่ส่งเสริมการออกกำลังกายเป็นกิจกรรมกลุ่มและสร้างบรรยากาศการมีส่วนร่วมในคณะและชุมชน",
-      detailedDescription:
-        "Pulse Athletics เชิญชวนคนรักกีฬาและสุขภาพทุกระดับฝีมือเข้าร่วมกิจกรรมฝึกซ้อม, การแข่งขันภายในคณะ, และโครงการสุขภาพเชิงชุมชน เราให้ความสำคัญกับทั้งการพัฒนาทักษะและการสร้างความสัมพันธ์ที่ดีจากการทำกิจกรรมร่วมกัน",
-      gallery: [
-        "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=80",
-        "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80",
-      ],
-      socials: {
-        signUpForm: "https://example.com/forms/pulse-athletics",
-        instagram: "pulse.athletics",
-        facebook: "PulseAthleticsCU",
-        line: "@pulseathletics",
-      },
-      averageHoursPerWeek: 7,
-      recruitmentPeriod: { allYear: true },
-      interestNames: ["กีฬา", "พัฒนาชุมชน"],
-      posts: [
-        {
-          title: "Inter-Faculty Football Cup",
-          description: "ทัวร์นาเมนต์ฟุตบอลระหว่างคณะสำหรับทีม 7 คนขึ้นไป พร้อมกิจกรรม networking หลังแข่งขัน",
-          activityTypeName: "กิจกรรมกีฬา",
-          interestNames: ["กีฬา"],
-          dateOffsetDays: 12,
-          image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=700&q=80",
-        },
-        {
-          title: "Weekend Run Club",
-          description: "กิจกรรมวิ่งเพื่อสุขภาพและสร้างแรงบันดาลใจในช่วงเช้า พร้อมการแบ่งกลุ่มตามระดับความเร็ว",
-          activityTypeName: "กิจกรรมกีฬา",
-          interestNames: ["กีฬา"],
-          dateOffsetDays: 22,
-          image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=700&q=80",
-        },
-      ],
-    },
-  ];
-
-  const attendeeUser = await db.query.user.findFirst({ where: eq(user.email, "seed.attendee@example.com") });
-  if (!attendeeUser) {
-    throw new Error("Attendee user was not found for relationship seeding.");
-  }
-
-  const createdOrganizationIds: string[] = [];
-  const createdPostIds: string[] = [];
-
-  for (const organizationSeed of organizationSeeds) {
-    const managerUsers = await Promise.all(
-      organizationSeed.managerEmails.map(async (email) => {
-        const existingUser = await db.query.user.findFirst({ where: eq(user.email, email) });
-        if (!existingUser) {
-          throw new Error(`Manager user ${email} was not found.`);
-        }
-        return existingUser;
-      }),
-    );
-
-    const organizationId = randomUUID();
-    await db.insert(organization).values({
-      id: organizationId,
-      name: organizationSeed.name,
-      facultyId: facultyByName.get(organizationSeed.facultyName) ?? null,
-      category: "CLUB",
-      averageHoursPerWeek: organizationSeed.averageHoursPerWeek,
-      bio: organizationSeed.bio,
-      detailedDescription: organizationSeed.detailedDescription,
-      gallery: organizationSeed.gallery,
-      recruitmentPeriod: organizationSeed.recruitmentPeriod,
-      userId: managerUsers[0]!.id,
-      isBanned: false,
-      image: organizationSeed.image,
-      ownerContact: {
-        name: organizationSeed.name,
-        email: managerUsers[0]!.email,
-        phone: "+66 81 234 5678",
-        line: `@${organizationSeed.name.toLowerCase().replace(/\s+/g, "")}`,
-      },
-      socials: organizationSeed.socials,
     });
-    createdOrganizationIds.push(organizationId);
+    const userId = result.user.id;
+    await db.update(user).set({ role: "CLUB", emailVerified: true }).where(eq(user.id, userId));
 
-    const orgInterestIds = organizationSeed.interestNames
-      .map((interestName) => interestByName.get(interestName))
-      .filter((interestId): interestId is string => Boolean(interestId));
-    if (orgInterestIds.length > 0) {
-      await db.insert(interestXOrganization).values(
-        orgInterestIds.map((interestId) => ({
-          interestId,
-          organizationId,
-        })),
-      );
-    }
-
-    for (const postSeed of organizationSeed.posts) {
-      const activityTypeId = activityByName.get(postSeed.activityTypeName);
-      if (!activityTypeId) {
-        continue;
-      }
-
-      const postId = randomUUID();
-      const eventDate = new Date();
-      eventDate.setDate(eventDate.getDate() + postSeed.dateOffsetDays);
-      eventDate.setHours(19, 0, 0, 0);
-
-      await db.insert(post).values({
-        id: postId,
-        organizationId,
-        activityTypeId,
-        title: postSeed.title,
-        description: postSeed.description,
-        instaLink: `https://instagram.com/${organizationSeed.socials.instagram ?? "club"}`,
-        image: postSeed.image,
-        date: eventDate,
-      });
-      createdPostIds.push(postId);
-
-      const postInterestIds = postSeed.interestNames
-        .map((interestName) => interestByName.get(interestName))
-        .filter((interestId): interestId is string => Boolean(interestId));
-      if (postInterestIds.length > 0) {
-        await db.insert(interestXPost).values(
-          postInterestIds.map((interestId) => ({
-            interestId,
-            postId,
-          })),
-        );
-      }
-    }
-
-    for (const managerUser of managerUsers) {
-      await db.insert(userXOrganization).values({
-        userId: managerUser.id,
-        organizationId,
-      });
-    }
-  }
-
-  const attendeeInterestIds = ["เทคโนโลยี", "ดนตรี", "การศึกษา"]
-    .map((interestName) => interestByName.get(interestName))
-    .filter((interestId): interestId is string => Boolean(interestId));
-  if (attendeeInterestIds.length > 0) {
-    await db.delete(interestXUser).where(eq(interestXUser.userId, attendeeUser.id));
-    await db.insert(interestXUser).values(
-      attendeeInterestIds.map((interestId) => ({
-        userId: attendeeUser.id,
-        interestId,
-      })),
-    );
-  }
-
-  if (createdOrganizationIds.length > 0) {
-    await db.delete(userXOrganization).where(eq(userXOrganization.userId, attendeeUser.id));
-    await db.insert(userXOrganization).values(
-      createdOrganizationIds.slice(0, 3).map((organizationId) => ({
-        userId: attendeeUser.id,
-        organizationId,
-      })),
-    );
-  }
-
-  if (createdPostIds.length >= 2) {
-    await db.insert(calendarItem).values([
-      {
-        id: randomUUID(),
-        userId: attendeeUser.id,
-        postId: createdPostIds[0]!,
-      },
-      {
-        id: randomUUID(),
-        userId: attendeeUser.id,
-        postId: createdPostIds[1]!,
-      },
-    ]);
-
-    await db.insert(eventReminderDelivery).values({
-      userId: attendeeUser.id,
-      postId: createdPostIds[0]!,
-      claimedAt: new Date(),
-      sentAt: new Date(),
+    const clubId = randomUUID();
+    await db.insert(clubs).values({
+      id: clubId,
+      userId,
+      email: clubSeed.email,
+      registrationStatus: "completed",
+      name: clubSeed.name,
+      logoUrl: clubSeed.logoUrl,
+      facultyId: facultyByLabel.get(clubSeed.facultyName) ?? null,
+      shortDescription: clubSeed.shortDescription,
+      longDescription: clubSeed.longDescription,
+      imageUrls: clubSeed.imageUrls,
+      contacts: clubSeed.contacts,
     });
-  }
 
-  console.log("Seeded organizations, posts, and relationships.");
+    const categoryIds = clubSeed.categoryLabels
+      .map((label) => categoryByLabel.get(label))
+      .filter((id): id is number => id !== undefined);
+    if (categoryIds.length > 0) {
+      await db.insert(clubCategories).values(categoryIds.map((categoryId) => ({ clubId, categoryId })));
+    }
+
+    console.log(`Seeded club: ${clubSeed.name}`);
+  }
+}
+
+async function seedInvitationCodes() {
+  const expiredAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  const pendingInvites = ["seed.club.pending@example.com"];
+
+  for (const email of pendingInvites) {
+    const inviteCode = randomBytes(6).toString("hex").toUpperCase();
+    await db.insert(invitationCodes).values({
+      id: randomUUID(),
+      email,
+      inviteCode,
+      expiredAt,
+    });
+    console.log(`Issued invitation code for ${email}: ${inviteCode}`);
+  }
 }
 
 async function main() {
-  console.log("Resetting and seeding base data and users...");
+  console.log("Resetting and seeding base data, users, and clubs...");
   await resetSeedData();
   await seedBaseData();
   await seedUsers();
-  await seedOrganizationsAndContent();
+  await seedClubs();
+  await seedInvitationCodes();
   console.log("Seeding completed.");
   console.log("Login credentials:");
   for (const userData of usersToSeed) {
     console.log(`- ${userData.email} / ${userData.password}`);
+  }
+  for (const clubData of clubsToSeed) {
+    console.log(`- ${clubData.email} / ${clubData.password}`);
   }
 }
 
