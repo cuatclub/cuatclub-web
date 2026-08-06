@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import { auth } from "@/utils/auth";
+import { auth } from "@/server/auth";
 import { ATTENDEE_LOGIN_PATH, defaultHomePathForRole } from "@/lib/auth-paths";
 
 export type AppRole = "ATTENDEE" | "ORGANIZATION" | "ADMIN";

@@ -7,7 +7,7 @@ import { categories } from "@/server/db/schema/categories";
 import { clubs } from "@/server/db/schema/clubs";
 import { clubCategories } from "@/server/db/schema/club-categories";
 import { user } from "@/server/db/schema/user";
-import { auth } from "@/utils/auth";
+import { auth } from "@/server/auth";
 
 const DEMO_PASSWORD = "Demo1234!";
 
