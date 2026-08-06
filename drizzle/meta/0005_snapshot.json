@@ -1,5 +1,5 @@
 {
-  "id": "6bfa007c-c146-4f4c-afac-0f7d7c0bb3d7",
+  "id": "d56a9b96-ecfc-4cd3-afd9-9bbd98cb7149",
   "prevId": "6c1f9140-bd64-46e2-af1b-a889b9cf184a",
   "version": "7",
   "dialect": "postgresql",
@@ -245,7 +245,7 @@
         },
         "faculty_id": {
           "name": "faculty_id",
-          "type": "text",
+          "type": "smallint",
           "primaryKey": false,
           "notNull": false
         },
@@ -302,10 +302,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "user_faculty_id_faculty_id_fk": {
-          "name": "user_faculty_id_faculty_id_fk",
+        "user_faculty_id_faculties_id_fk": {
+          "name": "user_faculty_id_faculties_id_fk",
           "tableFrom": "user",
-          "tableTo": "faculty",
+          "tableTo": "faculties",
           "columnsFrom": [
             "faculty_id"
           ],
@@ -598,38 +598,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "clubs_faculty_id_idx": {
-          "name": "clubs_faculty_id_idx",
-          "columns": [
-            {
-              "expression": "faculty_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "clubs_status_idx": {
-          "name": "clubs_status_idx",
-          "columns": [
-            {
-              "expression": "registration_status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "clubs_user_id_user_id_fk": {
           "name": "clubs_user_id_user_id_fk",
@@ -676,28 +645,7 @@
         }
       },
       "policies": {},
-      "checkConstraints": {
-        "clubs_short_description_len": {
-          "name": "clubs_short_description_len",
-          "value": "\"clubs\".\"short_description\" IS NULL OR char_length(\"clubs\".\"short_description\") <= 180"
-        },
-        "clubs_image_urls_max5": {
-          "name": "clubs_image_urls_max5",
-          "value": "cardinality(\"clubs\".\"image_urls\") <= 5"
-        },
-        "clubs_contacts_is_object": {
-          "name": "clubs_contacts_is_object",
-          "value": "\"clubs\".\"contacts\" IS NULL OR jsonb_typeof(\"clubs\".\"contacts\") = 'object'"
-        },
-        "clubs_contacts_keys": {
-          "name": "clubs_contacts_keys",
-          "value": "\"clubs\".\"contacts\" IS NULL OR \"clubs\".\"contacts\" - 'instagram' - 'facebook' - 'tiktok' - 'line_oa' = '{}'::jsonb"
-        },
-        "clubs_info_complete": {
-          "name": "clubs_info_complete",
-          "value": "\"clubs\".\"registration_status\" = 'PENDING' OR (\n\t\t\t\t\"clubs\".\"name\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"logo_url\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"faculty_id\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"short_description\" IS NOT NULL AND\n\t\t\t\t\"clubs\".\"long_description\" IS NOT NULL\n\t\t\t)"
-        }
-      },
+      "checkConstraints": {},
       "isRLSEnabled": false
     },
     "public.faculties": {
@@ -729,45 +677,6 @@
           ]
         }
       },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.faculty": {
-      "name": "faculty",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

@@ -16,7 +16,7 @@ export const UpdateUserRequestSchema = z.object({
     id: z.string().uuid(),
     name: z.string().optional(),
     image: z.string().optional(),
-    facultyId: z.string().uuid().optional(),
+    facultyId: z.number().int().optional(),
     isReceiveMail: z.boolean().optional(),
     notifyEventReminders: z.boolean().optional(),
     notifyMatchingEvents: z.boolean().optional(),
@@ -37,7 +37,7 @@ export const UpdateProfileRequestSchema = z.object({
 		.transform((value) => value.toLowerCase())
 		.nullable()
 		.optional(),
-    facultyId: z.string().uuid().nullable().optional(),
+    facultyId: z.number().int().nullable().optional(),
     isReceiveMail: z.boolean().optional(),
     notifyEventReminders: z.boolean().optional(),
     notifyMatchingEvents: z.boolean().optional(),

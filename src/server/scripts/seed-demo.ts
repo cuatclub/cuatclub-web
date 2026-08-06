@@ -2,7 +2,6 @@ import "dotenv/config";
 import { randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
-import { faculty } from "@/server/db/faculty";
 import { faculties } from "@/server/db/faculties";
 import { categories } from "@/server/db/categories";
 import { clubs } from "@/server/db/clubs";
@@ -85,7 +84,7 @@ async function ensureUser(opts: {
 	email: string;
 	name: string;
 	role: "ATTENDEE" | "CLUB";
-	facultyId?: string | null;
+	facultyId?: number | null;
 }) {
 	const existing = await db.query.user.findFirst({ where: eq(user.email, opts.email) });
 
@@ -128,15 +127,13 @@ async function ensureUser(opts: {
 async function main() {
 	console.log("Seeding demo data (clubs, demo accounts)...");
 
-	const facultyRows = await db.select().from(faculty);
 	const facultiesRows = await db.select().from(faculties);
 	const categoryRows = await db.select().from(categories);
 
-	if (facultyRows.length === 0 || facultiesRows.length === 0 || categoryRows.length === 0) {
+	if (facultiesRows.length === 0 || categoryRows.length === 0) {
 		throw new Error("Missing base seed data. Run `yarn db:seed` first, then `yarn db:seed:demo`.");
 	}
 
-	const legacyFacultyByName = new Map(facultyRows.map((f) => [f.name, f.id]));
 	const facultyByLabel = new Map(facultiesRows.map((f) => [f.label, f.id]));
 	const categoryByLabel = new Map(categoryRows.map((c) => [c.label, c.id]));
 
@@ -145,7 +142,7 @@ async function main() {
 		email: "demo.attendee@example.com",
 		name: "Demo Attendee",
 		role: "ATTENDEE",
-		facultyId: legacyFacultyByName.get("Economics") ?? facultyRows[0]!.id,
+		facultyId: facultyByLabel.get("Economics") ?? facultiesRows[0]!.id,
 	});
 
 	for (const demoClub of demoClubs) {

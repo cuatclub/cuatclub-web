@@ -1,5 +1,5 @@
-import { pgTable, text, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core";
-import { faculty } from "./faculty";
+import { pgTable, text, timestamp, boolean, pgEnum, smallint } from "drizzle-orm/pg-core";
+import { faculties } from "./faculties";
 
 export const roleEnum = pgEnum("role", ["ATTENDEE", "ORGANIZATION", "ADMIN", "CLUB"]);
 
@@ -11,7 +11,7 @@ export const user = pgTable("user", {
 	emailVerified: boolean("email_verified").default(false),
 	image: text("image"),
 	createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-	facultyId: text("faculty_id").references(() => faculty.id),
+	facultyId: smallint("faculty_id").references(() => faculties.id),
 	isReceiveMail: boolean("is_receive_mail").default(false).notNull(),
 	/** Granular notification preferences; only meaningful when isReceiveMail is true. */
 	notifyEventReminders: boolean("notify_event_reminders").default(true).notNull(),

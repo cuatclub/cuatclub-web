@@ -2,7 +2,6 @@ import "dotenv/config";
 import { randomUUID, randomBytes } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/server/db";
-import { faculty } from "@/server/db/faculty";
 import { faculties } from "@/server/db/faculties";
 import { categories } from "@/server/db/categories";
 import { invitationCodes } from "@/server/db/invitation-codes";
@@ -127,14 +126,12 @@ async function resetSeedData() {
     await tx.delete(user).where(sql`true`);
     await tx.delete(categories).where(sql`true`);
     await tx.delete(faculties).where(sql`true`);
-    await tx.delete(faculty).where(sql`true`);
   });
 }
 
 async function seedBaseData() {
   await db.transaction(async (tx) => {
     for (const name of facultyNames) {
-      await tx.insert(faculty).values({ id: randomUUID(), name });
       await tx.insert(faculties).values({ label: name });
     }
 
@@ -145,7 +142,7 @@ async function seedBaseData() {
 }
 
 async function seedUsers() {
-  const facultyRows = await db.select({ id: faculty.id, name: faculty.name }).from(faculty);
+  const facultyRows = await db.select({ id: faculties.id, name: faculties.label }).from(faculties);
   const facultyByName = new Map(facultyRows.map((row) => [row.name, row.id]));
 
   for (const seedUser of usersToSeed) {

@@ -136,7 +136,7 @@ export const userRouter = createTRPCRouter({
       z.object({
         name: z.string().min(1).optional(),
         image: z.string().optional(),
-        facultyId: z.string().optional(),
+        facultyId: z.number().int().optional(),
         isReceiveMail: z.boolean().optional(),
       }),
     )

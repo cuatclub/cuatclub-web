@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, smallint, jsonb, pgEnum, index, check } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, smallint, jsonb, pgEnum } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { user } from "./auth-schema";
 import { faculties } from "./faculties";
@@ -39,28 +39,5 @@ export const clubs = pgTable(
 			.$onUpdate(() => new Date())
 			.notNull(),
 	},
-	(t) => [
-		index("clubs_faculty_id_idx").on(t.facultyId),
-		index("clubs_status_idx").on(t.registrationStatus),
-		check("clubs_short_description_len", sql`${t.shortDescription} IS NULL OR char_length(${t.shortDescription}) <= 180`),
-		check("clubs_image_urls_max5", sql`cardinality(${t.imageUrls}) <= 5`),
-		check(
-			"clubs_contacts_is_object",
-			sql`${t.contacts} IS NULL OR jsonb_typeof(${t.contacts}) = 'object'`,
-		),
-		check(
-			"clubs_contacts_keys",
-			sql`${t.contacts} IS NULL OR ${t.contacts} - 'instagram' - 'facebook' - 'tiktok' - 'line_oa' = '{}'::jsonb`,
-		),
-		check(
-			"clubs_info_complete",
-			sql`${t.registrationStatus} = 'PENDING' OR (
-				${t.name} IS NOT NULL AND
-				${t.logoUrl} IS NOT NULL AND
-				${t.facultyId} IS NOT NULL AND
-				${t.shortDescription} IS NOT NULL AND
-				${t.longDescription} IS NOT NULL
-			)`,
-		),
-	],
 );
+
