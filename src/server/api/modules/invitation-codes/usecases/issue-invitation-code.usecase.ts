@@ -1,5 +1,5 @@
 import { randomBytes } from "crypto";
-import { invitationCodesRepository } from "@/server/api/modules/invitation-codes/repository/invitation-codes.repository";
+import { invitationCodesRepository } from "@/server/api/modules/invitation-codes/invitation-codes.repository";
 import type { InvitationCode, IssueInvitationCodeRequest } from "@/server/api/modules/invitation-codes/dto/issue-invitation-code.dto";
 import type { ErrorOrNull } from "@/utils/error";
 

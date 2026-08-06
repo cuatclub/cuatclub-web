@@ -1,4 +1,4 @@
-import { clubsRepository } from "@/server/api/modules/clubs/repository/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import type { GetMineClubResult } from "@/server/api/modules/clubs/dto/get-mine-club.dto";
 import type { ErrorOrNull } from "@/utils/error";
 

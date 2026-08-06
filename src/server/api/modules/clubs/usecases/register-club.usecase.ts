@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
 import { user } from "@/server/db/auth-schema";
 import { auth } from "@/utils/auth";
-import { clubsRepository } from "@/server/api/modules/clubs/repository/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import { validateInvitationCode } from "@/server/api/modules/invitation-codes/usecases/validate-invitation-code.usecase";
 import { consumeInvitationCode } from "@/server/api/modules/invitation-codes/usecases/consume-invitation-code.usecase";
 import type { RegisterClubRequest, RegisterClubResult } from "@/server/api/modules/clubs/dto/register-club.dto";

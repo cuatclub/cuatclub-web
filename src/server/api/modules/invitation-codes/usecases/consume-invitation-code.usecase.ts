@@ -1,5 +1,5 @@
 import type { db } from "@/server/db";
-import { invitationCodesRepository } from "@/server/api/modules/invitation-codes/repository/invitation-codes.repository";
+import { invitationCodesRepository } from "@/server/api/modules/invitation-codes/invitation-codes.repository";
 import { evaluate } from "@/server/api/modules/invitation-codes/usecases/validate-invitation-code.usecase";
 import { ErrorCategory, ErrorWithCategory, type ErrorOrNull } from "@/utils/error";
 

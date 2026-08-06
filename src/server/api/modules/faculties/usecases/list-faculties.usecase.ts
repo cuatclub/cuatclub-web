@@ -1,4 +1,4 @@
-import { facultiesRepository } from "@/server/api/modules/faculties/repository/faculties.repository";
+import { facultiesRepository } from "@/server/api/modules/faculties/faculties.repository";
 import type { Faculty } from "@/server/api/modules/faculties/dto/list-faculties.dto";
 import type { ErrorOrNull } from "@/utils/error";
 

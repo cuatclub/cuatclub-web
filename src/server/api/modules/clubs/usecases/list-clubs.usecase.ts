@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { clubs } from "@/server/db/clubs";
-import { clubsRepository } from "@/server/api/modules/clubs/repository/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import type { ListClubsRequest, ListClubsResult } from "@/server/api/modules/clubs/dto/list-clubs.dto";
 import type { ErrorOrNull } from "@/utils/error";
 

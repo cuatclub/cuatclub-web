@@ -1,4 +1,4 @@
-import { clubsRepository } from "@/server/api/modules/clubs/repository/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import { ErrorCategory, ErrorWithCategory, type ErrorOrNull } from "@/utils/error";
 
 export const setMineClubCategories = async (userId: string, categoryIds: number[]): Promise<ErrorOrNull> => {

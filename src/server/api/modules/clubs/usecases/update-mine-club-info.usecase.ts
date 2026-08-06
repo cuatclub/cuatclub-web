@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { clubs } from "@/server/db/clubs";
-import { clubsRepository } from "@/server/api/modules/clubs/repository/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import type { UpdateMineClubInfoRequest } from "@/server/api/modules/clubs/dto/update-mine-club-info.dto";
 import { ErrorCategory, ErrorWithCategory, type ErrorOrNull } from "@/utils/error";
 

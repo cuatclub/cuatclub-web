@@ -1,4 +1,4 @@
-import { clubsRepository } from "@/server/api/modules/clubs/repository/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import type { GetClubByIdRequest, GetClubByIdResult } from "@/server/api/modules/clubs/dto/get-club-by-id.dto";
 import { ErrorCategory, ErrorWithCategory, type ErrorOrNull } from "@/utils/error";
 
