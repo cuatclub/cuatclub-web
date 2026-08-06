@@ -1,7 +1,8 @@
 import { z, type ZodSchema } from "zod";
 import type { clubs } from "@/server/db/schema/clubs";
+import { ClubOutputDTOSchema, type ClubOutputDTO } from "@/server/api/modules/clubs/dto/club.dto";
 
-export type CreateClubRequest = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
+export type CreateClubInputDTO = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
 
 const ContactsSchema = z.object({
 	instagram: z.string().optional(),
@@ -10,7 +11,7 @@ const ContactsSchema = z.object({
 	line_oa: z.string().optional(),
 });
 
-export const CreateClubRequestSchema: ZodSchema<CreateClubRequest> = z.object({
+export const CreateClubInputDTOSchema: ZodSchema<CreateClubInputDTO> = z.object({
 	userId: z.string(),
 	email: z.string().email(),
 	registrationStatus: z.enum(["PENDING", "INFO_SUBMITTED", "COMPLETED"]).optional(),
@@ -22,3 +23,7 @@ export const CreateClubRequestSchema: ZodSchema<CreateClubRequest> = z.object({
 	imageUrls: z.array(z.string()).max(5).optional(),
 	contacts: ContactsSchema.nullable().optional(),
 });
+
+export type CreateClubOutputDTO = ClubOutputDTO;
+
+export const CreateClubOutputDTOSchema = ClubOutputDTOSchema;

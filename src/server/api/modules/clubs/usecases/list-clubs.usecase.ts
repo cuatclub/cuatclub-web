@@ -1,7 +1,9 @@
 import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
-import type { ListClubsResult } from "@/server/api/modules/clubs/dto/list-clubs.dto";
-import type { ErrorOrNull } from "@/server/error";
+import type { ListClubsOutputDTO } from "@/server/api/modules/clubs/dto";
 
-export const listClubs = async (): Promise<[ListClubsResult, ErrorOrNull]> => {
-	return clubsRepository.getByFilter();
+export const listClubs = async (): Promise<ListClubsOutputDTO> => {
+	const [clubsList, error] = await clubsRepository.getByFilter();
+	if (error) throw error;
+
+	return clubsList.map((club) => club.toDTO());
 };

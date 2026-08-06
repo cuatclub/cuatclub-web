@@ -1,44 +1,57 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
-import { createClub } from "@/server/api/modules/clubs/usecases/create-club.usecase";
-import { listClubs } from "@/server/api/modules/clubs/usecases/list-clubs.usecase";
-import { getClubById } from "@/server/api/modules/clubs/usecases/get-club-by-id.usecase";
-import { updateClub } from "@/server/api/modules/clubs/usecases/update-club.usecase";
-import { deleteClub } from "@/server/api/modules/clubs/usecases/delete-club.usecase";
-import { CreateClubRequestSchema } from "@/server/api/modules/clubs/dto/create-club.dto";
-import { UpdateClubRequestSchema } from "@/server/api/modules/clubs/dto/update-club.dto";
-import { DeleteClubRequestSchema } from "@/server/api/modules/clubs/dto/delete-club.dto";
-import { GetClubByIdRequestSchema } from "@/server/api/modules/clubs/dto/get-club-by-id.dto";
-import { getTRPCError } from "@/server/error";
-import { TRPCError } from "@trpc/server";
+import { createClub, listClubs, getClubById, updateClub, deleteClub } from "@/server/api/modules/clubs/usecases";
+import {
+	CreateClubInputDTOSchema,
+	CreateClubOutputDTOSchema,
+	UpdateClubInputDTOSchema,
+	UpdateClubOutputDTOSchema,
+	DeleteClubInputDTOSchema,
+	DeleteClubOutputDTOSchema,
+	GetClubByIdInputDTOSchema,
+	GetClubByIdOutputDTOSchema,
+	ListClubsInputDTOSchema,
+	ListClubsOutputDTOSchema,
+} from "@/server/api/modules/clubs/dto";
+import { ok, ApiResponseSchema } from "@/server/response";
 
 export const clubsRouter = createTRPCRouter({
-	create: protectedProcedure.input(CreateClubRequestSchema).mutation(async ({ input }) => {
-		const [res, error] = await createClub(input);
-		if (error) throw new TRPCError(getTRPCError(error));
-		return res;
-	}),
+	create: protectedProcedure
+		.input(CreateClubInputDTOSchema)
+		.output(ApiResponseSchema(CreateClubOutputDTOSchema))
+		.mutation(async ({ input, ctx }) => {
+			const res = await createClub(input, ctx.session.user.id);
+			return ok(res);
+		}),
 
-	list: publicProcedure.query(async () => {
-		const [res, error] = await listClubs();
-		if (error) throw new TRPCError(getTRPCError(error));
-		return res;
-	}),
+	list: publicProcedure
+		.input(ListClubsInputDTOSchema)
+		.output(ApiResponseSchema(ListClubsOutputDTOSchema))
+		.query(async () => {
+			const res = await listClubs();
+			return ok(res);
+		}),
 
-	getById: publicProcedure.input(GetClubByIdRequestSchema).query(async ({ input }) => {
-		const [res, error] = await getClubById(input);
-		if (error) throw new TRPCError(getTRPCError(error));
-		return res;
-	}),
+	getById: publicProcedure
+		.input(GetClubByIdInputDTOSchema)
+		.output(ApiResponseSchema(GetClubByIdOutputDTOSchema))
+		.query(async ({ input }) => {
+			const res = await getClubById(input);
+			return ok(res);
+		}),
 
-	update: protectedProcedure.input(UpdateClubRequestSchema).mutation(async ({ input }) => {
-		const error = await updateClub(input);
-		if (error) throw new TRPCError(getTRPCError(error));
-		return null;
-	}),
+	update: protectedProcedure
+		.input(UpdateClubInputDTOSchema)
+		.output(ApiResponseSchema(UpdateClubOutputDTOSchema))
+		.mutation(async ({ input, ctx }) => {
+			const res = await updateClub(input, ctx.session.user.id);
+			return ok(res);
+		}),
 
-	delete: protectedProcedure.input(DeleteClubRequestSchema).mutation(async ({ input }) => {
-		const error = await deleteClub(input);
-		if (error) throw new TRPCError(getTRPCError(error));
-		return null;
-	}),
+	delete: protectedProcedure
+		.input(DeleteClubInputDTOSchema)
+		.output(ApiResponseSchema(DeleteClubOutputDTOSchema))
+		.mutation(async ({ input, ctx }) => {
+			const res = await deleteClub(input, ctx.session.user.id);
+			return ok(res);
+		}),
 });

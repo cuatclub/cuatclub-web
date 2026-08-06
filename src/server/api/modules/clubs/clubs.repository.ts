@@ -1,21 +1,22 @@
 import type { SQL } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { db } from "@/server/db";
 import { clubs } from "@/server/db/schema/clubs";
-import { type ErrorOrNull, ErrorWithCategory, ErrorCategory, PostgreSQLError } from "@/server/error";
-import type { ClubRow } from "@/server/api/modules/clubs/club.entity";
-import type { CreateClubRequest } from "@/server/api/modules/clubs/dto/create-club.dto";
+import { InternalServerError, type ErrorOrNull } from "@/server/errors";
+import { Club, type ClubRow } from "@/server/api/modules/clubs/club.entity";
+import type { CreateClubInputDTO } from "@/server/api/modules/clubs/dto";
 
 export interface IClubsRepository {
-	create(req: CreateClubRequest): Promise<[string | null, ErrorOrNull]>;
-	getByFilter(filter?: SQL): Promise<[ClubRow[], ErrorOrNull]>;
-	getOneByFilter(filter: SQL): Promise<[ClubRow | null, ErrorOrNull]>;
-	update(filter: SQL, update: Partial<ClubRow>): Promise<ErrorOrNull>;
-	delete(filter: SQL): Promise<ErrorOrNull>;
+	create(req: CreateClubInputDTO): Promise<[string | null, ErrorOrNull]>;
+	getById(id: string): Promise<[Club | null, ErrorOrNull]>;
+	getByFilter(filter?: SQL): Promise<[Club[], ErrorOrNull]>;
+	updateById(id: string, update: Partial<ClubRow>): Promise<ErrorOrNull>;
+	deleteById(id: string): Promise<ErrorOrNull>;
 }
 
 class ClubsRepository implements IClubsRepository {
-	async create(req: CreateClubRequest): Promise<[string | null, ErrorOrNull]> {
+	async create(req: CreateClubInputDTO): Promise<[string | null, ErrorOrNull]> {
 		const id = randomUUID();
 		const res = await db
 			.insert(clubs)
@@ -23,35 +24,49 @@ class ClubsRepository implements IClubsRepository {
 			.returning({ id: clubs.id })
 			.catch((e) => {
 				console.log(e);
-				return new PostgreSQLError();
+				return new InternalServerError(e);
 			});
 
 		if (res instanceof Error) return [null, res];
 		return [res[0]?.id ?? null, null];
 	}
 
-	async getByFilter(filter?: SQL): Promise<[ClubRow[], ErrorOrNull]> {
+	async getById(id: string): Promise<[Club | null, ErrorOrNull]> {
+		return this.getOneByFilter(eq(clubs.id, id));
+	}
+
+	async getByFilter(filter?: SQL): Promise<[Club[], ErrorOrNull]> {
 		const res = await db.query.clubs.findMany({ where: filter }).catch((e) => {
 			console.log(e);
-			return new PostgreSQLError();
+			return new InternalServerError(e);
 		});
 
 		if (res instanceof Error) return [[], res];
-		return [res, null];
+		return [Club.toEntities(res), null];
 	}
 
-	async getOneByFilter(filter: SQL): Promise<[ClubRow | null, ErrorOrNull]> {
+	async updateById(id: string, update: Partial<ClubRow>): Promise<ErrorOrNull> {
+		return this.updateByFilter(eq(clubs.id, id), update);
+	}
+
+	async deleteById(id: string): Promise<ErrorOrNull> {
+		return this.deleteByFilter(eq(clubs.id, id));
+	}
+
+	// Returns [null, null] when nothing matches — that's a normal result,
+	// not a repository error. The usecase decides whether that's a NotFoundError.
+	private async getOneByFilter(filter: SQL): Promise<[Club | null, ErrorOrNull]> {
 		const res = await db.query.clubs.findFirst({ where: filter }).catch((e) => {
 			console.log(e);
-			return new PostgreSQLError();
+			return new InternalServerError(e);
 		});
 
 		if (res instanceof Error) return [null, res];
-		if (!res) return [null, new ErrorWithCategory("Club not found", ErrorCategory.ResourceNotFound)];
-		return [res, null];
+		if (!res) return [null, null];
+		return [Club.toEntity(res), null];
 	}
 
-	async update(filter: SQL, update: Partial<ClubRow>): Promise<ErrorOrNull> {
+	private async updateByFilter(filter: SQL, update: Partial<ClubRow>): Promise<ErrorOrNull> {
 		const res = await db
 			.update(clubs)
 			.set(update)
@@ -59,21 +74,20 @@ class ClubsRepository implements IClubsRepository {
 			.returning({ updatedId: clubs.id })
 			.catch((e) => {
 				console.log(e);
-				return new PostgreSQLError();
+				return new InternalServerError(e);
 			});
 
 		if (res instanceof Error) return res;
-		if (res.length === 0) return new ErrorWithCategory("Club not found", ErrorCategory.ResourceNotFound);
 		return null;
 	}
 
-	async delete(filter: SQL): Promise<ErrorOrNull> {
+	private async deleteByFilter(filter: SQL): Promise<ErrorOrNull> {
 		const res = await db
 			.delete(clubs)
 			.where(filter)
 			.catch((e) => {
 				console.log(e);
-				return new PostgreSQLError();
+				return new InternalServerError(e);
 			});
 
 		if (res instanceof Error) return res;

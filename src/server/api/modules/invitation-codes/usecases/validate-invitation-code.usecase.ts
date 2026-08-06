@@ -1,20 +1,18 @@
 import { invitationCodesRepository } from "@/server/api/modules/invitation-codes/invitation-codes.repository";
-import type { InvitationCode } from "@/server/api/modules/invitation-codes/dto/issue-invitation-code.dto";
 import type {
+	InvitationCode,
 	ValidateInvitationCodeRequest,
 	ValidateInvitationCodeResult,
-} from "@/server/api/modules/invitation-codes/dto/validate-invitation-code.dto";
-import type { ErrorOrNull } from "@/server/error";
+} from "@/server/api/modules/invitation-codes/dto";
 
 /** Read-only check. Does not mark the code as used — see consumeInvitationCode for that. */
 export const validateInvitationCode = async (
 	req: ValidateInvitationCodeRequest,
-): Promise<[ValidateInvitationCodeResult, ErrorOrNull]> => {
+): Promise<ValidateInvitationCodeResult> => {
 	const [record, error] = await invitationCodesRepository.findByEmailAndCode(req.email, req.code);
-	if (error) return [{ valid: false }, error];
+	if (error) throw error;
 
-	const result = evaluate(record);
-	return [result, null];
+	return evaluate(record);
 };
 
 export const evaluate = (record: InvitationCode | null): ValidateInvitationCodeResult => {

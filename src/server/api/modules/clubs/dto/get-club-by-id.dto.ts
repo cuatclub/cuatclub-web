@@ -1,10 +1,12 @@
 import { z, type ZodSchema } from "zod";
-import type { ClubRow } from "@/server/api/modules/clubs/club.entity";
+import { ClubOutputDTOSchema, type ClubOutputDTO } from "@/server/api/modules/clubs/dto/club.dto";
 
-export type GetClubByIdRequest = { id: string };
+export type GetClubByIdInputDTO = { id: string };
 
-export const GetClubByIdRequestSchema: ZodSchema<GetClubByIdRequest> = z.object({
+export const GetClubByIdInputDTOSchema: ZodSchema<GetClubByIdInputDTO> = z.object({
 	id: z.string().uuid(),
 });
 
-export type GetClubByIdResult = ClubRow;
+export type GetClubByIdOutputDTO = ClubOutputDTO;
+
+export const GetClubByIdOutputDTOSchema = ClubOutputDTOSchema;
