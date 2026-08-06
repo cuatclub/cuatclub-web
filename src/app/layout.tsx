@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Noto_Sans, Noto_Sans_Thai } from "next/font/google";
+import { IBM_Plex_Sans_Thai, Noto_Sans } from "next/font/google";
 
 import { AuthProvider } from "@/components/ui/context/AuthContext";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 	icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const notoThai = Noto_Sans_Thai({
+const plexThai = IBM_Plex_Sans_Thai({
 	subsets: ["thai"],
-	weight: ["100", "300", "400", "500", "600", "700", "900"],
+	weight: ["100", "200", "300", "400", "500", "600", "700"],
 	variable: "--font-th",
 });
 
@@ -26,7 +26,7 @@ const noto = Noto_Sans({
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" className={`${notoThai.variable} ${noto.variable}`}>
+		<html lang="en" className={`${plexThai.variable} ${noto.variable}`}>
 			<body>
 				<TRPCReactProvider>
 					<AuthProvider>{children}</AuthProvider>

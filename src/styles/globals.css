@@ -9,6 +9,15 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   
   --breakpoint-ssm: 350px;
+
+  --text-h1: var(--fs-h1);
+  --text-h2: var(--fs-h2);
+  --text-h3: var(--fs-h3);
+  --text-h4: var(--fs-h4);
+  --text-button: var(--fs-button);
+  --text-body-text: var(--fs-body);
+  --text-labels: var(--fs-label);
+  --text-description: var(--fs-description);
 }
 
 @theme inline {
@@ -224,6 +233,28 @@
     oklch(0.922 0 0);
   --sidebar-ring:
     oklch(0.708 0 0);
+
+  --fs-h1: 2rem;
+  --fs-h2: 1.786rem;
+  --fs-h3: 1.571rem;
+  --fs-h4: 1.429rem;
+  --fs-button: 1.286rem;
+  --fs-body: 1rem;
+  --fs-label: 0.813rem;
+  --fs-description: 0.688rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --fs-h1: 2.5rem;
+    --fs-h2: 2.063rem;
+    --fs-h3: 1.75rem;
+    --fs-h4: 1.438rem;
+    --fs-button: 1.188rem;
+    --fs-body: 1rem;
+    --fs-label: 0.813rem;
+    --fs-description: 0.688rem;
+  }
 }
 
 .dark {
@@ -297,7 +328,7 @@
     @apply bg-background text-foreground;
   }
   h1 {
-    @apply font-semibold md:text-[28px] text-[24px] text-primary;
+    @apply font-semibold text-h1 text-primary;
   }
   .body-section {
     @apply flex flex-col lg:px-25 sm:px-10 sm:pb-20 px-5 py-5 gap-3;
