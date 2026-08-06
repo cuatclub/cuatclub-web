@@ -10,6 +10,8 @@
   
   --breakpoint-ssm: 350px;
 
+  --shadow-black: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+
   --text-h1: var(--fs-h1);
   --text-h2: var(--fs-h2);
   --text-h3: var(--fs-h3);
