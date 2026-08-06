@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { clubs } from "@/server/db/clubs";
+import { clubs } from "@/server/db/schema/clubs";
 import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import type { DeleteClubRequest } from "@/server/api/modules/clubs/dto/delete-club.dto";
 import type { ErrorOrNull } from "@/utils/error";

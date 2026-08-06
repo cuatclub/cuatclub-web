@@ -2,7 +2,7 @@ import type { CreateUserRequest, User } from "../dto/user.dto";
 import type { SQL } from "drizzle-orm";
 import { type ErrorOrNull, ErrorWithCategory, ErrorCategory, PostgreSQLError } from "@/utils/error";
 import { db } from "@/server/db";
-import { user } from "@/server/db/auth-schema";
+import { user } from "@/server/db/schema/auth-schema";
 
 export interface IUserService {
     getByFilter(filter?: SQL): Promise<[User[] | [], ErrorOrNull]>;

@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { invitationCodesRepository } from "@/server/api/modules/invitation-codes/invitation-codes.repository";
-import { invitationCodes } from "@/server/db/invitation-codes";
+import { invitationCodes } from "@/server/db/schema/invitation-codes";
 import type { InvitationCode } from "@/server/api/modules/invitation-codes/dto/issue-invitation-code.dto";
 import type { ListInvitationCodesRequest } from "@/server/api/modules/invitation-codes/dto/list-invitation-codes.dto";
 import type { ErrorOrNull } from "@/utils/error";

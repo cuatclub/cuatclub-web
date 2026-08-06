@@ -2,11 +2,11 @@ import "dotenv/config";
 import { randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
-import { faculties } from "@/server/db/faculties";
-import { categories } from "@/server/db/categories";
-import { clubs } from "@/server/db/clubs";
-import { clubCategories } from "@/server/db/club-categories";
-import { user } from "@/server/db/auth-schema";
+import { faculties } from "@/server/db/schema/faculties";
+import { categories } from "@/server/db/schema/categories";
+import { clubs } from "@/server/db/schema/clubs";
+import { clubCategories } from "@/server/db/schema/club-categories";
+import { user } from "@/server/db/schema/auth-schema";
 import { auth } from "@/utils/auth";
 
 const DEMO_PASSWORD = "Demo1234!";

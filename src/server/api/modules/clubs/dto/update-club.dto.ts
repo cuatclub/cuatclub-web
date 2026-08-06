@@ -1,5 +1,5 @@
 import { z, type ZodSchema } from "zod";
-import type { clubs } from "@/server/db/clubs";
+import type { clubs } from "@/server/db/schema/clubs";
 
 export type UpdateClubRequest = {
 	id: string;

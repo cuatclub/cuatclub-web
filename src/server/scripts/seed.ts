@@ -2,12 +2,12 @@ import "dotenv/config";
 import { randomUUID, randomBytes } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/server/db";
-import { faculties } from "@/server/db/faculties";
-import { categories } from "@/server/db/categories";
-import { invitationCodes } from "@/server/db/invitation-codes";
-import { clubs } from "@/server/db/clubs";
-import { clubCategories } from "@/server/db/club-categories";
-import { account, session, user, verification } from "@/server/db/auth-schema";
+import { faculties } from "@/server/db/schema/faculties";
+import { categories } from "@/server/db/schema/categories";
+import { invitationCodes } from "@/server/db/schema/invitation-codes";
+import { clubs } from "@/server/db/schema/clubs";
+import { clubCategories } from "@/server/db/schema/club-categories";
+import { account, session, user, verification } from "@/server/db/schema/auth-schema";
 import { auth } from "@/utils/auth";
 
 const facultyNames = [

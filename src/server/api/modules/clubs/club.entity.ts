@@ -1,4 +1,4 @@
-import type { clubs } from "@/server/db/clubs";
+import type { clubs } from "@/server/db/schema/clubs";
 
 export type ClubRow = typeof clubs.$inferSelect;
 
