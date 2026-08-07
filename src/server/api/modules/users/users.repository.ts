@@ -1,3 +1,4 @@
+import type { SQL } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
 import { user } from "@/server/db/schema/user";
@@ -10,7 +11,11 @@ export interface IUsersRepository {
 
 class UsersRepository implements IUsersRepository {
   async getById(id: string): Promise<User | null> {
-    const res = await db.query.user.findFirst({ where: eq(user.id, id) }).catch(wrapRepoError);
+    return this.getOneByFilter(eq(user.id, id));
+  }
+
+  private async getOneByFilter(filter: SQL): Promise<User | null> {
+    const res = await db.query.user.findFirst({ where: filter }).catch(wrapRepoError);
 
     return res ? User.toEntity(res) : null;
   }
