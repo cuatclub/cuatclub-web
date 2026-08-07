@@ -4,14 +4,17 @@ import { randomUUID } from "crypto";
 import { db, type DbClient } from "@/server/db";
 import { clubs } from "@/server/db/schema/clubs";
 import { wrapRepoError } from "@/server/errors";
-import { Club, type ClubRow, type CreateClubParams } from "@/server/api/modules/clubs/club.entity";
+import { Club, type ClubRow } from "@/server/api/modules/clubs/club.entity";
+
+export type CreateClubParams = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
+export type UpdateClubParams = Partial<Omit<ClubRow, "id" | "userId" | "createdAt" | "updatedAt">>;
 
 export interface IClubsRepository {
   create(req: CreateClubParams, client?: DbClient): Promise<string>;
   getById(id: string): Promise<Club | null>;
   getByUserId(userId: string): Promise<Club | null>;
   getByFilter(filter?: SQL): Promise<Club[]>;
-  updateById(id: string, update: Partial<ClubRow>, client?: DbClient): Promise<void>;
+  updateById(id: string, update: UpdateClubParams, client?: DbClient): Promise<void>;
   deleteById(id: string, client?: DbClient): Promise<void>;
 }
 
@@ -43,7 +46,7 @@ class ClubsRepository implements IClubsRepository {
     return Club.toEntities(res);
   }
 
-  async updateById(id: string, update: Partial<ClubRow>, client: DbClient = db): Promise<void> {
+  async updateById(id: string, update: UpdateClubParams, client: DbClient = db): Promise<void> {
     return this.updateByFilter(eq(clubs.id, id), update, client);
   }
 
@@ -61,7 +64,7 @@ class ClubsRepository implements IClubsRepository {
 
   private async updateByFilter(
     filter: SQL,
-    update: Partial<ClubRow>,
+    update: UpdateClubParams,
     client: DbClient
   ): Promise<void> {
     await client.update(clubs).set(update).where(filter).catch(wrapRepoError);

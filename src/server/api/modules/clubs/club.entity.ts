@@ -2,7 +2,6 @@ import type { clubs } from "@/server/db/schema/clubs";
 import type { ClubOutputDTO } from "@/server/api/modules/clubs/dto";
 
 export type ClubRow = typeof clubs.$inferSelect;
-export type CreateClubParams = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
 
 export class Club {
   private constructor(private row: ClubRow) {}
