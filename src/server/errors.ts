@@ -8,6 +8,9 @@ export const notFound = (message = "Resource not found") =>
 export const unauthorized = (message = "Unauthorized") =>
   new TRPCError({ code: "UNAUTHORIZED", message });
 
+export const forbidden = (message = "Forbidden") =>
+  new TRPCError({ code: "FORBIDDEN", message });
+
 export const validationError = (message = "Validation failed") =>
   new TRPCError({ code: "BAD_REQUEST", message });
 

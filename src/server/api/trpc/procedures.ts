@@ -1,6 +1,6 @@
 import { t } from "@/server/api/trpc/init";
 import { errorHandlingMiddleware } from "@/server/api/trpc/middleware";
-import { unauthorized } from "@/server/errors";
+import { forbidden, unauthorized } from "@/server/errors";
 
 const baseProcedure = t.procedure.use(errorHandlingMiddleware);
 
@@ -22,7 +22,7 @@ export const protectedProcedure = baseProcedure.use(({ ctx, next }) => {
 // Protected (admin-only) procedure
 export const adminProcedure = baseProcedure.use(({ ctx, next }) => {
   if (ctx.session?.user?.role !== "ADMIN") {
-    throw unauthorized("You must be an admin to do this");
+    throw forbidden("You must be an admin to do this");
   }
   return next({
     ctx: {
