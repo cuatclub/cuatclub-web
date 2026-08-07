@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2.5 rounded-lg px-6 py-3 font-ibm-plex font-semibold text-sm leading-[23px] md:text-base md:leading-[26px] transition-colors cursor-pointer disabled:pointer-events-none disabled:cursor-not-allowed",
+  "inline-flex items-center justify-center h-[40px] gap-3 rounded-lg px-6 font-semibold text-sm leading-[23px] md:text-base md:leading-[26px] transition-colors cursor-pointer disabled:pointer-events-none disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
@@ -28,12 +28,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, isLoading, disabled, children, ...props }, ref) => (
     <button
       ref={ref}
-      className={cn(buttonVariants({ variant }), isLoading && "w-[92px] md:w-[98px]", className)}
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- boolean OR intended, not nullish fallback
+      className={cn(buttonVariants({ variant }), className)}
+      aria-busy={isLoading ?? undefined}
       disabled={disabled || isLoading}
       {...props}
     >
-      {isLoading ? <Loader2 className="size-4 shrink-0 animate-spin" /> : children}
+      {isLoading ? (
+        <>
+          <Loader2 aria-hidden="true" className="size-4 shrink-0 animate-spin" />
+          <span className="sr-only">{children}</span>
+        </>
+      ) : (
+        children
+      )}
     </button>
   )
 );
