@@ -1,9 +1,10 @@
 import type { clubs } from "@/server/db/schema/clubs";
 import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
-import type { CreateClubInputDTO, ClubOutputDTO } from "@/server/api/modules/clubs/dto";
+import type { ClubOutputDTO } from "@/server/api/modules/clubs/dto";
 import { internalError } from "@/server/errors";
 
 export type ClubRow = typeof clubs.$inferSelect;
+export type CreateClubParams = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
 
 export class Club {
 	private constructor(private row: ClubRow) {}
@@ -16,7 +17,7 @@ export class Club {
 		return rows.map((row) => Club.toEntity(row));
 	}
 
-	static async create(req: CreateClubInputDTO): Promise<Club> {
+	static async create(req: CreateClubParams): Promise<Club> {
 		const id = await clubsRepository.create(req);
 		const club = await clubsRepository.getById(id);
 		if (!club) throw internalError({ reason: "Club was created but could not be reloaded", id });

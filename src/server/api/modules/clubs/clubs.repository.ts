@@ -4,19 +4,19 @@ import { randomUUID } from "crypto";
 import { db } from "@/server/db";
 import { clubs } from "@/server/db/schema/clubs";
 import { wrapRepoError } from "@/server/errors";
-import { Club, type ClubRow } from "@/server/api/modules/clubs/club.entity";
-import type { CreateClubInputDTO } from "@/server/api/modules/clubs/dto";
+import { Club, type ClubRow, type CreateClubParams } from "@/server/api/modules/clubs/club.entity";
 
 export interface IClubsRepository {
-	create(req: CreateClubInputDTO): Promise<string>;
+	create(req: CreateClubParams): Promise<string>;
 	getById(id: string): Promise<Club | null>;
+	getByUserId(userId: string): Promise<Club | null>;
 	getByFilter(filter?: SQL): Promise<Club[]>;
 	updateById(id: string, update: Partial<ClubRow>): Promise<void>;
 	deleteById(id: string): Promise<void>;
 }
 
 class ClubsRepository implements IClubsRepository {
-	async create(req: CreateClubInputDTO): Promise<string> {
+	async create(req: CreateClubParams): Promise<string> {
 		const id = randomUUID();
 		const res = await db
 			.insert(clubs)
@@ -29,6 +29,10 @@ class ClubsRepository implements IClubsRepository {
 
 	async getById(id: string): Promise<Club | null> {
 		return this.getOneByFilter(eq(clubs.id, id));
+	}
+
+	async getByUserId(userId: string): Promise<Club | null> {
+		return this.getOneByFilter(eq(clubs.userId, userId));
 	}
 
 	async getByFilter(filter?: SQL): Promise<Club[]> {
