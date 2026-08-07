@@ -1,24 +1,26 @@
 import type { SQL } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
-import { db } from "@/server/db";
+import { db, type DbClient } from "@/server/db";
 import { clubs } from "@/server/db/schema/clubs";
 import { wrapRepoError } from "@/server/errors";
 import { Club, type ClubRow, type CreateClubParams } from "@/server/api/modules/clubs/club.entity";
 
 export interface IClubsRepository {
-	create(req: CreateClubParams): Promise<string>;
+	create(req: CreateClubParams, client?: DbClient): Promise<string>;
 	getById(id: string): Promise<Club | null>;
 	getByUserId(userId: string): Promise<Club | null>;
 	getByFilter(filter?: SQL): Promise<Club[]>;
-	updateById(id: string, update: Partial<ClubRow>): Promise<void>;
-	deleteById(id: string): Promise<void>;
+	updateById(id: string, update: Partial<ClubRow>, client?: DbClient): Promise<void>;
+	deleteById(id: string, client?: DbClient): Promise<void>;
 }
 
 class ClubsRepository implements IClubsRepository {
-	async create(req: CreateClubParams): Promise<string> {
+	// `client` defaults to the module-level `db` so callers only need to pass
+	// one explicitly when running inside unitOfWork.run() (see db/unit-of-work.ts).
+	async create(req: CreateClubParams, client: DbClient = db): Promise<string> {
 		const id = randomUUID();
-		const res = await db
+		const res = await client
 			.insert(clubs)
 			.values({ ...req, id })
 			.returning({ id: clubs.id })
@@ -41,12 +43,12 @@ class ClubsRepository implements IClubsRepository {
 		return Club.toEntities(res);
 	}
 
-	async updateById(id: string, update: Partial<ClubRow>): Promise<void> {
-		return this.updateByFilter(eq(clubs.id, id), update);
+	async updateById(id: string, update: Partial<ClubRow>, client: DbClient = db): Promise<void> {
+		return this.updateByFilter(eq(clubs.id, id), update, client);
 	}
 
-	async deleteById(id: string): Promise<void> {
-		return this.deleteByFilter(eq(clubs.id, id));
+	async deleteById(id: string, client: DbClient = db): Promise<void> {
+		return this.deleteByFilter(eq(clubs.id, id), client);
 	}
 
 	// Returns null when nothing matches — that's a normal result, not a
@@ -57,16 +59,16 @@ class ClubsRepository implements IClubsRepository {
 		return res ? Club.toEntity(res) : null;
 	}
 
-	private async updateByFilter(filter: SQL, update: Partial<ClubRow>): Promise<void> {
-		await db
+	private async updateByFilter(filter: SQL, update: Partial<ClubRow>, client: DbClient): Promise<void> {
+		await client
 			.update(clubs)
 			.set(update)
 			.where(filter)
 			.catch(wrapRepoError);
 	}
 
-	private async deleteByFilter(filter: SQL): Promise<void> {
-		await db
+	private async deleteByFilter(filter: SQL, client: DbClient): Promise<void> {
+		await client
 			.delete(clubs)
 			.where(filter)
 			.catch(wrapRepoError);
