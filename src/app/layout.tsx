@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Noto_Sans, Sarabun } from "next/font/google";
+import { IBM_Plex_Sans_Thai, Noto_Sans, Sarabun } from "next/font/google";
 
 import { AuthProvider } from "@/components/ui/context/AuthContext";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -15,7 +15,13 @@ export const metadata: Metadata = {
 const sarabun = Sarabun({
 	subsets: ["thai"],
 	weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
-	variable: "--font-th",
+	variable: "--font-th-sarabun",
+});
+
+const plexThai = IBM_Plex_Sans_Thai({
+	subsets: ["thai"],
+	weight: ["100", "200", "300", "400", "500", "600", "700"],
+	variable: "--font-ibm-plex",
 });
 
 const noto = Noto_Sans({
@@ -26,7 +32,7 @@ const noto = Noto_Sans({
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" className={`${sarabun.variable} ${noto.variable}`}>
+		<html lang="en" className={`${sarabun.variable} ${plexThai.variable} ${noto.variable}`}>
 			<body>
 				<TRPCReactProvider>
 					<AuthProvider>{children}</AuthProvider>

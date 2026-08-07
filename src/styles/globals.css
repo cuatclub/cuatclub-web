@@ -3,8 +3,10 @@
 
 @theme {
   --font-sans:
-    var(--font-th), var(--font-en), ui-sans-serif, system-ui, sans-serif,
+    var(--font-th-sarabun), var(--font-en), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-ibm-plex:
+    var(--font-ibm-plex), var(--font-en), ui-sans-serif, system-ui, sans-serif;
 
   --breakpoint-ssm: 350px;
 
