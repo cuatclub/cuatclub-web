@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>cuatclub — Architecture</title>
+<style>
+  :root {
+    --accent: #3b82f6;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --header: #1e293b;
+    --text: #1e293b;
+    --muted: #64748b;
+    --code-bg: #f1f5f9;
+    --code-dark-bg: #0f172a;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg);
+  }
+  header.top {
+    background: var(--header);
+    color: #fff;
+    padding: 1.25rem 2rem;
+  }
+  header.top h1 { margin: 0 0 0.25rem; font-size: 1.4rem; }
+  header.top p { margin: 0 0 0.75rem; color: #cbd5e1; font-size: 0.9rem; }
+  .badges { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .layout {
+    display: flex;
+    align-items: flex-start;
+  }
+  nav.sidebar {
+    width: 210px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1.5rem 1rem;
+    border-right: 1px solid var(--border);
+    background: var(--card);
+  }
+  nav.sidebar a {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-bottom: 0.15rem;
+  }
+  nav.sidebar a:hover { background: var(--code-bg); color: var(--text); }
+  main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 980px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--border);
+  }
+  .card.backend { border-left-color: #3b82f6; }
+  .card.frontend { border-left-color: #8b5cf6; }
+  .card.build { border-left-color: #22c55e; }
+  .card.guides { border-left-color: #f59e0b; }
+  .card.gaps { border-left-color: #ef4444; }
+  .card h2 { margin-top: 0; font-size: 1.15rem; }
+  .card h3 { font-size: 1rem; margin: 1.2rem 0 0.5rem; }
+  .card h4 { font-size: 0.9rem; margin: 1rem 0 0.4rem; color: var(--muted); }
+  code {
+    background: var(--code-bg);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+  }
+  pre {
+    background: var(--code-dark-bg);
+    color: #e2e8f0;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  .kw { color: #93c5fd; }
+  .str { color: #86efac; }
+  .cm { color: #64748b; font-style: italic; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    font-size: 13px;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+  thead th { position: sticky; top: 0; background: var(--card); }
+  tbody tr:nth-child(odd) { background: #f8fafc; }
+  .path-chip {
+    display: inline-block;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.15rem 0.5rem;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+  }
+  ol.steps { padding-left: 1.2rem; }
+  ol.steps > li {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  details {
+    background: var(--code-bg);
+    border-radius: 6px;
+    padding: 0.6rem 0.9rem;
+    margin: 0.75rem 0;
+  }
+  summary { cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+  .tree {
+    font-family: ui-monospace, monospace;
+    font-size: 12.5px;
+    background: var(--code-bg);
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .note { color: var(--muted); font-size: 0.85rem; }
+  @media (max-width: 768px) {
+    .layout { flex-direction: column; }
+    nav.sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); }
+    main { padding: 1rem; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>eventfinder</h1>
+  <p>T3-Stack Next.js monolith — tRPC + Drizzle + better-auth backend for a club-directory app ("CUATClub"). Frontend is largely unbuilt.</p>
+  <div class="badges">
+    <span class="badge" style="background:#000">Next.js 15</span>
+    <span class="badge" style="background:#61dafb;color:#00263a">React 19</span>
+    <span class="badge" style="background:#3178c6">TypeScript</span>
+    <span class="badge" style="background:#2596be">tRPC v11</span>
+    <span class="badge" style="background:#c5f74f;color:#1a2b12">Drizzle ORM</span>
+    <span class="badge" style="background:#336791">PostgreSQL</span>
+    <span class="badge" style="background:#0ea5e9">better-auth</span>
+    <span class="badge" style="background:#06b6d4">Tailwind v4</span>
+    <span class="badge" style="background:#f38020">Cloudflare R2</span>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <a href="#overview">Overview</a>
+    <a href="#layout">Repo layout</a>
+    <a href="#gaps">Gaps found</a>
+    <a href="#backend">Backend module shape</a>
+    <a href="#trpc">tRPC plumbing</a>
+    <a href="#errors">Error handling</a>
+    <a href="#data">Data access</a>
+    <a href="#auth">Auth</a>
+    <a href="#services">External integrations</a>
+    <a href="#glue">tRPC ↔ Next.js glue</a>
+    <a href="#frontend">Frontend</a>
+    <a href="#build">Build / lint / test</a>
+    <a href="#guides">Where to add what</a>
+  </nav>
+
+  <main>
+
+    <section class="card" id="overview">
+      <h2>📦 Overview</h2>
+      <p>Single Next.js App Router application — <strong>not</strong> a monorepo (no <code>apps/</code>/<code>packages/</code> split). Backend is a feature-sliced tRPC API following a strict <strong>router → usecase → repository → schema</strong> layering. Frontend has only default scaffolding (<code>layout.tsx</code>, <code>page.tsx</code>) — there's no real UI to reverse-engineer conventions from yet.</p>
+      <table>
+        <thead><tr><th>Layer</th><th>Tech</th><th>Where</th></tr></thead>
+        <tbody>
+          <tr><td>API layer</td><td>tRPC v11 + <code>@tanstack/react-query</code> v5</td><td><code>src/trpc/*</code>, <code>src/server/api/*</code></td></tr>
+          <tr><td>Validation</td><td>Zod</td><td>every <code>dto/*.dto.ts</code></td></tr>
+          <tr><td>ORM</td><td>Drizzle ORM (postgres-js dialect)</td><td><code>src/server/db/*</code></td></tr>
+          <tr><td>Auth</td><td>better-auth (drizzle adapter, email+password)</td><td><code>src/server/auth.ts</code></td></tr>
+          <tr><td>Styling</td><td>Tailwind v4 + shadcn/ui ("new-york")</td><td><code>components.json</code></td></tr>
+          <tr><td>Storage</td><td>Cloudflare R2 via <code>@aws-sdk/client-s3</code></td><td><code>src/server/services/r2.ts</code></td></tr>
+          <tr><td>Email</td><td>Resend</td><td><code>src/server/services/mailer.ts</code></td></tr>
+          <tr><td>Deploy</td><td>Docker (distroless multi-stage) + Vercel cron</td><td><code>Dockerfile</code>, <code>vercel.json</code></td></tr>
+        </tbody>
+      </table>
+      <h4>Path aliases</h4>
+      <p><code>tsconfig.json:29</code> — <code>"@/*": ["./src/*"]</code>. Every internal import uses <code>@/...</code>; no relative <code>../../..</code> chains anywhere in <code>src/</code>.</p>
+    </section>
+
+    <section class="card" id="layout">
+      <h2>🗂️ Repo layout</h2>
+      <div class="tree">src/
+├── app/                 # App Router — only layout.tsx + page.tsx exist today
+├── components/ui/       # shadcn components (button.tsx is a placeholder stub)
+├── config/env.js        # @t3-oss/env-nextjs schema — source of truth for env vars
+├── lib/
+│   ├── auth-client.ts   # better-auth React client
+│   └── utils.ts         # cn() Tailwind class merge helper
+├── scripts/seed.ts      # DB seed — currently empty
+├── server/
+│   ├── api/
+│   │   ├── modules/&lt;feature&gt;/   # one folder per domain module
+│   │   ├── root.ts               # appRouter — combines all module routers
+│   │   └── trpc/                  # context, procedures, middleware
+│   ├── auth.ts
+│   ├── db/
+│   │   ├── index.ts       # drizzle(postgres-js) singleton connection
+│   │   ├── schema/*.ts    # one file per table + relations.ts + index.ts barrel
+│   │   └── unit-of-work.ts
+│   ├── errors.ts          # TRPCError factories + wrapRepoError
+│   ├── services/{r2,mailer}.ts
+│   └── utils.ts           # empty stub
+├── styles/globals.css
+└── trpc/                  # tRPC &lt;-&gt; Next.js glue (RSC + client provider)</div>
+    </section>
+
+    <section class="card gaps" id="gaps">
+      <h2>⚠️ Gaps found</h2>
+      <p class="note">Things referenced by other code but not actually implemented yet — don't assume these exist.</p>
+      <ul>
+        <li>No <span class="path-chip">src/app/api/trpc/[trpc]/route.ts</span> — the HTTP handler Next.js needs is missing, even though <code>src/trpc/react.tsx:55</code> already points <code>httpBatchStreamLink</code> at <code>/api/trpc</code>.</li>
+        <li>No <span class="path-chip">src/app/api/auth/[...all]/route.ts</span> — better-auth's Next.js route handler isn't mounted either.</li>
+        <li><code>vercel.json:5</code> schedules a cron hitting <code>/api/notifications/event-reminders</code>, which doesn't exist in <code>src/app</code> yet.</li>
+        <li><code>package.json</code> — <code>"db:seed": "tsx src/server/scripts/seed.ts"</code> points at a path that doesn't exist; the real file is <span class="path-chip">src/scripts/seed.ts</span>. Broken until one side is fixed.</li>
+        <li><code>GOOGLE_CLIENT_ID</code>/<code>GOOGLE_CLIENT_SECRET</code> are required by <code>env.js:13-14</code> but <code>auth.ts</code> has no <code>socialProviders</code> block using them — validated but unused.</li>
+        <li><span class="path-chip">src/components/ui/button.tsx</span> and <span class="path-chip">src/server/utils.ts</span> are placeholder stubs.</li>
+      </ul>
+    </section>
+
+    <section class="card backend" id="backend">
+      <h2>🧱 Backend module shape</h2>
+
+      <figure>
+        <svg viewBox="0 0 920 640" role="img" aria-label="Backend request flow from tRPC call through appRouter, splitting into an entity-backed module path (router, usecase, repository, entity, database) and a value-object module path inside master-data that skips the entity layer and returns raw rows directly." style="width:100%;height:auto;font-family:ui-monospace,Menlo,Consolas,monospace;">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+          <g fill="none" stroke="currentColor" stroke-width="1.5">
+            <!-- Client -->
+            <rect x="330" y="14" width="260" height="38" rx="6"/>
+            <!-- root.ts -->
+            <rect x="290" y="86" width="340" height="46" rx="6"/>
+            <!-- lane headers -->
+            <rect x="70" y="168" width="330" height="34" rx="6"/>
+            <rect x="520" y="168" width="330" height="34" rx="6"/>
+            <!-- router boxes -->
+            <rect x="70" y="222" width="330" height="52" rx="6"/>
+            <rect x="520" y="222" width="330" height="52" rx="6"/>
+            <!-- usecase boxes -->
+            <rect x="70" y="304" width="330" height="52" rx="6"/>
+            <rect x="520" y="304" width="330" height="52" rx="6"/>
+            <!-- repository boxes -->
+            <rect x="70" y="386" width="330" height="52" rx="6"/>
+            <rect x="520" y="386" width="330" height="52" rx="6"/>
+            <!-- entity box (left lane only) -->
+            <rect x="70" y="468" width="330" height="52" rx="6" stroke-dasharray="0"/>
+            <!-- db -->
+            <rect x="310" y="580" width="300" height="44" rx="6"/>
+          </g>
+
+          <!-- text -->
+          <g fill="currentColor" font-size="12.5" text-anchor="middle">
+            <text x="460" y="37">tRPC call — client component or server component</text>
+
+            <text x="460" y="105" font-weight="600">appRouter — src/server/api/root.ts</text>
+            <text x="460" y="122" font-size="11" fill="currentColor" opacity="0.75">combines every module router</text>
+
+            <text x="235" y="189" font-weight="600">entity-backed module (own folder)</text>
+            <text x="685" y="189" font-weight="600">value-object module (inside master-data)</text>
+
+            <text x="235" y="244">clubs.router.ts</text>
+            <text x="235" y="260" font-size="11" opacity="0.75">validate input via dto/, call usecase</text>
+            <text x="685" y="244">master-data.router.ts</text>
+            <text x="685" y="260" font-size="11" opacity="0.75">validate input via dto/, call usecase</text>
+
+            <text x="235" y="326">usecases/*.usecase.ts</text>
+            <text x="235" y="342" font-size="11" opacity="0.75">1 file per endpoint, business logic</text>
+            <text x="685" y="326">usecases/*.usecase.ts</text>
+            <text x="685" y="342" font-size="11" opacity="0.75">1 file per endpoint, business logic</text>
+
+            <text x="235" y="408">clubs.repository.ts</text>
+            <text x="235" y="424" font-size="11" opacity="0.75">Drizzle query</text>
+            <text x="685" y="408">master-data.repository.ts</text>
+            <text x="685" y="424" font-size="11" opacity="0.75">Drizzle query</text>
+
+            <text x="235" y="490">club.entity.ts</text>
+            <text x="235" y="506" font-size="11" opacity="0.75">getters + domain logic, toDTO()</text>
+
+            <text x="460" y="598" font-weight="600">PostgreSQL</text>
+            <text x="460" y="614" font-size="11" opacity="0.75">src/server/db/schema/*.ts</text>
+          </g>
+
+          <!-- arrows -->
+          <g stroke="currentColor" stroke-width="1.5" fill="none" marker-end="url(#arrow)">
+            <line x1="460" y1="52" x2="460" y2="84"/>
+            <!-- split from root to lane headers -->
+            <polyline points="460,132 460,150 235,150 235,166"/>
+            <polyline points="460,132 460,150 685,150 685,166"/>
+            <!-- header to router -->
+            <line x1="235" y1="202" x2="235" y2="220"/>
+            <line x1="685" y1="202" x2="685" y2="220"/>
+            <!-- router to usecase -->
+            <line x1="235" y1="274" x2="235" y2="302"/>
+            <line x1="685" y1="274" x2="685" y2="302"/>
+            <!-- usecase to repository -->
+            <line x1="235" y1="356" x2="235" y2="384"/>
+            <line x1="685" y1="356" x2="685" y2="384"/>
+            <!-- left: repository to entity -->
+            <line x1="235" y1="438" x2="235" y2="466"/>
+            <!-- left: entity to db bus -->
+            <polyline points="235,520 235,550 460,550 460,578"/>
+            <!-- right: repository straight down to db bus, skipping entity -->
+            <polyline points="685,438 685,550 460,550"/>
+          </g>
+          <g fill="currentColor" font-size="11" text-anchor="middle">
+            <text x="325" y="461">row → Club.toEntity()</text>
+            <text x="800" y="470">raw row returned</text>
+            <text x="800" y="484">— no entity layer</text>
+          </g>
+        </svg>
+        <figcaption class="note">Both module shapes share the same router → usecase → repository chain; the only structural difference is whether the repository hands the usecase a domain <code>Entity</code> (left) or a raw Drizzle row (right, <code>master-data</code> only).</figcaption>
+      </figure>
+
+      <p>There are exactly <strong>two module shapes</strong> in this codebase, and which one a feature gets is a project rule, not just an observation:</p>
+      <ul>
+        <li><strong>Entity-backed module</strong> — a real domain entity (has identity, lifecycle, its own business rules: <code>clubs</code>, <code>users</code>) gets its <strong>own module folder</strong> with the full 5-piece layout below, including an <code>entity.ts</code>.</li>
+        <li><strong>Value-object module</strong> — plain lookup/reference data with no behavior of its own (faculties, categories, and any future "just a labelled row" type) does <strong>not</strong> get its own module. It's added as a new resource inside the existing <code>master-data</code> module instead (new schema table + repository method + usecase + router sub-object), skipping the entity layer entirely.</li>
+      </ul>
+      <p>Within either shape, dependency direction is strict: <strong>router → usecase → repository → (entity, if entity-backed) → Drizzle schema</strong> — nothing skips a layer.</p>
+      <div class="tree">modules/clubs/
+├── clubs.router.ts        # tRPC router: procedure + Zod DTO → usecase
+├── club.entity.ts         # Club class: wraps a DB row, getters + toDTO()
+├── clubs.repository.ts    # ClubsRepository class + singleton export
+├── dto/
+│   ├── club.dto.ts             # base output shape
+│   ├── get-club-profile.dto.ts # per-usecase input/output, extends base
+│   └── index.ts                 # barrel
+└── usecases/
+    ├── get-club-profile.usecase.ts
+    └── index.ts</div>
+
+      <h3>1. Router</h3>
+      <p><span class="path-chip">src/server/api/modules/clubs/clubs.router.ts</span></p>
+<pre><code><span class="kw">export const</span> clubsRouter = createTRPCRouter({
+  getClubProfile: protectedProcedure
+    .input(GetClubProfileInputDTOSchema)
+    .output(GetClubProfileOutputDTOSchema)
+    .query(<span class="kw">async</span> ({ ctx }) =&gt; getClubProfile(ctx.session.user.id)),
+});</code></pre>
+      <p>Routers never contain business logic — they call exactly one usecase and pass <code>ctx</code>/parsed input straight through. <code>.input()</code>/<code>.output()</code> are always Zod schemas from <code>dto/</code>.</p>
+      <p>Registered in <code>src/server/api/root.ts:5-8</code>:</p>
+<pre><code><span class="kw">export const</span> appRouter = createTRPCRouter({
+  clubs: clubsRouter,
+  masterData: masterDataRouter,
+});</code></pre>
+
+      <h3>2. Usecase</h3>
+      <p><span class="path-chip">src/server/api/modules/clubs/usecases/get-club-profile.usecase.ts</span></p>
+<pre><code><span class="kw">export const</span> getClubProfile = <span class="kw">async</span> (currentUserId: string): Promise&lt;GetClubProfileOutputDTO&gt; =&gt; {
+  <span class="kw">const</span> club = <span class="kw">await</span> clubsRepository.getByUserId(currentUserId);
+  <span class="kw">if</span> (!club) <span class="kw">throw</span> notFound(<span class="str">"Club profile not found"</span>);
+
+  <span class="kw">const</span> user = <span class="kw">await</span> usersRepository.getById(currentUserId);
+  <span class="kw">if</span> (!user) <span class="kw">throw</span> internalError({ reason: <span class="str">"Club exists but owning user could not be found"</span>, userId: currentUserId });
+
+  <span class="kw">return</span> { ...club.toDTO(), email: user.email, role: user.role };
+};</code></pre>
+      <p>Plain exported <code>async</code> functions (not classes) — no DI container, repositories imported directly. Usecases own all domain error decisions; repositories only ever throw generic <code>internalError</code>.</p>
+
+      <h3>3. Repository</h3>
+      <p><span class="path-chip">src/server/api/modules/clubs/clubs.repository.ts</span></p>
+<pre><code><span class="kw">class</span> ClubsRepository <span class="kw">implements</span> IClubsRepository {
+  <span class="kw">async</span> create(req: CreateClubParams, client: DbClient = db): Promise&lt;string&gt; {
+    <span class="kw">const</span> id = randomUUID();
+    <span class="kw">const</span> res = <span class="kw">await</span> client.insert(clubs).values({ ...req, id }).returning({ id: clubs.id }).catch(wrapRepoError);
+    <span class="kw">return</span> res[0]!.id;
+  }
+  <span class="cm">// getById / getByUserId delegate to a shared private getOneByFilter(filter: SQL)</span>
+}
+<span class="kw">export const</span> clubsRepository = <span class="kw">new</span> ClubsRepository();</code></pre>
+      <ul>
+        <li>Every method takes an optional <code>client: DbClient = db</code> so it runs standalone <em>or</em> inside <code>unitOfWork.run()</code>.</li>
+        <li>Every Drizzle call ends in <code>.catch(wrapRepoError)</code> — the only place raw driver errors are caught.</li>
+        <li>Filter-by-X public methods (<code>getById</code>, <code>updateById</code>, <code>deleteById</code>) are thin wrappers around shared private <code>*ByFilter</code> helpers.</li>
+        <li>Reads use <code>db.query.&lt;table&gt;.findFirst/findMany</code>; writes use the query builder (<code>db.insert/update/delete</code>).</li>
+      </ul>
+
+      <h3>4. Entity</h3>
+      <p><span class="path-chip">src/server/api/modules/clubs/club.entity.ts</span></p>
+<pre><code><span class="kw">export class</span> Club {
+  <span class="kw">private constructor</span>(<span class="kw">private</span> row: ClubRow) {}
+  <span class="kw">static</span> toEntity(row: ClubRow): Club { <span class="kw">return new</span> Club(row); }
+  get id() { <span class="kw">return</span> this.row.id; }
+  <span class="cm">// ... one getter per column</span>
+  toDTO(): ClubOutputDTO { <span class="kw">return</span> { ...this.row }; }
+}</code></pre>
+      <p>Repositories never return raw Drizzle rows — always <code>Entity | null</code> / <code>Entity[]</code>. Private-constructor wrapper classes, no ORM decorators.</p>
+
+      <details>
+        <summary>Simpler module without an entity layer — <code>master-data</code></summary>
+        <p>Read-only faculties/categories lookup skips entities entirely: the repository returns the raw Drizzle <code>$inferSelect</code> row type directly and the usecase just passes it through (<code>master-data.repository.ts:6-7</code>, <code>get-all-categories.usecase.ts:4-6</code>). Use an entity layer only when a module needs derived getters/mapping.</p>
+      </details>
+    </section>
+
+    <section class="card backend" id="trpc">
+      <h2>🔌 tRPC plumbing</h2>
+      <p><span class="path-chip">src/server/api/trpc/</span></p>
+      <table>
+        <thead><tr><th>File</th><th>Responsibility</th></tr></thead>
+        <tbody>
+          <tr><td><code>init.ts</code></td><td><code>createTRPCContext</code> (session + <code>db</code>), <code>t = initTRPC...</code> with <code>superjson</code> transformer + Zod-aware <code>errorFormatter</code></td></tr>
+          <tr><td><code>procedures.ts</code></td><td><code>publicProcedure</code> / <code>protectedProcedure</code> / <code>adminProcedure</code></td></tr>
+          <tr><td><code>middleware.ts</code></td><td><code>errorHandlingMiddleware</code></td></tr>
+          <tr><td><code>index.ts</code></td><td>barrel — <strong>always import from <code>@/server/api/trpc</code></strong>, never sub-files directly</td></tr>
+        </tbody>
+      </table>
+<pre><code><span class="kw">const</span> baseProcedure = t.procedure.use(errorHandlingMiddleware);
+<span class="kw">export const</span> publicProcedure = baseProcedure;
+<span class="kw">export const</span> protectedProcedure = baseProcedure.use(({ ctx, next }) =&gt; {
+  <span class="kw">if</span> (!ctx.session?.user) <span class="kw">throw</span> unauthorized(<span class="str">"You must be signed in to do this"</span>);
+  <span class="kw">return</span> next({ ctx: { session: { ...ctx.session, user: ctx.session.user } } });
+});</code></pre>
+      <p>Every procedure — including <code>publicProcedure</code> — runs through <code>errorHandlingMiddleware</code> first. <code>protectedProcedure</code>/<code>adminProcedure</code> narrow <code>ctx.session.user</code> to non-null downstream.</p>
+
+      <p><strong>Where to write these:</strong> only in <code>src/server/api/trpc/procedures.ts</code> — the single place new procedure variants get defined (e.g. a future <code>clubAdminProcedure</code> checking ownership of a specific club would be another <code>baseProcedure.use(...)</code> here).</p>
+      <p><strong>Where to use these:</strong> exclusively in <code>&lt;feature&gt;.router.ts</code> files, imported from the barrel <code>@/server/api/trpc</code> — never from <code>procedures.ts</code> directly.</p>
+      <table>
+        <thead><tr><th>Procedure</th><th>Use for</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>publicProcedure</code></td><td>No auth required — public reads anyone can call</td><td><code>masterData.faculties.getAll</code></td></tr>
+          <tr><td><code>protectedProcedure</code></td><td>Requires a signed-in user; most user-scoped reads/writes</td><td><code>clubs.getClubProfile</code> (uses <code>ctx.session.user.id</code>)</td></tr>
+          <tr><td><code>adminProcedure</code></td><td>Requires <code>role === "ADMIN"</code>; admin-only mutations/reads</td><td>not yet used by any router — e.g. approving a club registration would go here</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card backend" id="errors">
+      <h2>🚨 Error handling</h2>
+      <p><span class="path-chip">src/server/errors.ts</span> — factory functions, not thrown classes:</p>
+<pre><code><span class="kw">export const</span> notFound = (message = <span class="str">"Resource not found"</span>) =&gt; <span class="kw">new</span> TRPCError({ code: <span class="str">"NOT_FOUND"</span>, message });
+<span class="kw">export const</span> internalError = (cause?: unknown) =&gt; <span class="kw">new</span> TRPCError({ code: <span class="str">"INTERNAL_SERVER_ERROR"</span>, message: GENERIC_MESSAGE, cause });
+<span class="kw">export const</span> wrapRepoError = (e: unknown): never =&gt; { <span class="kw">throw</span> internalError(e); };</code></pre>
+      <p>Two-stage safety net:</p>
+      <ol class="steps">
+        <li>Repositories <code>.catch(wrapRepoError)</code> on every DB call → wraps into <code>internalError(cause)</code>.</li>
+        <li><code>errorHandlingMiddleware</code> catches any <code>INTERNAL_SERVER_ERROR</code> result, logs <code>result.error.cause ?? result.error</code> server-side, and re-throws a fresh <code>internalError()</code> with <strong>no cause</strong> — raw stack traces/SQL errors never reach the client.</li>
+      </ol>
+      <p>Usecases throw <code>notFound</code>/<code>conflict</code>/<code>unauthorized</code>/<code>validationError</code> directly for expected domain failures — those pass through untouched.</p>
+    </section>
+
+    <section class="card backend" id="data">
+      <h2>🗄️ Data access</h2>
+      <p><span class="path-chip">src/server/db/index.ts</span> — singleton postgres-js connection, cached on <code>globalThis</code> outside production to survive Next.js dev HMR:</p>
+<pre><code><span class="kw">const</span> conn = globalForDb.conn ?? postgres(env.DATABASE_URL);
+<span class="kw">if</span> (env.NODE_ENV !== <span class="str">"production"</span>) globalForDb.conn = conn;
+<span class="kw">export const</span> db = drizzle(conn, { schema });
+<span class="kw">export type</span> DbClient = <span class="kw">typeof</span> db | PostgresJsTransaction&lt;<span class="kw">typeof</span> schema, ExtractTablesWithRelations&lt;<span class="kw">typeof</span> schema&gt;&gt;;</code></pre>
+      <p><span class="path-chip">src/server/db/unit-of-work.ts</span> — transaction abstraction repositories use for atomic multi-table writes:</p>
+<pre><code><span class="kw">export interface</span> UnitOfWork { run&lt;T&gt;(fn: (client: DbClient) =&gt; Promise&lt;T&gt;): Promise&lt;T&gt;; }
+<span class="kw">class</span> DrizzleUnitOfWork <span class="kw">implements</span> UnitOfWork {
+  run&lt;T&gt;(fn: (client: DbClient) =&gt; Promise&lt;T&gt;): Promise&lt;T&gt; { <span class="kw">return</span> db.transaction(fn); }
+}</code></pre>
+      <p class="note">No usecase currently uses this yet (all existing usecases are single-repository reads) — the plumbing is in place for when one needs it.</p>
+
+      <details open>
+        <summary>Illustrative example — not real code in the repo yet</summary>
+        <p>A usecase that must create a club and attach its categories atomically (both DB writes commit or both roll back together), then send a welcome email <em>after</em> the transaction succeeds so a failed send never undoes the writes:</p>
+<pre><code><span class="kw">export const</span> registerClub = <span class="kw">async</span> (input: RegisterClubInputDTO, userId: string) =&gt; {
+  <span class="kw">const</span> clubId = <span class="kw">await</span> unitOfWork.run(<span class="kw">async</span> (client) =&gt; {
+    <span class="kw">const</span> id = <span class="kw">await</span> clubsRepository.create({ userId, name: input.name }, client);
+    <span class="kw">await</span> clubCategoriesRepository.attach(id, input.categoryIds, client);
+    <span class="kw">return</span> id;
+    <span class="cm">// if attach() throws, create()'s insert is rolled back too — both ran on `client`</span>
+  });
+
+  <span class="kw">await</span> sendMail({ to: input.contactEmail, subject: <span class="str">"Club registered"</span>, text: <span class="str">"..."</span> });
+  <span class="kw">return</span> clubId;
+};</code></pre>
+        <p class="note">The rule this demonstrates: every repository call inside the callback must be passed the same <code>client</code> (not the module-level <code>db</code>) — that's what makes them one transaction. Anything that shouldn't roll back with the DB (email, R2 upload) happens <strong>outside</strong> the <code>unitOfWork.run()</code> block, after it resolves.</p>
+      </details>
+
+      <h3>Schema — <code>src/server/db/schema/</code></h3>
+      <p>One file per table, plus <code>relations.ts</code> (all <code>relations()</code> calls in one place) and <code>index.ts</code> (barrel, imported as <code>import * as schema</code>).</p>
+<pre><code><span class="cm">// clubs.ts</span>
+<span class="kw">export const</span> clubs = pgTable(<span class="str">"clubs"</span>, {
+  id: uuid(<span class="str">"id"</span>).primaryKey().default(sql`gen_random_uuid()`),
+  userId: text(<span class="str">"user_id"</span>).notNull().unique().references(() =&gt; user.id),
+  imageUrls: text(<span class="str">"image_urls"</span>).array().default([]).notNull(),
+  contacts: jsonb(<span class="str">"contacts"</span>).$type&lt;{ instagram?: string; facebook?: string }&gt;(),
+  createdAt: timestamp(<span class="str">"created_at"</span>, { withTimezone: <span class="kw">true</span> }).defaultNow().notNull(),
+  updatedAt: timestamp(<span class="str">"updated_at"</span>, { withTimezone: <span class="kw">true</span> }).defaultNow().$onUpdate(() =&gt; <span class="kw">new</span> Date()).notNull(),
+});</code></pre>
+      <p><strong>Conventions:</strong> <code>uuid</code> PK + <code>gen_random_uuid()</code> for app-owned entities; <code>text</code> PK for better-auth-owned tables (matches better-auth's own ID format); <code>smallserial</code> PK for small lookup tables; every table has timestamptz <code>created_at</code>/<code>updated_at</code> with <code>$onUpdate</code>; junction tables use a composite primary key, not a surrogate id.</p>
+      <p class="note">Migrations: <code>drizzle-kit</code> generates SQL into <code>/drizzle</code> (currently 0000–0006). Config: <code>drizzle.config.ts</code>.</p>
+    </section>
+
+    <section class="card backend" id="auth">
+      <h2>🔐 Auth</h2>
+      <p><span class="path-chip">src/server/auth.ts</span> — <code>betterAuth()</code> with the Drizzle adapter pointed at the app's own <code>schema</code>; <code>role</code> added as a custom field on <code>user</code> (matches the <code>roleEnum</code> in <code>schema/user.ts</code>); email+password enabled; IDs via <code>crypto.randomUUID()</code>.</p>
+      <p><span class="path-chip">src/lib/auth-client.ts</span> — <code>createAuthClient</code> + <code>inferAdditionalFields&lt;typeof auth&gt;()</code> so <code>role</code> is typed client-side too. Re-exports <code>signIn</code>/<code>signUp</code>/<code>signOut</code>/<code>useSession</code> — import these, not <code>authClient.*</code> directly.</p>
+    </section>
+
+    <section class="card backend" id="services">
+      <h2>🔗 External integrations — <code>src/server/services/</code></h2>
+      <p>The single place third-party/external-service clients live — anything that isn't the app's own Postgres database goes here, not inside a feature module. Currently two:</p>
+      <table>
+        <thead><tr><th>File</th><th>Wraps</th><th>Exports</th></tr></thead>
+        <tbody>
+          <tr><td><code>r2.ts</code></td><td>Cloudflare R2 (S3-compatible) via <code>@aws-sdk/client-s3</code></td><td><code>uploadImage(buffer, contentType, key?)</code>, <code>getPublicUrl(key)</code></td></tr>
+          <tr><td><code>mailer.ts</code></td><td>Resend</td><td><code>sendMail(params)</code>, <code>bulkSendMail(items)</code></td></tr>
+        </tbody>
+      </table>
+<pre><code><span class="cm">// r2.ts</span>
+<span class="kw">const</span> client = <span class="kw">new</span> S3Client({ region: <span class="str">"auto"</span>, endpoint: env.R2_ENDPOINT, credentials: { ... } });
+<span class="kw">export async function</span> uploadImage(buffer: Buffer, contentType: string, key?: string): Promise&lt;string&gt; { ... }</code></pre>
+      <ul>
+        <li>A single module-level client instance (<code>new S3Client(...)</code>, <code>new Resend(...)</code>), configured entirely from <code>@/config/env</code> — never instantiated per-call.</li>
+        <li>Plain exported <code>async</code> functions, not a class — usecases import the function directly (<code>import { uploadImage } from "@/server/services/r2"</code>), same import style as a repository.</li>
+        <li>Errors are caught and re-thrown as a generic <code>Error</code> with a safe user-facing message (<code>mailer.ts:41-45</code>) — the raw provider error is logged but not propagated, mirroring how <code>wrapRepoError</code> hides raw DB errors from callers.</li>
+      </ul>
+      <p class="note"><strong>Adding a new integration</strong> (e.g. push notifications) follows the same pattern: new file here, its own env vars in <code>@/config/env</code>, one module-level client, plain exported functions — called from a usecase like any other dependency. It does not get a <code>dto/</code>, <code>entity.ts</code>, or router of its own; those only exist for <code>modules/&lt;feature&gt;/</code>.</p>
+    </section>
+
+    <section class="card frontend" id="glue">
+      <h2>🌉 tRPC ↔ Next.js glue</h2>
+      <p><span class="path-chip">src/trpc/</span></p>
+      <table>
+        <thead><tr><th>File</th><th>Runtime</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>query-client.ts</code></td><td>shared</td><td><code>createQueryClient()</code> — react-query defaults + superjson dehydrate/hydrate</td></tr>
+          <tr><td><code>server.ts</code></td><td><code>"server-only"</code></td><td><code>api</code>/<code>HydrateClient</code> for Server Components — no HTTP round-trip</td></tr>
+          <tr><td><code>react.tsx</code></td><td><code>"use client"</code></td><td><code>TRPCReactProvider</code> — real HTTP client via <code>httpBatchStreamLink</code> → <code>/api/trpc</code></td></tr>
+        </tbody>
+      </table>
+      <p>Server Components call <code>api.clubs.getClubProfile()</code> directly; Client Components use <code>api.clubs.getClubProfile.useQuery()</code> as a normal react-query hook. Both share the same <code>AppRouter</code> type from <code>@/server/api/root</code>.</p>
+    </section>
+
+    <section class="card frontend" id="frontend">
+      <h2>🎨 Frontend</h2>
+      <p>Minimal so far — <code>src/app/layout.tsx</code> and <code>src/app/page.tsx</code> are default Next.js scaffolding with no real UI. <code>src/components/ui/button.tsx</code> is a placeholder, not yet a real shadcn Button. No routing beyond the root page, no client-side data fetching wired up.</p>
+      <p class="note">There's nothing to reverse-engineer conventions from yet — the scaffolding above (tRPC hooks, shadcn <code>components.json</code>, <code>cn()</code> in <code>src/lib/utils.ts</code>) is what future frontend code is expected to follow, not yet demonstrated.</p>
+    </section>
+
+    <section class="card build" id="build">
+      <h2>🛠️ Build, lint, format, test</h2>
+<pre><code>yarn dev              <span class="cm"># next dev --turbo</span>
+yarn build             <span class="cm"># next build</span>
+yarn check              <span class="cm"># next lint && tsc --noEmit</span>
+yarn format:check / format:write   <span class="cm"># prettier, tabWidth 2, printWidth 100</span>
+yarn db:create / db:start / db:stop   <span class="cm"># docker compose create/start/stop db</span>
+yarn db:generate / db:migrate / db:push / db:studio   <span class="cm"># drizzle-kit</span></code></pre>
+      <p><strong>No test framework configured</strong> — no vitest/jest, no <code>*.test.ts</code> files anywhere.</p>
+      <p><code>.husky/pre-commit</code> runs <code>lint-staged</code>: <code>eslint --fix</code> + <code>prettier --write</code> on staged <code>.ts/.tsx</code>; <code>prettier --write</code> on staged <code>.js/.jsx/.mdx/.json/.css</code>.</p>
+      <p>CI (<code>.github/workflows/ci.yml</code>): on every PR + push to <code>main</code>, runs <code>format:check</code> → <code>lint</code> → <code>typecheck</code> with <code>SKIP_ENV_VALIDATION=1</code>. No build/test/deploy step yet.</p>
+      <p>Docker: multi-stage (<code>deps</code> → <code>builder</code> → distroless <code>runner</code>), <code>output: "standalone"</code>. <code>docker-compose.yaml</code> currently only runs Postgres — no app container in compose.</p>
+    </section>
+
+    <section class="card guides" id="guides">
+      <h2>🧭 Where to add what</h2>
+
+      <h3>Add a new endpoint to an existing module (e.g. <code>clubs.updateProfile</code>)</h3>
+      <ol class="steps">
+        <li><strong>DTO</strong> — add <span class="path-chip">dto/update-profile.dto.ts</span> with input/output schemas (extend the module's base schema if shapes overlap); export from <code>dto/index.ts</code>.</li>
+        <li><strong>Usecase</strong> — add <span class="path-chip">usecases/update-profile.usecase.ts</span>, an exported <code>async</code> function calling the repository and throwing domain errors from <code>@/server/errors</code>; export from <code>usecases/index.ts</code>.</li>
+        <li><strong>Repository method</strong> — add to <span class="path-chip">&lt;feature&gt;.repository.ts</span> (+ its interface) following the <code>client: DbClient = db</code> + <code>.catch(wrapRepoError)</code> pattern.</li>
+        <li><strong>Router</strong> — add the procedure to <span class="path-chip">&lt;feature&gt;.router.ts</span>: pick public/protected/admin, wire <code>.input()</code>/<code>.output()</code>, call the usecase.</li>
+        <li>Router is already registered in <code>root.ts</code> if the module exists — nothing else to wire.</li>
+      </ol>
+
+      <h3>Add a brand-new module (e.g. <code>events</code>)</h3>
+      <ol class="steps">
+        <li>Create <span class="path-chip">src/server/api/modules/events/</span> with the same 4 pieces as <code>clubs</code> (skip the entity if there's no derived logic, like <code>master-data</code>).</li>
+        <li>New tables: add <span class="path-chip">src/server/db/schema/events.ts</span>, export from <code>schema/index.ts</code>, add relations to <code>relations.ts</code>, run <code>yarn db:generate</code> then <code>yarn db:migrate</code>.</li>
+        <li>Register in <span class="path-chip">src/server/api/root.ts</span>: add <code>events: eventsRouter</code> to <code>appRouter</code>.</li>
+        <li>Consume via <code>api.events.xyz()</code> (Server Component, <code>@/trpc/server</code>) or <code>api.events.xyz.useQuery()</code> (Client Component, <code>@/trpc/react</code>) — types flow automatically.</li>
+      </ol>
+
+      <details>
+        <summary>Before either is usable end-to-end over HTTP</summary>
+        <p>The missing <span class="path-chip">src/app/api/trpc/[trpc]/route.ts</span> handler (see Gaps found) needs to exist first — without it, no procedure is reachable from Client Components, only from Server Components via the RSC caller.</p>
+      </details>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>
