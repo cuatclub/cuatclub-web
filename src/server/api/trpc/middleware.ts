@@ -8,9 +8,9 @@ import { internalError } from "@/server/errors";
 // tRPC auto-wrapped — in the latter case its message is the raw JS error text, so
 // we always log the cause and replace the message with a safe generic one.
 export const errorHandlingMiddleware = t.middleware(async ({ next, path }) => {
-	const result = await next();
-	if (result.ok || result.error.code !== "INTERNAL_SERVER_ERROR") return result;
+  const result = await next();
+  if (result.ok || result.error.code !== "INTERNAL_SERVER_ERROR") return result;
 
-	console.error(`[trpc] internal error in "${path}":`, result.error.cause ?? result.error);
-	throw internalError();
+  console.error(`[trpc] internal error in "${path}":`, result.error.cause ?? result.error);
+  throw internalError();
 });

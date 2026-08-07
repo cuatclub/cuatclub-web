@@ -2,5 +2,5 @@ import { masterDataRepository } from "@/server/api/modules/master-data/master-da
 import type { GetAllFacultiesOutputDTO } from "@/server/api/modules/master-data/dto";
 
 export const getAllFaculties = async (): Promise<GetAllFacultiesOutputDTO> => {
-	return masterDataRepository.getAllFaculties();
+  return masterDataRepository.getAllFaculties();
 };

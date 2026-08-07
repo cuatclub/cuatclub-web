@@ -5,69 +5,69 @@ export type ClubRow = typeof clubs.$inferSelect;
 export type CreateClubParams = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
 
 export class Club {
-	private constructor(private row: ClubRow) {}
+  private constructor(private row: ClubRow) {}
 
-	static toEntity(row: ClubRow): Club {
-		return new Club(row);
-	}
+  static toEntity(row: ClubRow): Club {
+    return new Club(row);
+  }
 
-	static toEntities(rows: ClubRow[]): Club[] {
-		return rows.map((row) => Club.toEntity(row));
-	}
+  static toEntities(rows: ClubRow[]): Club[] {
+    return rows.map((row) => Club.toEntity(row));
+  }
 
-	get id() {
-		return this.row.id;
-	}
+  get id() {
+    return this.row.id;
+  }
 
-	get userId() {
-		return this.row.userId;
-	}
+  get userId() {
+    return this.row.userId;
+  }
 
-	get registrationStatus() {
-		return this.row.registrationStatus;
-	}
+  get registrationStatus() {
+    return this.row.registrationStatus;
+  }
 
-	get name() {
-		return this.row.name;
-	}
+  get name() {
+    return this.row.name;
+  }
 
-	get logoUrl() {
-		return this.row.logoUrl;
-	}
+  get logoUrl() {
+    return this.row.logoUrl;
+  }
 
-	get facultyId() {
-		return this.row.facultyId;
-	}
+  get facultyId() {
+    return this.row.facultyId;
+  }
 
-	get shortDescription() {
-		return this.row.shortDescription;
-	}
+  get shortDescription() {
+    return this.row.shortDescription;
+  }
 
-	get longDescription() {
-		return this.row.longDescription;
-	}
+  get longDescription() {
+    return this.row.longDescription;
+  }
 
-	get imageUrls() {
-		return this.row.imageUrls;
-	}
+  get imageUrls() {
+    return this.row.imageUrls;
+  }
 
-	get contacts() {
-		return this.row.contacts;
-	}
+  get contacts() {
+    return this.row.contacts;
+  }
 
-	get createdAt() {
-		return this.row.createdAt;
-	}
+  get createdAt() {
+    return this.row.createdAt;
+  }
 
-	get updatedAt() {
-		return this.row.updatedAt;
-	}
+  get updatedAt() {
+    return this.row.updatedAt;
+  }
 
-	get raw(): ClubRow {
-		return this.row;
-	}
+  get raw(): ClubRow {
+    return this.row;
+  }
 
-	toDTO(): ClubOutputDTO {
-		return { ...this.row };
-	}
+  toDTO(): ClubOutputDTO {
+    return { ...this.row };
+  }
 }

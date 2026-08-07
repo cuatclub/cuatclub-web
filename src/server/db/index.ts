@@ -21,4 +21,6 @@ export const db = drizzle(conn, { schema });
 
 // Common type for both the top-level `db` and a transaction's `tx` — repositories
 // accept this so they can run standalone or inside a UnitOfWork.run() block.
-export type DbClient = typeof db | PostgresJsTransaction<typeof schema, ExtractTablesWithRelations<typeof schema>>;
+export type DbClient =
+  | typeof db
+  | PostgresJsTransaction<typeof schema, ExtractTablesWithRelations<typeof schema>>;
