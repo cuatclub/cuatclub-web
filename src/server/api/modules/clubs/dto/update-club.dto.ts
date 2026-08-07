@@ -1,6 +1,6 @@
 import { z, type ZodSchema } from "zod";
 import type { clubs } from "@/server/db/schema/clubs";
-import { ClubOutputDTOSchema, type ClubOutputDTO } from "@/server/api/modules/clubs/dto/club.dto";
+import { ClubOutputDTOSchema } from "@/server/api/modules/clubs/dto/club.dto";
 
 export type UpdateClubInputDTO = {
 	id: string;
@@ -26,6 +26,5 @@ export const UpdateClubInputDTOSchema: ZodSchema<UpdateClubInputDTO> = z.object(
 	contacts: ContactsSchema.nullable().optional(),
 });
 
-export type UpdateClubOutputDTO = ClubOutputDTO;
-
 export const UpdateClubOutputDTOSchema = ClubOutputDTOSchema;
+export type UpdateClubOutputDTO = z.infer<typeof UpdateClubOutputDTOSchema>;

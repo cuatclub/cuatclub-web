@@ -1,7 +1,7 @@
 import type { clubs } from "@/server/db/schema/clubs";
 import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import type { CreateClubInputDTO, ClubOutputDTO } from "@/server/api/modules/clubs/dto";
-import type { ErrorOrNull } from "@/server/errors";
+import { internalError } from "@/server/errors";
 
 export type ClubRow = typeof clubs.$inferSelect;
 
@@ -16,20 +16,19 @@ export class Club {
 		return rows.map((row) => Club.toEntity(row));
 	}
 
-	static async create(req: CreateClubInputDTO): Promise<[Club | null, ErrorOrNull]> {
-		const [id, error] = await clubsRepository.create(req);
-		if (error || !id) return [null, error];
-		return clubsRepository.getById(id);
+	static async create(req: CreateClubInputDTO): Promise<Club> {
+		const id = await clubsRepository.create(req);
+		const club = await clubsRepository.getById(id);
+		if (!club) throw internalError({ reason: "Club was created but could not be reloaded", id });
+		return club;
 	}
 
-	async update(patch: Partial<ClubRow>): Promise<ErrorOrNull> {
-		const error = await clubsRepository.updateById(this.row.id, patch);
-		if (error) return error;
+	async update(patch: Partial<ClubRow>): Promise<void> {
+		await clubsRepository.updateById(this.row.id, patch);
 		this.row = { ...this.row, ...patch };
-		return null;
 	}
 
-	async delete(): Promise<ErrorOrNull> {
+	async delete(): Promise<void> {
 		return clubsRepository.deleteById(this.row.id);
 	}
 
