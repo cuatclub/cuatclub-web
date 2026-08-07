@@ -4,8 +4,6 @@ export const ClubOutputDTOSchema = z.object({
   id: z.string(),
   userId: z.string(),
   registrationStatus: z.enum(["PENDING", "INFO_SUBMITTED", "COMPLETED"]),
-  name: z.string().nullable(),
-  logoUrl: z.string().nullable(),
   facultyId: z.number().nullable(),
   shortDescription: z.string().nullable(),
   longDescription: z.string().nullable(),

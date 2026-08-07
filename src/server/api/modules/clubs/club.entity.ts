@@ -26,14 +26,6 @@ export class Club {
     return this.row.registrationStatus;
   }
 
-  get name() {
-    return this.row.name;
-  }
-
-  get logoUrl() {
-    return this.row.logoUrl;
-  }
-
   get facultyId() {
     return this.row.facultyId;
   }

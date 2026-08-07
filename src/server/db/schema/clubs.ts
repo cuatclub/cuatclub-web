@@ -20,8 +20,6 @@ export const clubs = pgTable("clubs", {
   registrationStatus: clubRegistrationStatusEnum("registration_status")
     .notNull()
     .default("PENDING"),
-  name: text("name"),
-  logoUrl: text("logo_url"),
   facultyId: smallint("faculty_id").references(() => faculties.id),
   shortDescription: text("short_description"),
   longDescription: text("long_description"),
