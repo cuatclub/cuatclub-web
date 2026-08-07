@@ -1,9 +1,11 @@
 import { clubsRouter } from "@/server/api/modules/clubs/clubs.router";
+import { masterDataRouter } from "@/server/api/modules/master-data/master-data.router";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 
 export const appRouter = createTRPCRouter({
   clubs: clubsRouter,
+  masterData: masterDataRouter,
 });
 
 // export type definition of API
