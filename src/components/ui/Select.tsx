@@ -1,11 +1,13 @@
-import { forwardRef, type ComponentPropsWithoutRef, type ElementRef } from "react";
+import { forwardRef, useId, type ComponentPropsWithoutRef, type ElementRef } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const Select = SelectPrimitive.Root;
+const SelectRoot = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
 const SelectValue = SelectPrimitive.Value;
+
+const textSize = "text-sm leading-[23px] md:text-base md:leading-[26px]";
 
 const SelectTrigger = forwardRef<
   ElementRef<typeof SelectPrimitive.Trigger>,
@@ -14,7 +16,8 @@ const SelectTrigger = forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "border-border font-ibm-plex text-foreground flex h-10 w-full items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 text-sm leading-[23px] transition-colors md:text-base md:leading-[26px]",
+      "border-border font-ibm-plex text-foreground flex h-10 w-full items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors",
+      textSize,
       "hover:border-primary-light data-[state=open]:border-primary",
       "data-[placeholder]:text-placeholder",
       "disabled:bg-border disabled:text-placeholder disabled:hover:border-border disabled:cursor-not-allowed",
@@ -76,7 +79,8 @@ const SelectItem = forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "font-ibm-plex text-foreground relative flex w-full cursor-pointer items-center rounded-md px-2 py-2 text-sm leading-[23px] outline-none select-none md:text-base md:leading-[26px]",
+      "font-ibm-plex text-foreground relative flex w-full cursor-pointer items-center rounded-md px-2 py-2 outline-none select-none",
+      textSize,
       "data-[highlighted]:bg-primary-lighter data-[highlighted]:text-primary",
       "data-[state=checked]:bg-primary data-[state=checked]:text-white",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
@@ -101,8 +105,91 @@ const SelectSeparator = forwardRef<
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
+export interface SelectProps {
+  label?: string;
+  placeholder?: string;
+  options: string[];
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  disabled?: boolean;
+  error?: boolean;
+  errorMessage?: string;
+  name?: string;
+  className?: string;
+  triggerClassName?: string;
+}
+
+const Select = ({
+  label,
+  placeholder,
+  options,
+  value,
+  defaultValue,
+  onValueChange,
+  defaultOpen,
+  open,
+  onOpenChange,
+  disabled,
+  error,
+  errorMessage,
+  name,
+  className,
+  triggerClassName,
+}: SelectProps) => {
+  const labelId = useId();
+  const triggerId = useId();
+  const errorId = useId();
+
+  return (
+    <div className={cn("flex flex-col gap-1", className)}>
+      {label && (
+        <span id={labelId} className={cn("font-ibm-plex text-foreground font-medium", textSize)}>
+          {label}
+        </span>
+      )}
+      <SelectRoot
+        value={value}
+        defaultValue={defaultValue}
+        onValueChange={onValueChange}
+        defaultOpen={defaultOpen}
+        open={open}
+        onOpenChange={onOpenChange}
+        disabled={disabled}
+        name={name}
+      >
+        <SelectTrigger
+          id={triggerId}
+          error={error}
+          className={triggerClassName}
+          aria-labelledby={label ? `${labelId} ${triggerId}` : undefined}
+          aria-describedby={error && errorMessage ? errorId : undefined}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
+          {options.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </SelectRoot>
+      {error && errorMessage && (
+        <span id={errorId} className="font-ibm-plex text-error text-sm leading-[23px] font-medium">
+          {errorMessage}
+        </span>
+      )}
+    </div>
+  );
+};
+
 export {
   Select,
+  SelectRoot,
   SelectGroup,
   SelectValue,
   SelectTrigger,
