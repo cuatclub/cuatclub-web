@@ -36,14 +36,20 @@ const Field = ({
       ? "text-base leading-[26px] md:text-base md:leading-[26px]"
       : "text-sm leading-[23px] md:text-sm md:leading-[23px]";
   const errorId = useId();
+  const labelId = useId();
+  const triggerId = useId();
 
   return (
     <div className="flex w-[200px] flex-col gap-1">
-      <span className={cn("font-ibm-plex text-foreground font-medium", textSize)}>คณะ</span>
+      <span id={labelId} className={cn("font-ibm-plex text-foreground font-medium", textSize)}>
+        คณะ
+      </span>
       <Select defaultOpen={defaultOpen} defaultValue={defaultValue} disabled={disabled}>
         <SelectTrigger
+          id={triggerId}
           error={error}
           className={textSize}
+          aria-labelledby={`${labelId} ${triggerId}`}
           aria-describedby={error ? errorId : undefined}
         >
           <SelectValue placeholder="เลือกคณะ" />
