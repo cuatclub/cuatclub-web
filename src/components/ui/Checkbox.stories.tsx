@@ -14,16 +14,22 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Unchecked: Story = {};
+export const Unchecked: Story = {
+  args: {
+    "aria-label": "ตัวอย่าง",
+  },
+};
 
 export const Checked: Story = {
   args: {
+    "aria-label": "ตัวอย่าง",
     defaultChecked: true,
   },
 };
 
 export const Disabled: Story = {
   args: {
+    "aria-label": "ตัวอย่าง",
     disabled: true,
   },
 };
