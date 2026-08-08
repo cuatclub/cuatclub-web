@@ -12,7 +12,14 @@ type NavbarProps = {
 export function Navbar({ isLoggedIn = false }: NavbarProps) {
   return (
     <nav className="flex items-center justify-between bg-white px-4 py-3 md:px-16">
-      <Image src="/images/logo.svg" alt="CUatClub" width={76} height={40} priority />
+      <Image
+        src="/images/logo.svg"
+        alt="CUatClub"
+        width={76}
+        height={40}
+        priority
+        className="h-7 w-[53px] md:h-10 md:w-[76px]"
+      />
 
       <div className="hidden items-center gap-6 md:flex">
         {NAV_LINKS.map((label) => (
@@ -26,12 +33,12 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
         ))}
       </div>
 
-      <div className="hidden items-center gap-3 md:flex">
+      <div className={`hidden items-center md:flex ${isLoggedIn ? "gap-6" : "gap-3"}`}>
         {isLoggedIn ? (
           <>
             <Button variant="outline">แดชบอร์ด</Button>
-            <div className="bg-primary-light flex h-10 w-10 items-center justify-center rounded-full">
-              <User className="text-primary h-5 w-5" />
+            <div className="bg-primary/50 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full">
+              <User className="text-primary-lighter h-7 w-7 translate-y-1.5" fill="currentColor" />
             </div>
           </>
         ) : (
