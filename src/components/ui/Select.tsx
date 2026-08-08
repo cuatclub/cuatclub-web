@@ -16,7 +16,7 @@ const SelectTrigger = forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "border-border font-ibm-plex text-foreground flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors",
+      "border-border font-ibm-plex text-foreground group flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors",
       textSize,
       "hover:border-primary-light data-[state=open]:border-primary",
       "data-[placeholder]:text-placeholder",
@@ -29,7 +29,7 @@ const SelectTrigger = forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="text-placeholder size-4 shrink-0" />
+      <ChevronDown className="text-placeholder size-4 shrink-0 transition-transform group-data-[state=open]:rotate-180" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -45,6 +45,7 @@ const SelectContent = forwardRef<
       position={position}
       className={cn(
         "border-border relative z-50 w-[var(--radix-select-trigger-width)] overflow-hidden rounded-lg border bg-white p-1.5 shadow-black",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper"
           ? "max-h-[var(--radix-select-content-available-height)] translate-y-1"
           : "max-h-96",
@@ -179,7 +180,7 @@ const Select = ({
         </SelectContent>
       </SelectRoot>
       {error && errorMessage && (
-        <span id={errorId} className="font-ibm-plex text-error text-xs md:text-sm leading-[23px]">
+        <span id={errorId} className="font-ibm-plex text-error text-xs leading-[23px] md:text-sm">
           {errorMessage}
         </span>
       )}
