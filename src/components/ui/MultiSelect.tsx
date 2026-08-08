@@ -75,7 +75,7 @@ const MultiSelect = ({
             aria-labelledby={label ? `${labelId} ${triggerId}` : undefined}
             aria-describedby={error && errorMessage ? errorId : undefined}
             className={cn(
-              "border-border font-ibm-plex flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors",
+              "border-border font-ibm-plex group flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors outline-none",
               textSize,
               selected.length > 0 ? "text-foreground" : "text-placeholder",
               "hover:border-primary-light data-[state=open]:border-primary",
@@ -87,14 +87,14 @@ const MultiSelect = ({
             <span className="truncate">
               {selected.length > 0 ? `เลือกแล้ว ${selected.length}` : placeholder}
             </span>
-            <ChevronDown className="text-placeholder size-4 shrink-0" />
+            <ChevronDown className="text-placeholder size-4 shrink-0 transition-transform group-data-[state=open]:rotate-180" />
           </button>
         </DropdownMenuPrimitive.Trigger>
         <DropdownMenuPrimitive.Portal>
           <DropdownMenuPrimitive.Content
             align="start"
             sideOffset={4}
-            className="border-border w-[var(--radix-dropdown-menu-trigger-width,12.5rem)] rounded-lg border bg-white p-1.5 shadow-black"
+            className="border-border data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 w-[var(--radix-dropdown-menu-trigger-width,12.5rem)] rounded-lg border bg-white p-1.5 shadow-black"
           >
             {options.map((option) => {
               const checked = selected.includes(option);
@@ -114,7 +114,7 @@ const MultiSelect = ({
                 >
                   <span
                     className={cn(
-                      "flex size-4 shrink-0 items-center justify-center rounded-[2px] border transition-colors",
+                      "flex size-4 shrink-0 items-center justify-center rounded-[2px] border",
                       checked
                         ? "border-primary bg-primary"
                         : "border-foreground-secondary/30 group-data-[highlighted]:border-primary"
@@ -132,7 +132,7 @@ const MultiSelect = ({
       {name &&
         selected.map((option) => <input key={option} type="hidden" name={name} value={option} />)}
       {error && errorMessage && (
-        <span id={errorId} className="font-ibm-plex text-error text-sm leading-[23px] font-medium">
+        <span id={errorId} className="font-ibm-plex text-error text-xs leading-[23px] sm:text-sm">
           {errorMessage}
         </span>
       )}

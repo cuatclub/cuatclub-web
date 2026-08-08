@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { MultiSelect } from "./Multiselect";
+import { MultiSelect } from "./MultiSelect";
 
 const options = ["หมวดหมู่ 1", "หมวดหมู่ 2", "หมวดหมู่ 3", "หมวดหมู่ 4"];
 
