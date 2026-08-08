@@ -60,10 +60,10 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
   }, [isSidebarOpen]);
 
   return (
-    <nav className="flex items-center justify-between bg-white px-4 py-3 md:grid md:grid-cols-[1fr_auto_1fr] md:px-16">
-      <div className="md:flex md:min-w-0 md:items-center">
+    <nav className="relative flex items-center justify-between bg-white px-4 py-3 md:px-16">
+      <div className="md:flex md:items-center">
         <Image
-          src="/images/logo.svg"
+          src="/svg/logo.svg"
           alt="CUatClub"
           width={76}
           height={40}
@@ -72,7 +72,7 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
         />
       </div>
 
-      <div className="hidden items-center gap-6 md:flex">
+      <div className="hidden items-center gap-6 md:absolute md:left-1/2 md:flex md:-translate-x-1/2">
         {NAV_LINKS.map((label) => (
           <button
             key={label}
@@ -84,14 +84,12 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
         ))}
       </div>
 
-      <div
-        className={`hidden items-center justify-end md:flex md:min-w-0 ${isLoggedIn ? "gap-6" : "gap-3"}`}
-      >
+      <div className={`hidden items-center justify-end md:flex ${isLoggedIn ? "gap-6" : "gap-3"}`}>
         {isLoggedIn ? (
           <>
             <Button variant="outline">แดชบอร์ด</Button>
             <Image
-              src="/images/user_profile.svg"
+              src="/svg/user_profile.svg"
               alt="Profile"
               width={40}
               height={40}
@@ -118,9 +116,9 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
       </button>
 
       {isSidebarOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
+        <div className="fixed inset-0 flex md:hidden">
           <div
-            className="absolute inset-0 bg-black/30"
+            className="absolute inset-0 z-20 bg-black/30"
             onClick={() => setIsSidebarOpen(false)}
             aria-hidden="true"
           />
@@ -130,7 +128,7 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
             role="dialog"
             aria-modal="true"
             aria-label="เมนู"
-            className="relative flex h-full w-[300px] flex-col bg-white px-5"
+            className="animate-in slide-in-from-right z-50 ml-auto flex h-full w-[300px] flex-col bg-white px-5 duration-300"
           >
             <div className="flex h-16 items-center justify-end">
               <button type="button" aria-label="ปิดเมนู" onClick={() => setIsSidebarOpen(false)}>
