@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, uuid, smallint, jsonb, pgEnum } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { user } from "./user";
-import { faculties } from "./faculties";
+import { affiliations } from "./affiliations";
 
 export const clubRegistrationStatusEnum = pgEnum("club_registration_status", [
   "PENDING",
@@ -20,7 +20,7 @@ export const clubs = pgTable("clubs", {
   registrationStatus: clubRegistrationStatusEnum("registration_status")
     .notNull()
     .default("PENDING"),
-  facultyId: smallint("faculty_id").references(() => faculties.id),
+  affiliationId: smallint("affiliation_id").references(() => affiliations.id),
   shortDescription: text("short_description"),
   longDescription: text("long_description"),
   imageUrls: text("image_urls").array().default([]).notNull(),

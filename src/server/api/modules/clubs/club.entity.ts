@@ -26,8 +26,8 @@ export class Club {
     return this.row.registrationStatus;
   }
 
-  get facultyId() {
-    return this.row.facultyId;
+  get affiliationId() {
+    return this.row.affiliationId;
   }
 
   get shortDescription() {

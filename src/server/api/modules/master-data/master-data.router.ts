@@ -1,17 +1,17 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { getAllFaculties, getAllCategories } from "@/server/api/modules/master-data/usecases";
+import { getAllAffiliations, getAllCategories } from "@/server/api/modules/master-data/usecases";
 import {
-  GetAllFacultiesInputDTOSchema,
-  GetAllFacultiesOutputDTOSchema,
+  GetAllAffiliationsInputDTOSchema,
+  GetAllAffiliationsOutputDTOSchema,
   GetAllCategoriesInputDTOSchema,
   GetAllCategoriesOutputDTOSchema,
 } from "@/server/api/modules/master-data/dto";
 
-const facultiesRouter = createTRPCRouter({
+const affiliationsRouter = createTRPCRouter({
   getAll: publicProcedure
-    .input(GetAllFacultiesInputDTOSchema)
-    .output(GetAllFacultiesOutputDTOSchema)
-    .query(async () => getAllFaculties()),
+    .input(GetAllAffiliationsInputDTOSchema)
+    .output(GetAllAffiliationsOutputDTOSchema)
+    .query(async () => getAllAffiliations()),
 });
 
 const categoriesRouter = createTRPCRouter({
@@ -22,6 +22,6 @@ const categoriesRouter = createTRPCRouter({
 });
 
 export const masterDataRouter = createTRPCRouter({
-  faculties: facultiesRouter,
+  affiliations: affiliationsRouter,
   categories: categoriesRouter,
 });

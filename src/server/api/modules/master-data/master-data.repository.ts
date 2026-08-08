@@ -1,19 +1,19 @@
 import { db } from "@/server/db";
-import type { faculties } from "@/server/db/schema/faculties";
+import type { affiliations } from "@/server/db/schema/affiliations";
 import type { categories } from "@/server/db/schema/categories";
 import { wrapRepoError } from "@/server/errors";
 
-export type FacultyRow = typeof faculties.$inferSelect;
+export type AffiliationRow = typeof affiliations.$inferSelect;
 export type CategoryRow = typeof categories.$inferSelect;
 
 export interface IMasterDataRepository {
-  getAllFaculties(): Promise<FacultyRow[]>;
+  getAllAffiliations(): Promise<AffiliationRow[]>;
   getAllCategories(): Promise<CategoryRow[]>;
 }
 
 class MasterDataRepository implements IMasterDataRepository {
-  async getAllFaculties(): Promise<FacultyRow[]> {
-    return db.query.faculties.findMany().catch(wrapRepoError);
+  async getAllAffiliations(): Promise<AffiliationRow[]> {
+    return db.query.affiliations.findMany().catch(wrapRepoError);
   }
 
   async getAllCategories(): Promise<CategoryRow[]> {
