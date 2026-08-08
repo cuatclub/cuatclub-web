@@ -1,5 +1,5 @@
 import { forwardRef, useId, useState, type InputHTMLAttributes } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeClosed } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface PasswordInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type"> {
@@ -72,7 +72,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             {visible ? (
               <Eye className="size-4" strokeWidth={1.5} />
             ) : (
-              <EyeOff className="size-4" strokeWidth={1.5} />
+              <EyeClosed className="size-4" strokeWidth={1.5} />
             )}
           </button>
         </div>
