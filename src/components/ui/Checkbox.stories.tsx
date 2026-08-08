@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Checkbox } from "./Checkbox";
 
@@ -34,27 +33,19 @@ export const Disabled: Story = {
   },
 };
 
-const Labeled = ({ defaultChecked }: { defaultChecked?: boolean }) => {
-  const [checked, setChecked] = useState(defaultChecked ?? false);
-  return (
-    <label className="flex items-center gap-2">
-      <Checkbox checked={checked} onCheckedChange={(v) => setChecked(v === true)} />
-      <span className="font-ibm-plex text-foreground text-sm leading-[23px]">ตัวอย่าง</span>
-    </label>
-  );
-};
-
 export const WithLabel: Story = {
-  render: () => <Labeled />,
+  args: {
+    label: "ตัวอย่าง",
+  },
 };
 
 export const OptionList: Story = {
   render: () => (
     <div className="flex flex-col gap-3">
-      <Labeled />
-      <Labeled defaultChecked />
-      <Labeled />
-      <Labeled defaultChecked />
+      <Checkbox label="ตัวอย่าง" />
+      <Checkbox label="ตัวอย่าง" defaultChecked />
+      <Checkbox label="ตัวอย่าง" />
+      <Checkbox label="ตัวอย่าง" defaultChecked />
     </div>
   ),
 };
