@@ -35,6 +35,14 @@ export const Disabled: Story = {
   },
 };
 
+export const DisabledOpen: Story = {
+  args: {
+    disabled: true,
+    defaultOpen: true,
+    defaultValue: ["หมวดหมู่ 1"],
+  },
+};
+
 export const WithError: Story = {
   args: {
     defaultValue: ["หมวดหมู่ 1", "หมวดหมู่ 2"],

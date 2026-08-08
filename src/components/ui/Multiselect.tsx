@@ -36,6 +36,7 @@ const MultiSelect = ({
   disabled,
   error,
   errorMessage,
+  name,
   className,
   triggerClassName,
 }: MultiSelectProps) => {
@@ -65,10 +66,12 @@ const MultiSelect = ({
       )}
       <DropdownMenuPrimitive.Root defaultOpen={defaultOpen} open={open} onOpenChange={onOpenChange}>
         <DropdownMenuPrimitive.Trigger asChild disabled={disabled}>
+          {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props -- error state still needs to be exposed on the trigger; upgrading to a full combobox role/aria-controls/aria-expanded contract is out of scope here */}
           <button
             type="button"
             id={triggerId}
             disabled={disabled}
+            aria-invalid={error}
             aria-labelledby={label ? `${labelId} ${triggerId}` : undefined}
             aria-describedby={error && errorMessage ? errorId : undefined}
             className={cn(
@@ -99,12 +102,14 @@ const MultiSelect = ({
                 <DropdownMenuPrimitive.CheckboxItem
                   key={option}
                   checked={checked}
+                  disabled={disabled}
                   onCheckedChange={() => toggle(option)}
                   onSelect={(e) => e.preventDefault()}
                   className={cn(
                     "group font-ibm-plex text-foreground relative flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-2 outline-none select-none",
                     textSize,
-                    "data-[highlighted]:bg-primary-lighter"
+                    "data-[highlighted]:bg-primary-lighter",
+                    "data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                   )}
                 >
                   <span
@@ -124,6 +129,8 @@ const MultiSelect = ({
           </DropdownMenuPrimitive.Content>
         </DropdownMenuPrimitive.Portal>
       </DropdownMenuPrimitive.Root>
+      {name &&
+        selected.map((option) => <input key={option} type="hidden" name={name} value={option} />)}
       {error && errorMessage && (
         <span id={errorId} className="font-ibm-plex text-error text-sm leading-[23px] font-medium">
           {errorMessage}
