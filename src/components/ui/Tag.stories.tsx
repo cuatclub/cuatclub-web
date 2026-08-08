@@ -14,67 +14,86 @@ const meta = {
   args: {
     children: "เทคโนโลยี",
   },
+  argTypes: {
+    type: {
+      control: "radio",
+      options: ["solid", "selectable"],
+    },
+  },
 } satisfies Meta<typeof Tag>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Static badge — never clickable. */
 export const Solid: Story = {
   args: {
-    variant: "solid",
     color: "#0891b2",
     bgColor: "#cffafe",
   },
 };
 
-export const Outline: Story = {
-  args: {
-    variant: "outline",
+/** Selectable tag, unselected — outline style. */
+export const SelectableUnselected: Story = {
+  render: (args) => {
+    const [selected, setSelected] = useState(false);
+    return (
+      <Tag
+        {...args}
+        type="selectable"
+        selected={selected}
+        onClick={() => setSelected((prev) => !prev)}
+      />
+    );
   },
 };
 
-/** Click the × — the tag actually gets removed from the list below. */
-export const RemovableList: Story = {
+/** Selectable tag, selected — solid style with a × to deselect. */
+export const SelectableSelected: Story = {
+  render: (args) => {
+    const [selected, setSelected] = useState(true);
+    return (
+      <Tag
+        {...args}
+        type="selectable"
+        color="#0891b2"
+        bgColor="#cffafe"
+        selected={selected}
+        onClick={() => setSelected((prev) => !prev)}
+      />
+    );
+  },
+};
+
+/** Click a tag to toggle it between outline (unselected) and solid + × (selected). */
+export const SelectableList: Story = {
   render: () => {
     const initial = [
-      { id: 1, label: "เทคโนโลยี", color: "#0891b2", bgColor: "#cffafe" },
-      { id: 2, label: "กีฬา", color: "#db2777", bgColor: "#fce7f3" },
-      { id: 3, label: "ดนตรี", color: "#65a30d", bgColor: "#ecfccb" },
+      { id: 1, label: "เทคโนโลยี", color: "#0891b2", bgColor: "#cffafe", selected: false },
+      { id: 2, label: "กีฬา", color: "#db2777", bgColor: "#fce7f3", selected: true },
+      { id: 3, label: "ดนตรี", color: "#65a30d", bgColor: "#ecfccb", selected: false },
     ];
     const [tags, setTags] = useState(initial);
 
     return (
       <div className="flex flex-wrap gap-2">
-        {tags.length === 0 && <span className="text-foreground-secondary text-sm">ไม่มีแท็ก</span>}
         {tags.map((tag) => (
           <Tag
             key={tag.id}
+            type="selectable"
             color={tag.color}
             bgColor={tag.bgColor}
-            onRemove={() => setTags((prev) => prev.filter((t) => t.id !== tag.id))}
+            selected={tag.selected}
+            onClick={() =>
+              setTags((prev) =>
+                prev.map((t) => (t.id === tag.id ? { ...t, selected: !t.selected } : t))
+              )
+            }
           >
             {tag.label}
           </Tag>
         ))}
       </div>
-    );
-  },
-};
-
-/** Click the tag — it toggles between solid (selected) and outline (unselected). */
-export const ClickableFilter: Story = {
-  render: () => {
-    const [selected, setSelected] = useState(false);
-
-    return (
-      <Tag
-        variant={selected ? "solid" : "outline"}
-        color={selected ? "#0891b2" : undefined}
-        bgColor={selected ? "#cffafe" : undefined}
-        onClick={() => setSelected((prev) => !prev)}
-      >
-        เทคโนโลยี
-      </Tag>
     );
   },
 };
@@ -89,19 +108,6 @@ export const AllStates: Story = {
 
     const rows: { label: string; desktop: ReactNode; mobile: ReactNode }[] = [
       {
-        label: "Selected",
-        desktop: (
-          <Tag color="#0891b2" bgColor="#cffafe" onRemove={fn()} className={desktopSize}>
-            เทคโนโลยี
-          </Tag>
-        ),
-        mobile: (
-          <Tag color="#db2777" bgColor="#fce7f3" onRemove={fn()} className={mobileSize}>
-            เทคโนโลยี
-          </Tag>
-        ),
-      },
-      {
         label: "Solid",
         desktop: (
           <Tag color="#0891b2" bgColor="#cffafe" className={desktopSize}>
@@ -115,27 +121,64 @@ export const AllStates: Story = {
         ),
       },
       {
-        label: "Outline",
+        label: "Selectable — unselected",
         desktop: (
-          <Tag variant="outline" className={desktopSize}>
+          <Tag type="selectable" selected={false} onClick={fn()} className={desktopSize}>
             เทคโนโลยี
           </Tag>
         ),
         mobile: (
-          <Tag variant="outline" className={mobileSize}>
+          <Tag type="selectable" selected={false} onClick={fn()} className={mobileSize}>
             เทคโนโลยี
           </Tag>
         ),
       },
       {
-        label: "Hover",
+        label: "Selectable — selected",
         desktop: (
-          <Tag variant="outline" className={cn(desktopSize, "bg-primary-lighter")}>
+          <Tag
+            type="selectable"
+            selected
+            onClick={fn()}
+            color="#0891b2"
+            bgColor="#cffafe"
+            className={desktopSize}
+          >
             เทคโนโลยี
           </Tag>
         ),
         mobile: (
-          <Tag variant="outline" className={cn(mobileSize, "bg-primary-lighter")}>
+          <Tag
+            type="selectable"
+            selected
+            onClick={fn()}
+            color="#db2777"
+            bgColor="#fce7f3"
+            className={mobileSize}
+          >
+            เทคโนโลยี
+          </Tag>
+        ),
+      },
+      {
+        label: "Selectable — hover",
+        desktop: (
+          <Tag
+            type="selectable"
+            selected={false}
+            onClick={fn()}
+            className={cn(desktopSize, "bg-primary-lighter")}
+          >
+            เทคโนโลยี
+          </Tag>
+        ),
+        mobile: (
+          <Tag
+            type="selectable"
+            selected={false}
+            onClick={fn()}
+            className={cn(mobileSize, "bg-primary-lighter")}
+          >
             เทคโนโลยี
           </Tag>
         ),

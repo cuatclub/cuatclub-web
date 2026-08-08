@@ -1,5 +1,5 @@
 import { type CSSProperties, type ReactNode } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -8,7 +8,7 @@ const tagVariants = cva(
   {
     variants: {
       variant: {
-        solid: "",
+        solid: "border-[1.5px]",
         outline:
           "border-[1.5px] border-primary bg-transparent text-primary hover:bg-primary-lighter",
       },
@@ -19,20 +19,41 @@ const tagVariants = cva(
   }
 );
 
-export interface TagProps extends VariantProps<typeof tagVariants> {
+interface BaseTagProps {
   children: ReactNode;
-  /** Text color for the `solid` variant. Any valid CSS color. Ignored by `outline`. */
+  /** Text color. Any valid CSS color. Only applied when the tag is rendered solid. */
   color?: string;
-  /** Background color for the `solid` variant. Any valid CSS color. Ignored by `outline`. */
+  /** Background color. Any valid CSS color. Only applied when the tag is rendered solid. */
   bgColor?: string;
-  onClick?: () => void;
-  onRemove?: () => void;
   className?: string;
 }
 
+export interface SolidTagProps extends BaseTagProps {
+  /** Static badge — never clickable. This is the default. */
+  type?: "solid";
+}
+
+export interface SelectableTagProps extends BaseTagProps {
+  /** Interactive toggle — outline when unselected, solid with a × when selected. */
+  type: "selectable";
+  selected: boolean;
+  onClick: () => void;
+}
+
+export type TagProps = SolidTagProps | SelectableTagProps;
+
+const solidStyle = (color?: string, bgColor?: string): CSSProperties => {
+  const background = bgColor ?? "var(--primary-lighter)";
+  return {
+    color: color ?? "var(--primary)",
+    backgroundColor: background,
+    borderColor: background,
+  };
+};
+
 /**
  * @example
- * // Static badge, brand colors
+ * // Static badge, brand colors — never clickable
  * <Tag>เทคโนโลยี</Tag>
  *
  * @example
@@ -40,59 +61,42 @@ export interface TagProps extends VariantProps<typeof tagVariants> {
  * <Tag color="#0891b2" bgColor="#cffafe">เทคโนโลยี</Tag>
  *
  * @example
- * // Outline variant (always brand-colored, no color/bgColor)
- * <Tag variant="outline">เทคโนโลยี</Tag>
- *
- * @example
- * // Removable "selected" tag — clicking anywhere on it (not just the ×) removes it
- * <Tag color="#0891b2" bgColor="#cffafe" onRemove={() => removeCategory(id)}>
+ * // Selectable tag — outline by default, solid with × once selected
+ * <Tag type="selectable" selected={isSelected} onClick={() => toggle(id)}>
  *   เทคโนโลยี
  * </Tag>
- *
- * @example
- * // Clickable tag, e.g. toggling a filter
- * <Tag variant="outline" onClick={() => toggleFilter(id)}>เทคโนโลยี</Tag>
  */
-const Tag = ({
-  children,
-  variant = "solid",
-  color,
-  bgColor,
-  onClick,
-  onRemove,
-  className,
-}: TagProps) => {
-  const handleClick = onRemove ?? onClick;
-  const clickable = Boolean(handleClick);
+const Tag = (props: TagProps) => {
+  const { children, color, bgColor, className } = props;
 
-  const style: CSSProperties | undefined =
-    variant === "solid"
-      ? { color: color ?? "var(--primary)", backgroundColor: bgColor ?? "var(--primary-lighter)" }
-      : undefined;
+  if (props.type === "selectable") {
+    const { selected, onClick } = props;
 
-  const tagClassName = cn(tagVariants({ variant }), clickable && "cursor-pointer", className);
-
-  if (!clickable) {
     return (
-      <span className={tagClassName} style={style}>
+      <button
+        type="button"
+        onClick={onClick}
+        style={selected ? solidStyle(color, bgColor) : undefined}
+        aria-pressed={selected}
+        className={cn(
+          tagVariants({ variant: selected ? "solid" : "outline" }),
+          "cursor-pointer",
+          className
+        )}
+      >
         {children}
-      </span>
+        {selected && <X className="size-3.5" strokeWidth={2} />}
+      </button>
     );
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      style={style}
-      aria-label={
-        onRemove ? `ลบ ${typeof children === "string" ? children : ""}`.trim() : undefined
-      }
-      className={tagClassName}
+    <span
+      className={cn(tagVariants({ variant: "solid" }), className)}
+      style={solidStyle(color, bgColor)}
     >
       {children}
-      {onRemove && <X className="size-3.5" strokeWidth={2} />}
-    </button>
+    </span>
   );
 };
 
