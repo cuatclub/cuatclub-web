@@ -59,7 +59,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {error && errorMessage && (
           <span
             id={errorId}
-            className="font-ibm-plex text-error text-xs md:text-sm leading-[26px]"
+            className="font-ibm-plex text-error text-xs md:text-sm leading-[23px]"
           >
             {errorMessage}
           </span>
