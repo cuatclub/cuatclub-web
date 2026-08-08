@@ -1,5 +1,6 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment, useId, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./Select";
 import { cn } from "@/lib/utils";
 
@@ -34,12 +35,17 @@ const Field = ({
     size === "desktop"
       ? "text-base leading-[26px] md:text-base md:leading-[26px]"
       : "text-sm leading-[23px] md:text-sm md:leading-[23px]";
+  const errorId = useId();
 
   return (
     <div className="flex w-[200px] flex-col gap-1">
       <span className={cn("font-ibm-plex text-foreground font-medium", textSize)}>คณะ</span>
       <Select defaultOpen={defaultOpen} defaultValue={defaultValue} disabled={disabled}>
-        <SelectTrigger error={error} className={textSize}>
+        <SelectTrigger
+          error={error}
+          className={textSize}
+          aria-describedby={error ? errorId : undefined}
+        >
           <SelectValue placeholder="เลือกคณะ" />
         </SelectTrigger>
         <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
@@ -51,7 +57,7 @@ const Field = ({
         </SelectContent>
       </Select>
       {error && (
-        <span className="font-ibm-plex text-error text-sm leading-[23px] font-medium">
+        <span id={errorId} className="font-ibm-plex text-error text-sm leading-[23px] font-medium">
           เกิดข้อผิดพลาด
         </span>
       )}
@@ -73,6 +79,16 @@ export const Disabled: Story = {
 
 export const WithError: Story = {
   render: () => <Field size="desktop" defaultValue="ตัวเลือก 1" error />,
+};
+
+export const HoverOption: Story = {
+  render: () => <Field size="desktop" defaultOpen />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement.ownerDocument.body);
+    const option = await canvas.findByText("ตัวเลือก 1");
+    await userEvent.hover(option);
+    await expect(option.closest('[role="option"]')).toHaveAttribute("data-highlighted");
+  },
 };
 
 export const AllStates: Story = {

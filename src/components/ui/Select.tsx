@@ -21,6 +21,7 @@ const SelectTrigger = forwardRef<
       error && "border-error hover:border-error data-[state=open]:border-error",
       className
     )}
+    aria-invalid={error}
     {...props}
   >
     {children}
@@ -40,8 +41,10 @@ const SelectContent = forwardRef<
       ref={ref}
       position={position}
       className={cn(
-        "border-border relative z-50 max-h-96 w-[var(--radix-select-trigger-width)] overflow-hidden rounded-lg border bg-white p-1.5 shadow-black",
-        position === "popper" && "translate-y-1",
+        "border-border relative z-50 w-[var(--radix-select-trigger-width)] overflow-hidden rounded-lg border bg-white p-1.5 shadow-black",
+        position === "popper"
+          ? "max-h-[var(--radix-select-content-available-height)] translate-y-1"
+          : "max-h-96",
         className
       )}
       {...props}
