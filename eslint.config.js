@@ -5,6 +5,8 @@ import { FlatCompat } from "@eslint/eslintrc";
 import tseslint from "typescript-eslint";
 // @ts-ignore -- no types for this plugin
 import drizzle from "eslint-plugin-drizzle";
+import eslintConfigPrettier from "eslint-config-prettier";
+import eslintPluginPrettier from "eslint-plugin-prettier";
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
@@ -53,5 +55,14 @@ export default tseslint.config(
       },
     },
   },
-  storybook.configs["flat/recommended"]
+  storybook.configs["flat/recommended"],
+  {
+    plugins: {
+      prettier: eslintPluginPrettier,
+    },
+    rules: {
+      "prettier/prettier": "error",
+    },
+  },
+  eslintConfigPrettier
 );
