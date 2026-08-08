@@ -16,7 +16,7 @@ const SelectTrigger = forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "border-border font-ibm-plex text-foreground flex h-10 w-full items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors",
+      "border-border font-ibm-plex text-foreground flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors",
       textSize,
       "hover:border-primary-light data-[state=open]:border-primary",
       "data-[placeholder]:text-placeholder",
