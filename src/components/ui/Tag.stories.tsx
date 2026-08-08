@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment, useState, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { fn } from "storybook/test";
 import { Tag } from "./Tag";
@@ -22,21 +22,60 @@ type Story = StoryObj<typeof meta>;
 export const Solid: Story = {
   args: {
     variant: "solid",
-    color: "cyan",
-  },
-};
-
-export const Selected: Story = {
-  args: {
-    variant: "solid",
-    color: "cyan",
-    onRemove: fn(),
+    color: "#0891b2",
+    bgColor: "#cffafe",
   },
 };
 
 export const Outline: Story = {
   args: {
     variant: "outline",
+  },
+};
+
+/** Click the × — the tag actually gets removed from the list below. */
+export const RemovableList: Story = {
+  render: () => {
+    const initial = [
+      { id: 1, label: "เทคโนโลยี", color: "#0891b2", bgColor: "#cffafe" },
+      { id: 2, label: "กีฬา", color: "#db2777", bgColor: "#fce7f3" },
+      { id: 3, label: "ดนตรี", color: "#65a30d", bgColor: "#ecfccb" },
+    ];
+    const [tags, setTags] = useState(initial);
+
+    return (
+      <div className="flex flex-wrap gap-2">
+        {tags.length === 0 && <span className="text-foreground-secondary text-sm">ไม่มีแท็ก</span>}
+        {tags.map((tag) => (
+          <Tag
+            key={tag.id}
+            color={tag.color}
+            bgColor={tag.bgColor}
+            onRemove={() => setTags((prev) => prev.filter((t) => t.id !== tag.id))}
+          >
+            {tag.label}
+          </Tag>
+        ))}
+      </div>
+    );
+  },
+};
+
+/** Click the tag — it toggles between solid (selected) and outline (unselected). */
+export const ClickableFilter: Story = {
+  render: () => {
+    const [selected, setSelected] = useState(false);
+
+    return (
+      <Tag
+        variant={selected ? "solid" : "outline"}
+        color={selected ? "#0891b2" : undefined}
+        bgColor={selected ? "#cffafe" : undefined}
+        onClick={() => setSelected((prev) => !prev)}
+      >
+        เทคโนโลยี
+      </Tag>
+    );
   },
 };
 
@@ -52,12 +91,12 @@ export const AllStates: Story = {
       {
         label: "Selected",
         desktop: (
-          <Tag color="cyan" onRemove={fn()} className={desktopSize}>
+          <Tag color="#0891b2" bgColor="#cffafe" onRemove={fn()} className={desktopSize}>
             เทคโนโลยี
           </Tag>
         ),
         mobile: (
-          <Tag color="pink" onRemove={fn()} className={mobileSize}>
+          <Tag color="#db2777" bgColor="#fce7f3" onRemove={fn()} className={mobileSize}>
             เทคโนโลยี
           </Tag>
         ),
@@ -65,12 +104,12 @@ export const AllStates: Story = {
       {
         label: "Solid",
         desktop: (
-          <Tag color="cyan" className={desktopSize}>
+          <Tag color="#0891b2" bgColor="#cffafe" className={desktopSize}>
             เทคโนโลยี
           </Tag>
         ),
         mobile: (
-          <Tag color="pink" className={mobileSize}>
+          <Tag color="#db2777" bgColor="#fce7f3" className={mobileSize}>
             เทคโนโลยี
           </Tag>
         ),
