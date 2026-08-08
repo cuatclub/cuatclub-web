@@ -179,7 +179,7 @@ const Select = ({
         </SelectContent>
       </SelectRoot>
       {error && errorMessage && (
-        <span id={errorId} className="font-ibm-plex text-error text-sm leading-[23px] font-medium">
+        <span id={errorId} className="font-ibm-plex text-error text-xs md:text-sm leading-[23px]">
           {errorMessage}
         </span>
       )}
