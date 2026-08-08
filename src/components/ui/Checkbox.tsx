@@ -15,7 +15,7 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, CheckboxP
         ref={ref}
         disabled={disabled}
         className={cn(
-          "peer border-foreground-secondary/30 size-4 shrink-0 cursor-pointer rounded-[2px] border bg-transparent transition-colors",
+          "peer border-foreground-secondary/30 size-4 shrink-0 cursor-pointer rounded-[2px] border bg-transparent",
           "data-[state=checked]:border-primary data-[state=checked]:bg-primary",
           "disabled:cursor-not-allowed disabled:opacity-50",
           className
@@ -47,6 +47,6 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, CheckboxP
     );
   }
 );
-Checkbox.displayName = CheckboxPrimitive.Root.displayName;
+Checkbox.displayName = "Checkbox";
 
 export { Checkbox };
