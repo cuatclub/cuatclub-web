@@ -60,7 +60,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {error && errorMessage && (
           <span
             id={errorId}
-            className="font-ibm-plex text-error text-sm leading-[23px] font-medium"
+            className="font-ibm-plex text-error text-xs md:text-sm leading-[23px]"
           >
             {errorMessage}
           </span>
