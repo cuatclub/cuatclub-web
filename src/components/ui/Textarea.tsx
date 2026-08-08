@@ -18,7 +18,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       wrapperClassName,
       id,
       disabled,
-      "aria-invalid": _ariaInvalid,
+      "aria-invalid": ariaInvalid,
       "aria-describedby": ariaDescribedBy,
       ...props
     },
@@ -30,6 +30,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const describedByIds = [error && errorMessage ? errorId : undefined, ariaDescribedBy]
       .filter(Boolean)
       .join(" ");
+    const mergedAriaInvalid = error || ariaInvalid;
 
     return (
       <div className={cn("flex flex-col gap-1", wrapperClassName)}>
@@ -45,7 +46,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={inputId}
           disabled={disabled}
-          aria-invalid={error}
+          aria-invalid={mergedAriaInvalid}
           aria-describedby={describedByIds || undefined}
           className={cn(
             "border-border font-ibm-plex text-foreground placeholder:text-placeholder flex min-h-24 w-full items-start rounded-lg border bg-white p-3 text-sm leading-[23px] transition-colors outline-none md:text-base md:leading-[26px]",
