@@ -67,7 +67,8 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             onClick={() => setVisible((v) => !v)}
             disabled={disabled}
             aria-label={visible ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"}
-            className={cn("text-foreground absolute top-1/2 right-3 flex -translate-y-1/2 cursor-pointer items-center disabled:cursor-not-allowed",
+            className={cn(
+              "text-foreground absolute top-1/2 right-3 flex -translate-y-1/2 cursor-pointer items-center disabled:cursor-not-allowed",
               disabled && "text-placeholder"
             )}
           >
@@ -79,10 +80,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           </button>
         </div>
         {error && errorMessage && (
-          <span
-            id={errorId}
-            className="font-ibm-plex text-error text-xs md:text-sm leading-[23px]"
-          >
+          <span id={errorId} className="font-ibm-plex text-error text-xs leading-[23px] md:text-sm">
             {errorMessage}
           </span>
         )}
