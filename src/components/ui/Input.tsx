@@ -9,10 +9,27 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, errorMessage, className, wrapperClassName, id, disabled, ...props }, ref) => {
+  (
+    {
+      label,
+      error,
+      errorMessage,
+      className,
+      wrapperClassName,
+      id,
+      disabled,
+      "aria-invalid": _ariaInvalid,
+      "aria-describedby": ariaDescribedBy,
+      ...props
+    },
+    ref
+  ) => {
     const generatedId = useId();
     const inputId = id ?? generatedId;
     const errorId = useId();
+    const describedByIds = [error && errorMessage ? errorId : undefined, ariaDescribedBy]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div className={cn("flex flex-col gap-1", wrapperClassName)}>
@@ -29,7 +46,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           disabled={disabled}
           aria-invalid={error}
-          aria-describedby={error && errorMessage ? errorId : undefined}
+          aria-describedby={describedByIds || undefined}
           className={cn(
             "border-border font-ibm-plex text-foreground placeholder:text-placeholder flex h-10 w-full items-center rounded-lg border bg-white px-3 text-sm leading-[23px] transition-colors outline-none md:text-base md:leading-[26px]",
             "hover:border-primary-light focus:border-primary",
