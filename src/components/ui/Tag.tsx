@@ -37,7 +37,7 @@ const tagVariants = cva(
       variant: {
         solid: "",
         outline:
-          "border-[1.5px] border-primary bg-transparent text-primary hover:bg-primary-lighter hover:cursor-pointer",
+          "border-[1.5px] border-primary bg-transparent text-primary hover:bg-primary-lighter",
       },
     },
     defaultVariants: {
@@ -65,6 +65,17 @@ const Tag = ({
   const handleClick = onRemove ?? onClick;
   const clickable = Boolean(handleClick);
 
+  const tagClassName = cn(
+    tagVariants({ variant }),
+    variant === "solid" && solidColorClasses[color],
+    clickable && "cursor-pointer",
+    className
+  );
+
+  if (!clickable) {
+    return <span className={tagClassName}>{children}</span>;
+  }
+
   return (
     <button
       type="button"
@@ -72,12 +83,7 @@ const Tag = ({
       aria-label={
         onRemove ? `ลบ ${typeof children === "string" ? children : ""}`.trim() : undefined
       }
-      className={cn(
-        tagVariants({ variant }),
-        variant === "solid" && solidColorClasses[color],
-        clickable && "cursor-pointer",
-        className
-      )}
+      className={tagClassName}
     >
       {children}
       {onRemove && <X className="size-3.5" strokeWidth={2} />}
