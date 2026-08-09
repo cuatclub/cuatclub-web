@@ -4,11 +4,17 @@ import { affiliations } from "@/server/db/schema/affiliations";
 import { categories } from "@/server/db/schema/categories";
 
 const affiliationLabels = [
+  "เกษตรศาสตร์บูรณาการ",
   "ครุศาสตร์",
   "จิตวิทยา",
   "ทันตแพทยศาสตร์",
   "นิติศาสตร์",
   "นิเทศศาสตร์",
+  "ฝ่ายกีฬา อบจ.",
+  "ฝ่ายพัฒนาสังคมและบำเพ็ญประโยชน์ อบจ.",
+  "ฝ่ายวิชาการ อบจ.",
+  "ฝ่ายศิลปะวัฒนธรรม อบจ.",
+  "พยาบาลศาสตร์",
   "เภสัชศาสตร์",
   "รัฐศาสตร์",
   "วิทยาศาสตร์",
@@ -16,52 +22,47 @@ const affiliationLabels = [
   "วิศวกรรมศาสตร์",
   "ศิลปกรรมศาสตร์",
   "เศรษฐศาสตร์",
+  "สถาบันนวัตกรรมบูรณาการ",
   "สถาปัตยกรรมศาสตร์",
   "สหเวชศาสตร์",
   "สัตวแพทยศาสตร์",
   "อักษรศาสตร์",
-  "เกษตรศาสตร์บูรณาการ",
-  "สถาบันนวัตกรรมบูรณาการ",
-  "พยาบาลศาสตร์",
-  "ฝ่ายวิชาการ อบจ.",
-  "ฝ่ายศิลปะวัฒนธรรม อบจ.",
-  "ฝ่ายกีฬา อบจ.",
-  "ฝ่ายพัฒนาสังคมและบำเพ็ญประโยชน์ อบจ.",
   "CU Innovation Hub",
 ] as const;
 
 const categorySeeds = [
-  { label: "ธุรกิจ", fontColor: "#9333EA", backgroundColor: "#F3E8FF" },
-  { label: "เทคโนโลยี", fontColor: "#0891B2", backgroundColor: "#CFFAFE" },
-  { label: "แพทย์", fontColor: "#CA8A24", backgroundColor: "#FEF9C3" },
-  { label: "กีฬา", fontColor: "#EA580C", backgroundColor: "#FFEDD5" },
-  { label: "วิชาการ", fontColor: "#2563EB", backgroundColor: "#DBEAFE" },
-  { label: "พัฒนาชุมชน", fontColor: "#16A34A", backgroundColor: "#DCFCE7" },
-  { label: "ศิลปะ", fontColor: "#DB2777", backgroundColor: "#FCE7F3" },
-  { label: "ดนตรี", fontColor: "#DC2626", backgroundColor: "#FEE2E2" },
   { label: "การศึกษา", fontColor: "#475569", backgroundColor: "#E2E8F0" },
+  { label: "กีฬา", fontColor: "#EA580C", backgroundColor: "#FFEDD5" },
+  { label: "ดนตรี", fontColor: "#DC2626", backgroundColor: "#FEE2E2" },
+  { label: "เทคโนโลยี", fontColor: "#0891B2", backgroundColor: "#CFFAFE" },
+  { label: "ธุรกิจ", fontColor: "#9333EA", backgroundColor: "#F3E8FF" },
+  { label: "พัฒนาชุมชน", fontColor: "#16A34A", backgroundColor: "#DCFCE7" },
+  { label: "แพทย์", fontColor: "#CA8A24", backgroundColor: "#FEF9C3" },
+  { label: "วิชาการ", fontColor: "#2563EB", backgroundColor: "#DBEAFE" },
+  { label: "ศิลปะ", fontColor: "#DB2777", backgroundColor: "#FCE7F3" },
 ];
+
+const thCollator = new Intl.Collator("th");
+const byLabel = <T extends { label: string }>(a: T, b: T) => thCollator.compare(a.label, b.label);
 
 async function seedAffiliations() {
   console.log("Seeding affiliations...");
 
-  await db
-    .insert(affiliations)
-    .values(affiliationLabels.map((label) => ({ label })))
-    .onConflictDoNothing({ target: affiliations.label });
+  const sorted = [...affiliationLabels].map((label) => ({ label })).sort(byLabel);
 
-  console.log(`Seeded ${affiliationLabels.length} affiliations.`);
+  await db.insert(affiliations).values(sorted).onConflictDoNothing({ target: affiliations.label });
+
+  console.log(`Seeded ${sorted.length} affiliations.`);
 }
 
 async function seedCategories() {
   console.log("Seeding categories...");
 
-  await db
-    .insert(categories)
-    .values(categorySeeds)
-    .onConflictDoNothing({ target: categories.label });
+  const sorted = [...categorySeeds].sort(byLabel);
 
-  console.log(`Seeded ${categorySeeds.length} categories.`);
+  await db.insert(categories).values(sorted).onConflictDoNothing({ target: categories.label });
+
+  console.log(`Seeded ${sorted.length} categories.`);
 }
 
 async function main() {
