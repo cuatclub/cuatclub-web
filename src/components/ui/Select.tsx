@@ -180,7 +180,11 @@ const Select = ({
         </SelectContent>
       </SelectRoot>
       {error && errorMessage && (
-        <span id={errorId} className="font-ibm-plex text-error text-xs leading-[23px] md:text-sm">
+        <span
+          id={errorId}
+          role="alert"
+          className="font-ibm-plex text-error text-xs leading-[23px] md:text-sm"
+        >
           {errorMessage}
         </span>
       )}
