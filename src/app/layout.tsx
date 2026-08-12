@@ -3,6 +3,7 @@ import { IBM_Plex_Sans_Thai, Sarabun } from "next/font/google";
 import "@/styles/globals.css";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: {
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${sarabun.variable} ${plexThai.variable}`}>
       <body>
+        <Navbar />
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
