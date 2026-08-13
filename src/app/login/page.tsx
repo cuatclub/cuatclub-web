@@ -147,9 +147,11 @@ export default function Login() {
                     checked={rememberMe}
                     onCheckedChange={(checked) => setRememberMe(checked === true)}
                   />
-                  <a href="#" className="text-primary text-sm underline underline-offset-2">
-                    ลืมรหัสผ่าน
-                  </a>
+                  {/* Forgot-password flow is out of scope (see #84) — a real
+                      link here would be keyboard-focusable and navigate to
+                      "#" for nothing, so keep it a plain label until the
+                      route exists. */}
+                  <span className="text-foreground-muted text-sm">ลืมรหัสผ่าน</span>
                 </div>
 
                 {errors.root?.message && (
