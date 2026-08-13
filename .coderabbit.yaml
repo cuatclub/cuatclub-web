@@ -20,6 +20,11 @@ reviews:
   #     instructions: "Focus on security, input validation และ error handling"
   #   - path: "**/*.test.ts"
   #     instructions: "ตรวจ edge cases และ mock completeness"
+  tools:
+    eslint:
+      enabled: true
+    gitleaks:
+      enabled: true
 
 knowledge_base:
   web_search:
@@ -28,9 +33,3 @@ knowledge_base:
     enabled: true
     filePatterns:
       - "docs/review-guidelines.md"
-
-tools:
-  eslint:
-    enabled: true
-  gitleaks:
-    enabled: true
