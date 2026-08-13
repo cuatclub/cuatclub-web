@@ -16,38 +16,42 @@ import { post } from "@/server/db/post";
 import { userXOrganization } from "@/server/db/userXOrganization";
 import { auth } from "@/utils/auth";
 
+// Ported from branch `refactor` (src/scripts/seed.ts `affiliationLabels`).
 const faculties = [
-  "Allied Health Sciences",
-  "Architecture",
-  "Arts",
-  "Commerce and Accountancy",
-  "Communication Arts",
-  "Dentistry",
-  "Economics",
-  "Education",
-  "Engineering",
-  "Fine and Applied Arts",
-  "Laws",
-  "Medicine",
-  "Nursing",
-  "Pharmaceutical Sciences",
-  "Political Science",
-  "Psychology",
-  "Science",
-  "Sports Science",
-  "Veterinary Science",
-  "School of Integrated Innovation",
-  "Agricultural Resources",
-  "Graduate School",
+  "เกษตรศาสตร์บูรณาการ",
+  "ครุศาสตร์",
+  "จิตวิทยา",
+  "ทันตแพทยศาสตร์",
+  "นิติศาสตร์",
+  "นิเทศศาสตร์",
+  "ฝ่ายกีฬา อบจ.",
+  "ฝ่ายพัฒนาสังคมและบำเพ็ญประโยชน์ อบจ.",
+  "ฝ่ายวิชาการ อบจ.",
+  "ฝ่ายศิลปะวัฒนธรรม อบจ.",
+  "พยาบาลศาสตร์",
+  "เภสัชศาสตร์",
+  "รัฐศาสตร์",
+  "วิทยาศาสตร์",
+  "วิทยาศาสตร์การกีฬา",
+  "วิศวกรรมศาสตร์",
+  "ศิลปกรรมศาสตร์",
+  "เศรษฐศาสตร์",
+  "สถาบันนวัตกรรมบูรณาการ",
+  "สถาปัตยกรรมศาสตร์",
+  "สหเวชศาสตร์",
+  "สัตวแพทยศาสตร์",
+  "อักษรศาสตร์",
+  "CU Innovation Hub",
 ] as const;
 
+// Names match branch `refactor`'s `categorySeeds` labels — see interest-theme.ts for the color mapping.
 const interests = [
   { name: "ธุรกิจ", icon: "BriefcaseBusiness" },
   { name: "เทคโนโลยี", icon: "Cpu" },
   { name: "แพทย์", icon: "HeartPulse" },
   { name: "กีฬา", icon: "Volleyball" },
   { name: "พัฒนาชุมชน", icon: "HandHeart" },
-  { name: "สารสนเทศ", icon: "Monitor" },
+  { name: "วิชาการ", icon: "BookOpen" },
   { name: "ศิลปะ", icon: "Palette" },
   { name: "ดนตรี", icon: "Music" },
   { name: "การศึกษา", icon: "GraduationCap" },
@@ -81,7 +85,7 @@ const usersToSeed: SeedUser[] = [
     name: "Alicia Chen",
     username: "alicia.chen",
     role: "ATTENDEE",
-    facultyName: "Engineering",
+    facultyName: "วิศวกรรมศาสตร์",
     password: "Seed1234!",
   },
   {
@@ -89,7 +93,7 @@ const usersToSeed: SeedUser[] = [
     name: "Nara Pattanakul",
     username: "nara.pattanakul",
     role: "ORGANIZATION",
-    facultyName: "Engineering",
+    facultyName: "วิศวกรรมศาสตร์",
     password: "Seed1234!",
   },
   {
@@ -97,7 +101,7 @@ const usersToSeed: SeedUser[] = [
     name: "Mina Siriporn",
     username: "mina.siriporn",
     role: "ORGANIZATION",
-    facultyName: "Arts",
+    facultyName: "อักษรศาสตร์",
     password: "Seed1234!",
   },
   {
@@ -105,7 +109,7 @@ const usersToSeed: SeedUser[] = [
     name: "Preecha Rattanakul",
     username: "preecha.rattanakul",
     role: "ORGANIZATION",
-    facultyName: "Commerce and Accountancy",
+    facultyName: "เศรษฐศาสตร์",
     password: "Seed1234!",
   },
   {
@@ -113,7 +117,7 @@ const usersToSeed: SeedUser[] = [
     name: "Korn Chaiyaporn",
     username: "korn.chaiyaporn",
     role: "ORGANIZATION",
-    facultyName: "Sports Science",
+    facultyName: "วิทยาศาสตร์การกีฬา",
     password: "Seed1234!",
   },
   {
@@ -121,7 +125,7 @@ const usersToSeed: SeedUser[] = [
     name: "System Administrator",
     username: "system.admin",
     role: "ADMIN",
-    facultyName: "Science",
+    facultyName: "วิทยาศาสตร์",
     password: "Seed1234!",
   },
 ];
@@ -207,7 +211,7 @@ async function seedOrganizationsAndContent() {
     {
       managerEmails: ["seed.organizer@example.com", "seed.music@example.com"],
       name: "Chula Innovation Network",
-      facultyName: "Engineering",
+      facultyName: "วิศวกรรมศาสตร์",
       image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80",
       bio: "ชมรมสตาร์ทอัพและนวัตกรรมบน campus ที่ช่วยให้นิสิตพัฒนาโซลูชันจริงสำหรับปัญหาชุมชน โดยเน้นการทำงานแบบทีมและการส่งมอบผลงานที่ใช้งานได้",
       detailedDescription:
@@ -250,7 +254,7 @@ async function seedOrganizationsAndContent() {
     {
       managerEmails: ["seed.music@example.com", "seed.organizer@example.com"],
       name: "The Sound Lab",
-      facultyName: "Arts",
+      facultyName: "อักษรศาสตร์",
       image: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=600&q=80",
       bio: "คอมมูนิตี้นักดนตรีและครีเอทีฟที่เปิดพื้นที่ให้สมาชิกลองสร้างเสียงใหม่ ๆ ผ่านการแสดงสด การบันทึกเสียง และการทำงานร่วมกับศิลปินในวงการ",
       detailedDescription:
@@ -293,7 +297,7 @@ async function seedOrganizationsAndContent() {
     {
       managerEmails: ["seed.entrepreneur@example.com"],
       name: "Catalyst Collective",
-      facultyName: "Commerce and Accountancy",
+      facultyName: "เศรษฐศาสตร์",
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80",
       bio: "ชมรมผู้ประกอบการและนักธุรกิจรุ่นเยาว์ที่ช่วยให้นิสิตฝึกคิดเชิงกลยุทธ์และนำไอเดียสู่โมเดลธุรกิจที่จับต้องได้",
       detailedDescription:
@@ -333,7 +337,7 @@ async function seedOrganizationsAndContent() {
     {
       managerEmails: ["seed.sports@example.com"],
       name: "Pulse Athletics",
-      facultyName: "Sports Science",
+      facultyName: "วิทยาศาสตร์การกีฬา",
       image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=600&q=80",
       bio: "ชมรมกีฬาและสุขภาพที่ส่งเสริมการออกกำลังกายเป็นกิจกรรมกลุ่มและสร้างบรรยากาศการมีส่วนร่วมในคณะและชุมชน",
       detailedDescription:

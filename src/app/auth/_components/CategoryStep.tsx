@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, BriefcaseBusiness, Cpu, GraduationCap, HandHeart, HeartPulse, Monitor, Music, Palette, Volleyball } from "lucide-react";
+import { ArrowLeft, BookOpen, BriefcaseBusiness, Cpu, GraduationCap, HandHeart, HeartPulse, Music, Palette, Volleyball } from "lucide-react";
 import { api } from "@/trpc/react";
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,7 @@ const iconMap = {
   HeartPulse,
   Volleyball,
   HandHeart,
-  Monitor,
+  BookOpen,
   Palette,
   Music,
   GraduationCap,

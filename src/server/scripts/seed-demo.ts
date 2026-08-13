@@ -39,7 +39,7 @@ const clubs: ClubSeed[] = [
 		bio: "ชมรมเทคโนโลยีที่สร้างโปรเจกต์เพื่อสังคม เปิดรับสมาชิกสาย Dev, Design และ Product",
 		instagram: "thinc.chula",
 		discord: "discord.gg/thinc-demo",
-		interestNames: ["เทคโนโลยี", "สารสนเทศ", "ธุรกิจ"],
+		interestNames: ["เทคโนโลยี", "วิชาการ", "ธุรกิจ"],
 		imageLabel: "Thinc",
 		posts: [
 			{
@@ -241,8 +241,8 @@ async function main() {
 	const interestByName = new Map(interests.map((i) => [i.name, i.id]));
 	const activityByName = new Map(activityTypes.map((a) => [a.name, a.id]));
 
-	const engineeringFacultyId = facultyByName.get("Engineering") ?? faculties[0]!.id;
-	const economicsFacultyId = facultyByName.get("Economics") ?? faculties[0]!.id;
+	const engineeringFacultyId = facultyByName.get("วิศวกรรมศาสตร์") ?? faculties[0]!.id;
+	const economicsFacultyId = facultyByName.get("เศรษฐศาสตร์") ?? faculties[0]!.id;
 
 	const demoInterestIds = ["เทคโนโลยี", "ธุรกิจ", "ดนตรี"]
 		.map((name) => interestByName.get(name))

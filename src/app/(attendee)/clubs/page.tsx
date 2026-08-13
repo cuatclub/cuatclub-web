@@ -170,7 +170,7 @@ export default function ClubsPage() {
 		<div className="flex min-h-screen flex-col">
 			<Navbar />
 
-			<main className="body-section flex-1 items-center gap-10 pb-10 lg:gap-15">
+			<main className="body-section flex-1 items-center gap-10 pb-10 lg:gap-15 mt-5 md:mt-10">
 				<section className="flex w-full flex-col items-center gap-7">
 					<h1 className="w-full max-w-[700px] text-center text-[33px] leading-[1.2] font-semibold text-[#DE5C8E] lg:text-[40px]">
 						ค้นหาชมรมทั่วทั้งจุฬา

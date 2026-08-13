@@ -1,10 +1,10 @@
 import {
+	BookOpen,
 	BriefcaseBusiness,
 	Cpu,
 	GraduationCap,
 	HandHeart,
 	HeartPulse,
-	Monitor,
 	Music,
 	Palette,
 	Sparkles,
@@ -14,12 +14,12 @@ import {
 
 /** `interest.icon` stores a lucide icon name — see the `interests` list in src/server/scripts/seed.ts. */
 const ICONS: Record<string, LucideIcon> = {
+	BookOpen,
 	BriefcaseBusiness,
 	Cpu,
 	GraduationCap,
 	HandHeart,
 	HeartPulse,
-	Monitor,
 	Music,
 	Palette,
 	Volleyball,
@@ -27,34 +27,27 @@ const ICONS: Record<string, LucideIcon> = {
 
 export const interestIcon = (icon?: string | null): LucideIcon => (icon ? (ICONS[icon] ?? Sparkles) : Sparkles);
 
-/** Figma "club tag category" pairs: 50-level fill with 500-level ink. */
-export const THEMES = [
-	{ soft: "#E7EBF4", ink: "#0F3795" },
-	{ soft: "#FFFAE6", ink: "#E8BA00" },
-	{ soft: "#FAEAFC", ink: "#CB30E0" },
-	{ soft: "#FCF0E6", ink: "#E06C00" },
-	{ soft: "#E8F5ED", ink: "#1B9D46" },
-	{ soft: "#FDE6E6", ink: "#E90000" },
-	{ soft: "#FCEFF4", ink: "#DE5C8E" },
-	{ soft: "#E6F9FD", ink: "#00C0E8" },
-] as const;
+export type InterestTheme = { soft: string; ink: string };
 
-export type InterestTheme = (typeof THEMES)[number];
-
-export const FALLBACK_THEME: InterestTheme = THEMES[0];
+export const FALLBACK_THEME: InterestTheme = { soft: "#E7EBF4", ink: "#0F3795" };
 
 /**
- * Colours are handed out by position in the interest list rather than hashed from the label.
- * A multiplicative hash bucketed with `% 8` collapses on Thai names — every Thai codepoint sits
- * in U+0E00–U+0E7F, so the low bits carry almost no entropy and most names land in one bucket.
- *
- * Sorting by id first keeps the assignment stable between requests, because `interest.getAll`
- * has no ORDER BY and Postgres makes no row-order guarantee.
+ * Ported from branch `refactor`'s `categorySeeds` (src/scripts/seed.ts) — each interest name is
+ * itself a category label there, with `backgroundColor`/`fontColor` as `soft`/`ink` here. Keyed
+ * by name (not id) so the color for a given category stays fixed across environments/reseeds.
  */
-export function buildInterestThemes(interests: { id: string }[]): Map<string, InterestTheme> {
-	return new Map(
-		[...interests]
-			.sort((a, b) => a.id.localeCompare(b.id))
-			.map((interest, index) => [interest.id, THEMES[index % THEMES.length]!] as const),
-	);
+const CATEGORY_THEMES: Record<string, InterestTheme> = {
+	การศึกษา: { soft: "#E2E8F0", ink: "#475569" },
+	กีฬา: { soft: "#FFEDD5", ink: "#EA580C" },
+	ดนตรี: { soft: "#FEE2E2", ink: "#DC2626" },
+	เทคโนโลยี: { soft: "#CFFAFE", ink: "#0891B2" },
+	ธุรกิจ: { soft: "#F3E8FF", ink: "#9333EA" },
+	พัฒนาชุมชน: { soft: "#DCFCE7", ink: "#16A34A" },
+	แพทย์: { soft: "#FEF9C3", ink: "#CA8A24" },
+	วิชาการ: { soft: "#DBEAFE", ink: "#2563EB" },
+	ศิลปะ: { soft: "#FCE7F3", ink: "#DB2777" },
+};
+
+export function buildInterestThemes(interests: { id: string; name: string }[]): Map<string, InterestTheme> {
+	return new Map(interests.map((interest) => [interest.id, CATEGORY_THEMES[interest.name] ?? FALLBACK_THEME] as const));
 }
