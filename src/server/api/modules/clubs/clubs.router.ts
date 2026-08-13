@@ -1,11 +1,18 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { getClubProfile } from "@/server/api/modules/clubs/usecases";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
+import { getClubById, getClubProfile } from "@/server/api/modules/clubs/usecases";
 import {
+  GetClubByIdInputDTOSchema,
+  GetClubByIdOutputDTOSchema,
   GetClubProfileInputDTOSchema,
   GetClubProfileOutputDTOSchema,
 } from "@/server/api/modules/clubs/dto";
 
 export const clubsRouter = createTRPCRouter({
+  getById: publicProcedure
+    .input(GetClubByIdInputDTOSchema)
+    .output(GetClubByIdOutputDTOSchema)
+    .query(async ({ input }) => getClubById(input.clubId)),
+
   getClubProfile: protectedProcedure
     .input(GetClubProfileInputDTOSchema)
     .output(GetClubProfileOutputDTOSchema)
