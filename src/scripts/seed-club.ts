@@ -111,7 +111,7 @@ const clubSeeds: ClubSeed[] = [
     shortDescription:
       "ชมรมเทคโนโลยีที่สร้างโปรเจกต์เพื่อสังคม เปิดรับสมาชิกสาย Dev, Design และ Product",
     longDescription:
-      "Thinc. รวมนิสิตที่อยากใช้ซอฟต์แวร์แก้ปัญหาจริงในสังคม ทุกภาคการศึกษาเราจับทีมข้ามสาย Dev, Design และ Product แล้วปล่อยโปรเจกต์ออกสู่ผู้ใช้จริง โดยมีรุ่นพี่และเมนเทอร์จากบริษัทเทคโนโลยีคอยรีวิวงานให้ตลอดทาง สมาชิกใหม่ไม่จำเป็นต้องเขียนโค้ดเป็นมาก่อน เพราะมีคลาสปูพื้นฐานให้ในเดือนแรก",
+      "Thinc is a student builder community at Chula Engineering that has been shipping real software to the market and spinning out startups since 2012. We exist because we believe a lot of students could build something people genuinely use, but they never get the team, the real problem, or the push to start. So we put you in a small team, help you find a real problem with real users, and you build it, test it with those users, and keep fixing it until it works, with alumni around to help. Our club has grown real startups like Viabus and shipped apps like CUpid and CUGetReg that thousands of students actually use, and we also take on paid client work that keeps the club running. You walk out knowing how to turn an idea into something real.",
     // The only row with all four channels — proves the contact list wraps and orders correctly.
     contacts: {
       instagram: "thinc.chula",
