@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
+import { TRPCError } from "@trpc/server";
 
 import { Navbar } from "@/components/Navbar";
 import { BackLink } from "@/app/clubs/[clubId]/_components/BackLink";
@@ -7,15 +9,35 @@ import { ClubAbout } from "@/app/clubs/[clubId]/_components/ClubAbout";
 import { ClubContacts } from "@/app/clubs/[clubId]/_components/ClubContacts";
 import { ClubGallery } from "@/app/clubs/[clubId]/_components/ClubGallery";
 import { ClubHeader } from "@/app/clubs/[clubId]/_components/ClubHeader";
-import { getMockClubById } from "@/app/clubs/[clubId]/_mock/club-detail.mock";
+import { api } from "@/trpc/server";
 
 type ClubDetailPageProps = {
   params: Promise<{ clubId: string }>;
 };
 
+// generateMetadata and the page body both need the club, so cache() keeps it to one
+// round trip per request.
+const getClub = cache(async (clubId: string) => {
+  try {
+    return await api.clubs.getById({ clubId });
+  } catch (error) {
+    // [clubId] is a free-form path segment, so a non-uuid fails input validation as
+    // BAD_REQUEST rather than NOT_FOUND. To a visitor both just mean "no such club",
+    // and neither should surface as a 500.
+    if (
+      error instanceof TRPCError &&
+      (error.code === "NOT_FOUND" || error.code === "BAD_REQUEST")
+    ) {
+      return null;
+    }
+
+    throw error;
+  }
+});
+
 export async function generateMetadata({ params }: ClubDetailPageProps): Promise<Metadata> {
   const { clubId } = await params;
-  const club = await getMockClubById(clubId);
+  const club = await getClub(clubId);
 
   if (!club) return { title: "ไม่พบชมรม" };
 
@@ -27,7 +49,7 @@ export async function generateMetadata({ params }: ClubDetailPageProps): Promise
 
 export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
   const { clubId } = await params;
-  const club = await getMockClubById(clubId);
+  const club = await getClub(clubId);
 
   if (!club) notFound();
 

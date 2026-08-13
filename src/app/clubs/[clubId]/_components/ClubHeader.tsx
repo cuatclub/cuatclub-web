@@ -2,13 +2,15 @@ import Image from "next/image";
 import { Building2 } from "lucide-react";
 
 import { Tag } from "@/components/ui/Tag";
-import type { ClubAffiliation, ClubCategory } from "@/app/clubs/[clubId]/_mock/club-detail.mock";
+import type { RouterOutputs } from "@/trpc/react";
+
+type Club = RouterOutputs["clubs"]["getById"];
 
 type ClubHeaderProps = {
-  name: string;
-  logoUrl: string | null;
-  affiliation: ClubAffiliation | null;
-  categories: ClubCategory[];
+  name: Club["name"];
+  logoUrl: Club["logoUrl"];
+  affiliation: Club["affiliation"];
+  categories: Club["categories"];
 };
 
 export function ClubHeader({ name, logoUrl, affiliation, categories }: ClubHeaderProps) {

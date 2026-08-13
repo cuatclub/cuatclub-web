@@ -2,7 +2,10 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import { Facebook, Instagram } from "lucide-react";
 
-import type { ClubContactChannel, ClubDetail } from "@/app/clubs/[clubId]/_mock/club-detail.mock";
+import type { RouterOutputs } from "@/trpc/react";
+
+type Club = RouterOutputs["clubs"]["getById"];
+type ClubContactChannel = keyof NonNullable<Club["contacts"]>;
 
 const ICON_CLASS = "size-4 shrink-0 md:size-5";
 
@@ -64,8 +67,8 @@ const buildContactUrl = ({ baseUrl, stripLeadingAt }: ContactChannel, value: str
 };
 
 type ClubContactsProps = {
-  contacts: NonNullable<ClubDetail["contacts"]>;
-  clubName: string;
+  contacts: NonNullable<Club["contacts"]>;
+  clubName: Club["name"];
 };
 
 export function ClubContacts({ contacts, clubName }: ClubContactsProps) {
