@@ -20,7 +20,7 @@ export const protectedProcedure = baseProcedure.use(({ ctx, next }) => {
 });
 
 // Protected (admin-only) procedure
-export const adminProcedure = baseProcedure.use(({ ctx, next }) => {
+export const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
   if (ctx.session?.user?.role !== "ADMIN") {
     throw forbidden("You must be an admin to do this");
   }
