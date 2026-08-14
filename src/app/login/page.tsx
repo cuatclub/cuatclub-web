@@ -77,6 +77,8 @@ export default function Login() {
 
     if (classification === null) {
       router.push("/");
+      // force server components to re-render with fresh session
+      router.refresh();
       return;
     }
 
