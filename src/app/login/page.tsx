@@ -156,7 +156,7 @@ export default function Login() {
                       link here would be keyboard-focusable and navigate to
                       "#" for nothing, so keep it a plain label until the
                       route exists. */}
-                  <span className="text-foreground-muted text-sm">ลืมรหัสผ่าน</span>
+                  {/* <span className="text-foreground-muted text-sm">ลืมรหัสผ่าน</span> */}
                 </div>
 
                 {errors.root?.message && (
