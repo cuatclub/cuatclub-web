@@ -44,10 +44,10 @@ const SelectContent = forwardRef<
       ref={ref}
       position={position}
       className={cn(
-        "border-border relative z-50 w-[var(--radix-select-trigger-width)] overflow-hidden rounded-lg border bg-white p-1.5 shadow-black",
+        "border-border relative z-50 overflow-hidden rounded-lg border bg-white p-1.5 shadow-black",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper"
-          ? "max-h-[var(--radix-select-content-available-height)] translate-y-1"
+          ? "max-h-[var(--radix-select-content-available-height)] w-[var(--radix-select-trigger-width)] translate-y-1"
           : "max-h-96",
         className
       )}
@@ -171,7 +171,7 @@ const Select = ({
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
-        <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
+        <SelectContent>
           {options.map((option) => (
             <SelectItem key={option} value={option}>
               {option}
@@ -180,7 +180,11 @@ const Select = ({
         </SelectContent>
       </SelectRoot>
       {error && errorMessage && (
-        <span id={errorId} className="font-ibm-plex text-error text-xs leading-[23px] md:text-sm">
+        <span
+          id={errorId}
+          role="alert"
+          className="font-ibm-plex text-error text-xs leading-[23px] md:text-sm"
+        >
           {errorMessage}
         </span>
       )}
