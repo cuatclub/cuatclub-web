@@ -6,11 +6,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { signIn } from "@/lib/auth-client";
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Checkbox } from "@/components/ui/Checkbox";
-import { Input } from "@/components/ui/Input";
-import { PasswordInput } from "@/components/ui/PasswordForm";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Checkbox,
+  Input,
+  PasswordInput,
+} from "@/components";
 import {
   classifyAuthError,
   GENERIC_ERROR_MESSAGE,
