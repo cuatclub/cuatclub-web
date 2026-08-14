@@ -20,7 +20,8 @@
     "typecheck": "tsc --noEmit",
     "db:seed": "tsx src/server/scripts/seed.ts",
     "db:seed:demo": "tsx src/server/scripts/seed-demo.ts",
-    "db:import-clubs": "tsx src/server/scripts/import-clubs-csv.ts"
+    "clubs:generate-json": "tsx src/server/scripts/generate-clubs-json.ts",
+    "clubs:import-json": "tsx src/server/scripts/import-clubs-from-json.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",

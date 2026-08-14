@@ -1,0 +1,1005 @@
+[
+  {
+    "name": "GRDC Game Research and Development club ชมรมวิจัยและพัฒนาเกม",
+    "slug": "grdc_game_dev_club",
+    "bio": "ชมรมที่เปิดพื้นที่ให้ทุกคนได้เรียนรู้การพัฒนาเกม ตั้งแต่การออกแบบ เขียนโค้ด สร้างโมเดล ไปจนถึงการทำโปรเจกต์เกมจริงร่วมกับเพื่อน ๆ ขอแค่มีใจรักก็สามารถมาเป็นส่วนหนึ่งของ GRDC ได้",
+    "detailedDescription": "ชมรมที่เน้นออกแบบ สร้างสรรค์ และสร้างเกม กับเพื่อนๆ ที่มีความสนใจร่วมกัน เพื่อนำไปต่อยอดเป็นโปรเจคอื่นๆ หรือนำไปแข่งในประเทศและรอบโลก หากคุณไม่มีพื้นฐานใดๆ แต่มีใจรัก ก็มาเป็นส่วนนึงกับพวกเราได้เสมอ และแน่นอน พวกเรามีกิจกรรมมากมายทั้ง เวิคชอบ บอร์ดเกม สันทนาการต่างๆ ฯลฯ ให้คุณได้เป็นตัวเองในชมรมนี้",
+    "facultyName": "วิศวกรรมศาสตร์",
+    "interestNames": [
+      "เทคโนโลยี"
+    ],
+    "socials": {
+      "instagram": "chula.grdc"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/grdc_game_dev_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/grdc_game_dev_club/image1.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมแฮนด์บอล",
+    "slug": "handball_club",
+    "bio": "ชมรมสำหรับคนที่สนใจ ชื่นชอบและรักในกีฬาแฮนด์บอล",
+    "detailedDescription": "ชมรมนี้จัดตั้งขึ้นสำหรับนิสิตที่สนใจและชื่นชอบในกีฬาแฮนด์บอลมาร่วมฝึกซ้อมและแข่งขันร่วมกัน สร้างความสามัคคี ฝึกระเบียบวินัยการแบ่งเวลาในการเรียนและการซ้อม เพื่อนำไปสู้การแข่งขัน คว้ารางวัลในรายการกีฬามหาวิทยาลัยและรายการอื่นๆให้กับมหาวิทยาลัย ส่งเสริมให้นิสิตมีสุขภาพร่างกายที่แข็งแรง",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/handball_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/handball_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/handball_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/handball_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "CU Golf Club",
+    "slug": "cu_golf_club",
+    "bio": "ชมรมกอล์ฟนิสิตจุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่เปิดรับนิสิตจากทุกคณะไม่ว่าจะเล่นกอล์ฟเป็นหรือไม่เป็น มีกิจกรรมตลอดทั้งปีที่สามารถเข้าร่วมได้ตลอด และยังมีโปรจากภายนอกมาสอนนิสิตอีกด้วย",
+    "detailedDescription": "ชมรมกอล์ฟนิสิตจุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่ดูแลนักกีฬากอล์ฟประจำมหาวิทยาลัยและส่งเข้าร่วมการแข่งขันอยู่ตลอดปี และยังจัดกิจกรรมต่างๆภายในรั้วมหาลัยไม่ว่าผู้เข้าร่วมจะมีพื้นฐานมาก่อนหรือไม่ก็สามารถเข้าร่วมกิจกรรมต่างๆของทางชมรมได้ตลอดทั้งปี นอกเหนือจากการแข่งขัน ชมรมกอล์ฟจุฬา มุ่งเน้นไปที่การพบปะและสังสรรค์ของผู้คนที่มีความชื่นชอบในกีฬากอล์ฟ และยังเป็นศูนย์รวม Connection ของผู้คนต่างคณะ หรือแม้แต่ศิษย์เก่าที่จบไปแล้วก็ตาม",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {
+      "instagram": "cugolfclub",
+      "facebook": "cugolfclub",
+      "tiktok": "@cugolfclub"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_golf_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_golf_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_golf_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_golf_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_golf_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_golf_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมกีฬายิงปืน",
+    "slug": "shooting_club",
+    "bio": "ชมรมยิงปืน เปิดโอกาสให้นิสิตได้เรียนรู้กีฬายิงปืนอัดลมอย่างถูกต้องและปลอดภัยโดยที่นิสิตไม่จำเป็นต้องมีประสบการณ์และอุปกรณ์เป็นของตัวเอง เนื่องจากทางชมรมมีอุปกรณ์สำหรับการเรียนรู้และฝึกซ้อมสำหรับนิสิตผู้ที่ให้ความสนใจและเข้าร่วม",
+    "detailedDescription": "ชมรมยิงปืน เป็นชมรมกีฬาที่มุ่งส่งเสริมให้นิสิตได้เรียนรู้ทักษะการยิงปืนอัดลมอย่างถูกต้องและปลอดภัย ภายใต้การดูแลของนิสิตผู้ปฏิบัติงานและมาตรฐานด้านความปลอดภัย นิสิตผู้เข้าร่วมจะได้ฝึกพื้นฐานการใช้อุปกรณ์และความแม่นยำ รวมถึงมีโอกาสได้เข้าร่วมการแข่งขันในระดับมหาวิทยาลัยและระดับอุดมศึกษา โดยที่นิสิตไม่จำเป็นต้องมีประสบการณ์และอุปกรณ์เป็นของตัวเอง เนื่องจากทางชมรมมีอุปกรณ์สำหรับการเรียนรู้และฝึกซ้อมสำหรับนิสิตผู้ให้ความสนใจและเข้าร่วม",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/shooting_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/shooting_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/shooting_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/shooting_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมเทเบิลเทนนิส",
+    "slug": "table_tennis_club",
+    "bio": "ชมรมสำหรับคนที่ชื่นชอบกีฬาเทเบิลเทนนิส มาเล่นกีฬา ออกกำลังกาย พบปะเพื่อนใหม่ และร่วมกิจกรรมของชมรมไปด้วยกัน",
+    "detailedDescription": "ชมรมปิงปองจุฬาฯ เปิดรับนิสิตทุกคนที่สนใจกีฬาเทเบิลเทนนิส ไม่ว่าจะเล่นเพื่อความสนุก ออกกำลังกาย พัฒนาฝีมือ หรือแข่งขัน ก็สามารถมาเป็นส่วนหนึ่งของชมรมได้ เรามีกิจกรรมให้สมาชิกได้มาพบปะ ตีปิงปองด้วยกัน เข้าร่วมการแข่งขันทั้ง รวมถึงกิจกรรมสานสัมพันธ์ของชมรมตลอดทั้งปี ชมรมปิงปองยินดีต้อนรับทุกคน",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/table_tennis_club/logo.jpg",
+    "gallery": []
+  },
+  {
+    "name": "เเบดมินตัน",
+    "slug": "badminton_club",
+    "bio": "เป็นชมรมตีเเบดมินตัน เราจะมีตีก๊วนกันทุกสัปดาห์ ใครมาก็ได้สนุกๆ เอ็นจอย เจอเพื่อนใหม่ๆ ทำความรู้จักกัน เเล้วคนที่พอไปต่อได้เราจะเปิดโอกาศให้คัดตัวนักกีฬาเพื่อไปเเข่งกีฬามหาลัย",
+    "detailedDescription": "เป็นชมรมตีเเบดมินตัน เราจะมีตีก๊วนกันทุกสัปดาห์ ใครมาก็ได้สนุกๆ เอ็นจอย เจอเพื่อนใหม่ๆ ทำความรู้จักกัน เเล้วคนที่พอไปต่อได้เราจะเปิดโอกาศให้คัดตัวนักกีฬาเพื่อไปเเข่งกีฬามหาลัย พอการจัดซ้อม อยู่ร่วมกัน กินข้าวด้วยกัน มีจริงจังมีสนุก เป้าหมายเพียงอยากให้ทุกคนได้ออกกำลังกายกันสนุกๆครับ",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/badminton_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/badminton_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/badminton_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/badminton_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/badminton_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/badminton_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ยูยิตสู",
+    "slug": "jiujitsu_club",
+    "bio": "ชมรมยูยิตสูเป็นชมรมที่จัดตั้งขึ้นเพื่อส่งเสริมการเรียนรู้ศิลปะการป้องกันตัว สมาชิกจะได้พัฒนาทักษะต่างๆที่จำเป็นต่อการเล่นกีฬายูยิตสู พร้อมทั้งเรียนรู้กฎกติกาของกีฬายูยิตสู",
+    "detailedDescription": "ชมรมยูยิตสูเป็นชมรมที่จัดตั้งขึ้นเพื่อส่งเสริมการเรียนรู้ศิลปะการป้องกันตัวแบบยูยิตสู (Ju-Jitsu) ซึ่งเป็นศิลปะการป้องกันตัวที่มีต้นกำเนิดจากประเทศญี่ปุ่น โดยเน้นการใช้เทคนิคการต่อย การเตะ การทุ่ม การจับล็อก และการหักแขนรัดคอ นอกจากนี้ชมรมยังมุ่งเสริมสร้างสมรรถภาพทางร่างกาย เช่น ความแข็งแรง ความอดทน ความยืดหยุ่น เป็นต้น อีกทั้งยังมุ่งส่งเสริมทักษะการแข่งขัน พร้อมทั้งเรียนรู้กฎกติกาของกีฬายูยิตสู",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {
+      "instagram": "jujitsu_cu"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/jiujitsu_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/jiujitsu_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/jiujitsu_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/jiujitsu_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "สาราณียกร คณะอักษรศาสตร์",
+    "slug": "saraniyakorn_arts_club",
+    "bio": null,
+    "detailedDescription": "เป็นพื้นที่แห่งการสร้างสรรค์ผลงานร่วมกันผ่านบทความและสิ่งพิมพ์ของทั้งนักเขียน นักพิสูจน์อักษร หรือนักออกแบบศิลป์ในคณะอักษรศาสตร์ เพื่อ \"จุดประกายความคิด พลิกมองชีวิตผ่านตัวอักษร\" แก่นักอ่านด้วยแง่มุมหลากหลาย อันเกี่ยวเนื่องกับประเด็นสะท้อนสังคม ประวัติศาสตร์ วรรณกรรม เรื่องสั้น และบทวิจารณ์ต่าง ๆ",
+    "facultyName": "อักษรศาสตร์",
+    "interestNames": [
+      "ศิลปะ"
+    ],
+    "socials": {
+      "instagram": "aksorn.sara"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/saraniyakorn_arts_club/logo.jpg",
+    "gallery": []
+  },
+  {
+    "name": "ชมรมอิงคลิศวิชชาหรรษา",
+    "slug": "english_fun_club",
+    "bio": null,
+    "detailedDescription": "เป็นชมรมที่สร้างเพื่อส่งเสริมการใช้ภาษาอังกฤษ ในทั้งรูปแบบผู้เรียนและผู้สอนโดยชมรมจะมีการจัดกิจกรรมค่ายภาษาอังกฤษที่นิสิตสามารถไปสอนภาษาอังกฤษที่โรงเรียนต่างๆ และจัดกิจกรรมส่งเสริมการใช้ภาษาอังกฤษของนิสิตในสถานการต่างๆ",
+    "facultyName": "ครุศาสตร์",
+    "interestNames": [
+      "วิชาการ"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/english_fun_club/logo.jpg",
+    "gallery": []
+  },
+  {
+    "name": "ฟันดาบสากล",
+    "slug": "fencing_club",
+    "bio": "ชมรมที่เปิดโอกาสให้ทุกคนได้พัฒนาทักษะกีฬา ทั้งเพื่อการแข่งขันและเพื่อความสนุก โดยไม่จำเป็นต้องมีพื้นฐานหรือประสบการณ์มาก่อน",
+    "detailedDescription": "ชมรมฟันดาบสากลเป็นชมรมที่เปิดโอกาสให้ทุกคนได้เรียนรู้และพัฒนาทักษะกีฬาฟันดาบ ไม่ว่าจะเป็นการฝึกซ้อมเพื่อการแข่งขันหรือเล่นเพื่อความสนุก ก็สามารถเข้าร่วมได้โดยไม่จำเป็นต้องมีพื้นฐานมาก่อน สมาชิกทุกคนจะได้เรียนรู้ตั้งแต่ทักษะพื้นฐาน กฎกติกาของดาบแต่ละประเภท พร้อมทั้งได้ทดลองและค้นหาประเภทของดาบที่เหมาะกับความถนัดและความชื่นชอบของตนเอง ชมรมมีการฝึกซ้อมอย่างเป็นระบบเพื่อพัฒนาทักษะกีฬา ควบคู่ไปกับการเสริมสร้างสมาธิ ไหวพริบ ความแข็งแรง และความมั่นใจในตนเอง อีกทั้งยังเปิดโอกาสให้สมาชิกที่สนใจได้เข้าร่วมการแข่งขันในระดับมหาวิทยาลัยและรายการแข่งขันต่าง ๆ เพื่อเก็บเกี่ยวประสบการณ์และพัฒนาศักยภาพของตนเอง",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/fencing_club/logo.png",
+    "gallery": []
+  },
+  {
+    "name": "ชมรมศิลปวัฒนธรรมล้านนา จุฬาลงกรณ์มหาวิทยาลัย",
+    "slug": "lanna_culture_club",
+    "bio": "ชมรมศิลปวัฒนธรรมล้านนา ชมรมที่ไม่ได้เป็นแค่พื้นที่รวมตัวสำหรับคนภาคเหนือ แต่ยังต้อนรับผู้คนทุกเพศ ทุกวัย ไม่ว่าจะอยู่ภาคไหน จังหวัดอะไร ขอแค่สนใจในวัฒนธรรมล้านนา ก็สามารถเข้าร่วมกิจกรรมและมาเป็นครอบครัวเล็กๆที่รักกันได้",
+    "detailedDescription": "ชมรมศิลปวัฒนธรรมล้านนา จุฬาลงกรณ์มหาวิทยาลัย เป็นพื้นที่แห่งการเรียนรู้และสืบสานศิลปวัฒนธรรม ประเพณี และภูมิปัญญาของภาคเหนือ โดยมุ่งสร้างความภาคภูมิใจในอัตลักษณ์ล้านนา ควบคู่กับการเปิดโอกาสให้ผู้ที่สนใจจากทุกภูมิภาคได้เข้ามามีส่วนร่วม แลกเปลี่ยนประสบการณ์ และเรียนรู้ร่วมกัน ผ่านกิจกรรมที่หลากหลาย เช่น การแสดงศิลปวัฒนธรรม ดนตรีพื้นเมือง นาฏศิลป์ งานหัตถกรรม อาหาร ประเพณี และโครงการอาสา ชมรมเชื่อว่าศิลปวัฒนธรรมเป็นสะพานเชื่อมผู้คน และความแตกต่างทางภูมิหลังไม่ใช่อุปสรรคในการสร้างมิตรภาพ เราจึงยินดีต้อนรับทั้งนิสิตชาวเหนือและผู้ที่สนใจทุกคน ให้ร่วมเป็นส่วนหนึ่งของการอนุรักษ์ เผยแพร่ และส่งต่อคุณค่าของวัฒนธรรมล้านนา เพื่อให้มรดกอันงดงามนี้คงอยู่และเติบโตไปพร้อมกับสังคมไทยในอนาคต",
+    "facultyName": "ฝ่ายศิลปะวัฒนธรรม อบจ.",
+    "interestNames": [
+      "ศิลปะ"
+    ],
+    "socials": {
+      "instagram": "lannachula.official"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/lanna_culture_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/lanna_culture_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/lanna_culture_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/lanna_culture_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมดนตรีไทย สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย/CU Thai Classical Music Club",
+    "slug": "cu_thai_classical_music_club",
+    "bio": "มาร่วมเป็นส่วนหนึ่งของครอบครัวดนตรีไทย พื้นที่สำหรับนิสิตทุกคณะที่มีความสนใจและรักในเสียงดนตรีไทยโดยไม่จำเป็นต้องมีพื้นฐาน ไม่ว่าจะเซียนดนตรีไทยระดับเทพ หรือไม่เคยจับเครื่องดนตรีมาก่อนเลย ก็มาจอยกันได้ มีพี่ ๆ คอยสอนให้ตั้งแต่เริ่มต้นเลย  / Calling all students who vibe with Thai classical music! No experience? No problem. Whether you're a literal god at playing or have never held an instrument in your life, come hang out and join the club. We've got folks ready to teach you from step one.",
+    "detailedDescription": "ใครอยากหาทำกิจกรรมปัง ๆ ได้เพื่อนใหม่ต่างคณะแบบฉ่ำ ๆ แถมได้สกิลดนตรีไทยติดตัวแบบจึ้ง ๆ ต้องรีบมาจอยกันแล้ว! ชมรมของเราเปิดรับสมัครนิสิตทุกคณะ ทุกชั้นปี และเปิดโอกาสให้ทั้งผู้ที่เคยและไม่เคยเล่นดนตรีไทยมาก่อน โดยไม่จำเป็นที่จะต้องมีพื้นฐานใด ๆ ก็สามารถเข้ามาเลือกบรรเลงเครื่องดนตรีที่สนใจได้เลย เพราะเรามีการสอนปูพื้นฐานให้ครบทุกชนิด ทั้งดีด สี ตี เป่า และขับร้อง จากรุ่นพี่และครูผู้เชี่ยวชาญ\n\nทุกคนที่เข้ามาจะได้ร่วม \"สืบสาน\" ทางเพลง แนวคิด และกลวิธีการบรรเลงที่เป็นเอกลักษณ์ของครูดนตรีประจำชมรม พร้อมทั้ง \"สอนซ่อมสร้าง\" ที่ไม่เพียงแต่สอนเล่นดนตรี แต่ยังได้เรียนรู้วิธีการดูแลรักษาและซ่อมบำรุงเครื่องดนตรีเบื้องต้นผ่านโครงการ \"รู้รักษ์นักซ่อม\" และชมรมเรามีการ \"สร้างสรรค์\" ผลงานผ่านเวทีและกิจกรรมอีกมากมาย เพื่อให้ทุกคนได้แสดงผลสัมฤทธิ์และศักยภาพทางดนตรี เช่น\n1. พิธีไหว้ครูดนตรีไทย\n2. งานดนตรีไทยสามสถาบัน\n3. งานดนตรีไทยอุดมศึกษา\n4. คอนเสิร์ตชมรมดนตรีไทย\n5. ดนตรีไทยสัญจร\n\n\"สืบสานงานครู เรียนรู้ดนตรีไทย มาบรรเลงด้วยความสุขใจไปด้วยกัน\"\n\nแล้วมาจอยกันที่ชมรมดนตรีไทย สจม. ชั้น 6 อาคารจามจุรี 9\n\nติดตามข่าวสารได้ที่\nfacebook: ชมรมดนตรีไทย สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย \nInstagram: cu.thaiclassicalmusicclub\nTiktok: cu.thaiclassicalmusicclub\nYoutube: ชมรมดนตรีไทย สจม.\n\n\n/CU Thai Classical Music Club is now welcome students from any faculties and academic years. No skill is needed! We’ll offer basic training for all traditional Thai instruments—plucked, bowed, struck, and wind—as well as vocal training.\nMembers will have the opportunity to participate in numerous enriching activities, including:\n1. The Thai Classical Music  Ceremony\n2. The Tri-universities Thai Classical Music Concert\n3. The Udom Suksa (Universities) Thai Classical Music Event\n4. The CU Thai Classical Music Club’s For Showing Achievements Concert\n5. Club’s Field Trip \nIf you are looking to join in rewarding activities, gather connections with friends across different faculties, and improve your traditional music skills, come join us!\n\nFollow the news\nfacebook: ชมรมดนตรีไทย สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย \nInstagram: cu.thaiclassicalmusicclub\nTiktok: cu.thaiclassicalmusicclub\nYoutube: ชมรมดนตรีไทย สจม.",
+    "facultyName": "ฝ่ายศิลปะวัฒนธรรม อบจ.",
+    "interestNames": [
+      "ดนตรี"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_thai_classical_music_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_thai_classical_music_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_thai_classical_music_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_thai_classical_music_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_thai_classical_music_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_thai_classical_music_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมเซปักตะกร้อ",
+    "slug": "sepak_takraw_club",
+    "bio": "ชมรมเซปักตะกร้อ (Sepak Takraw Club) คือศูนย์รวมของกลุ่มผู้ที่มีความสนใจ ความชื่นชอบ และความหลงใหลในกีฬาเซปักตะกร้อ ร่วมกันจัดตั้งขึ้นเพื่อส่งเสริม การฝึกซ้อม การแข่งขัน และสานสัมพันธ์ระหว่างสมาชิก โดยมักจะพบได้ในสถานศึกษา (โรงเรียน/มหาวิทยาลัย) ชุมชน หรือองค์กรต่างๆ",
+    "detailedDescription": "ชมรมเซปักตะกร้อ (Sepak Takraw Club) คือองค์กรกิจกรรมนักเรียน นักศึกษา หรือกลุ่มคนในชุมชนที่จัดตั้งขึ้นเพื่อเป็นพื้นที่ศูนย์รวมของผู้ที่มีความสนใจ หลงใหล และรักในการเล่นกีฬาเซปักตะกร้อ โดยมีวัตถุประสงค์หลักในการส่งเสริมการออกกำลังกาย พัฒนาทักษะความสามารถทางด้านกีฬา เสริมสร้างสุขภาพร่างกายให้แข็งแรง ตลอดจนการสร้างความสามัคคีและวินัยในหมู่คณะ\nบทบาทสำคัญของชมรมเซปักตะกร้อไม่ได้จำกัดอยู่เพียงการเล่นกีฬาเพื่อความสนุกสนานเท่านั้น แต่ยังเป็นพื้นที่ฝึกฝนระเบียบวินัย การทำงานร่วมกันเป็นทีม และการสร้างภาวะผู้นำ การดำเนินงานภายในชมรมมักแบ่งออกเป็นหลายฝ่ายเพื่อความราบรื่น เช่น ฝ่ายบริหารที่ดูแลการจัดสรรงบประมาณ การจัดหาอุปกรณ์ และการจัดการแข่งขัน ฝ่ายประชาสัมพันธ์ที่ทำหน้าที่เปิดรับสมาชิกใหม่และกระจายข่าวสาร ตลอดจนฝ่ายฝึกซ้อมที่มีโค้ชหรือผู้มีประสบการณ์คอยวางโปรแกรมการซ้อมอย่างเป็นระบบ ตั้งแต่การฝึกทักษะพื้นฐาน เช่น การแปตะกร้อ การตั้งลูก การเสิร์ฟ การโหม่ง ไปจนถึงเทคนิคขั้นสูงอย่างการขึ้นฟาดและการบล็อกลูกกลางอากาศ\nนอกจากกิจกรรมการฝึกซ้อมสม่ำเสมอแล้ว ชมรมเซปักตะกร้อยังมีการจัดกิจกรรมแข่งขันกระชับมิตรทั้งภายในชมรมและระหว่างสถาบัน รวมถึงการส่งนักกีฬาตัวแทนเข้าร่วมการแข่งขันในระดับต่างๆ เช่น กีฬานักเรียน กีฬามหาวิทยาลัย หรือการแข่งขันระดับจังหวัดและประเทศ ซึ่งเป็นโอกาสสำคัญในการสร้างชื่อเสียงให้กับองค์กรและสะสมประสบการณ์ตรงให้กับสมาชิก\nประโยชน์ที่สมาชิกจะได้รับจากการเข้าร่วมชมรมเซปักตะกร้อ นอกเหนือจากการพัฒนาสมรรถภาพทางกายทั้งความยืดหยุ่น ความคล่องแคล่วว่องไว และกำลังกล้ามเนื้อแล้ว คือการได้สร้างมิตรภาพและเครือข่ายความสัมพันธ์อันดีระหว่างเพื่อนร่วมชมรม ชมรมเซปักตะกร้อจึงเปรียบเสมือนพื้นที่ปลูกฝังคนรุ่นใหม่ให้มีใจรักกีฬา มีน้ำใจนักกีฬา และร่วมกันสืบสานวัฒนธรรมทางกีฬาที่เป็นเอกลักษณ์ของภูมิภาคให้อยู่คู่สังคมอย่างยั่งยืน",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sepak_takraw_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sepak_takraw_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sepak_takraw_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sepak_takraw_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sepak_takraw_club/image4.jpg"
+    ]
+  },
+  {
+    "name": "EDU COOL DEBATE/ ชมรมโต้วาทีคณะครุศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย",
+    "slug": "edu_cool_debate_club",
+    "bio": "ชมรมโต้วาที คณะครุศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่มุ่งพัฒนาทักษะการโต้วาที",
+    "detailedDescription": "ชมรมโต้วาที คณะครุศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย มุ่งพัฒนาทักษะการโต้วาที โดยเน้นการฝึกฝนทักษะการพูดอย่างมีวาทศิลป์ การฟัง และการคิดวิเคราะห์อย่างมีเหตุผล ชมรมจะเปิดรับและคัดเลือกนิสิตชั้นปีที่ 1 ในทุก ๆ ปี เพื่อค้นหาผู้แทนเข้าร่วมการแข่งขันโต้วาทีประเพณีนิสิตใหม่",
+    "facultyName": "ครุศาสตร์",
+    "interestNames": [
+      "วิชาการ"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/edu_cool_debate_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/edu_cool_debate_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/edu_cool_debate_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/edu_cool_debate_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/edu_cool_debate_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/edu_cool_debate_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "RxCU Dancing Club",
+    "slug": "rxcu_dancing_club",
+    "bio": "ชมรมเต้นของคณะเภสัชศาสตร์ ที่รวมตัวคนมีใจรักในการเต้น ! ไม่มีการออดิชั่น พร้อมเปิดรับทุกคน ทุกเพศ ทุกชั้นปี จะได้พบเจอกับมิตรภาพและความสุขผ่านกิจกรรมมากมาย",
+    "detailedDescription": "พร้อมสลัดลุคเภสัชสุดเนิร์ด แล้วมาปล่อยสเต็ปไฟลุกกันหรือยัง?\n\n ไม่ว่าจะเต้นเป๊ะระดับตัวแม่ หรือเพียงแค่ใจรักแต่ขาก้าวไม่ตรงจังหวะ ชมรม RxCU Dancing Club พร้อมเปิดพื้นที่ให้ทุกคนได้ฉายแสง! 💃🏽🪩 \n\n♥️ไม่ต้องมีพื้นฐาน ไม่ต้องกลัวเต้นไม่ได้ ขอแค่มี passion อยากออกสเต็ป พวกเราพร้อมสนุกไปด้วยกันตั้งแต่ปรับพื้นฐานยันโชว์บนเวทีจริง! \n♥️กิจกรรมเพียบ มีงานให้ปล่อยของตลอดทั้งปีแบบไม่มีเหงา ทั้ง Freshy Games, Club Mania, Gown Games, PharmaCamp, Pharmafest, PSAT Games, Rubnong และอีกหลายเวทีที่รอทุกคนมาจัดเต็มไปด้วยกัน \n\nที่สำคัญชมรมเราอบอุ่น อยู่ด้วยกันเป็นครอบครัว เข้ามาแล้วรับรองว่าได้ทั้งมิตรภาพ ความสนุก และไม่ผิดหวังแน่นอน! กดติดตามข่าวสารและสอบถามเพิ่มเติมได้ที่ IG: rxcudancingclub แล้วมาเป็นส่วนหนึ่งของครอบครัวชมรมเต้นด้วยกันน้า🏠🌟\n\nคุณสมบัติผู้สมัครชมรม 🤍\n1. เป็นนิสิตคณะเภสัชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย (ทุกชั้นปี)\n2. มีใจรักและมี Passion ในการเต้นเป็นชีวิตจิตใจ\n3. อยากหาพื้นที่ปล่อยของ และสัมผัสประสบการณ์ขึ้นโชว์บนเวทีจริง\n4. พร้อมเปิดใจเรียนรู้ ไม่จำเป็นต้องมีพื้นฐานเต้นมาก่อน (ขอแค่พร้อมลุยไปด้วยกัน!)\n5. ชอบความสนุกสนาน และอยากได้สังคมเพื่อนพี่น้องที่อบอุ่นเหมือนครอบครัว",
+    "facultyName": "เภสัชศาสตร์",
+    "interestNames": [
+      "กีฬา",
+      "ศิลปะ",
+      "ดนตรี"
+    ],
+    "socials": {
+      "instagram": "rxcudancingclub",
+      "tiktok": "rxcudancingclub"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rxcu_dancing_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rxcu_dancing_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rxcu_dancing_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rxcu_dancing_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมวาทศิลป์และมนุษยสัมพันธ์ (Rhetoric and Human Relations - Chulalongkorn Debate Club)",
+    "slug": "rhetoric_human_relations_club",
+    "bio": "พื้นที่แห่งการเรียนรู้ พัฒนาทักษะการสื่อสาร การคิดเชิงวิเคราะห์ และการเปิดรับมุมมองใหม่ ๆ ผ่านการการแสดงทัศนะและโต้วาทีของนิสิตจุฬาฯ\nA platform empowering Chulalongkorn University students through critical thinking, public speaking, and impactful debate competitions and workshops.",
+    "detailedDescription": "ชมรมวาทศิลป์และมนุษยสัมพันธ์ จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่มุ่งเน้นการส่งเสริมและพัฒนาศักยภาพของนิสิตในด้านศิลปะแห่งการสื่อสาร ควบคู่ไปกับมนุษยสัมพันธ์ การสร้างความเข้าใจและการทำงานร่วมกับผู้อื่น \nชมรมฯ จัดกิจกรรมหลากหลายตลอดปีการศึกษา ได้แก่ การแข่งขันโต้วาทีประเพณีนิสิตใหม่ การคัดเลือกและฝึกซ้อมตัวแทนมหาวิทยาลัยเพื่อเข้าร่วมการแข่งขันโต้วาทีระดับอุดมศึกษาชิงโล่พระราชทานฯ และกิจกรรมเวิร์กชอปกระชับความสัมพันธ์ต่าง ๆ เพื่อเปิดโอกาสให้นิสิตจากต่างคณะได้แลกเปลี่ยนมุมมองความคิด และนำเสนอศักยภาพสู่สังคมอย่างสร้างสรรค์",
+    "facultyName": "ฝ่ายวิชาการ อบจ.",
+    "interestNames": [
+      "วิชาการ"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rhetoric_human_relations_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rhetoric_human_relations_club/image1.png",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rhetoric_human_relations_club/image2.png",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rhetoric_human_relations_club/image3.png",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rhetoric_human_relations_club/image4.png",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/rhetoric_human_relations_club/image5.png"
+    ]
+  },
+  {
+    "name": "Arts Boxing ชมรมมวยสากลสมัครเล่น คณะอักษณศาสตร์",
+    "slug": "arts_boxing_club",
+    "bio": "ชมรมมวยสากลสมัครเล่น คณะอักษรศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย",
+    "detailedDescription": "ชมรมมวยสากลสมัครเล่น คณะอักษรศาสตร์ เป็นพื้นที่สำหรับนิสิตที่มีความสนใจในกีฬาและศิลปะมวยสากล ชมรมเราไม่มีตารางซ้อมหรือคลาสบังคับที่ตายตัว สมาชิกสามารถนัดหมายเวลาที่สะดวกมาซ้อม ใส่นวม ชกเป้า หรือแลกเปลี่ยนเทคนิคกันได้แบบเป็นกันเอง ถึงไม่มีพื้นฐานมาก่อนก็มาเริ่มเรียนรู้ไปด้วยกันได้",
+    "facultyName": "อักษรศาสตร์",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_boxing_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_boxing_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_boxing_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_boxing_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_boxing_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_boxing_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมวอลเลย์บอล คณะครุศาสตร์",
+    "slug": "education_volleyball_club",
+    "bio": "ชมรมสำหรับนักกีฬาและนิสิตผู้ที่สนใจในกีฬาวอลเลย์บอลของคณะครุศาสตร์",
+    "detailedDescription": "ชมรมวอลเลย์บอล คณะครุศาสตร์ จัดตั้งขึ้นเพื่อเป็นพื้นที่สำหรับนิสิตทุกคนที่มีความสนใจในกีฬาวอลเลย์บอลได้มาพบปะ พูดคุย แลกเปลี่ยนประสบการณ์ และร่วมพัฒนาทักษะด้านกีฬาไปด้วยกัน ภายใต้บรรยากาศที่อบอุ่นและเป็นกันเองเสมือนครอบครัว โดยชมรมมุ่งส่งเสริมให้นิสิตใช้เวลาว่างให้เกิดประโยชน์ด้วยการออกกำลังกาย เรียนรู้การทำงานเป็นทีม ตลอดการสร้างมิตรภาพระหว่างรุ่นพี่และรุ่นน้องภายในคอร์ทเดียวกัน",
+    "facultyName": "ครุศาสตร์",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/education_volleyball_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/education_volleyball_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/education_volleyball_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/education_volleyball_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมทูตเยาวชนนานาชาติและสันติภาพสากล(iGEN)",
+    "slug": "igen_club",
+    "bio": "ชมรมมีเป้าหมายในการสร้างชุมชนที่เป็นตัวเชื่อมต่อระหว่างชาวไทยและชาวต่างชาติ พร้อมไปกับการพัฒนาและเข้าใจตัวเองมากขึ้น",
+    "detailedDescription": "ชมรม iGEN ก่อตั้งขึ้นมาเพื่อเป็นพื้นที่ให้นิสิตชาวไทยและชาวต่างชาติมีพื้นที่ในการพูดคุยและแลกเปลี่ยนความคิดและวัฒนธรรม โดยให้ความสำคัญกับการลดการใช้สื่ออิเล็คทรอนิกส์ในการจัดกิจกรรม เพื่อให้ทุกคนในชมรม ไม่ว่าสตาฟหรือผู้เข้าร่วมงานได้สนใจกันและกันมากขึ้น นอกจากนี้ iGEN ยังช่วยให้ทุกคนในชมรมได้รู้จักและเข้าใจตนเอง ตามหลักการสากลของ UN อย่าง Inner Development Goal หรือ IDG  ชมรม iGEN ยังพาสมาชิกมาทำความรู้จักกับประเทศไทยมากขึ้น โดยการแลกเปลี่ยนและทำความรู้จักวัฒนธรรมท้องถิ่นในพื้นที่ต่าง ๆ ทำงานจิตอาสา และได้สัมผัสกับธรรมชาติ เพื่อให้ได้พักจากความกังวลและความเครียดจากชีวิต พร้อมทั้งให้ความสำคัญกับทั้งตัวเองและคนรอบข้าง",
+    "facultyName": "ฝ่ายวิชาการ อบจ.",
+    "interestNames": [
+      "พัฒนาชุมชน"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/igen_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/igen_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/igen_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/igen_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/igen_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/igen_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมเพาะกายเเละฟิตเนสจุฬา",
+    "slug": "bodybuilding_fitness_club",
+    "bio": "ชมรมเพาะกายและฟิตเนส จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมสำหรับนิสิตที่สนใจการออกกำลังกาย เวทเทรนนิ่ง ฟิตเนส และเพาะกาย โดยมุ่งส่งเสริมการออกกำลังกายอย่างถูกวิธี ปลอดภัย และเหมาะกับทั้งผู้เริ่มต้นและผู้มีประสบการณ์\n\nชมรมจัดกิจกรรม เวิร์กชอป การแข่งขัน และสนับสนุนนักกีฬาที่ต้องการพัฒนาศักยภาพ พร้อมสร้างชุมชนด้านสุขภาพและการพัฒนาตนเองภายในมหาวิทยาลัย",
+    "detailedDescription": "ชมรมเพาะกายและฟิตเนส จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่มุ่งส่งเสริมให้นิสิตมีความรู้ ความเข้าใจ และทักษะในการออกกำลังกายอย่างถูกต้อง ปลอดภัย และยั่งยืน โดยครอบคลุมทั้งด้านเวทเทรนนิ่ง ฟิตเนส เพาะกาย การพัฒนาสมรรถภาพทางกาย และการดูแลสุขภาพโดยรวม\n\nชมรมเปิดพื้นที่ให้กับนิสิตทุกระดับ ไม่ว่าจะเป็นผู้ที่เพิ่งเริ่มต้นออกกำลังกาย ผู้ที่ต้องการพัฒนารูปร่างและสุขภาพของตนเอง หรือผู้ที่มีเป้าหมายในการฝึกซ้อมอย่างจริงจังเพื่อเข้าร่วมการแข่งขัน โดยให้ความสำคัญกับการสร้างสภาพแวดล้อมที่เป็นมิตร ปลอดภัย ไม่ตัดสินรูปร่าง และเหมาะสำหรับทั้งมือใหม่และผู้มีประสบการณ์\n\nกิจกรรมของชมรมประกอบด้วยการจัดกิจกรรมด้านฟิตเนสและการออกกำลังกาย เวิร์กชอปให้ความรู้ การแข่งขันภายในมหาวิทยาลัย การสนับสนุนนักกีฬาเพื่อเข้าร่วมการแข่งขันในระดับต่างๆ รวมถึงการสร้างชุมชนของนิสิตที่สนใจสุขภาพ การฝึกซ้อม และการพัฒนาตนเองผ่านการออกกำลังกาย\n\nชมรมเชื่อว่าการออกกำลังกายไม่ใช่เพียงเรื่องของรูปร่างหรือความแข็งแรงทางกายเท่านั้น แต่ยังเป็นเครื่องมือในการสร้างวินัย ความมั่นใจ สุขภาพจิตที่ดี ความรับผิดชอบต่อตนเอง และความสัมพันธ์ที่ดีระหว่างนิสิต ภายใต้แนวคิดที่ว่า ทุกคนสามารถเริ่มต้นพัฒนาตนเองได้จากจุดที่ตนเองอยู่ และเติบโตไปพร้อมกับชุมชนที่สนับสนุนกัน\n\nเป้าหมายของชมรมคือการเป็นพื้นที่กลางด้านฟิตเนสและเพาะกายของนิสิตจุฬาลงกรณ์มหาวิทยาลัย ที่ช่วยให้นิสิตเข้าถึงความรู้ที่ถูกต้อง ฝึกซ้อมได้อย่างปลอดภัย มีแรงบันดาลใจในการดูแลสุขภาพ และสามารถต่อยอดสู่การพัฒนาศักยภาพของตนเองทั้งในชีวิตประจำวันและในด้านกีฬา",
+    "facultyName": "วิทยาศาสตร์การกีฬา",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/bodybuilding_fitness_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/bodybuilding_fitness_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/bodybuilding_fitness_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/bodybuilding_fitness_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/bodybuilding_fitness_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/bodybuilding_fitness_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "พุทธธรรมจุฬาฯ",
+    "slug": "buddhadhamma_club",
+    "bio": null,
+    "detailedDescription": "สืบสานพุทธศาสนาสายพระป่ากรรมฐาน ตามปฏิปทาพระอาจารย์มั่น ภูริทัตโต และสร้างพื้นที่แห่งธรรมะเพื่อสวดมันต์ นั่งสมาธิและสนทนาธรรม มีจัดกิจกรรมนั่งสมาธิภาวนา ประจำวันวันอังคาร และพฤหัสบดี เวลา 17:15 น. ที่ ธรรมสถานจุฬาฯ นอกจากนี้ยังมีกิจกรรมอื่นๆ สามารถติดตามข่าวสารได้ที่ IG: bdclub.chula",
+    "facultyName": "ฝ่ายวิชาการ อบจ.",
+    "interestNames": [
+      "วิชาการ"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/buddhadhamma_club/logo.jpg",
+    "gallery": []
+  },
+  {
+    "name": "เรือใบและเรือพาย",
+    "slug": "sailing_rowing_club",
+    "bio": "ชมรมสำหรับผู้ที่สนใจกีฬาเรือพายและกิจกรรมทางน้ำ ไม่ว่าจะเป็น **เรือคายัค เรือมังกร SUP Board และกรรเชียงบก (Indoor Rowing)** เปิดรับสมาชิกใหม่ทุกคน ไม่จำเป็นต้องมีพื้นฐานหรือประสบการณ์มาก่อน เพียงแค่มีความสนใจและพร้อมเรียนรู้ ก็สามารถมาเป็นส่วนหนึ่งของชมรมเราได้",
+    "detailedDescription": "ชมรมเรือพายเปิดโอกาสให้ทุกคนได้เรียนรู้และสัมผัสประสบการณ์กีฬาทางน้ำหลากหลายประเภท ไม่ว่าจะเป็น **เรือคายัค (Kayak), เรือมังกร (Dragon Boat), SUP Board (Stand Up Paddle Board)** และ **กรรเชียงบก (Indoor Rowing)** โดยมีการฝึกสอนตั้งแต่พื้นฐานไปจนถึงการพัฒนาทักษะเพื่อการแข่งขัน\n\nไม่ว่าคุณจะไม่เคยพายเรือมาก่อนหรือมีประสบการณ์อยู่แล้ว ก็สามารถเข้าร่วมชมรมได้ เพราะเรามีรุ่นพี่และผู้ฝึกสอนคอยแนะนำอย่างใกล้ชิด ภายในชมรมยังมีกิจกรรมฝึกซ้อม การแข่งขัน และโอกาสในการเดินทางไปแข่งขันทั้งในและต่างประเทศ พร้อมทั้งได้พบเพื่อนใหม่ สร้างมิตรภาพ และพัฒนาทักษะด้านร่างกาย ความอดทน และการทำงานเป็นทีมไปพร้อมกัน\n\nหากคุณกำลังมองหากีฬาที่ท้าทาย สนุก และได้เปิดประสบการณ์ใหม่ ๆ ชมรมเรือพายยินดีต้อนรับทุกคนมาเป็นส่วนหนึ่งของครอบครัวเรา",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sailing_rowing_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sailing_rowing_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sailing_rowing_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sailing_rowing_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sailing_rowing_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sailing_rowing_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมยิงธนู",
+    "slug": "archery_club",
+    "bio": "ชมรมที่เปิดโอกาสให้ทุกคนได้เรียนรู้ ท้าทายตนเอง และฝึกสมาธิผ่านการยิงธนู ไม่จำเป็นต้องมีพื้นฐานก็สามารถเข้าร่วมได้",
+    "detailedDescription": "ชมรมยิงธนู มุ่งเน้นส่งเสริมการออกกำลังกาย ฝึกฝนสมาธิ บุคลิกภาพ และความใจเย็น ผ่านกีฬาฝึกทักษะการยิงธนู ทางชมรมเปิดรับสมาชิกทุกระดับตั้งแต่ผู้เริ่มต้นที่ไม่เคยจับคันธนูมาก่อน ไปจนถึงผู้ที่ต้องการฝึกฝนเพื่อความสนุกสนานหรือเข้าร่วมการแข่งขัน ภายในชมรมมีอุปกรณ์พื้นฐานพร้อมให้ใช้งาน พร้อมทั้งมีพี่ๆ และเพื่อนๆ คอยแนะนำเทคนิคการยิงอย่างถูกต้องและปลอดภัย นอกจากนี้ยังมีกิจกรรมกระชับความสัมพันธ์ภายในชมรมเพื่อสร้างมิตรภาพและสังคมที่ดีร่วมกัน",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/archery_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/archery_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/archery_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/archery_club/image3.png"
+    ]
+  },
+  {
+    "name": "ชมรมซอฟท์บอล สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย",
+    "slug": "softball_club",
+    "bio": "ชมรมซอฟท์บอล สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย รับสมาชิกทุกเพศ ทุกคณะ ทุกชั้นปี โดยไม่จำเป็นต้องมีประสบการณ์มาก่อน เพราะเรายินดีต้อนรับทุกคนอย่างอบอุ่นและเท่าเทียม",
+    "detailedDescription": "“ชมรมซอฟท์บอล สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย” เป็นพื้นที่สำหรับนิสิตที่มีความสนใจใน “กีฬาซอฟท์บอลและเบสบอล 5” รวมถึงผู้ที่ต้องการมีส่วนร่วมในฐานะนักกีฬาของมหาวิทยาลัย โดยชมรมเปิดรับสมาชิกทุกเพศ ทุกคณะ ทุกชั้นปี โดยไม่จำเป็นต้องมีประสบการณ์มาก่อน เพราะเรายินดีต้อนรับทุกคนอย่างอบอุ่นและเท่าเทียม หากคุณกำลังมองหาสนามในการระเบิดพลังของตนเอง และอยากเปิดประสบการณ์ใหม่ ๆ กับเพื่อน ๆ ที่มีใจรักในกีฬาเหมือนกัน... มาร่วมเป็นส่วนหนึ่งของทีมซอฟท์บอล จุฬาฯ กับเรา!",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/softball_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/softball_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/softball_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/softball_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/softball_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/softball_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมบอร์ดเกมคณะเศรษฐศาสตร์ (econboardgame)",
+    "slug": "econ_boardgame_club",
+    "bio": "เป็น community ที่สนใจในการเล่น Boardgame หรือเล่นเพื่อสร้างความบันเทิง ผ่อนคลายความเครียด",
+    "detailedDescription": "เกี่ยวกับการเล่นบอร์ดเกมมีทั้งทาง แข่งขันเช่น หมากฮอส, A-math แข่งขันทั้งใน freshy game และ Chulalympics แต่ชมรมเรายังมีบอร์ดเกมที่ไว้เล่นเพื่อนสร้างความบันเทิง เป็น community เล็กๆไว้ผ่อนคลายจากการเรีบนหนัก",
+    "facultyName": "เศรษฐศาสตร์",
+    "interestNames": [
+      "ศิลปะ"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/econ_boardgame_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/econ_boardgame_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/econ_boardgame_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/econ_boardgame_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/econ_boardgame_club/image4.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมกีฬาอิเล็กทรอนิกส์ (Chula Esports)",
+    "slug": "chula_esports_club",
+    "bio": "ชุมชนของนิสิตจุฬาฯ ผู้หลงใหลในเกมและอีสปอร์ต ที่พร้อมสนับสนุนให้ทุกคนได้เรียนรู้ เชื่อมโยง และเติบโตไปด้วยกัน\nA welcoming university community that empowers passionate gamers to grow, connect, and excel in gaming and esports.",
+    "detailedDescription": "ชมรมกีฬาอิเล็กทรอนิกส์จุฬาลงกรณ์มหาวิทยาลัย (Chula Esports) คือชุมชนของนิสิตจุฬาฯ ผู้หลงใหลในเกมและอีสปอร์ต ที่เปิดพื้นที่ให้สมาชิกได้เรียนรู้ เชื่อมโยง และเติบโตไปด้วยกันอย่างมีความหมาย เราเชื่อว่าเกมไม่ใช่เพียงความบันเทิง แต่เป็นพื้นที่ของการพัฒนาทักษะ การทำงานเป็นทีม ความคิดสร้างสรรค์ และการสร้างประสบการณ์ร่วมที่มีคุณค่า\n\nชมรมของเรายินดีต้อนรับทั้งสมาชิกทั่วไปและผู้ที่ต้องการเข้ามามีส่วนร่วมอย่างใกล้ชิดในบทบาทการทำงานของชมรม สมาชิกทั่วไปสามารถเข้าร่วมกิจกรรมต่าง ๆ ที่ชมรมจัดขึ้นได้ เช่น สัมมนา เวิร์กช็อป และกิจกรรมแจกของรางวัล\n\nสำหรับผู้ที่ต้องการลงมือทำงานและพัฒนาประสบการณ์จริง ชมรมยังมีทีมปฏิบัติงานหลัก (Core Team) ซึ่งรับผิดชอบการวางแผน ดำเนินงาน และขับเคลื่อนกิจกรรมสำคัญของชมรม เช่น CU Freshy Game, Chulalympic และกิจกรรมอื่น ๆ ภายในจุฬาฯ โดยสมาชิกในทีมจะได้รับการแนะนำและถ่ายทอดประสบการณ์จากผู้ที่มีประสบการณ์ในแต่ละตำแหน่ง เพื่อให้สามารถเติบโตทั้งในด้านทักษะการทำงาน การประสานงาน และการจัดการอีเวนต์อย่างเป็นระบบ\n\nChula Esports จึงไม่ใช่แค่ชมรมสำหรับคนรักเกม แต่เป็นพื้นที่ของการเรียนรู้ การสร้างสรรค์ และการพัฒนาศักยภาพร่วมกันของนิสิตที่อยากเป็นส่วนหนึ่งของวงการเกมและอีสปอร์ตในระดับมหาวิทยาลัยอย่างแท้จริง\n\nChulalongkorn University Esports Club, or Chula Esports, is a community of Chulalongkorn students who are passionate about gaming and esports. We provide a welcoming space where members can learn, connect, and grow together in meaningful ways. We believe games are more than just entertainment, as they help develop skills, teamwork, creativity, and meaningful shared experiences.\n\nOur club welcomes both general members and those who would like to take on a more active role in club operations. General members are free to join a variety of activities hosted by the club, including seminars, workshops, and giveaway events.\n\nFor those who want hands-on experience and real-world growth, Chula Esports also has a Core Team. This team is responsible for planning, organizing, and driving major club activities such as CU Freshy Game, Chulalympic, and other events within Chulalongkorn University. Members of the Core Team receive guidance and knowledge transfer from experienced members in each position, helping them grow in teamwork, coordination, and structured event management.\n\nChula Esports is therefore more than just a club for gamers. It is a space for learning, creativity, and shared growth for students who want to become part of the university gaming and esports community in a meaningful way.",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "ธุรกิจ",
+      "เทคโนโลยี",
+      "กีฬา",
+      "วิชาการ",
+      "ศิลปะ",
+      "การศึกษา"
+    ],
+    "socials": {
+      "instagram": "https://www.instagram.com/chulaesports/",
+      "facebook": "https://www.facebook.com/Chula.Esports",
+      "tiktok": "https://www.tiktok.com/@chula.esports"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/chula_esports_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/chula_esports_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/chula_esports_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/chula_esports_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/chula_esports_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/chula_esports_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ดาบไทย",
+    "slug": "thai_sword_club",
+    "bio": "ชมรมเรารักกันดี ไม่ต่อยแต่ตี เพราะเราคือชมรมกีฬาฟันดาบไทย กระบี่ กระบอง และ ดาบสองมือ มีพร้อม มือใหม่มือเก่า เราพร้อมต้อนรับ สอนตั้งแต่เบสิกท่ายืนยันตีกระบี่ เตรียมมาแค่ตัวกับหัวใจ วอคอินเข้ามากันได้ที่ Sport complex ชั้น 1 ทุกวันศุกร์",
+    "detailedDescription": "ชมรมกีฬาดาบไทย ประกอบไปด้วย 1.รำกระบี่กระบอง หรือที่ทุกคนคุ้นเคยว่า ย่อ ยก ชิด จ้วง แทง 2.ดาบสองมือ เป็นดาบคู่สามารถกันและตีได้ในเวลาเดียวกัน และ 3.กระบี่ เป็นหวายแบบไทยที่ทุกคนน่าจะเคยได้สัมผัสกันมาบ้างในวิชาดาบไทย ทุกคนอาจคุ้นเคยกับการเรียนดาบไทยเพื่อการรำ แต่ชมรมเราจะพาทุกคนไปสัมผัสกับศิลปะการต่อสู้ของไทย ทั้งเพื่อการรำ และการต่อสู้แบบ ตัวต่อตัว กีฬาดาบไทยเล่นได้ทุกเพศ ทุกวัย ทุกปีการศึกษา จะน้องเฟรชชี่หรือพี่บัณฑิต แค่เปิดใจลอง ชมรมของเราพร้อมต้อนรับ ไม่จำเป็นต้องมีประสบการณ์มาก่อน เราสอนตั้งแต่ความรู้พื้นฐาน การจับดาบ ตีดาบ ท่ายืน จนถึงการประยุกต์ท่าดาบเพื่อหาลายเซ็นของแต่ละคน บรรยากาศในชมรมเป็นกันเองบอกเลยว่า โค้ชพร้อมสอน พี่พร้อมตี น้องพร้อมยัง \nติดตามชมรมได้ที่\n IG: Thaifencing.cu \n TikTok : Chula_Thaifencing",
+    "facultyName": "ฝ่ายกีฬา อบจ.",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/thai_sword_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/thai_sword_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/thai_sword_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/thai_sword_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/thai_sword_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/thai_sword_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "เภสัชสังคีต",
+    "slug": "pharmacy_music_club",
+    "bio": "ชมรมสำหรับคนรักเสียงดนตรีไทยในคณะเภสัช ไม่ว่าจะเคยเล่นมาก่อนหรือเพิ่งอยากเริ่มเล่นดนตรีไทย เราพร้อมต้อนรับทุกคนเสมอ มาร่วมสร้างท่วงทำนองไปด้วยกัน! 🇹🇭🎼🪷✨",
+    "detailedDescription": "🪷ชมรมเภสัชสังคีต เป็นชมรมดนตรีไทยประจำคณะเภสัชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย พื้นที่รวมตัวของนิสิตที่มีความชื่นชอบในเสียงดนตรีและศิลปะไทย โดยเราเน้นสร้างบรรยากาศการซ้อมที่เป็นกันเอง ผ่อนคลาย และเป็นพื้นที่ปลอดภัยให้ทุกคนได้พักสมองจากการเรียนที่หนักหน่วงผ่านการเล่นดนตรีไทย ในการซ้อมจะไม่ได้มีแค่เพลงไทยดั้งเดิม แต่เรามีการผสมผสานเพลงคลาสสิกใหม่ ๆ ที่ร่วมกันแกะโน้ตและซ้อมด้วยกัน \n     🪷กิจกรรมหลักของชมรม\n• การซ้อมดนตรีและแลกเปลี่ยนทักษะ : ซ้อมร่วมกันเป็นประจำในบรรยากาศพี่สอนน้อง เพื่อนช่วยเพื่อน เลือกเล่นได้ทั้งเครื่องสายและเครื่องตี โดยซ้อมร่วมกันเป็นประจำทุกสัปดาห์\n• การแสดงในโอกาสต่าง ๆ : ร่วมบรรเลงดนตรีในงานสำคัญของคณะและมหาวิทยาลัย เช่น พิธีไหว้ครู  งานครบรอบสถาปนา งานทำบุญ งานสงกรานต์ และอื่น ๆ อีกมากมาย\n• กิจกรรมกระชับสัมพันธ์ : จัดการแสดงร่วมกันกับชมรมดนตรีไทยของคณะเภสัช มหาวิทยาลัยอื่น เพื่อสร้างสายสัมพันธ์ใหม่\n     🪷ไม่จำเป็นต้องมีพื้นฐาน ก็มาเป็นส่วนหนึ่งกับเราได้\nเราเชื่อว่าดนตรีเป็นเรื่องของทุกคน จึงไม่ต้องกังวลเรื่องทักษะเริ่มต้น ขอแค่มีใจรักและอยากลอง ชมรมเรามีเครื่องดนตรีเตรียมไว้ให้พร้อม รวมถึงมีรุ่นพี่คอยดูแลและแนะนำอย่างใกล้ชิด มาเล่นดนตรีด้วยกันและสร้างความทรงจำดี ๆ ในชีวิตมหาลัยไปกับพวกเราที่ชมรมเภสัชสังคีต!",
+    "facultyName": "เภสัชศาสตร์",
+    "interestNames": [
+      "ดนตรี"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/pharmacy_music_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/pharmacy_music_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/pharmacy_music_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/pharmacy_music_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/pharmacy_music_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/pharmacy_music_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "Psyche Step-up",
+    "slug": "psyche_stepup_club",
+    "bio": "ชมรมเต้นแห่งคณะจิตวิทยา",
+    "detailedDescription": "ชมรมเต้นของคณะจิตวิทยา จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่รวบรวมผู้มีใจรัก ชื่นชอบในการเต้นมาอยู่ด้วยกัน ไม่ว่าจะชอบเต้นอยู่แล้วหรือเพิ่งเริ่มสนใจ โดยหลัก ๆ ชมรมจะเน้นการเต้น Cover Dance \n\nในตลอดหนึ่งปีการศึกษา ชมรมรับงานแสดง อาทิ งานเจาะจิต (ค่ายเปิดบ้านของคณะจิตวิทยา), งานริมสวน (งานดนตรีของคณะจิตวิทยา), งานสามพบ (ค่ายรับน้องของคณะจิตวิทยา) ฯลฯ\n\nการเปิดรับสมาชิกนักเต้น ชมรมจะไม่มีการ Audition มีเพียงการ First meet ในช่วงเริ่มปีการศึกษา เปิดรับและยินดีต้อนรับทุก ๆ คน ไม่ว่าจะเคยมีประสบการณ์การเต้นหรือไม่\n\nนอกจากสมาชิกนักเต้นแล้ว ชมรมยังเปิดรับสมัครสตาฟเพื่อร่วมสร้างสีสันและช่วยขับเคลื่อนพื้นที่แห่งงานอดิเรกของนักเต้นให้ดำเนินต่อไป ไม่ว่าจะเป็นฝ่ายเหรัญญิก ฝ่ายประชาสัมพันธ์ ฝ่ายเลขานุการ และฝ่ายอื่น ๆ ตามความสนใจ",
+    "facultyName": "จิตวิทยา",
+    "interestNames": [
+      "ศิลปะ",
+      "ดนตรี"
+    ],
+    "socials": {
+      "instagram": "psychestep_up"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psyche_stepup_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psyche_stepup_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psyche_stepup_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psyche_stepup_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมนักร้องประสานเสียง สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย",
+    "slug": "choir_club",
+    "bio": "ชมรม CU Chorus เป็นชมรมสำหรับนิสิตที่ชื่นชอบและสนใจในการขับร้องเพลงประสานเสียงและการบรรเลงเปียโน",
+    "detailedDescription": "ชมรมนักร้องประสานเสียง สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย มีหน้าที่ขับร้องบทเพลงมหาวิทยาลัยในพิธีการสำคัญต่าง ๆ สร้างประสบการณ์การขับร้องประสานเสียง ให้แก่ชาวจุฬาฯ มาอย่างยาวนาน และมุ่งเน้นที่จะเผยแพร่ศิลปะการขับร้องประสานเสียงให้เป็นที่แพร่หลาย อีกทั้งยังมีจุดประสงค์เพื่อพัฒนาทักษะการทำงานเป็นหมู่คณะและสร้างพื้นที่การเรียนรู้ทักษะการขับร้องให้กับสมาชิกชมรม",
+    "facultyName": "ฝ่ายศิลปะวัฒนธรรม อบจ.",
+    "interestNames": [
+      "ดนตรี"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/choir_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/choir_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/choir_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/choir_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "Psychemusic CU",
+    "slug": "psychemusic_cu_club",
+    "bio": "พวกเรามาจากชมรมดนตรีสากลแห่งคณะจิตวิทยา หรือ อีกชื่อที่เรียกกันว่า \"Psychemusic\" พื้นที่ที่รวบรวมชาวจิตวิทยาที่รักในเสียงดนตรี ร่วมกันพัฒนาทักษะทางดนตรีไปด้วยกัน !",
+    "detailedDescription": "ชมรมดนตรีสากลแห่งคณะจิตวิทยาเป็นพื้นที่ให้ชาวจิตวิทยาผู้มีใจรักในเสียงดนตรี ได้ร่วมกันฝึกซ้อมการเล่นเป็นวง พัฒนาศักยภาพทางดนตรี เพิ่มทักษะในการทำงานร่วมกับผู้อื่น ได้พบเจอกับมิตรภาพที่อบอุ่นของชาวจิตวิทยาทุกชั้นปี ทั้งภาคไทยและภาค JIPP และร่วมกันสร้างความทรงจำผ่านการแสดงดนตรีในกิจกรรมต่าง ๆ ทั้งภายในคณะจิตวิทยาและมหาวิทยาลัย พร้อมส่งมอบความสุขผ่านเสียงดนตรีให้กับผู้ฟัง",
+    "facultyName": "จิตวิทยา",
+    "interestNames": [
+      "ดนตรี"
+    ],
+    "socials": {
+      "instagram": "psychemusic.cu",
+      "facebook": "Psychemusic.cu"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychemusic_cu_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychemusic_cu_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychemusic_cu_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychemusic_cu_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychemusic_cu_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychemusic_cu_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมสันทนาการกลอง",
+    "slug": "drum_recreation_club",
+    "bio": "ของดีมาบุญครอง สันกลองสหเวช",
+    "detailedDescription": "ชมรมสันทนาการกลอง คณะสหเวชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่มีเสียงจังหวะกลองเป็นเอกลักษณ์ ส่งเสริมการใช้จังหวะกลองเป็นสื่อกลางในการสันทนาการ สร้างความสนุกสนาน ความสามัคคี และความสัมพันธ์อันดีระหว่างนิสิตในกิจกรรมต่าง ๆ ของคณะ ไม่ว่าจะเป็นกิจกรรมต้อนรับนิสิตใหม่ งานกีฬา งานประเพณี หรือกิจกรรมสำคัญของคณะ โดยรู้จักกันในนาม “ของดีมาบุญครอง สันกลองสหเวช”",
+    "facultyName": "สหเวชศาสตร์",
+    "interestNames": [
+      "ดนตรี"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/drum_recreation_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/drum_recreation_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/drum_recreation_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/drum_recreation_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/drum_recreation_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/drum_recreation_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "AHS CU Dance Club",
+    "slug": "ahscu_dance_club",
+    "bio": "AHS CU Dance Club พื้นที่สำหรับคนรักการเต้น ได้แสดงความสามารถอย่างเต็มที่",
+    "detailedDescription": "AHS CU Dance Club เป็นชมรมที่รวมคนในคณะสหเวชศาสตร์ที่มีความสนใจเกี่ยวกับการเต้นมารวมกัน เพื่อสร้างโชว์ที่แสดงความสามารถของเหล่านักเต้นออกมาอย่างสวยงาม",
+    "facultyName": "สหเวชศาสตร์",
+    "interestNames": [
+      "ดนตรี"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_dance_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_dance_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_dance_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_dance_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_dance_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_dance_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "CUVI (Chula Value Investor Club)",
+    "slug": "cuvi_club",
+    "bio": "CUVI คือชมรมนักลงทุนเน้นคุณค่า (Value Investing) ที่มุ่งเน้นให้ความรู้ด้านการลงทุนอย่างเป็นระบบและเข้มข้น ตั้งแต่พื้นฐานการวิเคราะห์หุ้น กลยุทธ์การลงทุนระยะยาว ไปจนถึงการสร้างความเข้าใจเชิงลึกในตลาดการเงินจริง",
+    "detailedDescription": "เราสร้างพื้นที่สำหรับนักศึกษาที่สนใจการลงทุน ได้เรียนรู้ผ่านกิจกรรมทั้งในและนอกห้องเรียน ไม่ว่าจะเป็นเวิร์กช็อป สัมมนา และการพูดคุยแลกเปลี่ยนกับนักลงทุนมืออาชีพ\n\nการเข้าร่วม CUVI จะช่วยพัฒนาทักษะวิเคราะห์หุ้นและกลยุทธ์การลงทุนแบบเน้นคุณค่า ได้รับประสบการณ์จริงผ่านการเรียนรู้เชิงปฏิบัติ (learning by doing) สร้างเครือข่ายกับเพื่อนนักลงทุนรุ่นใหม่ที่มีเป้าหมายเดียวกัน และเข้าถึงความรู้จากผู้เชี่ยวชาญในแวดวงการเงินและการลงทุน\n\nCUVI ไม่ใช่เพียงแค่ชมรม แต่คือพื้นที่สำหรับคนที่มีวิธีคิดและเป้าหมายเดียวกัน ได้เติบโตและเรียนรู้ไปด้วยกันในเส้นทางของนักลงทุน",
+    "facultyName": "ฝ่ายวิชาการ อบจ.",
+    "interestNames": [
+      "ธุรกิจ",
+      "วิชาการ"
+    ],
+    "socials": {
+      "instagram": "cuviclub",
+      "tiktok": "cu.value.investor"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cuvi_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cuvi_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cuvi_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cuvi_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cuvi_club/image4.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมพัฒนาความฉลาดทางอารมณ์",
+    "slug": "eq_development_club",
+    "bio": "😊 EQ Community\nCommunity สำหรับคนที่พร้อมเติบโตจากภายใน และรับผิดชอบชีวิตของตัวเอง เราเชื่อว่าการเข้าใจและบริหารอารมณ์ คือรากฐานของความสำเร็จ ความสัมพันธ์ และความสุขที่ยั่งยืน",
+    "detailedDescription": "คนจำนวนมากรู้ว่าควรทำอะไร แต่มีไม่กี่คนที่ทำได้จริง เพราะสิ่งที่ขวางเราไว้ ไม่ใช่ความรู้ แต่คืออารมณ์ของตัวเอง\n\nEQ Community คือ Community สำหรับคนที่พร้อมเผชิญตัวเอง ลงมือพัฒนาตัวเองอย่างจริงจัง และเชื่อว่าการเปลี่ยนแปลงที่ยั่งยืน เริ่มจากภายใน\n\nเราเรียนรู้ผ่าน Emotional Intelligence รูปแบบจิตวิทยาเชิงพุทธที่นำไปใช้ได้จริง เพื่อฝึกการเข้าใจตัวเอง รับผิดชอบอารมณ์ สร้างความสัมพันธ์ที่ดี และใช้ชีวิตอย่างมีความหมาย\n\nสิ่งที่คุณจะได้พบใน Community\n\n🌱 Weekly Workshop Meeting\nเรียนรู้ ฝึกปฏิบัติ แลกเปลี่ยน และสะท้อนตัวเองร่วมกันทุกสัปดาห์ ผ่านหัวข้อที่นำไปใช้ได้จริง เช่น Powerful Communication, Time Prioritization และ Emotional Resilience\n\n🤝 EQ Coaching Project\nโปรแกรม Buddy Coaching 10 สัปดาห์ ที่ช่วยให้คุณมองเห็นตัวเองลึกขึ้น ตั้งเป้าหมายที่ใช่ และพัฒนาตัวเองอย่างต่อเนื่องด้วยการตั้งคำถามที่ทรงพลัง\n\n🚀 Life Mastery Camp (6 วัน)\nประสบการณ์การเรียนรู้แบบเข้มข้น ที่ชวนคุณทบทวนชีวิต เปลี่ยนมุมมอง และสร้างการเปลี่ยนแปลงที่นำกลับไปใช้ได้จริงหลังจบค่าย\n\nหากคุณพร้อมเรียนรู้ รับผิดชอบอารมณ์ของตัวเอง และลงมือเติบโตจริง ๆ เราเชื่อว่าคุณจะพบเพื่อนร่วมทางที่ใช่ที่นี่",
+    "facultyName": "ฝ่ายวิชาการ อบจ.",
+    "interestNames": [
+      "วิชาการ"
+    ],
+    "socials": {
+      "instagram": "eqcommunity.official",
+      "line": "@eqcommunity"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/eq_development_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/eq_development_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/eq_development_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/eq_development_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/eq_development_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/eq_development_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "AHSCU Sports Club",
+    "slug": "ahscu_sports_club",
+    "bio": "ชมรมกีฬาประจำคณะสหเวชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย",
+    "detailedDescription": "ชมรมกีฬาคณะสหเวชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่มุ่งส่งเสริมการออกกำลังกายและการเล่นกีฬา เพื่อพัฒนาสุขภาพกาย สุขภาพใจ และทักษะการทำงานเป็นทีมของนิสิต เปิดโอกาสให้นิสิตทุกชั้นปีได้เข้าร่วมกิจกรรม ฝึกซ้อม และแข่งขันกีฬาในระดับต่าง ๆ พร้อมสร้างความสามัคคี มิตรภาพ และประสบการณ์ที่ดีตลอดการใช้ชีวิตในรั้วมหาวิทยาลัย",
+    "facultyName": "สหเวชศาสตร์",
+    "interestNames": [
+      "กีฬา"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_sports_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_sports_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_sports_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_sports_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_sports_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_sports_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมพุทธศาสตร์และประเพณี",
+    "slug": "buddhism_tradition_club",
+    "bio": "เป็นชมรมที่จัดกิจกรรมที่เกี่ยวข้องกับพุทธศาสนา อย่างเช่น การทำบุญตักบาตรประจำสัปดาห์ การทำวัดเย็น กิจกรรมจิตอาสา และกิจกรรมอื่นๆ เตรียมพบกับรอยยิ้ม มิตรภาพ ความอบอุ่น และการสร้างความดีง่ายๆ ที่ทุกคนทำได้ ณ ชมรมพุทธศาสตร์ฯ",
+    "detailedDescription": "ชมรมพุทธศาสตร์และประเพณี เป็นชมรมที่มุ่งเน้นการพัฒนาของจิตใจและอารมณ์ ทางชมรมได้จัดกิจกรรมที่จะบรรลุวัตถุประสงค์นี้ ไว้หลากหลายกิจกรรม ยกตัวอย่างเช่น กิจกรรมตักบาตรประจำสัปดาห์ การทำวัตรเย็น กิจกรรม One Day Trip (เที่ยวพร้อมกับการทำจิตอาสา) และกิจกรรมเนื่องในวันพิเศษอื่นๆ ตามโอกาส ทางชมรมพร้อมเปิดรับทุกคน ที่มีความสนใจในพระพุทธศาสนา ไม่จำเป็นต้องนับถือศาสนาพุทธ แต่ว่าเราทุกคนจะเรียนรู้ไปด้วยกัน มาร่วมพัฒนาจิตใจและทำความดีไปด้วยกันครับ",
+    "facultyName": "ฝ่ายวิชาการ อบจ.",
+    "interestNames": [
+      "วิชาการ",
+      "พัฒนาชุมชน",
+      "การศึกษา"
+    ],
+    "socials": {
+      "instagram": "cubudclub"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/buddhism_tradition_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/buddhism_tradition_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/buddhism_tradition_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/buddhism_tradition_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมถ่ายภาพคณะจิตวิทยา / psychephoto",
+    "slug": "psychephoto_club",
+    "bio": null,
+    "detailedDescription": "Psychephoto คือชมรมถ่ายภาพประจำคณะจิตวิทยา ที่เป็นผู้บันทึกภาพถ่ายความทรงจำ กิจกรรมแสนสนุก และความสัมพันธ์ของพี่ ๆ น้อง ๆ เพื่อน ๆ เด็กจิตวิทยา สมาชิกของชมรมไม่จำเป็นต้องเป็นผู้ที่รักการถ่ายภาพ แต่ยังรวมถึงคนที่ชอบโดนถ่ายภาพหรือเป็นแบบด้วย\n\nทางชมรมจะรับบทบาทในการถ่ายภาพงานคณะทาง ๆ อย่าง ค่ายสามพบ ค่ายเจาะจิต กิจกรรมวันไหว้ครู วันปฐมนิเทศน้องใหม่ วันปัจฉิมพี่ปี 4 psychenight และกิจกรรมอื่นๆที่คณะจัด\n\nนอกจากนี้ ชมรมก็ยังจัดเวิร์กช็อปให้กับน้องน้องในคณะที่สนใจในการถ่ายภาพโดยไม่จำเป็นต้องเป็นสมาชิกชมรมก็สามารถเข้าร่วมได้ โดยเวิร์กช็อปของเราจะเริ่มตั้งแต่การตั้งค่ากล้องและพื้นฐานของกล้องไปจนถึงการแต่งภาพด้วยโปรแกรม Lightroom\n\nและส่วนที่พลาดไม่ได้คือทางชมรมของเราจะจัดวันเดย์ทริปให้ไปถ่ายภาพโดยอาจจะอยู่ทั้งในกรุงเทพหรือนอกกรุงเทพและอาจจะทำกับฝ่ายอื่นๆในคณะหรือในชมรมของตัวเอง\n\nโดยชมรมของของเรายินดีต้อนรับทุกชั้นปี รวมถึงไม่มีการออดิชั่น และไม่ว่าจะมีอุปกรณ์ครบหรือแค่กล้องโทรศัพท์ก็เข้าร่วมกับเราได้ตลอดทั้งปี",
+    "facultyName": "จิตวิทยา",
+    "interestNames": [
+      "ศิลปะ"
+    ],
+    "socials": {
+      "instagram": "psychephoto.cu"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychephoto_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychephoto_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychephoto_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/psychephoto_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมคาทอลิก จุฬาลงกรณ์มหาวิทยาลัย / Catholic club of Chulalongkorn University",
+    "slug": "catholic_club",
+    "bio": null,
+    "detailedDescription": "เป็นศูนย์รวมของนิสิตที่นับถือศาสนาคริสต์ นิกายโรมันคาทอลิกและผู้ที่สนใจ เพื่อทำกิจกรรมต่างๆทั้งในและนอกมหาวิทยาลัย",
+    "facultyName": "ฝ่ายวิชาการ อบจ.",
+    "interestNames": [
+      "พัฒนาชุมชน"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/catholic_club/logo.jpg",
+    "gallery": []
+  },
+  {
+    "name": "Sahavejwathi",
+    "slug": "sahavejwathi_club",
+    "bio": null,
+    "detailedDescription": "ชมรมพิธีกรและโต้วาที คณะสหเวชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่มุ่งเน้นการพัฒนาทักษะการสื่อสาร วาทศิลป์ และบุคลิกภาพอย่างรอบด้าน โดยเปิดรับนิสิตทุกชั้นปีและทุกสาขาวิชา ไม่ว่าจะเป็นเทคนิคการแพทย์ กายภาพบำบัด รังสีเทคนิค หรือโภชนาการและการกำหนดอาหาร เพื่อส่งเสริมให้ทุกคนมีความมั่นใจ กล้าแสดงออกอย่างสร้างสรรค์ และสามารถถ่ายทอดความคิดได้อย่างมีประสิทธิภาพ ซึ่งถือเป็นทักษะสำคัญในการทำงานสายวิชาชีพสุขภาพและสังคมยุคปัจจุบัน\nโครงสร้างกิจกรรมของชมรมครอบคลุมทั้งงานด้านพิธีกร (MC) และการโต้วาที (Debate) ผ่านการจัดอบรมเชิงปฏิบัติการ (Workshop) การฝึกแก้ปัญหาเฉพาะหน้า การตั้งคำถามและการคิดวิเคราะห์อย่างมีตรรกะ รวมถึงการเปิดโอกาสให้นิสิตได้ปฏิบัติหน้าที่จริงบนเวทีในกิจกรรมสำคัญต่างๆ ของคณะและมหาวิทยาลัย เช่น งานรับน้อง  งานประชุมวิชาการ และงานกีฬาสานสัมพันธ์ นอกจากนี้ยังเป็นพื้นที่ส่งเสริมการเข้าร่วมแข่งขันโต้วาทีในระดับสถาบัน การเข้าร่วมชมรมจึงไม่เพียงช่วยเสริมสร้างทักษะการคิดวิเคราะห์ ความน่าเชื่อถือ และภาพลักษณ์ที่ดีเท่านั้น แต่ยังช่วยกระชับความสัมพันธ์และสร้างเครือข่ายมิตรภาพอันอบอุ่นระหว่างรุ่นพี่และรุ่นน้องภายในคณะอีกด้วย",
+    "facultyName": "สหเวชศาสตร์",
+    "interestNames": [
+      "การศึกษา"
+    ],
+    "socials": {
+      "instagram": "sahavejwathi"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sahavejwathi_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sahavejwathi_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sahavejwathi_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sahavejwathi_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sahavejwathi_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/sahavejwathi_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "CU Tomorrow (ชมรมกิจกรรมและสันทนาการ)",
+    "slug": "cu_tomorrow_club",
+    "bio": "ชมรมกิจกรรมและสันทนาการแห่งคณะครุศาสตร์ที่เต็มไปด้วยกิจกรรมด้านความบันเทิงมากมาย ครบเครื่องเรื่องสันทนาการและนันทนาการ ทั้งการเต้น ตีกลองสันทนาการ และบทบาทพิธีกร",
+    "detailedDescription": "CU Tomorrow คือชมรมที่รวบรวมนิสิตผู้มีใจรักในการแสดงออก กล้าแสดงความสามารถ และเปี่ยมไปด้วยความมั่นใจในการสร้างความสุขผ่านกิจกรรมนันทนาการและสันทนาการในหลากหลายรูปแบบ ไม่ว่าจะเป็นการเต้นสันทนาการ การเต้นเพื่อการแสดง การทำหน้าที่พิธีกรในกิจกรรมต่าง ๆ ตลอดจนการตีกลองสันทนาการที่ช่วยสร้างสีสันและความสนุกสนานให้กับผู้เข้าร่วม\n\nที่นี่ไม่ใช่เพียงแค่ชมรม แต่เป็นพื้นที่แห่งการเรียนรู้ การลงมือทำ และการค้นพบประสบการณ์ใหม่ ๆ ที่เปิดโอกาสให้นิสิตจากทุกคณะทั่วจุฬาลงกรณ์มหาวิทยาลัยได้มาร่วมเล่น เต้น ร่วมแสดง และร่วมสร้างความทรงจำอันน่าประทับใจไปด้วยกัน เพราะสำหรับพวกเรา CU Tomorrow ทุกกิจกรรมคือโอกาสในการเติบโต และทุกเสียงหัวเราะคือความทรงจำที่มีคุณค่า",
+    "facultyName": "ครุศาสตร์",
+    "interestNames": [
+      "ศิลปะ"
+    ],
+    "socials": {
+      "instagram": "cu.tomorr0w",
+      "tiktok": "cu.tomorr0w"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_tomorrow_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_tomorrow_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_tomorrow_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_tomorrow_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_tomorrow_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_tomorrow_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "Mother of Sahavej",
+    "slug": "mother_of_sahavej_club",
+    "bio": "Mother of Sahavej , Mother of the Show",
+    "detailedDescription": "“ Mother of Sahavej , Mother of the Show ” ถึงชื่อชมรมจะเป็นคำว่า Mother แต่คนในชมรมเป็น Father(เกือบ)ทั้งหมด \n  ชมรมนี้ไม่เพียงแต่มาสร้างสีสันต์ให้กับงานหรือกิจกรรมต่างๆเพียงเท่านั้น แต่ยังเป็นชมรมที่เป็นอีกหนึ่งพื้นที่ปลอดภัยให้กับคนในชมรม ไม่จะเป็นในเรื่องของการแสดงออก ความคิด และอื่นๆ อีกทั้งชมรมนี้ยังเปิดโอกาสให้กับคนทุกเพศทุกวัยในคณะสหเวชศาสตร์ ที่มีใจรักที่อยากจะมอบความสุขและเสียงหัวเราะให้แก่ผู้ชม \n ชมรมของเราไม่ได้มีเพียงแต่การเต้นเท่านั้น ยังมีในส่วนของการคิดโชว์ คิดสตอรี่ต่างๆในโชว์ องค์ประกอบในโชว์ รวมถึงบทต่างๆ อีกทั้งยังมีการกำกับทั้งในการแสดง เต้น และแสงเสียงต่างๆ สำหรับใครรู้สึกว่าชอบทำงานเบื้องหลัง ชมรมนี้ตอบโจทย์เช่นกัน \n  สุดท้ายนี้ไม่ว่าคุณจะเป็นใคร แค่เพียงคุณมีใจรัก ที่อยากจะก้าวไปกับเรา ก้าวไปกับ แม่ เพราะเราคือ “Mother of Sahavej,Mother of the Show”",
+    "facultyName": "สหเวชศาสตร์",
+    "interestNames": [
+      "ศิลปะ"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/mother_of_sahavej_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/mother_of_sahavej_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/mother_of_sahavej_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/mother_of_sahavej_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/mother_of_sahavej_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมลีลาศ คณะอักษรศาสตร์ จุฬาฯ / Arts CU DanceSport Club",
+    "slug": "arts_dancesport_club",
+    "bio": "ชมรมลีลาศ คณะอักษรศาสตร์ 💃🏻🩷🪩\nชมรมสำหรับนิสิตอักษรฯ ผู้ที่รักในการเต้น และพร้อมสนุกไปกับการเต้นจังหวะต่าง ๆ ไม่ว่าจะเป็นจังหวะ Standard หรือ Latin American",
+    "detailedDescription": "ชมรมลีลาศ คณะอักษรศาสตร์💃🏻🪩🕺🏻 \nเหมาะกับทุกคนที่มีความสนใจในการเต้นลีลาศจังหวะต่าง ๆ \n⭐️ ชมรมลีลาศอักษร ฯ มีจังหวะการเต้นหลากหลาย ทั้งประเภท standard อย่างจังหวะ Waltz, Tango และ Quick step\nและ ประเภท Latin America อย่างจังหวะ Cha Cha Cha, Rumba และ Jive \n\n⭐️ สมาชิกชมรมลีลาศอักษร ฯ นอกจากจะได้ร่วมแสดงในโชว์ต่าง ๆ มากมาย ทั้งภายในคณะและภายนอกคณะแล้ว ก็ยังสามารถเข้าร่วมการแข่งขัน CU Freshy Games และ Chulalympics ได้อีกด้วย ! 💃🏻🕺🏻🩷\n\n⭐️ ไม่จำเป็นต้องมีพื้นฐานก็สามารถสมัครได้ โดยจะมีสมาชิกของชมรมฝึกซ้อมให้ตั้งแต่ 0 เลยย 🙆🏻‍♀️\n\nติดตามชมรมลีลาศอักษรฯ เพิ่มเติมได้ที่ ig : leelartaksorncu และ TikTok : leelartaksorncu",
+    "facultyName": "อักษรศาสตร์",
+    "interestNames": [
+      "กีฬา",
+      "ศิลปะ"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_dancesport_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_dancesport_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_dancesport_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_dancesport_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_dancesport_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/arts_dancesport_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมผู้นำเชียร์และคัลเลอร์การ์ดแห่งคณะสหเวชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย หรือ AHSCU Cheerclub",
+    "slug": "ahscu_cheer_club",
+    "bio": "พวกเราชมรมเชียร์ประจำคณะสเวชศาสตร์มีหน้าที่นำเสนอความสามัคคี และภาพลักษณ์ที่เข้มแข็งให้แก่คณะ โดยการนำเสนอผ่านทักษะของผู้นำเชียร์และการแสดงคัลเลอร์การ์ด",
+    "detailedDescription": "ชมรมผู้นำเชียร์และคัลเลอร์การ์ด คณะสหเวชศาสตร์ จุฬาฯหรือชมรมเชียร์ เป็นชมรมที่ทำหน้าที่นำเชียร์ ควงธง และแสดงโชว์ต่างๆและร่วมสร้างความประทับใจในงานสำคัญ เช่น พิธีเปิดปฐมนิเทศนิสิตใหม่ งานรับน้อง งานเปิดบ้านสหเวช และงานต่างๆ ในคณะ เสริมสร้างความสามัคคีและสนับสนุนกิจกรรมทั้งภายในและภายนอกคณะ เป็นตัวแทนแสดงศักยภาพและความสามารถของนิสิต พร้อมทั้งช่วยพัฒนาบุคลิกภาพ ความมั่นใจ การทำงานเป็นทีม และสร้างความสัมพันธ์ที่แน่นแฟ้นระหว่างรุ่นพี่รุ่นน้อง",
+    "facultyName": "สหเวชศาสตร์",
+    "interestNames": [
+      "ศิลปะ"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_cheer_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_cheer_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_cheer_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_cheer_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_cheer_club/image4.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมจุฬาฯ สู่ชุมชน (Slumclub)",
+    "slug": "slumclub",
+    "bio": "ชมรมจุฬาฯสู่ชุมชน (Slum Club) มีการจัดกิจกรรมการเรียนรู้ให้กับเด็ก ๆในโรงเรียนที่อยู่ห่างไกล ทั้งความรู้เชิงวิชาการ ความรู้เชิงบูรณาการ และความรู้นอกห้องเรียน ควบคู่กับการลงพื้นที่ทำกิจกรรมร่วมกับชุมชน เพื่อเรียนรู้วิถีชีวิต ภูมิปัญญาท้องถิ่น และสร้างประโยชน์แก่สังคมร่วมกัน",
+    "detailedDescription": "ชมรมที่มีชื่อเต็มว่า “ชมรมจุฬาฯสู่ชุมชน” หรือที่หลายคนรู้จักกันในชื่อ “สลัมคลับ” โดยชมรมของเราเป็นชมรมอาสาที่จะไปสอนหนังสือให้กับเด็ก ๆ ที่ไม่สามารถเข้าถึงแหล่งทรัพยากรการเรียนรู้ได้เท่าที่ควร  โดยจัดกิจกรรมทั้งความรู้เชิงวิชาการ ความรู้เชิงบูรณาการ และความรู้นอกห้องเรียน ควบคู่กับการลงพื้นที่ทำกิจกรรมร่วมกับชุมชน เพื่อเรียนรู้วิถีชีวิต ภูมิปัญญาท้องถิ่น และสร้างประโยชน์แก่สังคมร่วมกัน ทางชมรมจะจัดกิจกรรมขึ้นที่โรงเรียนขนาดเล็กตามจังหวัดต่าง ๆ ทั่วประเทศไทย โดยกิจกรรมจะจัดขึ้น ดังนี้\n1.ค่ายกลาง หรือที่เรียกกันว่า “ค่ายหนาว” ซึ่งจัดขึ้นในช่วงปิดเทอมเล็ก ระยะเวลาประมาณ 13 วัน 12 คืน\n2.ค่ายใหญ่ หรือที่เรียกกันว่า “ค่ายร้อน“ ซึ่งจัดขึ้นในช่วงปิดเทอมใหญ่ ระยะเวลาประมาณ 13 วัน 12 คืน",
+    "facultyName": "ฝ่ายพัฒนาสังคมและบำเพ็ญประโยชน์ อบจ.",
+    "interestNames": [
+      "พัฒนาชุมชน"
+    ],
+    "socials": {
+      "instagram": "slumclub_chula",
+      "tiktok": "slumclub_chula"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/slumclub/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/slumclub/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/slumclub/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/slumclub/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/slumclub/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/slumclub/image5.jpg"
+    ]
+  },
+  {
+    "name": "CU Band (ชมรมดนตรีสากล สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย)",
+    "slug": "cu_band_club",
+    "bio": "CU Band หรือชมรมดนตรีสากล สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย ก่อตั้งขึ้นเมื่อปี พ.ศ. 2498 และเป็นวง Big Band วงแรกของจุฬาฯ โดยมีการแสดงตลอดทั้งปีเพื่อส่งมอบความสุขผ่านเสียงดนตรี",
+    "detailedDescription": "CU Band หรือชมรมดนตรีสากล สโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่นิสิตจัดทำการแสดงในรูปแบบของ “Big Band” โดยถูกก่อตั้งในปี พ.ศ. 2498 เป็นวงดนตรี Big Band วงแรกของจุฬาลงกรณ์มหาวิทยาลัย\n\n⭐️ ทางชมรมนั้นมีงานแสดงให้รับชมตลอดทั้งปี และในทุก ๆ ปีจะมีคอนเสิร์ตใหญ่ของชมรมทั้งหมด 2 ครั้ง ได้แก่ \n1. คอนเสิร์ตเปิดตัวสมาชิกใหม่ (Voice of Angels) 🎼\n2. คอนเสิร์ตประจำปี 🎶\n\n🔎 Our Vision\nเป็นพื้นที่ให้ชาวจุฬาฯ ทุกคน ทั้งในและนอกชมรมได้มีความสุขจากดนตรีและเสียงเพลง และส่งเสริมให้สมาชิกของชมรมได้พัฒนาศักยภาพและทักษะต่าง ๆ เพื่อเติบโตสู่การเป็นบุคลากรที่มีคุณภาพของสังคม\n\n🎯 Our Mission\n🌟 ส่งมอบความสุขให้ผู้ชมผ่านการแสดงดนตรีที่มีคุณภาพ\n🌟 เป็นพื้นที่ในการพัฒนาศักยภาพและฝึกฝนทักษะให้แก่สมาชิกของชมรม\n\nCU Band ประกอบไปด้วย 5 พาร์ท ดังนี้\n1. นักร้อง (Vocalist) 🎙️\n2. นักดนตรี (Musician)🥁\n3. พิธีกร (MC) 🎤\n4. แสงเสียง (Light & Sound) 🎼\n5. ประชาสัมพันธ์ (PR) 📢",
+    "facultyName": "ฝ่ายศิลปะวัฒนธรรม อบจ.",
+    "interestNames": [
+      "ดนตรี"
+    ],
+    "socials": {
+      "instagram": "cuband_official",
+      "tiktok": "cuband_official"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_band_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_band_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_band_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_band_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_band_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_band_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "AHSCU BAND",
+    "slug": "ahscu_band_club",
+    "bio": "ชมรมดนตรีสากล คณะสหเวชศาสตร์",
+    "detailedDescription": "ชมรมดนตรีสากล นิสิตคณะสหเวชศาสตร์ ชมรมสำหรับคนที่มีใจรักทางด้านดนตรี เป็นเวทีที่เปิดโอกาสให้นิสิตได้แสดงศักยภาพทางด้านดนตรี ขึ้นโชว์ในงานและกิจกรรมต่างๆ\nลักษณะวง : วงสตริงคอมโบ 1 วง/ 1 ชั้นปี \nรับสมัคร : รับสมัคร Audition เข้าวงในช่วงเวลาเปิดภาคเรียน ติดตามรายละเอียดได้ทาง IG : ahscuband",
+    "facultyName": "สหเวชศาสตร์",
+    "interestNames": [
+      "ดนตรี"
+    ],
+    "socials": {
+      "instagram": "ahscuband"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_band_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_band_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_band_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_band_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_band_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ahscu_band_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "Economics’ Central Frequency (ECF)",
+    "slug": "ecf_club",
+    "bio": "ECF เป็นชมรมที่เชื่อว่าเศรษฐศาสตร์ไม่ควรเป็นเรื่องไกลตัว จึงมุ่งเปลี่ยนประเด็นเศรษฐศาสตร์ที่ซับซ้อนให้เป็นเรื่องที่ทุกคนเข้าใจได้ ผ่านการวิเคราะห์ สรุปข่าว และการสื่อสารอย่างสร้างสรรค์ พร้อมสร้างพื้นที่ให้นิสิตได้พัฒนาทักษะทั้งด้านวิชาการและการทำงานจริง",
+    "detailedDescription": "ECF เป็นชมรมด้านเศรษฐศาสตร์ที่มุ่งสร้างพื้นที่การเรียนรู้สำหรับผู้ที่สนใจเศรษฐศาสตร์ การเงิน และประเด็นทางเศรษฐกิจร่วมสมัย โดยมีเป้าหมายในการทำให้เรื่องเศรษฐกิจที่ซับซ้อนกลายเป็นเรื่องที่เข้าใจง่าย เข้าถึงได้ และเชื่อมโยงกับชีวิตประจำวัน\nECF เชื่อว่าการเรียนรู้เศรษฐศาสตร์ไม่ควรจำกัดอยู่เพียงในห้องเรียน แต่ควรเกิดจากการติดตามเหตุการณ์จริง การตั้งคำถาม การค้นคว้าข้อมูล และการแลกเปลี่ยนความคิดเห็น สมาชิกจึงจะได้ฝึกคิด วิเคราะห์ และอธิบายประเด็นเศรษฐกิจจากเหตุการณ์ที่เกิดขึ้นจริง ทั้งในและต่างประเทศ พร้อมเรียนรู้การนำเสนอข้อมูลให้ถูกต้อง ชัดเจน และเหมาะสมกับผู้รับสาร\nกิจกรรมหลักของชมรมประกอบด้วยการจัดทำคอนเทนต์ด้านเศรษฐศาสตร์และการเงิน เช่น การสรุปข่าวเศรษฐกิจ การอธิบายแนวคิดทางเศรษฐศาสตร์ผ่านกรณีศึกษา การนำเสนอข้อมูลในรูปแบบที่เข้าใจง่าย รวมถึงการผลิตสื่อบนแพลตฟอร์มออนไลน์ นอกจากนี้ ยังมีการจัดกิจกรรมเสริม เช่น การบรรยายหรือเสวนาจากวิทยากร การแลกเปลี่ยนความรู้ระหว่างสมาชิก และกิจกรรมที่ส่งเสริมการเรียนรู้ด้านเศรษฐศาสตร์ในรูปแบบที่หลากหลาย\nการเข้าร่วมชมรมเปิดโอกาสให้สมาชิกได้พัฒนาทักษะที่สามารถนำไปใช้ได้จริง ไม่ว่าจะเป็นการค้นคว้าและวิเคราะห์ข้อมูล การเขียนเชิงวิชาการและการเขียนเพื่อการสื่อสาร การเล่าเรื่อง (Storytelling) การออกแบบสื่อ การสร้างคอนเทนต์ การประชาสัมพันธ์ การทำงานเป็นทีม การบริหารจัดการโครงการ และการสื่อสารกับผู้คนผ่านช่องทางออนไลน์\nไม่ว่าจะเป็นผู้ที่มีพื้นฐานด้านเศรษฐศาสตร์อยู่แล้ว หรือเป็นผู้ที่เพิ่งเริ่มสนใจ ECF ต้อนรับทุกคนที่มีความกระตือรือร้นในการเรียนรู้ พร้อมเปิดรับความคิดเห็นใหม่ ๆ และต้องการมีส่วนร่วมในการสร้างสื่อที่ช่วยให้ความรู้ด้านเศรษฐศาสตร์เข้าถึงผู้คนได้มากขึ้น",
+    "facultyName": "เศรษฐศาสตร์",
+    "interestNames": [
+      "วิชาการ"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ecf_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ecf_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ecf_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/ecf_club/image3.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมค่ายอาสาพัฒนาชาวไทยภูเขา จุฬาลงกรณ์มหาวิทยาลัย (Hill Tribe Club Chula)",
+    "slug": "hill_tribe_club",
+    "bio": "ชมรมค่ายอาสาพัฒนาชาวไทยภูเขา จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่มีวัตถุประสงค์เพื่อเรียนรู้และศึกษาปัญหาของกลุ่มชนชาติพันธุ์ในพื้นที่ต่าง ๆ ผ่านกิจกรรมต่าง ๆ ตลอดปีการศึกษา",
+    "detailedDescription": "ชมรมค่ายอาสาพัฒนาชาวไทยภูเขา จุฬาลงกรณ์มหาวิทยาลัย เป็นชมรมที่มีวัตถุประสงค์เพื่อเรียนรู้และศึกษาปัญหาของกลุ่มชนชาติพันธุ์ในพื้นที่ต่าง ๆ รวมถึงเป็นพื้นที่และช่องทางสำหรับช่วยเหลือและสนับสนุนคุณภาพชีวิตของกลุ่มชนชาติพันธุ์ อีกทั้งยังเปิดโอกาสให้นิสิตจุฬาลงกรณ์มหาวิทยาลัยที่สนใจการทำกิจกรรมอาสาและชนชาติพันธุ์\nภายในชมรมมีกิจกรรมต่าง ๆ มากมาย ทั้งค่ายอาสาประจำปีการศึกษาที่จะจัดขึ้นทุกเดือนพฤษภาคมและเดือนธันวาคมในชุมชนกลุ่มชนชาติพันธุ์ต่าง ๆ เพื่อศึกษาวิถีชีวิตและปัญหาของกลุ่มชนชาติพันธุ์อย่างใกล้ชิด, งานเสวนาเกี่ยวกับชนชาติพันธุ์, กิจกรรม HTC Campaign ที่เป็นการสานต่อการแก้ไขปัญหาของชนชาติพันธุ์ที่ได้ศึกษาจากค่ายประจำปี ฯลฯ",
+    "facultyName": "ฝ่ายพัฒนาสังคมและบำเพ็ญประโยชน์ อบจ.",
+    "interestNames": [
+      "พัฒนาชุมชน"
+    ],
+    "socials": {
+      "instagram": "htc.chula",
+      "tiktok": "htc.chula"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/hill_tribe_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/hill_tribe_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/hill_tribe_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/hill_tribe_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/hill_tribe_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/hill_tribe_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมค่ายอาสาสมัครสโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย Voluntary Club Of the student Union Chulalongkorn University (VSCU)",
+    "slug": "vscu_club",
+    "bio": "ชมรมค่ายอาสาสมัครสโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย มุ่งเปิดโอกาสให้นิสิตจากหลากหลายคณะร่วมทำกิจกรรมพัฒนาชุมชนและสร้างประสบการณ์การเรียนรู้นอกห้องเรียนร่วมกัน",
+    "detailedDescription": "ชมรมค่ายอาสาสมัครสโมสรนิสิตจุฬาลงกรณ์มหาวิทยาลัย หรือค่ายสจม. เป็นชมรมค่ายอาสาสมัครแห่งแรกที่ก่อตั้งขึ้นใน รั้วจุฬาฯ เมื่อปี พ.ศ.2502 โดยศ.ดร.วิจิตร ศรีสอ้าน รวมนิสิตร่วมอุดมการณ์จากต่างคณะและต่างชั้นปีไปร่วม สร้างสิ่งปลูกสร้าง อย่างห้องสมุด อาคารเรียน ห้องพักครู และอื่น ๆ ที่โรงเรียนต้องการ รวมไปถึงการแลกเปลี่ยน ทั้งประสบการณ์และความทรงจำขณะอยู่บนค่ายร่วมกับเพื่อนนิสิตและคนในชุมชน",
+    "facultyName": "ฝ่ายพัฒนาสังคมและบำเพ็ญประโยชน์ อบจ.",
+    "interestNames": [
+      "พัฒนาชุมชน"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/vscu_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/vscu_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/vscu_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/vscu_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/vscu_club/image4.jpg"
+    ]
+  },
+  {
+    "name": "เต้นแห่งจุฬาลงกรณ์มหาวิทยาลัย",
+    "slug": "cu_dance_club",
+    "bio": "Chulalongkorn University Dance Club (CUDC) คือชมรมเต้นแห่งจุฬาลงกรณ์มหาวิทยาลัย ที่เปิดโอกาสให้นิสิตทุกคณะได้พัฒนาทักษะการเต้น สร้างมิตรภาพ และร่วมแสดงในกิจกรรมสำคัญของมหาวิทยาลัยตลอดทั้งปี",
+    "detailedDescription": "Chulalongkorn University Dance Club (CUDC) คือชมรมเต้นแห่งจุฬาลงกรณ์มหาวิทยาลัยที่รวบรวมนิสิตผู้มีใจรักในการเต้นจากทุกคณะและทุกระดับประสบการณ์ ทุกคนสามารถเข้ามาเรียนรู้และพัฒนาทักษะไปพร้อมกันได้\n\nตลอดทั้งปี ชมรมมีการจัดกิจกรรมและการแสดงในหลากหลายโอกาส ทั้งกิจกรรมต้อนรับนิสิตใหม่ การแสดงประจำปีของชมรม งานบอลประเพณี งาน Open House รวมถึงการแสดงในกิจกรรมต่าง ๆ ของมหาวิทยาลัยและหน่วยงานภายนอก นอกจากนี้ยังมีกิจกรรม Workshop และการฝึกซ้อมเพื่อพัฒนาศักยภาพของสมาชิกอย่างต่อเนื่อง\n\nCUDC ไม่ได้เป็นเพียงพื้นที่สำหรับการเต้น แต่ยังเป็นพื้นที่ที่สมาชิกได้สร้างมิตรภาพ เรียนรู้การทำงานเป็นทีม ฝึกความรับผิดชอบ และเก็บเกี่ยวประสบการณ์ผ่านการทำกิจกรรมร่วมกัน จนเกิดเป็นความทรงจำที่มีคุณค่าตลอดช่วงชีวิตในรั้วจามจุรี",
+    "facultyName": "ฝ่ายศิลปะวัฒนธรรม อบจ.",
+    "interestNames": [
+      "ศิลปะ"
+    ],
+    "socials": {
+      "instagram": "cudanceclub_official"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_dance_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_dance_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_dance_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_dance_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_dance_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cu_dance_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "อักษราวาทิต",
+    "slug": "aksarawathit_club",
+    "bio": "ชมรมดนตรีไทย คณะอักษรศาสตร์",
+    "detailedDescription": "ชมรมดนตรีไทย คณะอักษรศาสตร์ หรือวง “อักษราวาทิต” เป็นชมรมที่มีประวัติความเป็นมายาวนานควบคู่กับการก่อตั้งคณะอักษรศาสตร์ ปัจจุบันวงอักษราวาทิตมีส่วนร่วมในกิจกรรมของคณะอักษรศาสตร์อย่างสม่ำเสมอตลอดปีการศึกษา วงอักษราวาทิตรับสมัครสมาชิกจากทุกคณะและทุกชั้นปี แม้ว่าจะไม่มีพื้นฐานการเล่นดนตรีไทยมาก่อนก็สามารถเข้าร่วมได้ ห้องชมรมอยู่ที่ห้อง 149 ชั้น M1 อาคารมหาจักรีสิรินธร คณะอักษรศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย",
+    "facultyName": "อักษรศาสตร์",
+    "interestNames": [
+      "ดนตรี"
+    ],
+    "socials": {},
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/aksarawathit_club/logo.jpg",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/aksarawathit_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/aksarawathit_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/aksarawathit_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/aksarawathit_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/aksarawathit_club/image5.jpg"
+    ]
+  },
+  {
+    "name": "ชมรมอาสาพัฒนาเพื่อเด็กด้อยโอกาสแห่งจุฬาลงกรณ์มหาวิทยาลัย",
+    "slug": "cvvc_club",
+    "bio": "ชมรมอาสาพัฒนาเพื่อเด็กด้อยโอกาสแห่งจุฬาลงกรณ์มหาวิทยาลัย (Chula Volunteers for Vulnerable Children Club) เป็นองค์กรกิจกรรมนิสิตที่มุ่งเน้นการดำเนินกิจกรรมค่ายอาสาเพื่อช่วยเหลือ ส่งเสริมการเรียนรู้ และขยายโอกาสให้แก่เด็กและเยาวชนที่ขาดแคลน โดยมีจุดมุ่งหมายสำคัญในการเสริมสร้าง \"ความเข้มแข็งทางจิตใจ\" เพื่อเป็นรากฐานให้พวกเขาสามารถเติบโตและพัฒนาตนเองได้อย่างมีคุณภาพและยั่งยืน",
+    "detailedDescription": "ชมรมอาสาพัฒนาเพื่อเด็กด้อยโอกาสแห่งจุฬาลงกรณ์มหาวิทยาลัย (Chula Volunteers for Vulnerable Children Club) มุ่งเน้นดำเนินกิจกรรมค่ายอาสาเพื่อส่งมอบความสุขและขยายโอกาสการเรียนรู้แก่เด็กและเยาวชน โดยเราให้ความสำคัญกับการบูรณาการทางวิชาการควบคู่ไปกับความสนุกสนาน ที่สำคัญคือการเสริมสร้าง \"ความเข้มแข็งด้านจิตใจ\" ให้กับเด็กและเยาวชน เพราะเราเชื่อว่าภายใต้ข้อจำกัดในชีวิตที่พวกเขาไม่สามารถเลือกได้ จิตใจที่เข้มแข็งจะเป็นรากฐานสำคัญที่สุดที่จะนำพาพวกเขาฝ่าฟันอุปสรรคและเติบโตได้อย่างมั่นคง\n\nกิจกรรมหลักตลอดปีของชมรม ประกอบด้วย\n1. ค่ายเติมรัก ถักทอฝัน\nค่ายอาสาระยะสั้นที่เปิดโอกาสให้นิสิตจุฬาฯ ได้สัมผัส \"ก้าวแรกของความเป็นค่ายอาสา\" มาร่วมส่งต่อรอยยิ้มและความรู้ให้เด็กๆ ผ่านกิจกรรมการเรียนรู้เชิงบูรณาการ พร้อมเปิดโลกการเรียนรู้นอกห้องเรียนด้วยการลงพื้นที่ศึกษาวิถีชีวิตชุมชนและบริบททางสังคมที่มีอิทธิพลต่อการเติบโตของเด็กๆ\n2. ค่ายขอบใจและค่ายพี่จุฬาฯ อาสาเพื่อน้อง\nค่ายอาสาระยะยาวประจำช่วงปิดภาคเรียนที่ 1 และ 2 ของทุกปี ที่พวกเราจะออกเดินทางสู่โรงเรียนในพื้นที่ห่างไกล เพื่อพัฒนาโรงเรียนและจัดกิจกรรมการเรียนรู้เชิงบูรณาการให้แก่เด็กๆ ควบคู่ไปกับการ \"เสริมสร้างความเข้มแข็งทางจิตใจ\" เพื่อจุดประกายให้เด็กๆ ได้เห็นคุณค่าในตัวเองและมีพลังในการก้าวผ่านทุกอุปสรรคในชีวิต พร้อมกิจกรรมลงพื้นที่เรียนรู้วิถีชีวิตชุมชน เพื่อเข้าใจสภาพบริบทสังคมที่มีอิทธิพลต่อการเติบโตของเด็กๆ อย่างแท้จริง\n3. กิจกรรมหนึ่งวัน ปันสุข\nกิจกรรมจิตอาสาแบบ 1 วันเต็ม (One Day Trip) ที่มุ่งส่งต่อความสุขและรอยยิ้มผ่านกิจกรรมการเรียนรู้เชิงบูรณาการที่ผสานความรู้และความสนุกสนานเข้าด้วยกัน พร้อมส่งมอบสิ่งของบริจาคเพื่อเติมเต็มคุณภาพชีวิตให้แก่เด็กและเยาวชนในเขตกรุงเทพมหานครและปริมณฑล",
+    "facultyName": "ฝ่ายพัฒนาสังคมและบำเพ็ญประโยชน์ อบจ.",
+    "interestNames": [
+      "พัฒนาชุมชน"
+    ],
+    "socials": {
+      "instagram": "cvvc.officail"
+    },
+    "image": "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cvvc_club/logo.png",
+    "gallery": [
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cvvc_club/image1.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cvvc_club/image2.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cvvc_club/image3.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cvvc_club/image4.jpg",
+      "https://pub-e132e6542f3c43bb8734748a162bb15d.r2.dev/clubs/cvvc_club/image5.jpg"
+    ]
+  }
+]
