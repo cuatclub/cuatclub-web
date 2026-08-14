@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { PasswordInput } from "./PasswordForm";
+import { PasswordInput } from "./PasswordInput";
 import { cn } from "@/lib/utils";
 
 const meta = {

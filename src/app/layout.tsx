@@ -1,7 +1,9 @@
 import { type Metadata } from "next";
 import { IBM_Plex_Sans_Thai, Sarabun } from "next/font/google";
+import { headers } from "next/headers";
 import "@/styles/globals.css";
 
+import { auth } from "@/server/auth";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Navbar } from "@/components/Navbar";
 
@@ -36,11 +38,17 @@ const plexThai = IBM_Plex_Sans_Thai({
   variable: "--font-ibm-plex",
 });
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const session = await auth.api.getSession({ headers: await headers() });
+
   return (
-    <html lang="en" className={`${sarabun.variable} ${plexThai.variable}`}>
+    <html lang="th" className={`${sarabun.variable} ${plexThai.variable}`}>
       <body>
-        <Navbar />
+        <Navbar
+          isLoggedIn={!!session}
+          userName={session?.user.name}
+          userEmail={session?.user.email}
+        />
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
