@@ -180,7 +180,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => router.push("/register")}
-                  className="text-primary cursor-pointer font-semibold"
+                  className="text-primary cursor-pointer font-medium"
                 >
                   ลงทะเบียน
                 </button>
