@@ -177,9 +177,13 @@ export default function Login() {
 
               <p className="text-foreground-secondary text-center text-sm">
                 ยังไม่มีบัญชี?{" "}
-                <a href="#" className="text-primary font-semibold">
+                <button
+                  type="button"
+                  onClick={() => router.push("/register")}
+                  className="text-primary cursor-pointer font-semibold"
+                >
                   ลงทะเบียน
-                </a>
+                </button>
               </p>
             </form>
           </CardContent>
