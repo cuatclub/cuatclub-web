@@ -1,0 +1,71 @@
+name: Delete merged branch
+
+# Only run when a PR is closed (this fires both for merges and for plain closes,
+# so we filter on `merged == true` inside the job).
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  # Needed to delete the branch via the API/gh CLI.
+  contents: write
+  # Needed to read PR metadata (head ref, merged status).
+  pull-requests: read
+
+jobs:
+  delete-branch:
+    # Skip entirely unless the PR was actually merged (not just closed).
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete source branch if it matches an allowed prefix
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          # Head ref is the source branch of the PR (e.g. "feat/login").
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          # True if the head branch lives in a fork, not this repository.
+          IS_FORK: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
+        run: |
+          set -euo pipefail
+
+          # Never touch branches from forks - we don't own them, and the
+          # default GITHUB_TOKEN has no permission to delete them anyway.
+          if [ "$IS_FORK" = "true" ]; then
+            echo "Head branch is in a fork ($HEAD_REF). Skipping."
+            exit 0
+          fi
+
+          # Hard safety net: never delete protected/base branches, regardless
+          # of prefix matching below.
+          case "$HEAD_REF" in
+            dev|main)
+              echo "Refusing to delete protected branch: $HEAD_REF"
+              exit 0
+              ;;
+          esac
+
+          # Only delete branches whose name starts with one of the allowed
+          # prefixes. Anything else (e.g. "hotfix/", "release/") is left alone.
+          case "$HEAD_REF" in
+            feat/*|fix/*|refactor/*|chore/*)
+              echo "Branch '$HEAD_REF' matches an allowed prefix. Deleting..."
+              ;;
+            *)
+              echo "Branch '$HEAD_REF' does not match an allowed prefix. Skipping."
+              exit 0
+              ;;
+          esac
+
+          # Idempotent delete: if the branch is already gone (e.g. deleted via
+          # the "Delete branch" button on GitHub, or by a previous run), the
+          # API/gh call fails with a 422/404. Treat that as success rather
+          # than failing the workflow.
+          if gh api \
+              --method DELETE \
+              -H "Accept: application/vnd.github+json" \
+              "/repos/${REPO}/git/refs/heads/${HEAD_REF}"; then
+            echo "Deleted branch: $HEAD_REF"
+          else
+            echo "Branch '$HEAD_REF' was already deleted (or delete failed non-fatally). Continuing."
+          fi
