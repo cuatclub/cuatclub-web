@@ -2,6 +2,40 @@ import { Resend } from "resend";
 import { z } from "zod";
 import { env } from "@/config/env";
 
+/**
+ * CONTRACT REQUIREMENTS HANDED OFF TO #69 / #108
+ *
+ * None of the following can be enforced by code inside this module (#68) — they are written
+ * down here so the requirement is not silently assumed by whoever builds the consumer.
+ *
+ * (a) GET /register MUST be non-consuming [#108]. Email security gateways (Microsoft Defender
+ *     Safe Links, Proofpoint, Mimecast) auto-GET every URL in an inbound message within seconds
+ *     of delivery, before any human opens it. If validation consumes on GET, the scanner burns
+ *     the single-use code and the real recipient sees "already used". The code may be READ from
+ *     the query string to prefill the form; it must only be checked and consumed on the
+ *     subsequent POST.
+ * (b) Invite codes MUST carry a server-side expiry [#69 issues it, #108 checks it].
+ *     Recommended default 48h. Expiry is a property of the code, never of the send: an expired
+ *     code is rejected regardless of whether the email was ever successfully delivered.
+ *     Re-triggering a failed send with the SAME code must NOT extend expiresAt, or repeated
+ *     retries silently mint an immortal credential. If already expired, issue a fresh code.
+ *     NOTE: the client has not yet ratified the TTL — record it as the recommendation.
+ * (c) OPS: Resend open-and-click tracking MUST be disabled for the sending domain. Resend link
+ *     tracking rewrites every href into a Resend redirect URL, so the code would transit a
+ *     third party and every gateway prefetch would be logged there. It is a per-domain
+ *     dashboard setting, not a per-call API flag, so no code change can guarantee it. Requires
+ *     human verification, stated in the PR description.
+ * (d) /register MUST send Referrer-Policy: no-referrer or same-origin [#108]. next.config.js
+ *     currently defines no headers() function at all, so the default applies. Without it, any
+ *     third-party resource the register page loads receives the full referring URL —
+ *     including the invite code — in the Referer header.
+ *
+ * RESIDUAL RISK ACCEPTED: even with (a)-(d), a code in a query string persists in browser
+ * history, in Vercel/edge/CDN access logs (which capture full request lines including query
+ * strings), and in intermediate proxy logs. The expiry in (b) is the primary mitigation for
+ * that persistence.
+ */
+
 const resend = new Resend(env.RESEND_API_KEY);
 
 const PROVIDER_NAME = "resend";
