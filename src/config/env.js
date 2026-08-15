@@ -45,7 +45,7 @@ export const env = createEnv({
     // If APP_BASE_URL ever diverges from BETTER_AUTH_URL, that origin must also be added to
     // trustedOrigins in src/server/auth.ts (~line 31) or better-auth will reject requests
     // originating from links in the email.
-    APP_BASE_URL: process.env.APP_BASE_URL ?? process.env.BETTER_AUTH_URL,
+    APP_BASE_URL: process.env.APP_BASE_URL || process.env.BETTER_AUTH_URL,
     NEXT_PUBLIC_BETTER_AUTH_URL:
       process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? process.env.BETTER_AUTH_URL,
     DATABASE_URL: process.env.DATABASE_URL,

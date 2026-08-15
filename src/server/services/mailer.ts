@@ -44,9 +44,9 @@ const REGISTER_PATH = "/register";
 const INVITE_CODE_PARAM = "inviteCode";
 
 export class MailValidationError extends Error {
-  readonly field: "to" | "inviteCode";
+  readonly field: "to" | "inviteCode" | "clubName";
 
-  constructor(field: "to" | "inviteCode", message: string) {
+  constructor(field: "to" | "inviteCode" | "clubName", message: string) {
     super(message);
     this.name = "MailValidationError";
     this.field = field;
@@ -273,7 +273,7 @@ export async function sendClubInviteCodeEmail(
 
   const clubNameResult = clubNameSchema.safeParse(params.clubName);
   if (!clubNameResult.success) {
-    throw new MailValidationError("to", "Invalid club name.");
+    throw new MailValidationError("clubName", "Invalid club name.");
   }
 
   const to = toResult.data;
@@ -300,12 +300,11 @@ export async function sendClubInviteCodeEmail(
     });
 
     if (res.error) {
-      const statusCode = res.error.statusCode ?? undefined;
-      const retryable = statusCode === 429 || (statusCode !== undefined && statusCode >= 500);
+      const statusCode = res.error.statusCode;
+      const retryable = statusCode == null || statusCode === 429 || statusCode >= 500;
       console.error("mailer: resend delivery failed", {
         name: res.error.name,
         statusCode: res.error.statusCode,
-        message: res.error.message,
         recipient: maskEmail(to),
       });
       throw new MailDeliveryError(

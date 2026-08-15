@@ -159,6 +159,22 @@ describe("sendClubInviteCodeEmail", () => {
     });
   });
 
+  describe("club name rejection", () => {
+    const rejectionCases: Array<[string, string]> = [
+      ["line break", "Sample\nClub"],
+      ["too long", "a".repeat(121)],
+    ];
+
+    it.each(rejectionCases)("rejects %s", async (_label, clubName) => {
+      await expect(
+        sendClubInviteCodeEmail({ to: VALID_TO, inviteCode: VALID_CODE, clubName })
+      ).rejects.toSatisfy(
+        (err: unknown) => err instanceof MailValidationError && err.field === "clubName"
+      );
+      expect(mockSend).not.toHaveBeenCalled();
+    });
+  });
+
   describe("escaping / XSS", () => {
     // Plan test 10 (an inviteCode containing `<script>`, `"`, `'`, `&`, expected to render
     // escaped in the HTML) is not exercisable through the public API: the inviteCode regex
