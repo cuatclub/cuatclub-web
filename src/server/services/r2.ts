@@ -2,9 +2,8 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { randomUUID } from "crypto";
 import { env } from "@/env";
 
-export const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
-const ALLOWED_TYPES = ALLOWED_IMAGE_TYPES;
-export const IMAGE_EXT_MAP: Record<string, string> = {
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
+const EXT_MAP: Record<string, string> = {
 	"image/jpeg": "jpg",
 	"image/png": "png",
 	"image/webp": "webp",
@@ -34,7 +33,7 @@ export async function uploadImage(
 	if (!ALLOWED_TYPES.includes(contentType as (typeof ALLOWED_TYPES)[number])) {
 		throw new Error(`Unsupported image type: ${contentType}`);
 	}
-	const ext = IMAGE_EXT_MAP[contentType] ?? "jpg";
+	const ext = EXT_MAP[contentType] ?? "jpg";
 	const objectKey = key ?? `images/${randomUUID()}.${ext}`;
 
 	await client.send(

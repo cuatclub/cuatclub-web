@@ -10,10 +10,11 @@ import { interest } from "@/server/db/interest";
 import { interestXOrganization } from "@/server/db/interestXOrganization";
 import { organization } from "@/server/db/organization";
 import { auth } from "@/utils/auth";
-import type { ClubSocials } from "@/server/scripts/lib/club-import-shared";
 
 const JSON_PATH = process.argv[2] ?? join(process.cwd(), "data.json");
 const PLACEHOLDER_PASSWORD = "ClubImport1234!";
+
+type ClubSocials = { instagram?: string; facebook?: string; tiktok?: string; line?: string };
 
 type CleanClub = {
 	name: string;
