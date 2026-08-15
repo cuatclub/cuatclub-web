@@ -15,11 +15,10 @@ import { env } from "@/config/env";
  *     the query string to prefill the form; it must only be checked and consumed on the
  *     subsequent POST.
  * (b) Invite codes MUST carry a server-side expiry [#69 issues it, #108 checks it].
- *     Recommended default 48h. Expiry is a property of the code, never of the send: an expired
- *     code is rejected regardless of whether the email was ever successfully delivered.
+ *     TTL is 14 days (client-ratified). Expiry is a property of the code, never of the send: an
+ *     expired code is rejected regardless of whether the email was ever successfully delivered.
  *     Re-triggering a failed send with the SAME code must NOT extend expiresAt, or repeated
  *     retries silently mint an immortal credential. If already expired, issue a fresh code.
- *     NOTE: the client has not yet ratified the TTL — record it as the recommendation.
  * (c) OPS: Resend open-and-click tracking MUST be disabled for the sending domain. Resend link
  *     tracking rewrites every href into a Resend redirect URL, so the code would transit a
  *     third party and every gateway prefetch would be logged there. It is a per-domain
@@ -39,9 +38,11 @@ import { env } from "@/config/env";
 const resend = new Resend(env.RESEND_API_KEY);
 
 const PROVIDER_NAME = "resend";
-const SUBJECT = "Your CUATClub invitation code";
+const SUBJECT = "รหัสเชิญเข้าร่วม CUatClub ของคุณ";
 const REGISTER_PATH = "/register";
 const INVITE_CODE_PARAM = "inviteCode";
+const LOGO_PATH = "/images/logo-email.png";
+const FONT_STACK = "'IBM Plex Sans Thai', 'Sarabun', Tahoma, Arial, sans-serif";
 
 export class MailValidationError extends Error {
   readonly field: "to" | "inviteCode" | "clubName";
@@ -128,20 +129,24 @@ function buildRegisterUrl(inviteCode: string): string {
   return url.toString();
 }
 
-function renderHtml(inviteCodeHtml: string, greetingNameHtml: string, registerUrlHtml: string) {
+function buildLogoUrl(): string {
+  return new URL(LOGO_PATH, env.APP_BASE_URL).toString();
+}
+
+function renderHtml(inviteCodeHtml: string, registerUrlHtml: string, logoUrlHtml: string) {
   return `<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="th" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Your CUATClub invitation code</title>
+<title>รหัสเชิญเข้าร่วม CUatClub ของคุณ</title>
 </head>
 <body style="margin:0; padding:0; background-color:#f0f0f0; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;">
 
   <!-- Preheader (hidden, shows in inbox preview) -->
   <div style="display:none; max-height:0; max-width:0; overflow:hidden; opacity:0; mso-hide:all; font-size:1px; line-height:1px; color:#f0f0f0;">
-    Your CUATClub invitation code is inside. It can only be used once, so keep it safe.
+    รหัสเชิญเข้าร่วม CUatClub ของคุณอยู่ในอีเมลนี้ ใช้งานได้เพียงครั้งเดียว
   </div>
   <!-- Spacer to push preheader text away from visible content in some clients -->
   <div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">
@@ -152,20 +157,16 @@ function renderHtml(inviteCodeHtml: string, greetingNameHtml: string, registerUr
     <tr>
       <td align="center" style="padding:24px 16px;">
 
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#ffffff; border:1px solid #ececec;">
-
-          <!-- Header band -->
-          <tr>
-            <td align="center" style="background-color:#dd598c; padding:28px 24px;">
-              <span style="font-family:Arial, Helvetica, sans-serif; font-size:22px; line-height:28px; font-weight:700; color:#ffffff; letter-spacing:0.5px;">CUATClub</span>
-            </td>
-          </tr>
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#ffffff;">
 
           <!-- Body -->
           <tr>
-            <td style="padding:36px 40px 8px 40px; font-family:Arial, Helvetica, sans-serif;">
-              <p style="margin:0 0 4px 0; font-size:14px; line-height:20px; color:#595959;">Hi ${greetingNameHtml},</p>
-              <h1 style="margin:0; font-size:20px; line-height:28px; font-weight:700; color:#0a0a0a;">Here is your invitation code</h1>
+            <td style="padding:40px 40px 8px 40px; font-family:${FONT_STACK};">
+              <img src="${logoUrlHtml}" width="91" height="48" alt="CUatClub" style="display:block; margin:0 0 20px 0; border:0; outline:none;" />
+              <h1 style="margin:0; font-size:20px; line-height:32px; font-weight:700; color:#0a0a0a;">นี่คือรหัสเชิญเข้าร่วมของคุณ</h1>
+              <p style="margin:12px 0 0 0; font-size:14px; line-height:23px; color:#595959;">
+                กรอกรหัสนี้บนหน้าลงทะเบียนเพื่อเริ่มใช้งานบัญชีของคุณ
+              </p>
             </td>
           </tr>
 
@@ -174,8 +175,8 @@ function renderHtml(inviteCodeHtml: string, greetingNameHtml: string, registerUr
             <td align="center" style="padding:24px 40px 8px 40px;">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td align="center" style="background-color:#f8dee8; border:2px solid #dd598c; padding:18px 32px;">
-                    <span style="font-family:'Courier New', Courier, monospace; font-size:32px; line-height:38px; font-weight:700; letter-spacing:6px; color:#0a0a0a;">${inviteCodeHtml}</span>
+                  <td align="center" style="background-color:rgba(248,222,232,0.5); border-radius:6px; padding:18px 64px;">
+                    <span style="font-family:${FONT_STACK}; font-size:32px; line-height:38px; font-weight:700; color:#dd598c;">${inviteCodeHtml}</span>
                   </td>
                 </tr>
               </table>
@@ -184,9 +185,9 @@ function renderHtml(inviteCodeHtml: string, greetingNameHtml: string, registerUr
 
           <!-- Instructions -->
           <tr>
-            <td align="center" style="padding:16px 40px 0 40px; font-family:Arial, Helvetica, sans-serif;">
-              <p style="margin:0; font-size:14px; line-height:21px; color:#595959;">
-                This code can only be used once. Enter it on the registration page to complete your club's sign-up.
+            <td align="center" style="padding:16px 40px 0 40px; font-family:${FONT_STACK};">
+              <p style="margin:0; font-size:14px; line-height:23px; color:#595959;">
+                รหัสนี้หมดอายุใน 14 วัน และใช้งานได้เพียงครั้งเดียว
               </p>
             </td>
           </tr>
@@ -196,8 +197,8 @@ function renderHtml(inviteCodeHtml: string, greetingNameHtml: string, registerUr
             <td align="center" style="padding:28px 40px 8px 40px;">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td align="center" style="background-color:#dd598c;">
-                    <a href="${registerUrlHtml}" target="_blank" style="display:inline-block; padding:12px 32px; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:20px; font-weight:700; color:#ffffff; text-decoration:none;">Register your club</a>
+                  <td align="center" style="background-color:#dd598c; border-radius:8px;">
+                    <a href="${registerUrlHtml}" target="_blank" style="display:inline-block; padding:12px 32px; font-family:${FONT_STACK}; font-size:15px; line-height:20px; font-weight:600; color:#ffffff; text-decoration:none; border-radius:8px;">ลงทะเบียนชมรม</a>
                   </td>
                 </tr>
               </table>
@@ -206,9 +207,9 @@ function renderHtml(inviteCodeHtml: string, greetingNameHtml: string, registerUr
 
           <!-- Fallback URL -->
           <tr>
-            <td align="center" style="padding:8px 40px 32px 40px; font-family:Arial, Helvetica, sans-serif;">
+            <td align="center" style="padding:8px 40px 32px 40px; font-family:${FONT_STACK};">
               <p style="margin:0; font-size:12px; line-height:18px; color:#707070; word-break:break-all;">
-                Or copy this link into your browser:<br>
+                หรือคัดลอกลิงก์นี้ไปวางในเบราว์เซอร์:<br>
                 <a href="${registerUrlHtml}" target="_blank" style="color:#dd598c; text-decoration:underline;">${registerUrlHtml}</a>
               </p>
             </td>
@@ -216,12 +217,12 @@ function renderHtml(inviteCodeHtml: string, greetingNameHtml: string, registerUr
 
           <!-- Footer -->
           <tr>
-            <td style="padding:20px 40px; border-top:1px solid #ececec; font-family:Arial, Helvetica, sans-serif;" align="center">
+            <td style="padding:20px 40px; border-top:1px solid #ececec; font-family:${FONT_STACK};" align="center">
               <p style="margin:0; font-size:12px; line-height:18px; color:#707070;">
-                Didn't expect this email? You can safely ignore it — the code will not work for anyone else.
+                ไม่ได้ขอรหัสเชิญเข้าร่วม CUatClub ใช่หรือไม่? คุณสามารถละเว้นอีเมลฉบับนี้ได้อย่างปลอดภัย รหัสนี้จะไม่สามารถใช้งานได้กับผู้อื่น
               </p>
               <p style="margin:8px 0 0 0; font-size:12px; line-height:18px; color:#acacac;">
-                &copy; CUATClub
+                &copy; CUatClub
               </p>
             </td>
           </tr>
@@ -236,18 +237,16 @@ function renderHtml(inviteCodeHtml: string, greetingNameHtml: string, registerUr
 </html>`;
 }
 
-function renderText(inviteCode: string, greetingName: string, registerUrl: string): string {
-  return `Hi ${greetingName},
+function renderText(inviteCode: string, registerUrl: string): string {
+  return `นี่คือรหัสเชิญเข้าร่วม CUatClub ของคุณ: ${inviteCode}
 
-Here is your invitation code: ${inviteCode}
+กรอกรหัสนี้บนหน้าลงทะเบียนเพื่อเริ่มใช้งานบัญชีของคุณ รหัสนี้หมดอายุใน 14 วัน และใช้งานได้เพียงครั้งเดียว
 
-This code can only be used once. Enter it on the registration page to complete your club's sign-up.
+ลงทะเบียนชมรม: ${registerUrl}
 
-Register your club: ${registerUrl}
+ไม่ได้ขอรหัสเชิญเข้าร่วม CUatClub ใช่หรือไม่? คุณสามารถละเว้นอีเมลฉบับนี้ได้อย่างปลอดภัย รหัสนี้จะไม่สามารถใช้งานได้กับผู้อื่น
 
-Didn't expect this email? You can safely ignore it — the code will not work for anyone else.
-
-CUATClub`;
+CUatClub`;
 }
 
 /**
@@ -271,6 +270,9 @@ export async function sendClubInviteCodeEmail(
     throw new MailValidationError("inviteCode", "Invalid invite code.");
   }
 
+  // clubName is validated but not currently rendered anywhere in the template (design has no
+  // greeting line) — kept as a public param since callers may already pass it, and future
+  // copy changes may want it again.
   const clubNameResult = clubNameSchema.safeParse(params.clubName);
   if (!clubNameResult.success) {
     throw new MailValidationError("clubName", "Invalid club name.");
@@ -278,21 +280,19 @@ export async function sendClubInviteCodeEmail(
 
   const to = toResult.data;
   const inviteCode = inviteCodeResult.data;
-  const clubName = clubNameResult.data;
 
   const registerUrl = buildRegisterUrl(inviteCode);
   const registerUrlHtml = escapeHtml(registerUrl);
+  const logoUrlHtml = escapeHtml(buildLogoUrl());
 
-  const greetingName = clubName ?? "there";
-
-  const html = renderHtml(escapeHtml(inviteCode), escapeHtml(greetingName), registerUrlHtml);
+  const html = renderHtml(escapeHtml(inviteCode), registerUrlHtml, logoUrlHtml);
   // The plain-text part is deliberately NOT escaped — HTML entities in a text/plain body are
   // a rendering bug, not a security control.
-  const text = renderText(inviteCode, greetingName, registerUrl);
+  const text = renderText(inviteCode, registerUrl);
 
   try {
     const res = await resend.emails.send({
-      from: `CUATClub <${env.EMAIL_FROM}>`,
+      from: `CUatClub <${env.EMAIL_FROM}>`,
       to,
       subject: SUBJECT,
       html,
