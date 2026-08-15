@@ -9,6 +9,8 @@ export const env = createEnv({
   server: {
     /** Canonical public origin of this app (OAuth, links, trusted origins). Must match what users open in the browser. */
     BETTER_AUTH_URL: z.string().url(),
+    /** Public origin used to build links inside outbound email. Falls back to BETTER_AUTH_URL. */
+    APP_BASE_URL: z.string().url(),
     DATABASE_URL: z.string().url(),
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
@@ -40,6 +42,10 @@ export const env = createEnv({
    */
   runtimeEnv: {
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+    // If APP_BASE_URL ever diverges from BETTER_AUTH_URL, that origin must also be added to
+    // trustedOrigins in src/server/auth.ts (~line 31) or better-auth will reject requests
+    // originating from links in the email.
+    APP_BASE_URL: process.env.APP_BASE_URL || process.env.BETTER_AUTH_URL,
     NEXT_PUBLIC_BETTER_AUTH_URL:
       process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? process.env.BETTER_AUTH_URL,
     DATABASE_URL: process.env.DATABASE_URL,
