@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Facebook, Instagram } from "lucide-react";
 
 import type { RouterOutputs } from "@/trpc/react";
+import { checkIsOnDemandRevalidate } from "next/dist/server/api-utils";
 
 type Club = RouterOutputs["clubs"]["getById"];
 type ClubContactChannel = keyof NonNullable<Club["contacts"]>;
@@ -95,8 +96,8 @@ export function ClubContacts({ contacts, clubName }: ClubContactsProps) {
               aria-label={`${channel.name} ของ${clubName}: ${value} (เปิดในแท็บใหม่)`}
               className="border-primary text-primary hover:bg-primary-lighter focus-visible:ring-primary font-ibm-plex flex h-10 items-center gap-2 rounded-xl border px-4 text-sm leading-[23px] font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:text-base md:leading-[26px]"
             >
-              {channel.icon}
-              {value}
+              <div>{channel.icon}</div>
+              <div className="pt-0.5 md:pt-1">{value}</div>
             </a>
           </li>
         ))}
