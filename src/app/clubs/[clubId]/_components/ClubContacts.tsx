@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
 import { Facebook, Instagram } from "lucide-react";
 
+import { LineIcon, TiktokIcon } from "@/components/icons";
 import type { RouterOutputs } from "@/trpc/react";
-import { checkIsOnDemandRevalidate } from "next/dist/server/api-utils";
 
 type Club = RouterOutputs["clubs"]["getById"];
 type ClubContactChannel = keyof NonNullable<Club["contacts"]>;
@@ -19,8 +18,6 @@ type ContactChannel = {
   icon: ReactNode;
 };
 
-// lucide has no TikTok or LINE glyph, so those two are brand marks exported from Figma
-// into public/svg — asset files loaded through next/image, the same way Navbar loads logo.svg.
 const CONTACT_CHANNELS: ContactChannel[] = [
   {
     key: "instagram",
@@ -41,14 +38,14 @@ const CONTACT_CHANNELS: ContactChannel[] = [
     name: "TikTok",
     baseUrl: "https://www.tiktok.com/@",
     stripLeadingAt: true,
-    icon: <Image src="/svg/tiktok.svg" alt="" width={20} height={20} className={ICON_CLASS} />,
+    icon: <TiktokIcon className={ICON_CLASS} />,
   },
   {
     key: "line_oa",
     name: "LINE",
     baseUrl: "https://line.me/R/ti/p/~",
     stripLeadingAt: false,
-    icon: <Image src="/svg/line.svg" alt="" width={20} height={20} className={ICON_CLASS} />,
+    icon: <LineIcon className={ICON_CLASS} />,
   },
 ];
 
