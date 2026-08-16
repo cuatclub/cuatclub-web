@@ -14,7 +14,7 @@ import {
 } from "@/server/api/modules/clubs/dto";
 
 export const clubsRouter = createTRPCRouter({
-  update: protectedProcedure
+  submitProfileRegistration: protectedProcedure
     .input(UpdateClubInputDTOSchema)
     .output(UpdateClubOutputDTOSchema)
     .mutation(async ({ input }) => updateClub(input)),

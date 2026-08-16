@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { ClubOutputDTOSchema } from "@/server/api/modules/clubs/dto/club.dto";
 
-export const UpdateClubInputDTOSchema = z.object({
+export const SubmitClubProfileRegistrationInputDTOSchema = z.object({
   id: z.string().uuid(),
   affiliationId: z.number().int().min(1).nullable().optional(),
   shortDescription: z.string().max(500).nullable().optional(),
   longDescription: z.string().nullable().optional(),
-  imageUrls: z.array(z.string()).optional(),
+  imageUrls: z.array(z.string().url()).optional(),
   contacts: z
     .object({
       instagram: z.string().optional(),
@@ -19,8 +19,12 @@ export const UpdateClubInputDTOSchema = z.object({
   registrationStatus: z.enum(["PENDING", "INFO_SUBMITTED", "COMPLETED"]).optional(),
 });
 
-export type UpdateClubInputDTO = z.infer<typeof UpdateClubInputDTOSchema>;
+export type SubmitClubProfileRegistrationInputDTO = z.infer<
+  typeof SubmitClubProfileRegistrationInputDTOSchema
+>;
 
-export const UpdateClubOutputDTOSchema = ClubOutputDTOSchema;
+export const SubmitClubProfileRegistrationOutputDTOSchema = ClubOutputDTOSchema;
 
-export type UpdateClubOutputDTO = z.infer<typeof UpdateClubOutputDTOSchema>;
+export type SubmitClubProfileRegistrationOutputDTO = z.infer<
+  typeof SubmitClubProfileRegistrationOutputDTOSchema
+>;
