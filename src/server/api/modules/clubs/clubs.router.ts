@@ -1,6 +1,12 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { getClubProfile, updateClub } from "@/server/api/modules/clubs/usecases";
 import {
+  getCategoryByClubId,
+  getClubProfile,
+  updateClub,
+} from "@/server/api/modules/clubs/usecases";
+import {
+  GetCategoryByClubIdInputDTOSchema,
+  GetCategoryByClubIdOutputDTOSchema,
   GetClubProfileInputDTOSchema,
   GetClubProfileOutputDTOSchema,
   UpdateClubInputDTOSchema,
@@ -12,6 +18,11 @@ export const clubsRouter = createTRPCRouter({
     .input(UpdateClubInputDTOSchema)
     .output(UpdateClubOutputDTOSchema)
     .mutation(async ({ input }) => updateClub(input)),
+
+  getCategoryByClubId: protectedProcedure
+    .input(GetCategoryByClubIdInputDTOSchema)
+    .output(GetCategoryByClubIdOutputDTOSchema)
+    .query(async ({ input }) => getCategoryByClubId(input)),
 
   getClubProfile: protectedProcedure
     .input(GetClubProfileInputDTOSchema)

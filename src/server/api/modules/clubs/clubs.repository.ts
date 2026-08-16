@@ -2,10 +2,13 @@ import type { SQL } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { db, type DbClient } from "@/server/db";
+import { clubCategories } from "@/server/db/schema/club-categories";
+import { type categories } from "@/server/db/schema/categories";
 import { clubs } from "@/server/db/schema/clubs";
 import { wrapRepoError } from "@/server/errors";
 import { Club, type ClubRow } from "@/server/api/modules/clubs/club.entity";
 
+export type CategoryRow = typeof categories.$inferSelect;
 export type CreateClubParams = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
 export type UpdateClubParams = Partial<Omit<ClubRow, "id" | "userId" | "createdAt" | "updatedAt">>;
 
@@ -14,6 +17,7 @@ export interface IClubsRepository {
   getById(id: string): Promise<Club | null>;
   getByUserId(userId: string): Promise<Club | null>;
   getByFilter(filter?: SQL): Promise<Club[]>;
+  getCategoryByClubId(clubId: string): Promise<CategoryRow[]>;
   updateById(id: string, update: UpdateClubParams, client?: DbClient): Promise<void>;
 }
 
@@ -43,6 +47,17 @@ class ClubsRepository implements IClubsRepository {
     const res = await db.query.clubs.findMany({ where: filter }).catch(wrapRepoError);
 
     return Club.toEntities(res);
+  }
+
+  async getCategoryByClubId(clubId: string): Promise<CategoryRow[]> {
+    const rows = await db.query.clubCategories
+      .findMany({
+        where: eq(clubCategories.clubId, clubId),
+        with: { category: true },
+      })
+      .catch(wrapRepoError);
+
+    return rows.map((row) => row.category);
   }
 
   async updateById(id: string, update: UpdateClubParams, client: DbClient = db): Promise<void> {

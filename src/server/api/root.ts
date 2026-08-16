@@ -1,11 +1,9 @@
 import { clubsRouter } from "@/server/api/modules/clubs/clubs.router";
-import { clubCategoriesRouter } from "@/server/api/modules/club-categories/club-categories.router";
 import { masterDataRouter } from "@/server/api/modules/master-data/master-data.router";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 export const appRouter = createTRPCRouter({
   clubs: clubsRouter,
-  clubCategories: clubCategoriesRouter,
   masterData: masterDataRouter,
 });
 
