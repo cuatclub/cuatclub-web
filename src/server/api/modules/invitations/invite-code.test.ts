@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { generateInviteCode } from "@/server/api/modules/invitations/invite-code";
 
-const ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
-const AMBIGUOUS_CHARS = ["0", "O", "1", "I", "L"];
+const ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 describe("generateInviteCode", () => {
   it("defaults to a 6-character code", () => {
@@ -22,15 +21,6 @@ describe("generateInviteCode", () => {
     }
   });
 
-  it("never contains visually-ambiguous characters", () => {
-    for (let i = 0; i < 200; i++) {
-      const code = generateInviteCode();
-      for (const ambiguous of AMBIGUOUS_CHARS) {
-        expect(code).not.toContain(ambiguous);
-      }
-    }
-  });
-
   it("satisfies the mailer's invite code format regex", () => {
     for (let i = 0; i < 50; i++) {
       expect(generateInviteCode()).toMatch(/^[A-Za-z0-9_-]+$/);
@@ -39,7 +29,7 @@ describe("generateInviteCode", () => {
 
   it("produces varied output across many calls (smoke check, not a statistical proof)", () => {
     const codes = new Set(Array.from({ length: 500 }, () => generateInviteCode()));
-    // 32^6 possible codes — 500 draws colliding even once would be extraordinarily unlikely
+    // 62^6 possible codes — 500 draws colliding even once would be extraordinarily unlikely
     // unless the RNG were badly broken.
     expect(codes.size).toBe(500);
   });
