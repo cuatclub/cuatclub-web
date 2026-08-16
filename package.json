@@ -24,6 +24,7 @@
     "start": "next start",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "test": "vitest run --project=unit",
     "typecheck": "tsc --noEmit",
     "prepare": "husky"
   },
