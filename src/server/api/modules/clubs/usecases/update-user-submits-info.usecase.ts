@@ -2,7 +2,7 @@ import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import type {
   UpdateClubInputDTO,
   UpdateClubOutputDTO,
-} from "@/server/api/modules/clubs/dto/update-club.dto";
+} from "@/server/api/modules/clubs/dto/update-user-submits-info.dto";
 import { notFound } from "@/server/errors";
 
 export const updateClub = async (input: UpdateClubInputDTO): Promise<UpdateClubOutputDTO> => {
