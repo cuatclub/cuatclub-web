@@ -7,6 +7,7 @@ import { type categories } from "@/server/db/schema/categories";
 import { clubs } from "@/server/db/schema/clubs";
 import { wrapRepoError } from "@/server/errors";
 import { Club, type ClubRow } from "@/server/api/modules/clubs/club.entity";
+import { ClubDetail } from "@/server/api/modules/clubs/club-detail.entity";
 
 export type CategoryRow = typeof categories.$inferSelect;
 export type CreateClubParams = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
@@ -15,6 +16,7 @@ export type UpdateClubParams = Partial<Omit<ClubRow, "id" | "userId" | "createdA
 export interface IClubsRepository {
   create(req: CreateClubParams, client?: DbClient): Promise<string>;
   getById(id: string): Promise<Club | null>;
+  getDetailById(id: string): Promise<ClubDetail | null>;
   getByUserId(userId: string): Promise<Club | null>;
   getByFilter(filter?: SQL): Promise<Club[]>;
   getCategoryByClubId(clubId: string): Promise<CategoryRow[]>;
@@ -37,6 +39,10 @@ class ClubsRepository implements IClubsRepository {
 
   async getById(id: string): Promise<Club | null> {
     return this.getOneByFilter(eq(clubs.id, id));
+  }
+
+  async getDetailById(id: string): Promise<ClubDetail | null> {
+    return this.getOneDetailByFilter(eq(clubs.id, id));
   }
 
   async getByUserId(userId: string): Promise<Club | null> {
@@ -70,6 +76,17 @@ class ClubsRepository implements IClubsRepository {
     const res = await db.query.clubs.findFirst({ where: filter }).catch(wrapRepoError);
 
     return res ? Club.toEntity(res) : null;
+  }
+
+  private async getOneDetailByFilter(filter: SQL): Promise<ClubDetail | null> {
+    const res = await db.query.clubs
+      .findFirst({
+        where: filter,
+        with: { user: true, affiliation: true, categories: { with: { category: true } } },
+      })
+      .catch(wrapRepoError);
+
+    return res ? ClubDetail.toEntity(res) : null;
   }
 
   private async updateByFilter(
