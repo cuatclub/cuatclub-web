@@ -24,6 +24,7 @@ const { FakeMailValidationError, FakeMailDeliveryError } = vi.hoisted(() => {
   return { FakeMailValidationError, FakeMailDeliveryError };
 });
 
+const mockLockEmailForWrite = vi.hoisted(() => vi.fn());
 const mockInvalidateActiveByEmail = vi.hoisted(() => vi.fn());
 const mockCreate = vi.hoisted(() => vi.fn());
 const mockSendClubInviteCodeEmail = vi.hoisted(() => vi.fn());
@@ -33,6 +34,7 @@ const mockUnitOfWorkRun = vi.hoisted(() =>
 
 vi.mock("@/server/api/modules/invitations/invitation-codes.repository", () => ({
   invitationCodesRepository: {
+    lockEmailForWrite: mockLockEmailForWrite,
     invalidateActiveByEmail: mockInvalidateActiveByEmail,
     create: mockCreate,
   },
@@ -68,15 +70,19 @@ function fakeInvitationCodeEntity(overrides: Partial<{ email: string; inviteCode
 
 describe("generateInvitationCode", () => {
   beforeEach(() => {
+    mockLockEmailForWrite.mockReset();
     mockInvalidateActiveByEmail.mockReset();
     mockCreate.mockReset();
     mockSendClubInviteCodeEmail.mockReset();
     mockUnitOfWorkRun.mockClear();
   });
 
-  it("invalidates any prior active code before creating the new one, inside the same unit of work", async () => {
+  it("locks the email, then invalidates any prior active code, then creates the new one — all inside the same unit of work", async () => {
     const entity = fakeInvitationCodeEntity();
     const callOrder: string[] = [];
+    mockLockEmailForWrite.mockImplementation(async () => {
+      callOrder.push("lock");
+    });
     mockInvalidateActiveByEmail.mockImplementation(async () => {
       callOrder.push("invalidate");
     });
@@ -89,7 +95,7 @@ describe("generateInvitationCode", () => {
     await generateInvitationCode({ email: VALID_EMAIL });
 
     expect(mockUnitOfWorkRun).toHaveBeenCalledTimes(1);
-    expect(callOrder).toEqual(["invalidate", "create"]);
+    expect(callOrder).toEqual(["lock", "invalidate", "create"]);
   });
 
   it("sends the email using the persisted row's email/inviteCode, not raw input, and returns the DTO", async () => {

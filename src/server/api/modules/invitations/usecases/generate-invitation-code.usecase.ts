@@ -20,8 +20,11 @@ export const generateInvitationCode = async (
   const expiredAt = new Date(Date.now() + INVITE_CODE_TTL_DAYS * 24 * 60 * 60 * 1000);
 
   // Invalidating the previous active code and inserting the new one happen atomically: a crash
-  // between the two must never leave an email with two simultaneously active codes.
+  // between the two must never leave an email with two simultaneously active codes. The advisory
+  // lock additionally serializes concurrent requests for the same email — without it, two
+  // requests could both see "no active code" under READ COMMITTED and each commit their own.
   const invitationCode = await unitOfWork.run(async (client) => {
+    await invitationCodesRepository.lockEmailForWrite(input.email, client);
     await invitationCodesRepository.invalidateActiveByEmail(input.email, client);
     return invitationCodesRepository.create({ email: input.email, expiredAt }, client);
   });
