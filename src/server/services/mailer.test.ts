@@ -98,7 +98,7 @@ describe("sendClubInviteCodeEmail", () => {
       expect(mockSend).toHaveBeenCalledTimes(1);
     });
 
-    it("renders and sends when clubName is present", async () => {
+    it("accepts a valid clubName without altering the send (not currently rendered)", async () => {
       mockSend.mockResolvedValueOnce(successResponse());
 
       await sendClubInviteCodeEmail({
@@ -108,18 +108,6 @@ describe("sendClubInviteCodeEmail", () => {
       });
 
       expect(mockSend).toHaveBeenCalledTimes(1);
-      const payload = getSentPayload();
-      expect(payload.html).toContain("Hi CUAT Club,");
-    });
-
-    it("renders and sends when clubName is absent, falling back to 'there'", async () => {
-      mockSend.mockResolvedValueOnce(successResponse());
-
-      await sendClubInviteCodeEmail({ to: VALID_TO, inviteCode: VALID_CODE });
-
-      expect(mockSend).toHaveBeenCalledTimes(1);
-      const payload = getSentPayload();
-      expect(payload.html).toContain("Hi there,");
     });
   });
 
@@ -180,17 +168,9 @@ describe("sendClubInviteCodeEmail", () => {
     // escaped in the HTML) is not exercisable through the public API: the inviteCode regex
     // (`^[A-Za-z0-9_-]+$`, see "invite code rejection" above) always rejects those characters
     // before the template is ever built. See final report for this gap.
-
-    it("escapes a club name containing an XSS payload", async () => {
-      mockSend.mockResolvedValueOnce(successResponse());
-      const clubName = `"><img src=x onerror=alert(1)>`;
-
-      await sendClubInviteCodeEmail({ to: VALID_TO, inviteCode: VALID_CODE, clubName });
-
-      const payload = getSentPayload();
-      expect(payload.html).not.toContain("<img src=x onerror=alert(1)>");
-      expect(payload.html).toContain("&quot;&gt;&lt;img");
-    });
+    //
+    // clubName is validated but no longer rendered anywhere in the template (design has no
+    // greeting line), so it has no XSS surface to test here.
 
     it("keeps the escaped register URL identical at both the href and visible-text sites", async () => {
       mockSend.mockResolvedValueOnce(successResponse());
@@ -378,7 +358,7 @@ describe("sendClubInviteCodeEmail", () => {
       expect(payload.subject).not.toContain(VALID_CODE);
       expect(payload.to).toBe(VALID_TO);
       expect(Array.isArray(payload.to)).toBe(false);
-      expect(payload.from).toBe("CUATClub <noreply@cuatclub.test>");
+      expect(payload.from).toBe("CUatClub <noreply@cuatclub.test>");
       expect(payload.html.length).toBeGreaterThan(0);
       expect(payload.text.length).toBeGreaterThan(0);
     });
