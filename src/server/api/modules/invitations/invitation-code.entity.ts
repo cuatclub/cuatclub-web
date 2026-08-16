@@ -45,6 +45,7 @@ export class InvitationCode {
   toDTO(): GenerateInvitationCodeOutputDTO {
     return {
       email: this.row.email,
+      inviteCode: this.row.inviteCode,
       expiredAt: this.row.expiredAt,
       createdAt: this.row.createdAt,
     };

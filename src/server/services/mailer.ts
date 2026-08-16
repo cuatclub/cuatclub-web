@@ -41,7 +41,7 @@ const PROVIDER_NAME = "resend";
 const SUBJECT = "รหัสเชิญเข้าร่วม CUatClub ของคุณ";
 const REGISTER_PATH = "/register";
 const INVITE_CODE_PARAM = "inviteCode";
-const LOGO_PATH = "/images/logo-email.png";
+const LOGO_PATH = "/images/logo.png";
 const FONT_STACK = "'IBM Plex Sans Thai', 'Sarabun', Tahoma, Arial, sans-serif";
 
 export class MailValidationError extends Error {

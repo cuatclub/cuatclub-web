@@ -7,9 +7,9 @@ export const GenerateInvitationCodeInputDTOSchema = z.object({
 
 export type GenerateInvitationCodeInputDTO = z.infer<typeof GenerateInvitationCodeInputDTOSchema>;
 
-// Never includes the raw invite code — the email is the only delivery channel for it.
 export const GenerateInvitationCodeOutputDTOSchema = z.object({
   email: z.string(),
+  inviteCode: z.string(),
   expiredAt: z.date(),
   createdAt: z.date(),
 });

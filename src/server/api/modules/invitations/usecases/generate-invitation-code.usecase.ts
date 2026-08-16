@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import { TRPCError } from "@trpc/server";
 import { unitOfWork } from "@/server/db/unit-of-work";
 import { invitationCodesRepository } from "@/server/api/modules/invitations/invitation-codes.repository";
@@ -14,19 +15,31 @@ import {
 // Client-ratified TTL — see the contract comment at the top of src/server/services/mailer.ts.
 const INVITE_CODE_TTL_DAYS = 14;
 
+const ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const CODE_LENGTH = 6;
+
+function generateCode(): string {
+  let code = "";
+  for (let i = 0; i < CODE_LENGTH; i++) {
+    code += ALPHABET[randomInt(ALPHABET.length)];
+  }
+  return code;
+}
+
 export const generateInvitationCode = async (
   input: GenerateInvitationCodeInputDTO
 ): Promise<GenerateInvitationCodeOutputDTO> => {
   const expiredAt = new Date(Date.now() + INVITE_CODE_TTL_DAYS * 24 * 60 * 60 * 1000);
 
-  // Invalidating the previous active code and inserting the new one happen atomically: a crash
-  // between the two must never leave an email with two simultaneously active codes. The advisory
-  // lock additionally serializes concurrent requests for the same email — without it, two
-  // requests could both see "no active code" under READ COMMITTED and each commit their own.
   const invitationCode = await unitOfWork.run(async (client) => {
-    await invitationCodesRepository.lockEmailForWrite(input.email, client);
-    await invitationCodesRepository.invalidateActiveByEmail(input.email, client);
-    return invitationCodesRepository.create({ email: input.email, expiredAt }, client);
+    const existing = await invitationCodesRepository.findByEmail(input.email, client);
+    if (existing && existing.expiredAt > new Date()) {
+      await invitationCodesRepository.revoke(existing.id, client);
+    }
+    return invitationCodesRepository.create(
+      { email: input.email, inviteCode: generateCode(), expiredAt },
+      client
+    );
   });
 
   try {
