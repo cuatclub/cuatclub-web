@@ -79,7 +79,7 @@ export function ClubContacts({ contacts, clubName }: ClubContactsProps) {
 
   return (
     <section className="flex flex-col gap-2">
-      <h2 className="font-ibm-plex text-foreground text-base leading-[26px] font-bold md:text-xl md:leading-[33px]">
+      <h2 className="font-ibm-plex text-foreground text-base leading-[26px] font-semibold md:text-xl md:leading-[33px]">
         ช่องทางติดต่อ
       </h2>
 
