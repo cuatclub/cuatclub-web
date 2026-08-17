@@ -19,5 +19,5 @@ export const invitationsRouter = createTRPCRouter({
   validate: publicProcedure
     .input(ValidateInvitationCodeInputDTOSchema)
     .output(ValidateInvitationCodeOutputDTOSchema)
-    .query(async ({ input }) => validateInvitationCode(input)),
+    .mutation(async ({ input }) => validateInvitationCode(input)),
 });
