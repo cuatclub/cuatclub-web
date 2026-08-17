@@ -1,8 +1,13 @@
-import { createTRPCRouter, adminProcedure } from "@/server/api/trpc";
-import { generateInvitationCode } from "@/server/api/modules/invitations/usecases";
+import { createTRPCRouter, adminProcedure, publicProcedure } from "@/server/api/trpc";
+import {
+  generateInvitationCode,
+  validateInvitationCode,
+} from "@/server/api/modules/invitations/usecases";
 import {
   GenerateInvitationCodeInputDTOSchema,
   GenerateInvitationCodeOutputDTOSchema,
+  ValidateInvitationCodeInputDTOSchema,
+  ValidateInvitationCodeOutputDTOSchema,
 } from "@/server/api/modules/invitations/dto";
 
 export const invitationsRouter = createTRPCRouter({
@@ -10,4 +15,9 @@ export const invitationsRouter = createTRPCRouter({
     .input(GenerateInvitationCodeInputDTOSchema)
     .output(GenerateInvitationCodeOutputDTOSchema)
     .mutation(async ({ input }) => generateInvitationCode(input)),
+
+  validate: publicProcedure
+    .input(ValidateInvitationCodeInputDTOSchema)
+    .output(ValidateInvitationCodeOutputDTOSchema)
+    .query(async ({ input }) => validateInvitationCode(input)),
 });

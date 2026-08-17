@@ -12,6 +12,7 @@ export interface CreateInvitationCodeParams {
 
 export interface IInvitationCodesRepository {
   findByEmail(email: string, client?: DbClient): Promise<InvitationCode | null>;
+  findByInviteCode(inviteCode: string, client?: DbClient): Promise<InvitationCode | null>;
   revoke(id: string, client?: DbClient): Promise<void>;
   create(req: CreateInvitationCodeParams, client?: DbClient): Promise<InvitationCode>;
 }
@@ -29,6 +30,17 @@ class InvitationCodesRepository implements IInvitationCodesRepository {
         where: and(eq(invitationCodes.email, email), isNull(invitationCodes.usedAt)),
         orderBy: desc(invitationCodes.createdAt),
       })
+      .catch(wrapRepoError);
+
+    return res ? InvitationCode.toEntity(res) : null;
+  }
+
+  async findByInviteCode(
+    inviteCode: string,
+    client: DbClient = db
+  ): Promise<InvitationCode | null> {
+    const res = await client.query.invitationCodes
+      .findFirst({ where: eq(invitationCodes.inviteCode, inviteCode) })
       .catch(wrapRepoError);
 
     return res ? InvitationCode.toEntity(res) : null;
