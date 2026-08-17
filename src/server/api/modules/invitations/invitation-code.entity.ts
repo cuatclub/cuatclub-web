@@ -42,6 +42,10 @@ export class InvitationCode {
     return this.row;
   }
 
+  validate(inviteCode: string): boolean {
+    return inviteCode === this.row.inviteCode;
+  }
+
   toDTO(): GenerateInvitationCodeOutputDTO {
     return {
       email: this.row.email,
