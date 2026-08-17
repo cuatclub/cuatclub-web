@@ -1,10 +1,9 @@
 import { db } from "@/server/db";
-import type { affiliations } from "@/server/db/schema/affiliations";
-import type { categories } from "@/server/db/schema/categories";
 import { wrapRepoError } from "@/server/errors";
-
-export type AffiliationRow = typeof affiliations.$inferSelect;
-export type CategoryRow = typeof categories.$inferSelect;
+import type {
+  AffiliationRow,
+  CategoryRow,
+} from "@/server/api/modules/master-data/master-data.entity";
 
 export interface IMasterDataRepository {
   getAllAffiliations(): Promise<AffiliationRow[]>;

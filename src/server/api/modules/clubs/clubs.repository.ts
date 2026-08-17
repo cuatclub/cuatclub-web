@@ -2,13 +2,22 @@ import type { SQL } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { db, type DbClient } from "@/server/db";
-import { clubs } from "@/server/db/schema/clubs";
+import { clubs, type affiliations, type categories, type user } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
-import { Club, type ClubRow } from "@/server/api/modules/clubs/club.entity";
-import { ClubDetail } from "@/server/api/modules/clubs/club-detail.entity";
+import { Club, type ClubRow } from "@/server/api/modules/clubs/entities/club.entity";
+import { User } from "@/server/api/modules/users/user.entity";
+import { ClubDetail } from "@/server/api/modules/clubs/entities/club-detail.entity";
 
 export type CreateClubParams = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
 export type UpdateClubParams = Partial<Omit<ClubRow, "id" | "userId" | "createdAt" | "updatedAt">>;
+
+// Shape of the join used by getDetailById. Lives here, not on ClubDetail — the
+// repository owns persistence shape; the entity only knows about other entities.
+type ClubDetailRow = ClubRow & {
+  user: typeof user.$inferSelect;
+  affiliation: typeof affiliations.$inferSelect | null;
+  categories: { category: typeof categories.$inferSelect }[];
+};
 
 export interface IClubsRepository {
   create(req: CreateClubParams, client?: DbClient): Promise<string>;
@@ -76,7 +85,16 @@ class ClubsRepository implements IClubsRepository {
       })
       .catch(wrapRepoError);
 
-    return res ? ClubDetail.toEntity(res) : null;
+    return res ? this.toClubDetail(res) : null;
+  }
+
+  private toClubDetail(row: ClubDetailRow): ClubDetail {
+    return ClubDetail.compose({
+      club: Club.toEntity(row),
+      owner: User.toEntity(row.user),
+      affiliation: row.affiliation,
+      categories: row.categories.map(({ category }) => category),
+    });
   }
 
   private async updateByFilter(
