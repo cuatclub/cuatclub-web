@@ -6,13 +6,13 @@ export type ClubRow = typeof clubs.$inferSelect;
 export class Club {
   private constructor(private row: ClubRow) {}
 
-  static toEntity(row: ClubRow): Club {
-    return new Club(row);
+  // Domain business logic
+
+  get isPubliclyVisible() {
+    return this.row.registrationStatus === "COMPLETED";
   }
 
-  static toEntities(rows: ClubRow[]): Club[] {
-    return rows.map((row) => Club.toEntity(row));
-  }
+  // Getter function
 
   get id() {
     return this.row.id;
@@ -56,6 +56,16 @@ export class Club {
 
   get raw(): ClubRow {
     return this.row;
+  }
+
+  // Helper function
+
+  static toEntity(row: ClubRow): Club {
+    return new Club(row);
+  }
+
+  static toEntities(rows: ClubRow[]): Club[] {
+    return rows.map((row) => Club.toEntity(row));
   }
 
   toDTO(): ClubOutputDTO {

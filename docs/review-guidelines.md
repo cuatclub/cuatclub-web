@@ -71,10 +71,12 @@ repository).
    Drizzle row (value-object modules). Every method accepts an optional `client: DbClient = db`
    parameter so it can run inside `unitOfWork.run()`. Every Drizzle call ends in
    `.catch(wrapRepoError)` — flag any repository method missing this.
-4. **Entity** (`<feature>.entity.ts`, entity-backed modules only) — a private-constructor
+4. **Entity** (`entities/<name>.entity.ts`, entity-backed modules only) — a private-constructor
    wrapper class around the DB row (`static toEntity(row)`), with one getter per column plus any
    business logic that belongs to the entity itself, and a `toDTO()` mapper. Repositories never
-   return raw Drizzle rows for entity-backed modules — always `Entity | null` / `Entity[]`.
+   return raw Drizzle rows for entity-backed modules — always `Entity | null` / `Entity[]`. Put a
+   rule on the single-table entity whenever it only needs that table's own columns; don't
+   duplicate it onto a composite (see below).
 5. **DTO** (`dto/<action>.dto.ts`, **one file per endpoint**) — a Zod input schema and a Zod
    output schema (+ inferred types) per usecase. Per-endpoint output schemas should `.extend()` a
    shared base schema rather than redefining fields. No usecase's `.input()`/`.output()` should
@@ -82,6 +84,43 @@ repository).
 
 All module routers are combined in a single place: `src/server/api/root.ts`. A new module's
 router must be registered there; nothing else needs wiring.
+
+### Composite entities — only when they earn their place
+
+A **composite entity** (e.g. `ClubDetail`) holds other entities/rows instead of one DB row,
+for endpoints that need more than one table's worth of data. Flag a composite entity added for a
+reason weaker than these two:
+
+- It's the only home for a rule that genuinely needs more than one entity to decide (e.g. a rule
+  spanning `Club` and `User`).
+- The same composed shape is reused by more than one usecase.
+
+If neither holds, the composite shouldn't exist — the usecase should assemble the DTO directly
+from entities it fetched itself (see `getClubProfile`, which combines `Club` + `User` with no
+composite). Also flag:
+
+- A composite's `compose()`/constructor taking a raw joined Drizzle row instead of entities/row
+  types — the join shape belongs to the repository (a private type there), which maps it into
+  entities before calling `compose()`. This is what lets the data source change later (join vs.
+  separate queries) without touching the entity.
+- A composite reimplementing a rule that already lives on one of its parts, instead of
+  delegating (`get isPubliclyVisible() { return this.club.isPubliclyVisible; }`).
+
+### Cross-module imports — entity-to-entity is fine, repository-to-repository is not
+
+- An entity (or a repository, when mapping a join) may import another module's **entity** or
+  type-only row (e.g. `ClubDetail` importing `User`, or `AffiliationRow` from
+  `master-data/entities/`). Entities have no DB dependency, so this is ordinary domain
+  composition.
+- A repository may **never** import another module's **repository**, and an entity may never
+  import another module's repository either. Flag any such import — it couples one module's
+  query/transaction strategy to another's. If a usecase needs data from another module, it calls
+  that module's repository directly (see `getClubProfile`) or the flow goes through a usecase,
+  not repository-to-repository.
+- A value-object module's row types (e.g. `AffiliationRow`, `CategoryRow`) belong in that
+  module's own `entities/*.entity.ts` file — even with no class — specifically so other modules
+  can import the *type* without reaching into its `*.repository.ts`. Flag a cross-module type
+  import that comes from a `*.repository.ts` file instead.
 
 ### tRPC procedures — which one, and where
 
