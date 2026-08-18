@@ -11,7 +11,7 @@ export const clubsRouter = createTRPCRouter({
   getById: publicProcedure
     .input(GetClubByIdInputDTOSchema)
     .output(GetClubByIdOutputDTOSchema)
-    .query(async ({ input }) => getClubById(input.clubId)),
+    .query(async ({ input }) => getClubById(input)),
 
   getClubProfile: protectedProcedure
     .input(GetClubProfileInputDTOSchema)
