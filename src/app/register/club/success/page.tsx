@@ -7,8 +7,8 @@ import { StepIndicator } from "@/app/register/club/_components/StepIndicator";
 
 export default function ClubRegisterSuccess() {
   return (
-    <div className="flex flex-col bg-white">
-      <main className="flex flex-col px-5 py-5 md:py-10">
+    <div className="flex w-full flex-col bg-white">
+      <main className="w-full px-5 py-5 md:py-10">
         <div className="mx-auto flex w-full max-w-[622px] flex-col items-center gap-6 md:gap-16">
           <div className="flex flex-col items-center gap-6 md:gap-8">
             <div className="flex flex-col items-center gap-2 text-center">
