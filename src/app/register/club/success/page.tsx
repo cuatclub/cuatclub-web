@@ -1,4 +1,4 @@
-import { Check, Facebook, Instagram, Twitter } from "lucide-react";
+import { Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,74 +9,23 @@ const STEPS = ["สร้างบัญชี", "กรอกข้อมูล
 
 function StepIndicator() {
   return (
-    <div className="border-border flex items-center gap-2 rounded-lg border px-4 py-3 md:gap-2 md:px-6 md:py-4">
+    <div className="border-border flex w-full max-w-full items-center gap-2 rounded-lg border px-4 py-3 md:gap-2 md:px-6 md:py-4">
       {STEPS.map((label, index) => (
-        <div key={label} className="flex items-center gap-2">
-          <div className="flex items-center gap-2">
+        <div key={label} className="flex min-w-0 shrink items-center gap-2">
+          <div className="flex min-w-0 items-center gap-2">
             <span className="bg-success flex h-5 w-5 shrink-0 items-center justify-center rounded-full md:h-6 md:w-6">
               <Check className="h-3.5 w-3.5 text-white md:h-4 md:w-4" strokeWidth={2} />
             </span>
-            <span className="font-ibm-plex text-foreground-secondary text-xs font-medium md:text-base">
+            <span className="font-ibm-plex text-foreground-secondary truncate text-xs font-medium md:text-base">
               {label}
             </span>
           </div>
           {index < STEPS.length - 1 && (
-            <span className="border-placeholder h-0 w-6 border-t-2 md:w-[42px]" />
+            <span className="border-placeholder h-0 w-4 shrink border-t-2 md:w-[42px]" />
           )}
         </div>
       ))}
     </div>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="flex flex-col gap-12 bg-white px-5 py-16 md:px-16">
-      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-        <div className="flex flex-col items-start gap-4">
-          <Image
-            src="/svg/logo.svg"
-            alt="CUatClub"
-            width={91}
-            height={48}
-            className="h-12 w-[91px]"
-          />
-          <p className="font-ibm-plex text-foreground-secondary max-w-[226px] text-sm leading-[135%]">
-            รวมทุกชมรม ทุกกิจกรรม ทุกโอกาส ในรั้วจุฬาฯ ไว้ในที่เดียว
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <a
-            href="#"
-            aria-label="Facebook"
-            className="border-border flex h-9 w-9 items-center justify-center rounded-lg border bg-white"
-          >
-            <Facebook className="text-placeholder h-4 w-4" />
-          </a>
-          <a
-            href="#"
-            aria-label="Instagram"
-            className="border-border flex h-9 w-9 items-center justify-center rounded-lg border bg-white"
-          >
-            <Instagram className="text-placeholder h-4 w-4" />
-          </a>
-          <a
-            href="#"
-            aria-label="Twitter"
-            className="border-border flex h-9 w-9 items-center justify-center rounded-lg border bg-white"
-          >
-            <Twitter className="text-placeholder h-4 w-4" />
-          </a>
-        </div>
-      </div>
-
-      <div className="border-border border-t" />
-
-      <p className="font-ibm-plex text-foreground-secondary text-center text-sm leading-[135%]">
-        © 2026 Thinc. All rights reserved.
-      </p>
-    </footer>
   );
 }
 
@@ -114,7 +63,6 @@ export default function ClubRegisterSuccess() {
           </Link>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
