@@ -20,7 +20,7 @@ export function StepIndicator({ registrationStatus }: StepIndicatorProps) {
   const currentIndex = STATUS_STEP_INDEX[registrationStatus];
 
   return (
-    <div className="border-border flex w-full max-w-full items-center gap-2 rounded-lg border px-4 py-3 md:gap-2 md:px-6 md:py-4">
+    <div className="border-border flex w-full max-w-full items-center justify-center gap-2 rounded-lg border px-4 py-3 md:gap-2 md:px-6 md:py-4">
       {STEPS.map((label, index) => {
         const isDone = index <= currentIndex;
 
