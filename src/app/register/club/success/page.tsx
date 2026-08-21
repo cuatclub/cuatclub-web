@@ -31,9 +31,9 @@ function StepIndicator() {
 
 export default function ClubRegisterSuccess() {
   return (
-    <div className="flex min-h-screen flex-col bg-white">
-      <main className="flex flex-1 flex-col items-center justify-center gap-8 px-5 py-10 md:gap-12 md:py-10">
-        <div className="flex w-full max-w-[622px] flex-col items-center gap-6 md:gap-16">
+    <div className="flex flex-col bg-white">
+      <main className="flex flex-col px-5 py-5 md:py-10">
+        <div className="mx-auto flex w-full max-w-[622px] flex-col items-center gap-6 md:gap-16">
           <div className="flex flex-col items-center gap-6 md:gap-8">
             <div className="flex flex-col items-center gap-2 text-center">
               <h1 className="font-ibm-plex text-primary text-[32px] leading-[53px] font-bold md:text-[40px] md:leading-[66px]">
