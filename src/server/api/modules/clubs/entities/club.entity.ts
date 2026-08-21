@@ -4,12 +4,14 @@ import type { ClubOutputDTO } from "@/server/api/modules/clubs/dto";
 export type ClubRow = typeof clubs.$inferSelect;
 
 export class Club {
+  static readonly PUBLICLY_VISIBLE_STATUS = "COMPLETED";
+
   private constructor(private row: ClubRow) {}
 
   // Domain business logic
 
   get isPubliclyVisible() {
-    return this.row.registrationStatus === "COMPLETED";
+    return this.row.registrationStatus === Club.PUBLICLY_VISIBLE_STATUS;
   }
 
   // Getter function
