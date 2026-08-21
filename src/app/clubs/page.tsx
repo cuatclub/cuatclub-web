@@ -29,7 +29,7 @@ export default async function ClubListPage({ searchParams }: ClubListPageProps) 
     <HydrateClient>
       <main className="mx-auto flex w-full max-w-[1512px] flex-col gap-6 px-5 py-2.5 md:gap-8 md:px-8 md:py-10 xl:px-25">
         <header className="mx-auto flex w-full max-w-[680px] flex-col gap-1 text-center">
-          <h1 className="font-ibm-plex text-foreground text-[32px] leading-[53px] font-semibold md:text-5xl md:leading-[79px]">
+          <h1 className="font-ibm-plex text-foreground text-primary text-[32px] leading-[53px] font-semibold md:text-5xl md:leading-[79px]">
             ชมรมทั้งหมด
           </h1>
           <p className="font-ibm-plex text-foreground-muted text-base leading-[26px] md:text-xl md:leading-[33px]">

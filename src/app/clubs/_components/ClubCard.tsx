@@ -37,7 +37,7 @@ export function ClubCard({
   return (
     <Link
       href={`/clubs/${id}`}
-      className="border-border hover:border-primary-light focus-visible:ring-primary group flex h-full flex-col gap-4 rounded-xl border bg-white p-5 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:p-6"
+      className="border-border hover:border-primary-light focus-visible:ring-primary group flex h-full flex-col gap-4 rounded-xl border bg-white p-4 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:p-6"
     >
       <div className="flex items-start justify-between gap-3">
         {logoUrl ? (
@@ -46,13 +46,13 @@ export function ClubCard({
             alt=""
             width={56}
             height={56}
-            className="size-14 shrink-0 rounded-full object-cover"
+            className="size-12 shrink-0 rounded-full object-cover md:size-14"
           />
         ) : (
           // No logo uploaded — stand in with the club's initial rather than a broken frame.
           <div
             aria-hidden="true"
-            className="bg-primary-lighter text-primary font-ibm-plex flex size-14 shrink-0 items-center justify-center rounded-full text-xl font-bold"
+            className="bg-primary-lighter text-primary font-ibm-plex flex size-12 shrink-0 items-center justify-center rounded-full text-xl font-bold md:size-14"
           >
             {name.charAt(0)}
           </div>
@@ -76,7 +76,7 @@ export function ClubCard({
           {name}
         </h3>
         {shortDescription && (
-          <p className="font-ibm-plex text-foreground-muted line-clamp-3 text-sm leading-[23px] md:line-clamp-4 md:text-base md:leading-[24px]">
+          <p className="font-ibm-plex text-foreground-muted line-clamp-4 text-sm leading-[21px] md:text-base md:leading-[24px]">
             {shortDescription}
           </p>
         )}

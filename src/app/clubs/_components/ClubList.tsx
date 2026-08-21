@@ -1,11 +1,13 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { keepPreviousData } from "@tanstack/react-query";
 import { SearchX } from "lucide-react";
 
 import { CategoryFilterRow } from "@/app/clubs/_components/CategoryFilterRow";
 import { ClubCard } from "@/app/clubs/_components/ClubCard";
+import { ClubFilterModal } from "@/app/clubs/_components/ClubFilterModal";
 import { ClubSearchBar } from "@/app/clubs/_components/ClubSearchBar";
 import { ClubSortSelect } from "@/app/clubs/_components/ClubSortSelect";
 import {
@@ -15,6 +17,7 @@ import {
   toClubsQueryInput,
   type ClubListParams,
 } from "@/app/clubs/_lib/club-list-params";
+import { Pagination } from "@/components/ui/Pagination";
 import { api } from "@/trpc/react";
 
 /**
@@ -25,6 +28,9 @@ export function ClubList() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const filterButtonRef = useRef<HTMLButtonElement>(null);
 
   const params = parseClubListParams(searchParams);
 
@@ -50,17 +56,45 @@ export function ClubList() {
     });
   };
 
+  /** Paging leaves the visitor at the foot of the old page, so bring the new one to them. */
+  const goToPage = (page: number) => {
+    updateParams({ page });
+    resultsRef.current?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
   const clubs = data?.clubs ?? [];
+  const totalPages = data ? Math.ceil(data.total / data.pageSize) : 0;
 
   return (
     <div className="flex flex-col gap-8 md:gap-12">
-      {/* The search field keeps the header's width; the results below span the full column. */}
-      <div className="mx-auto w-full max-w-[680px]">
+      {/* The search field keeps the header's width; the results below span the full column. It is
+          also what the filter panel is anchored to, so the panel lives inside it. */}
+      <div className="relative mx-auto w-full max-w-[680px]">
         <ClubSearchBar
           // Remounts the field when the applied term changes elsewhere — a back button, a shared link.
           key={params.search}
           defaultValue={params.search}
           onSearch={(search) => updateParams({ search })}
+          onToggleFilters={() => setIsFilterOpen((open) => !open)}
+          isFilterOpen={isFilterOpen}
+          filterButtonRef={filterButtonRef}
+          activeFilterCount={params.categoryIds.length + params.affiliationIds.length}
+        />
+
+        <ClubFilterModal
+          open={isFilterOpen}
+          onOpenChange={setIsFilterOpen}
+          triggerRef={filterButtonRef}
+          categories={categories ?? []}
+          selection={{
+            categoryIds: params.categoryIds,
+            affiliationIds: params.affiliationIds,
+            sort: params.sort,
+          }}
+          onApply={updateParams}
         />
       </div>
 
@@ -74,29 +108,34 @@ export function ClubList() {
         <ClubSortSelect value={params.sort} onValueChange={(sort) => updateParams({ sort })} />
       </div>
 
-      {isPending ? (
-        <ClubGrid>
-          {Array.from({ length: CLUBS_PER_PAGE }, (_, index) => (
-            <ClubCardSkeleton key={index} />
-          ))}
-        </ClubGrid>
-      ) : clubs.length === 0 ? (
-        <EmptyState />
-      ) : (
-        <ClubGrid>
-          {clubs.map((club) => (
-            <ClubCard
-              key={club.id}
-              id={club.id}
-              name={club.name}
-              logoUrl={club.logoUrl}
-              shortDescription={club.shortDescription}
-              affiliation={club.affiliation}
-              categories={club.categories}
-            />
-          ))}
-        </ClubGrid>
-      )}
+      <div ref={resultsRef} className="flex scroll-mt-6 flex-col gap-8 md:gap-12">
+        {isPending ? (
+          <ClubGrid>
+            {Array.from({ length: CLUBS_PER_PAGE }, (_, index) => (
+              <ClubCardSkeleton key={index} />
+            ))}
+          </ClubGrid>
+        ) : clubs.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <ClubGrid>
+            {clubs.map((club) => (
+              <ClubCard
+                key={club.id}
+                id={club.id}
+                name={club.name}
+                logoUrl={club.logoUrl}
+                shortDescription={club.shortDescription}
+                affiliation={club.affiliation}
+                categories={club.categories}
+              />
+            ))}
+          </ClubGrid>
+        )}
+
+        {/* Kept below the empty state too, so a stale `?page=` deep link has a way back. */}
+        <Pagination page={params.page} totalPages={totalPages} onPageChange={goToPage} />
+      </div>
     </div>
   );
 }
@@ -112,10 +151,10 @@ function ClubCardSkeleton() {
   return (
     <div
       aria-hidden="true"
-      className="border-border flex h-[257px] flex-col gap-4 rounded-xl border bg-white p-5 md:h-[311px] md:p-6"
+      className="border-border flex h-[253px] flex-col gap-4 rounded-xl border bg-white p-4 md:h-[311px] md:p-6"
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="bg-surface size-14 shrink-0 animate-pulse rounded-full" />
+        <div className="bg-surface size-12 shrink-0 animate-pulse rounded-full md:size-14" />
         <div className="bg-surface h-7 w-24 animate-pulse rounded-full" />
       </div>
       <div className="flex flex-col gap-2">

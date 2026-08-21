@@ -1,6 +1,7 @@
 "use client";
 
 import { Select } from "@/components/ui/Select";
+import { cn } from "@/lib/utils";
 import type { ClubSortOption } from "@/server/api/modules/clubs/dto";
 
 const SORT_LABELS: Record<ClubSortOption, string> = {
@@ -16,10 +17,12 @@ const toSortOption = (label: string): ClubSortOption =>
 type ClubSortSelectProps = {
   value: ClubSortOption;
   onValueChange: (sort: ClubSortOption) => void;
+  /** Overrides the select's width — the filter panel gives it the full column. */
+  className?: string;
 };
 
 /** Orders the list by club name. The `Select` speaks in labels, so map them to API values here. */
-export function ClubSortSelect({ value, onValueChange }: ClubSortSelectProps) {
+export function ClubSortSelect({ value, onValueChange, className }: ClubSortSelectProps) {
   return (
     <div className="flex items-center gap-2">
       <span className="font-ibm-plex text-foreground shrink-0 text-sm leading-[23px] md:text-base md:leading-[26px]">
@@ -29,7 +32,7 @@ export function ClubSortSelect({ value, onValueChange }: ClubSortSelectProps) {
         options={OPTIONS}
         value={SORT_LABELS[value]}
         onValueChange={(label) => onValueChange(toSortOption(label))}
-        className="w-[172px]"
+        className={cn("w-[172px]", className)}
       />
     </div>
   );
