@@ -33,7 +33,9 @@ export function StepIndicator({ registrationStatus }: StepIndicatorProps) {
                   isDone ? "bg-success" : "bg-placeholder"
                 )}
               >
-                <Check className="h-3.5 w-3.5 text-white md:h-4 md:w-4" strokeWidth={2} />
+                {isDone && (
+                  <Check className="h-3.5 w-3.5 text-white md:h-4 md:w-4" strokeWidth={2} />
+                )}
               </span>
               <span
                 className={cn(
