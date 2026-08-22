@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { signIn } from "@/lib/auth-client";
+import { getSession, signIn } from "@/lib/auth-client";
 import {
   Button,
   Card,
@@ -76,7 +76,17 @@ export default function Login() {
     const classification = classifyAuthError(error);
 
     if (classification === null) {
-      router.push("/");
+      // /register/club/profile is guarded by clubRegistrationStepGuard, which
+      // routes CLUB users to whichever step actually matches their
+      // registrationStatus. Other roles have no club row to gate on, so
+      // they'd just get bounced home by the guard — send them there directly.
+      try {
+        const { data } = await getSession();
+        router.push(data?.user.role === "CLUB" ? "/register/club/profile" : "/");
+      } catch (cause) {
+        console.error("[login] session lookup failed", cause);
+        router.push("/");
+      }
       // force server components to re-render with fresh session
       router.refresh();
       return;
@@ -176,17 +186,6 @@ export default function Login() {
                   เข้าสู่ระบบ
                 </Button>
               </fieldset>
-
-              <p className="text-foreground-secondary text-center text-sm">
-                ยังไม่มีบัญชี?{" "}
-                <button
-                  type="button"
-                  onClick={() => router.push("/register")}
-                  className="text-primary cursor-pointer font-medium"
-                >
-                  ลงทะเบียน
-                </button>
-              </p>
             </form>
           </CardContent>
         </Card>
