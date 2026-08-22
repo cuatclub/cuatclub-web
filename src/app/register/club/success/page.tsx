@@ -3,9 +3,12 @@ import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { clubRegistrationStepGuard } from "@/server/guard";
 import { StepIndicator } from "@/app/register/club/_components/StepIndicator";
 
-export default function ClubRegisterSuccess() {
+export default async function ClubRegisterSuccess() {
+  const club = await clubRegistrationStepGuard("COMPLETED");
+
   return (
     <div className="flex w-full flex-col bg-white">
       <main className="w-full px-5 py-5 md:py-10">
@@ -20,7 +23,7 @@ export default function ClubRegisterSuccess() {
               </p>
             </div>
 
-            <StepIndicator registrationStatus="COMPLETED" />
+            <StepIndicator registrationStatus={club.registrationStatus} />
           </div>
 
           <Image
