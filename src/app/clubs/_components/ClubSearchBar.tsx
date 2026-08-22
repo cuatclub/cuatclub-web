@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, type FormEvent, type RefObject } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { useRef, useState, type FormEvent, type RefObject } from "react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 
 const PLACEHOLDER = "ค้นหาชื่อ หมวดหมู่ หรือสังกัด";
 
@@ -33,10 +33,17 @@ export function ClubSearchBar({
   activeFilterCount,
 }: ClubSearchBarProps) {
   const [draft, setDraft] = useState(defaultValue);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSearch(draft.trim());
+  };
+
+  /** Empties the field and hands focus back, like the browser's own clear button — no re-query. */
+  const handleClear = () => {
+    setDraft("");
+    inputRef.current?.focus();
   };
 
   return (
@@ -49,13 +56,25 @@ export function ClubSearchBar({
         ค้นหาชมรม
       </label>
       <input
+        ref={inputRef}
         id="club-search"
         type="search"
         value={draft}
         onChange={(event) => setDraft(event.target.value)}
         placeholder={PLACEHOLDER}
-        className="font-ibm-plex text-foreground placeholder:text-placeholder h-full min-w-0 flex-1 bg-transparent text-sm leading-[23px] outline-none md:text-base md:leading-[26px]"
+        className="font-ibm-plex text-foreground placeholder:text-placeholder h-full min-w-0 flex-1 bg-transparent text-sm leading-[23px] outline-none md:text-base md:leading-[26px] [&::-webkit-search-cancel-button]:appearance-none"
       />
+
+      {draft.length > 0 && (
+        <button
+          type="button"
+          onClick={handleClear}
+          aria-label="ล้างคำค้นหา"
+          className="text-placeholder hover:text-foreground-muted focus-visible:ring-primary flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none"
+        >
+          <X aria-hidden="true" className="size-4" />
+        </button>
+      )}
 
       <span aria-hidden="true" className="bg-placeholder h-6 w-px shrink-0" />
 
