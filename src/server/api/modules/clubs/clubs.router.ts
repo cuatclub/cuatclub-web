@@ -25,12 +25,12 @@ export const clubsRouter = createTRPCRouter({
   saveClubProfileRegistration: protectedProcedure
     .input(SaveClubProfileRegistrationInputDTOSchema)
     .output(SaveClubProfileRegistrationOutputDTOSchema)
-    .mutation(async ({ input }) => saveProfileRegistration(input)),
+    .mutation(async ({ ctx, input }) => saveProfileRegistration(ctx.session.user.id, input)),
 
   submitClubProfileRegistration: protectedProcedure
     .input(SubmitClubProfileRegistrationInputDTOSchema)
     .output(SubmitClubProfileRegistrationOutputDTOSchema)
-    .mutation(async ({ input }) => submitClubProfileRegistration(input)),
+    .mutation(async ({ ctx, input }) => submitClubProfileRegistration(ctx.session.user.id, input)),
 
   getClubProfile: protectedProcedure
     .input(GetClubProfileInputDTOSchema)
