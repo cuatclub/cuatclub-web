@@ -31,59 +31,15 @@ export const saveProfileRegistration = async (
     throw validationError("You are not the owner of this club.");
   }
 
-  let count = 0;
-  const updateData: Partial<UpdateClubParams> = {};
-  if ("affiliationId" in update && update.affiliationId !== undefined) {
-    updateData.affiliationId = update.affiliationId;
-    count++;
-  }
-  if ("shortDescription" in update && update.shortDescription !== undefined) {
-    updateData.shortDescription = update.shortDescription;
-    count++;
-  }
-  if ("longDescription" in update && update.longDescription !== undefined) {
-    updateData.longDescription = update.longDescription;
-    count++;
-  }
-  if ("imageUrls" in update && update.imageUrls !== undefined) {
-    updateData.imageUrls = update.imageUrls;
-    count++;
-  }
-  if ("contacts" in update && update.contacts !== undefined) {
-    updateData.contacts = update.contacts;
-    count++;
-  }
-
-  if (
-    count === 0 &&
-    (categories === undefined || categories.length === 0) &&
-    name === undefined &&
-    image === undefined
-  ) {
-    throw validationError("Please provide at least one field to update.");
-  }
-
-  const userUpdateData: Partial<UpdateUserParams> = {};
-  if (name !== undefined) {
-    userUpdateData.name = name;
-  }
-  if (image !== undefined) {
-    userUpdateData.image = image;
-  }
-
   await unitOfWork.run(async (client) => {
-    if (Object.keys(userUpdateData).length > 0) {
-      await usersRepository.updateById(club.userId, userUpdateData, client);
-    }
+    await usersRepository.updateById(club.userId, { name, image }, client);
     await clubsRepository.updateById(
       id,
-      { ...updateData, registrationStatus: "INFO_SUBMITTED" },
+      { ...update, registrationStatus: "INFO_SUBMITTED" },
       client
     );
 
-    if (categories && categories.length > 0) {
-      await clubCategoriesRepository.createCategoryClubByClubId(id, categories, client);
-    }
+    await clubCategoriesRepository.createCategoryClubByClubId(id, categories, client);
   });
 
   return SaveClubProfileRegistrationOutputDTOSchema.parse({

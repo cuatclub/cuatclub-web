@@ -2,22 +2,23 @@ import { z } from "zod";
 
 export const SaveClubProfileRegistrationInputDTOSchema = z.object({
   id: z.string().uuid(),
-  name: z.string().optional(),
-  image: z.string().nullable().optional(),
-  affiliationId: z.number().int().min(1).nullable().optional(),
-  categories: z.array(z.number()).optional(),
-  shortDescription: z.string().max(180).nullable().optional(),
-  longDescription: z.string().nullable().optional(),
-  imageUrls: z.array(z.string().url()).optional(),
+  name: z.string(),
+  image: z.string().url(),
+  affiliationId: z.number().int().min(1).nullable(),
+  categories: z.array(z.number()).refine((arr) => arr.length > 0, {
+    message: "At least one category must be selected.",
+  }),
+  shortDescription: z.string().max(180),
+  longDescription: z.string(),
+  imageUrls: z.array(z.string().url()),
   contacts: z
     .object({
-      instagram: z.string().optional(),
-      facebook: z.string().optional(),
-      tiktok: z.string().optional(),
-      line_oa: z.string().optional(),
+      instagram: z.string(),
+      facebook: z.string(),
+      tiktok: z.string(),
+      line_oa: z.string(),
     })
-    .nullable()
-    .optional(),
+    .nullable(),
 });
 
 export type SaveClubProfileRegistrationInputDTO = z.infer<
@@ -25,7 +26,7 @@ export type SaveClubProfileRegistrationInputDTO = z.infer<
 >;
 
 export const SaveClubProfileRegistrationOutputDTOSchema = z.object({
-  registrationStatus: z.enum(["INFO_SUBMITTED"]).optional(),
+  registrationStatus: z.enum(["INFO_SUBMITTED"]),
 });
 
 export type SaveClubProfileRegistrationOutputDTO = z.infer<
