@@ -17,6 +17,14 @@ export class User {
     return this.row.id;
   }
 
+  get name() {
+    return this.row.name;
+  }
+
+  get image() {
+    return this.row.image;
+  }
+
   get email() {
     return this.row.email;
   }

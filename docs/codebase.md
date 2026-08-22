@@ -127,8 +127,10 @@ layer.
 ```
 modules/clubs/
 ├── clubs.router.ts        # tRPC router: wires procedure + Zod DTO to a usecase function
-├── club.entity.ts         # Club class: wraps a DB row, exposes getters + toDTO()
 ├── clubs.repository.ts    # ClubsRepository class + exported singleton `clubsRepository`
+├── entities/
+│   ├── club.entity.ts         # Club class: wraps a DB row, exposes getters + toDTO()
+│   └── club-detail.entity.ts  # ClubDetail: composite over Club + User + master-data rows
 ├── dto/
 │   ├── club.dto.ts        # base output shape (ClubOutputDTOSchema)
 │   ├── get-club-profile.dto.ts  # per-usecase input/output schemas, extends base
@@ -137,6 +139,8 @@ modules/clubs/
     ├── get-club-profile.usecase.ts   # one function per use case
     └── index.ts
 ```
+One entity per table lives in `entities/`; a module gets more than one file there only once it
+also has a composite (see "Composite entities" below) — most modules will just have the one.
 
 ### 1. Router — `src/server/api/modules/clubs/clubs.router.ts`
 ```ts
@@ -199,20 +203,67 @@ export const clubsRepository = new ClubsRepository();
 - Read queries use `db.query.<table>.findFirst/findMany` (Drizzle's relational query API);
   writes use the query-builder (`db.insert/update/delete`).
 
-### 4. Entity — `src/server/api/modules/clubs/club.entity.ts`
+### 4. Entity — `src/server/api/modules/clubs/entities/club.entity.ts`
 ```ts
 export class Club {
   private constructor(private row: ClubRow) {}
   static toEntity(row: ClubRow): Club { return new Club(row); }
   static toEntities(rows: ClubRow[]): Club[] { return rows.map(Club.toEntity); }
   get id() { return this.row.id; }
-  // ... one getter per column
+  get isPubliclyVisible() { return this.row.registrationStatus === "COMPLETED"; }
+  // ... one getter per column, plus any rule that only needs this row
   toDTO(): ClubOutputDTO { return { ...this.row }; }
 }
 ```
 Repositories never return raw Drizzle rows — always `Entity | null` / `Entity[]`, converted via
 `Entity.toEntity(row)`. Entities are private-constructor wrapper classes (no ORM decorators);
 `toDTO()` is how a usecase turns an entity into the shape a router's `.output()` schema expects.
+A rule belongs on the single-table entity whenever it only needs that table's own columns
+(`isPubliclyVisible` only reads `registrationStatus`, so it lives on `Club`, not on a joined
+view).
+
+#### Composite entities — `entities/club-detail.entity.ts`
+Some endpoints need more than one table's worth of data (`getClubById` needs the club row plus
+its owning user's name/logo, affiliation, and categories). That shape gets its own **composite
+entity** — a class that holds other entities/rows, not a raw joined Drizzle row:
+```ts
+export class ClubDetail {
+  private constructor(
+    private club: Club,
+    private owner: User,
+    private affiliationRow: AffiliationRow | null,
+    private categoryRows: CategoryRow[]
+  ) {}
+
+  static compose(parts: { club: Club; owner: User; affiliation: AffiliationRow | null; categories: CategoryRow[] }): ClubDetail {
+    return new ClubDetail(parts.club, parts.owner, parts.affiliation, parts.categories);
+  }
+
+  get isPubliclyVisible() { return this.club.isPubliclyVisible; } // delegate, not reimplement
+  toDTO(): GetClubByIdOutputDTO { /* ... */ }
+}
+```
+Rules to follow when adding one:
+- **Only create a composite when it earns its place**: either it holds a rule that genuinely
+  needs more than one entity to decide (none exist yet for `ClubDetail` — it's currently pure
+  delegation), or the same composed shape is reused by more than one usecase. If neither is
+  true, skip the composite and have the usecase assemble the DTO directly from entities it
+  fetched itself (see `getClubProfile` in `get-club-profile.usecase.ts`, which does exactly
+  this with `Club` + `User`).
+- **`compose()` takes entities/rows, never a joined Drizzle row.** The join shape
+  (`ClubDetailRow`) is a private type owned by the repository (`clubs.repository.ts`), which
+  maps it into `Club.toEntity(...)` / `User.toEntity(...)` before calling `compose()`. This
+  keeps the entity ignorant of *how* its parts were fetched — a join today, several separate
+  repository calls tomorrow, without touching the entity or its business logic.
+- **Delegate single-entity rules, don't reimplement them.** `ClubDetail.isPubliclyVisible` just
+  forwards to `club.isPubliclyVisible` — the rule has exactly one home.
+- **Cross-module rule this enables:** an entity may import and hold another module's *entity*
+  (`ClubDetail` holds a `User`) — entities have no DB dependency, so this is just domain
+  composition. An entity or repository may **never** import another module's *repository*;
+  that's a repository-to-repository coupling and stays forbidden. Row types with no behavior
+  (e.g. `AffiliationRow`/`CategoryRow` from `master-data`) live in that module's own
+  `entities/*.entity.ts` file precisely so other modules can import the *type* without reaching
+  into `master-data.repository.ts`.
 
 ### DTOs — `src/server/api/modules/clubs/dto/`
 Zod schema + inferred type, one pair per shape:
@@ -231,11 +282,15 @@ Per-usecase DTOs `.extend()` a shared base schema rather than redefining fields
 (`get-club-profile.dto.ts:8` extends `ClubOutputDTOSchema`). Usecases with no input still
 declare `z.object({})` + a `Record<string, never>` type alias — never bare `z.any()`/no input.
 
-**Simpler module without entities** — `master-data` (faculties/categories, read-only, no
-domain logic) skips the entity layer entirely: the repository returns the raw Drizzle
+**Simpler module without an entity class** — `master-data` (faculties/categories, read-only, no
+domain logic) skips the entity *class* layer: the repository returns the raw Drizzle
 `$inferSelect` row type directly and the usecase just passes it through
-(`master-data.repository.ts:6-7`, `get-all-categories.usecase.ts:4-6`). Use an entity layer only
-when a module needs derived getters/mapping; simple read-through modules don't need one.
+(`get-all-categories.usecase.ts:4-6`). It still keeps its row types (`AffiliationRow`,
+`CategoryRow`) in `entities/master-data.entity.ts` rather than inline in the repository — that's
+what lets other modules' entities (e.g. `ClubDetail`) import the type without importing
+`master-data.repository.ts` (see "Composite entities" above). Use a full entity *class* only
+when a module needs derived getters/domain rules; a type-only `entities/` file is still worth
+having the moment another module needs to reference the row shape.
 
 ## tRPC plumbing — `src/server/api/trpc/`
 
@@ -494,10 +549,11 @@ app container defined in compose.
 5. Router is already registered in `root.ts` if the module exists — nothing else to wire.
 
 ### Add a brand-new module (e.g. `events`)
-1. Create `src/server/api/modules/events/` with the same 4 pieces as `clubs`: `events.entity.ts`
-   (skip if no derived logic, like `master-data`), `events.repository.ts` +
-   `IEventsRepository`, `dto/` + `dto/index.ts`, `usecases/` + `usecases/index.ts`,
-   `events.router.ts`.
+1. Create `src/server/api/modules/events/` with the same 4 pieces as `clubs`:
+   `entities/event.entity.ts` (skip the class if there's no derived logic — a type-only
+   `entities/event.entity.ts` with just the row type is still fine if another module will need
+   to reference it, like `master-data`), `events.repository.ts` + `IEventsRepository`, `dto/` +
+   `dto/index.ts`, `usecases/` + `usecases/index.ts`, `events.router.ts`.
 2. If new tables are needed: add `src/server/db/schema/events.ts`, export it from
    `schema/index.ts`, add any `relations()` to `schema/relations.ts`, then run
    `yarn db:generate` (writes SQL into `/drizzle`) and `yarn db:migrate`.

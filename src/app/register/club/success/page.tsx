@@ -1,0 +1,44 @@
+import Image from "next/image";
+import Link from "next/link";
+
+import { buttonVariants } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
+import { StepIndicator } from "@/app/register/club/_components/StepIndicator";
+
+export default function ClubRegisterSuccess() {
+  return (
+    <div className="flex w-full flex-col bg-white">
+      <main className="w-full px-5 py-5 md:py-10">
+        <div className="mx-auto flex w-full max-w-[622px] flex-col items-center gap-6 md:gap-16">
+          <div className="flex flex-col items-center gap-6 md:gap-8">
+            <div className="flex flex-col items-center gap-2 text-center">
+              <h1 className="font-ibm-plex text-primary text-[32px] leading-[53px] font-bold md:text-[40px] md:leading-[66px]">
+                ลงทะเบียนสำเร็จ 🎉
+              </h1>
+              <p className="font-ibm-plex text-foreground text-sm leading-[23px] md:text-lg md:leading-[30px]">
+                คุณได้ลงทะเบียนเป็นชมรมเรียบร้อย คุณสามารถแก้ไขข้อมูลได้ผ่านหน้าแดชบอร์ด
+              </p>
+            </div>
+
+            <StepIndicator registrationStatus="COMPLETED" />
+          </div>
+
+          <Image
+            src="/svg/register_success.svg"
+            alt=""
+            width={288}
+            height={240}
+            className="h-[200px] w-60 md:h-60 md:w-72"
+          />
+
+          <Link
+            href="/dashboard"
+            className={cn(buttonVariants({ variant: "primary" }), "w-60 md:w-[300px]")}
+          >
+            แดชบอร์ด
+          </Link>
+        </div>
+      </main>
+    </div>
+  );
+}

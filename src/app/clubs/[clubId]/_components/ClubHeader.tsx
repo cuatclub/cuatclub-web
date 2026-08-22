@@ -38,7 +38,7 @@ export function ClubHeader({ name, logoUrl, affiliation, categories }: ClubHeade
       {/* Matches the logo's height so the three rows spread across it, but grows if the
           name wraps onto a second line. */}
       <div className="flex min-h-24 flex-col justify-between gap-2 md:min-h-32">
-        <h1 className="font-ibm-plex text-foreground text-xl leading-[33px] font-bold md:text-2xl md:leading-[40px]">
+        <h1 className="font-ibm-plex text-foreground text-xl leading-[33px] font-semibold md:text-2xl md:leading-[40px]">
           {name}
         </h1>
 
