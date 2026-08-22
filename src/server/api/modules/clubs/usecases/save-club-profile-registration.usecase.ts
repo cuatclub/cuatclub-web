@@ -31,10 +31,6 @@ export const saveProfileRegistration = async (
     throw validationError("You are not the owner of this club.");
   }
 
-  if (Object.keys(update).length === 0) {
-    throw validationError("Please provide at least one field to update.");
-  }
-
   let count = 0;
   const updateData: Partial<UpdateClubParams> = {};
   if ("affiliationId" in update && update.affiliationId !== undefined) {
@@ -58,7 +54,12 @@ export const saveProfileRegistration = async (
     count++;
   }
 
-  if (count === 0 && categories === undefined && name === undefined && image === undefined) {
+  if (
+    count === 0 &&
+    (categories === undefined || categories.length === 0) &&
+    name === undefined &&
+    image === undefined
+  ) {
     throw validationError("Please provide at least one field to update.");
   }
 
@@ -71,14 +72,16 @@ export const saveProfileRegistration = async (
   }
 
   await unitOfWork.run(async (client) => {
-    await usersRepository.updateById(club.userId, userUpdateData, client);
+    if (Object.keys(userUpdateData).length > 0) {
+      await usersRepository.updateById(club.userId, userUpdateData, client);
+    }
     await clubsRepository.updateById(
       id,
       { ...updateData, registrationStatus: "INFO_SUBMITTED" },
       client
     );
 
-    if (categories) {
+    if (categories && categories.length > 0) {
       await clubCategoriesRepository.createCategoryClubByClubId(id, categories, client);
     }
   });
