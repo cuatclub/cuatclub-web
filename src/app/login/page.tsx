@@ -181,17 +181,6 @@ export default function Login() {
                   เข้าสู่ระบบ
                 </Button>
               </fieldset>
-
-              <p className="text-foreground-secondary text-center text-sm">
-                ยังไม่มีบัญชี?{" "}
-                <button
-                  type="button"
-                  onClick={() => router.push("/register")}
-                  className="text-primary cursor-pointer font-medium"
-                >
-                  ลงทะเบียน
-                </button>
-              </p>
             </form>
           </CardContent>
         </Card>

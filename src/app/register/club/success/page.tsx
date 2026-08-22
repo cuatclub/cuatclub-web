@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,6 +9,7 @@ import { StepIndicator } from "@/app/register/club/_components/StepIndicator";
 
 export default async function ClubRegisterSuccess() {
   const club = await registrationGuard();
+  if (!club) notFound();
 
   return (
     <div className="flex w-full flex-col bg-white">
@@ -23,7 +25,7 @@ export default async function ClubRegisterSuccess() {
               </p>
             </div>
 
-            <StepIndicator registrationStatus={club?.registrationStatus ?? "COMPLETED"} />
+            <StepIndicator registrationStatus={club.registrationStatus} />
           </div>
 
           <Image
