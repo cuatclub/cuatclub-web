@@ -12,9 +12,8 @@ import {
   CardTitle,
   Input,
   PasswordInput,
-  ToggleGroup,
-  ToggleGroupItem,
 } from "@/components";
+import { ToggleGroup, ToggleGroupItem } from "@/app/register/_components/ToggleGroup";
 
 type AccountType = "student" | "club";
 

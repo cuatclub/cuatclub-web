@@ -2,10 +2,24 @@
 
 import { createContext, useContext } from "react";
 import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui";
-import { type VariantProps } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { toggleVariants } from "@/components/ui/Toggle";
+
+export const toggleVariants = cva(
+  "font-ibm-plex inline-flex h-[40px] items-center justify-center gap-2 rounded-lg border border-primary bg-transparent px-6 text-sm leading-[23px] font-semibold text-primary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:text-base md:leading-[26px] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      variant: {
+        outline:
+          "hover:bg-primary-lighter data-[state=on]:bg-primary data-[state=on]:text-white data-[state=on]:hover:bg-primary/90 disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-primary-light disabled:text-primary-light disabled:hover:bg-transparent disabled:data-[state=on]:bg-primary-light",
+      },
+    },
+    defaultVariants: {
+      variant: "outline",
+    },
+  }
+);
 
 type ToggleGroupContextValue = VariantProps<typeof toggleVariants> & {
   orientation?: "horizontal" | "vertical";
