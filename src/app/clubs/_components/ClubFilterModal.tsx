@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 
 import { ClubSortSelect } from "@/app/clubs/_components/ClubSortSelect";
 import type { ClubListParams } from "@/app/clubs/_lib/club-list-params";
-import { useMediaQuery } from "@/app/clubs/_lib/use-media-query";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { DialogClose, DialogContent, DialogRoot, DialogTitle } from "@/components/ui/Dialog";

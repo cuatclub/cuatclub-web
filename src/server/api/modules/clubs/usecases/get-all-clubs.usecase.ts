@@ -2,7 +2,7 @@ import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
 import type { GetAllClubsInputDTO, GetAllClubsOutputDTO } from "@/server/api/modules/clubs/dto";
 
 export const getAllClubs = async (input: GetAllClubsInputDTO): Promise<GetAllClubsOutputDTO> => {
-  const { clubs, total } = await clubsRepository.getPublicDetailPage(input);
+  const { clubs, total } = await clubsRepository.getAllDetailByFilter(input);
 
   return {
     clubs: clubs.map((club) => ({

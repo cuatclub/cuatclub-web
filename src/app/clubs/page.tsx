@@ -1,14 +1,8 @@
 import { Suspense } from "react";
-import type { Metadata } from "next";
 
 import { ClubList } from "@/app/clubs/_components";
 import { parseClubListParams, toClubsQueryInput, toQueryParamReader } from "@/app/clubs/_lib";
 import { api, HydrateClient } from "@/trpc/server";
-
-export const metadata: Metadata = {
-  title: "ชมรมทั้งหมด",
-  description: "ค้นหาและเลือกดูชมรมทั้งหมดในจุฬาลงกรณ์มหาวิทยาลัย ตามหมวดหมู่ สังกัด หรือชื่อชมรม",
-};
 
 type ClubListPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

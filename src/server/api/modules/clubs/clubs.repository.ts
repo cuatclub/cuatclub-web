@@ -40,7 +40,7 @@ export interface IClubsRepository {
   getDetailById(id: string): Promise<ClubDetail | null>;
   getByUserId(userId: string): Promise<Club | null>;
   getByFilter(filter?: SQL): Promise<Club[]>;
-  getPublicDetailPage(params: GetPublicClubsParams): Promise<PublicClubsPage>;
+  getAllDetailByFilter(params: GetPublicClubsParams): Promise<PublicClubsPage>;
   updateById(id: string, update: UpdateClubParams, client?: DbClient): Promise<void>;
   deleteById(id: string, client?: DbClient): Promise<void>;
 }
@@ -77,7 +77,7 @@ class ClubsRepository implements IClubsRepository {
     return Club.toEntities(res);
   }
 
-  async getPublicDetailPage(params: GetPublicClubsParams): Promise<PublicClubsPage> {
+  async getAllDetailByFilter(params: GetPublicClubsParams): Promise<PublicClubsPage> {
     const filter = this.buildPublicFilter(params);
     const sortableName = sql`lower(${user.name})`;
 
