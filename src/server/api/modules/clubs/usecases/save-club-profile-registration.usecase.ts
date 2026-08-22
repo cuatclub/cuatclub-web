@@ -12,14 +12,24 @@ import {
   type SaveClubProfileRegistrationOutputDTO,
 } from "@/server/api/modules/clubs/dto/save-club-profile-registration.dto";
 import { notFound, validationError } from "@/server/errors";
+import { unitOfWork } from "@/server/db/unit-of-work";
+import { clubCategoriesRepository } from "../club-categories.repository";
 
 export const saveProfileRegistration = async (
+  userId: string,
   input: SaveClubProfileRegistrationInputDTO
 ): Promise<SaveClubProfileRegistrationOutputDTO> => {
   const { id, categories, name, image, ...update } = input;
 
+  const user = await usersRepository.getById(userId);
+  if (!user) throw notFound("User not found");
+
   const club = await clubsRepository.getById(id);
   if (!club) throw notFound("Club not found");
+
+  if (club.userId !== userId) {
+    throw validationError("You are not the owner of this club.");
+  }
 
   if (Object.keys(update).length === 0) {
     throw validationError("Please provide at least one field to update.");
@@ -59,10 +69,19 @@ export const saveProfileRegistration = async (
   if (image !== undefined) {
     userUpdateData.image = image;
   }
-  await usersRepository.updateById(club.userId, userUpdateData);
-  await clubsRepository.updateById(id, { ...updateData, registrationStatus: "INFO_SUBMITTED" });
 
-  if (categories) await clubsRepository.createCategoryClubByClubId(id, categories);
+  await unitOfWork.run(async (client) => {
+    await usersRepository.updateById(club.userId, userUpdateData, client);
+    await clubsRepository.updateById(
+      id,
+      { ...updateData, registrationStatus: "INFO_SUBMITTED" },
+      client
+    );
+
+    if (categories) {
+      await clubCategoriesRepository.createCategoryClubByClubId(id, categories, client);
+    }
+  });
 
   return SaveClubProfileRegistrationOutputDTOSchema.parse({
     registrationStatus: "INFO_SUBMITTED",

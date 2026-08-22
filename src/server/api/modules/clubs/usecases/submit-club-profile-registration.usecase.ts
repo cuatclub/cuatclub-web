@@ -4,17 +4,29 @@ import {
   type SubmitClubProfileRegistrationInputDTO,
   type SubmitClubProfileRegistrationOutputDTO,
 } from "@/server/api/modules/clubs/dto/submit-club-profile-registration.dto";
-import { notFound } from "@/server/errors";
+import { validationError, notFound } from "@/server/errors";
+import { usersRepository } from "@/server/api/modules/users/users.repository";
+import { unitOfWork } from "@/server/db/unit-of-work";
 
 export const submitClubProfileRegistration = async (
+  userId: string,
   input: SubmitClubProfileRegistrationInputDTO
 ): Promise<SubmitClubProfileRegistrationOutputDTO> => {
   const { id } = input;
 
+  const user = await usersRepository.getById(userId);
+  if (!user) throw notFound("User not found");
+
   const club = await clubsRepository.getById(id);
   if (!club) throw notFound("Club not found");
+  if (club.userId !== userId) {
+    throw validationError("You are not the owner of this club.");
+  }
 
-  await clubsRepository.updateById(id, { registrationStatus: "COMPLETED" });
+  await unitOfWork.run(async (client) => {
+    await clubsRepository.updateById(id, { registrationStatus: "COMPLETED" }, client);
+  });
+
   return SubmitClubProfileRegistrationOutputDTOSchema.parse({
     registrationStatus: "COMPLETED",
   });
