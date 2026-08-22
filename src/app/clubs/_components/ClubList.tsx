@@ -120,8 +120,11 @@ export function ClubList() {
   return (
     <div className="flex flex-col gap-8 md:gap-12">
       {/* The search field keeps the header's width; the results below span the full column. It is
-          also what the filter panel is anchored to, so the panel lives inside it. */}
-      <div className="relative mx-auto w-full max-w-[680px]">
+          also what the filter panel is anchored to, so the panel lives inside it — but only from
+          `md` up, where that panel turns into a card dropping out of this box. Staying static on a
+          phone keeps the bar out of the paint layer it would otherwise share with the header's
+          slide-out menu, which sits earlier in the document and would lose to it. */}
+      <div className="mx-auto w-full max-w-[680px] md:relative">
         <ClubSearchBar
           // Remounts the field when the applied term changes elsewhere — a back button, a shared link.
           key={params.search}

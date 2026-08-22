@@ -85,13 +85,17 @@ export function ClubSearchBar({
         aria-haspopup="dialog"
         aria-expanded={isFilterOpen}
         aria-label={activeFilterCount > 0 ? `ตัวกรอง (${activeFilterCount})` : "ตัวกรอง"}
-        className="text-foreground-muted hover:bg-primary-lighter hover:text-primary focus-visible:ring-primary relative flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none"
+        className="text-foreground-muted hover:bg-primary-lighter hover:text-primary focus-visible:ring-primary grid size-9 shrink-0 cursor-pointer place-items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none"
       >
-        <SlidersHorizontal aria-hidden="true" className="size-5" />
+        {/* The count sits over the icon by sharing its grid cell rather than by being positioned
+            against the button. A positioned button would paint in the same layer as the header's
+            slide-out menu and, coming later in the document, would win — so the whole bar stays
+            unpositioned and the badge overhangs the corner on negative margins instead. */}
+        <SlidersHorizontal aria-hidden="true" className="col-start-1 row-start-1 size-5" />
         {activeFilterCount > 0 && (
           <span
             aria-hidden="true"
-            className="bg-primary font-ibm-plex absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full text-[10px] leading-none font-semibold text-white"
+            className="bg-primary font-ibm-plex col-start-1 row-start-1 -mt-0.5 -mr-0.5 flex size-4 items-center justify-center self-start justify-self-end rounded-full text-[10px] leading-none font-semibold text-white"
           >
             {activeFilterCount}
           </span>
