@@ -80,8 +80,13 @@ export default function Login() {
       // routes CLUB users to whichever step actually matches their
       // registrationStatus. Other roles have no club row to gate on, so
       // they'd just get bounced home by the guard — send them there directly.
-      const { data } = await getSession();
-      router.push(data?.user.role === "CLUB" ? "/register/club/profile" : "/");
+      try {
+        const { data } = await getSession();
+        router.push(data?.user.role === "CLUB" ? "/register/club/profile" : "/");
+      } catch (cause) {
+        console.error("[login] session lookup failed", cause);
+        router.push("/");
+      }
       // force server components to re-render with fresh session
       router.refresh();
       return;
