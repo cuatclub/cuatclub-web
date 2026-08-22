@@ -1,5 +1,5 @@
 import type { SQL } from "drizzle-orm";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { db, type DbClient } from "@/server/db";
 import { clubCategories } from "@/server/db/schema/club-categories";
@@ -53,6 +53,16 @@ class ClubsRepository implements IClubsRepository {
     const res = await db.query.clubs.findMany({ where: filter }).catch(wrapRepoError);
 
     return Club.toEntities(res);
+  }
+
+  async createCategoryClubByClubId(clubId: string, update: number[]): Promise<void> {
+    await db.delete(clubCategories).where(eq(clubCategories.clubId, clubId)).catch(wrapRepoError);
+    await db
+      .insert(clubCategories)
+      .values(update.map((categoryId) => ({ clubId, categoryId })))
+      .catch(wrapRepoError);
+
+    return;
   }
 
   async getCategoryByClubId(clubId: string): Promise<CategoryRow[]> {
