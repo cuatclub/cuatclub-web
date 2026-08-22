@@ -1,15 +1,13 @@
-import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
-import { registrationGuard } from "@/server/registration-guard";
+import { clubRegistrationStepGuard } from "@/server/guard";
 import { StepIndicator } from "@/app/register/club/_components/StepIndicator";
 
 export default async function ClubRegisterSuccess() {
-  const club = await registrationGuard();
-  if (!club) notFound();
+  const club = await clubRegistrationStepGuard("COMPLETED");
 
   return (
     <div className="flex w-full flex-col bg-white">

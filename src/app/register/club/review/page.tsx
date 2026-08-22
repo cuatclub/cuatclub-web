@@ -1,7 +1,7 @@
-import { registrationGuard } from "@/server/registration-guard";
+import { clubRegistrationStepGuard } from "@/server/guard";
 
 export default async function RegisterReviewPage() {
-  await registrationGuard("INFO_SUBMITTED");
+  await clubRegistrationStepGuard("INFO_SUBMITTED");
 
   return <div>TODO: review submitted club info — issue #83</div>;
 }

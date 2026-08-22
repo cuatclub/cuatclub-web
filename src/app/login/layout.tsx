@@ -1,6 +1,6 @@
-import { registrationGuard } from "@/server/registration-guard";
+import { loginGuard } from "@/server/guard";
 
 export default async function LoginLayout({ children }: { children: React.ReactNode }) {
-  await registrationGuard(undefined, { onUnauthenticated: "allow" });
+  await loginGuard();
   return children;
 }

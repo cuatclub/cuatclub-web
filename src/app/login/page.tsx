@@ -76,12 +76,12 @@ export default function Login() {
     const classification = classifyAuthError(error);
 
     if (classification === null) {
-      // /register is guarded by registrationGuard, which routes CLUB users to
-      // whichever step actually matches their registrationStatus. Other
-      // roles have no club row to gate on, so they'd just hit the guard's
-      // placeholder there — send them home instead.
+      // /register/club/profile is guarded by clubRegistrationStepGuard, which
+      // routes CLUB users to whichever step actually matches their
+      // registrationStatus. Other roles have no club row to gate on, so
+      // they'd just get bounced home by the guard — send them there directly.
       const { data } = await getSession();
-      router.push(data?.user.role === "CLUB" ? "/register" : "/");
+      router.push(data?.user.role === "CLUB" ? "/register/club/profile" : "/");
       // force server components to re-render with fresh session
       router.refresh();
       return;
