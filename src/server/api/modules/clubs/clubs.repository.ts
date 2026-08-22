@@ -32,7 +32,6 @@ export interface IClubsRepository {
   getDetailById(id: string): Promise<ClubDetail | null>;
   getByUserId(userId: string): Promise<Club | null>;
   getByFilter(filter?: SQL): Promise<Club[]>;
-  createCategoryClubByClubId(clubId: string, update: number[]): Promise<void>;
   updateById(id: string, update: UpdateClubParams, client?: DbClient): Promise<void>;
 }
 
@@ -66,16 +65,6 @@ class ClubsRepository implements IClubsRepository {
     const res = await db.query.clubs.findMany({ where: filter }).catch(wrapRepoError);
 
     return Club.toEntities(res);
-  }
-
-  async createCategoryClubByClubId(clubId: string, update: number[]): Promise<void> {
-    await db.delete(clubCategories).where(eq(clubCategories.clubId, clubId)).catch(wrapRepoError);
-    await db
-      .insert(clubCategories)
-      .values(update.map((categoryId) => ({ clubId, categoryId })))
-      .catch(wrapRepoError);
-
-    return;
   }
 
   async updateById(id: string, update: UpdateClubParams, client: DbClient = db): Promise<void> {
