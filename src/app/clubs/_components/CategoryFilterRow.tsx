@@ -26,8 +26,15 @@ export function CategoryFilterRow({ categories, selectedIds, onToggle }: Categor
   if (categories.length === 0) return null;
 
   const canExpand = categories.length > COLLAPSED_COUNT;
+  // Selected categories lead the row, each side keeping its alphabetical order so toggling one
+  // chip moves only that chip. Reordering before the slice is also what surfaces a category
+  // picked in the filter modal into the collapsed row.
+  const orderedCategories = [
+    ...categories.filter((category) => selectedIds.includes(category.id)),
+    ...categories.filter((category) => !selectedIds.includes(category.id)),
+  ];
   const visibleCategories =
-    isExpanded || !canExpand ? categories : categories.slice(0, COLLAPSED_COUNT);
+    isExpanded || !canExpand ? orderedCategories : orderedCategories.slice(0, COLLAPSED_COUNT);
 
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
