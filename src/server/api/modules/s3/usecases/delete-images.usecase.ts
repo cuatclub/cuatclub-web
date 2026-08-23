@@ -2,7 +2,7 @@ import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
 import {
   DeleteImagesOutputDTOSchema,
   type DeleteImagesInputDTO,
-} from "@/server/api/modules/s3/dto/delete-image.dto";
+} from "@/server/api/modules/s3/dto/delete-images.dto";
 import { client } from "@/server/services/r2";
 import { usersRepository } from "@/server/api/modules/users/users.repository";
 

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const DeleteImagesInputDTOSchema = z.object({
-  urls: z.array(z.string().min(1, "URL is required")).min(1, "At least one URL is required"),
+  urls: z.array(z.string().url().min(1, "URL is required")).min(1, "At least one URL is required"),
 });
 
 export type DeleteImagesInputDTO = z.infer<typeof DeleteImagesInputDTOSchema>;

@@ -13,7 +13,7 @@ export const s3Router = createTRPCRouter({
     .output(GetPresignedUrlsOutputDTOSchema)
     .mutation(async ({ input, ctx }) => getPresignedUrls(ctx.session.user.id, input)),
 
-  deleteImage: protectedProcedure
+  deleteImages: protectedProcedure
     .input(DeleteImagesInputDTOSchema)
     .output(DeleteImagesOutputDTOSchema)
     .mutation(async ({ input, ctx }) => deleteImages(ctx.session.user.id, input)),
