@@ -6,6 +6,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { client } from "@/server/services/r2";
 import { usersRepository } from "@/server/api/modules/users/users.repository";
+import { randomUUID } from "crypto";
 
 export const getPresignedUrls = async (userId: string, input: GetPresignedUrlsInputDTO) => {
   const urls = await Promise.all(
@@ -15,7 +16,7 @@ export const getPresignedUrls = async (userId: string, input: GetPresignedUrlsIn
         throw new Error("User not found");
       }
 
-      const fileKey = `uploads/${userId}/${Date.now()}-${file.filename}`;
+      const fileKey = `uploads/${userId}/${Date.now()}-${randomUUID()}-${file.filename}`;
 
       const command = new PutObjectCommand({
         Bucket: process.env.R2_BUCKET,

@@ -5,17 +5,19 @@ import {
 } from "@/server/api/modules/s3/dto/delete-images.dto";
 import { client } from "@/server/services/r2";
 import { usersRepository } from "@/server/api/modules/users/users.repository";
+import { validationError } from "@/server/errors";
 
-function getKeyFromUrl(fileUrl: string): string {
-  try {
-    const parsed = new URL(fileUrl);
+function getKeyFromUrl(userId: string, fileUrl: string): string {
+  const parsed = new URL(fileUrl);
+  const key = parsed.pathname.replace(/^\//, "");
+  const decodedKey = decodeURIComponent(key);
+  const expectedPrefix = `uploads/${userId}/`;
 
-    const key = parsed.pathname.replace(/^\//, "");
-
-    return decodeURIComponent(key);
-  } catch {
-    return fileUrl;
+  if (!decodedKey.startsWith(expectedPrefix)) {
+    throw Error("Unauthorized or invalid file URL");
   }
+
+  return decodedKey;
 }
 
 export const deleteImages = async (userId: string, input: DeleteImagesInputDTO) => {
@@ -24,9 +26,14 @@ export const deleteImages = async (userId: string, input: DeleteImagesInputDTO) 
     throw new Error("User not found");
   }
 
-  const objectsToDelete = input.urls.map((url) => ({
-    Key: getKeyFromUrl(url),
-  }));
+  const objectsToDelete = input.urls.map((url) => {
+    try {
+      const Key = getKeyFromUrl(userId, url);
+      return { Key };
+    } catch (error) {
+      throw validationError("Invalid or unauthorized file URL");
+    }
+  });
 
   const command = new DeleteObjectsCommand({
     Bucket: process.env.R2_BUCKET, // Bucket name
@@ -37,10 +44,12 @@ export const deleteImages = async (userId: string, input: DeleteImagesInputDTO) 
   });
 
   const response = await client.send(command);
+  const deletedKeys = (response.Deleted ?? []).map((obj) => obj.Key!);
+  const errorMessages = (response.Errors ?? []).map((err) => `${err.Key}: ${err.Message}`);
 
   return DeleteImagesOutputDTOSchema.parse({
     success: true,
-    deleted: response.Deleted ?? [], // successfully deleted objects
-    errors: response.Errors ?? [],
+    deleted: deletedKeys, // successfully deleted objects
+    errors: errorMessages,
   });
 };
