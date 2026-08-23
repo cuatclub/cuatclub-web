@@ -9,13 +9,12 @@ import { usersRepository } from "@/server/api/modules/users/users.repository";
 import { randomUUID } from "crypto";
 
 export const getPresignedUrls = async (userId: string, input: GetPresignedUrlsInputDTO) => {
+  const user = await usersRepository.getById(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
   const urls = await Promise.all(
     input.files.map(async (file) => {
-      const user = await usersRepository.getById(userId);
-      if (!user) {
-        throw new Error("User not found");
-      }
-
       const fileKey = `uploads/${userId}/${Date.now()}-${randomUUID()}-${file.filename}`;
 
       const command = new PutObjectCommand({
