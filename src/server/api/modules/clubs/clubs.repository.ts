@@ -1,14 +1,8 @@
 import type { SQL } from "drizzle-orm";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { db, type DbClient } from "@/server/db";
-import {
-  clubs,
-  clubCategories,
-  type affiliations,
-  type categories,
-  type user,
-} from "@/server/db/schema";
+import { clubs, type affiliations, type categories, type user } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
 import { Club, type ClubRow } from "@/server/api/modules/clubs/entities/club.entity";
 import { User } from "@/server/api/modules/users/user.entity";

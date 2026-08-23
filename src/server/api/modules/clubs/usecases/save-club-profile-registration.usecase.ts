@@ -1,11 +1,5 @@
-import {
-  clubsRepository,
-  type UpdateClubParams,
-} from "@/server/api/modules/clubs/clubs.repository";
-import {
-  usersRepository,
-  type UpdateUserParams,
-} from "@/server/api/modules/users/users.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
+import { usersRepository } from "@/server/api/modules/users/users.repository";
 import {
   SaveClubProfileRegistrationOutputDTOSchema,
   type SaveClubProfileRegistrationInputDTO,

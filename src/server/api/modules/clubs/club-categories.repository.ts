@@ -4,14 +4,14 @@ import { clubCategories } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
 
 export interface IClubCategoriesRepository {
-  createCategoryClubByClubId(clubId: string, update: number[], client: DbClient): Promise<void>;
+  createCategoryClubByClubId(clubId: string, update: number[], client?: DbClient): Promise<void>;
 }
 
 class ClubCategoriesRepository implements IClubCategoriesRepository {
   async createCategoryClubByClubId(
     clubId: string,
     update: number[],
-    client: DbClient
+    client: DbClient = db
   ): Promise<void> {
     await client
       .delete(clubCategories)
