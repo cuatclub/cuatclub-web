@@ -8,6 +8,7 @@ import { Club, type ClubRow } from "@/server/api/modules/clubs/entities/club.ent
 import { User } from "@/server/api/modules/users/user.entity";
 import { ClubDetail } from "@/server/api/modules/clubs/entities/club-detail.entity";
 
+export type CategoryRow = typeof categories.$inferSelect;
 export type CreateClubParams = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
 export type UpdateClubParams = Partial<Omit<ClubRow, "id" | "userId" | "createdAt" | "updatedAt">>;
 
@@ -26,7 +27,6 @@ export interface IClubsRepository {
   getByUserId(userId: string): Promise<Club | null>;
   getByFilter(filter?: SQL): Promise<Club[]>;
   updateById(id: string, update: UpdateClubParams, client?: DbClient): Promise<void>;
-  deleteById(id: string, client?: DbClient): Promise<void>;
 }
 
 class ClubsRepository implements IClubsRepository {
@@ -65,10 +65,6 @@ class ClubsRepository implements IClubsRepository {
     return this.updateByFilter(eq(clubs.id, id), update, client);
   }
 
-  async deleteById(id: string, client: DbClient = db): Promise<void> {
-    return this.deleteByFilter(eq(clubs.id, id), client);
-  }
-
   // Returns null when nothing matches — that's a normal result, not a
   // repository error. The usecase decides whether that's a not-found error.
   private async getOneByFilter(filter: SQL): Promise<Club | null> {
@@ -103,10 +99,6 @@ class ClubsRepository implements IClubsRepository {
     client: DbClient
   ): Promise<void> {
     await client.update(clubs).set(update).where(filter).catch(wrapRepoError);
-  }
-
-  private async deleteByFilter(filter: SQL, client: DbClient): Promise<void> {
-    await client.delete(clubs).where(filter).catch(wrapRepoError);
   }
 }
 
