@@ -23,6 +23,10 @@ export const submitClubProfileRegistration = async (
     throw validationError("You are not the owner of this club.");
   }
 
+  if (club.registrationStatus !== "INFO_SUBMITTED") {
+    throw validationError("Club registration information must be submitted first.");
+  }
+
   await unitOfWork.run(async (client) => {
     await clubsRepository.updateById(id, { registrationStatus: "COMPLETED" }, client);
   });
