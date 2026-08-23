@@ -5,9 +5,14 @@ export const SaveClubProfileRegistrationInputDTOSchema = z.object({
   name: z.string(),
   image: z.string().url(),
   affiliationId: z.number().int().min(1).nullable(),
-  categories: z.array(z.number()).refine((arr) => arr.length > 0, {
-    message: "At least one category must be selected.",
-  }),
+  categories: z
+    .array(z.number().int().positive())
+    .refine((arr) => arr.length > 0, {
+      message: "At least one category must be selected.",
+    })
+    .refine((arr) => new Set(arr).size === arr.length, {
+      message: "Duplicate categories are not allowed.",
+    }),
   shortDescription: z.string().max(180),
   longDescription: z.string(),
   imageUrls: z.array(z.string().url()),
