@@ -1,8 +1,9 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { randomUUID } from "crypto";
+import { DeleteObjectsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { env } from "@/config/env";
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
+export const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
+
 const EXT_MAP: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
@@ -20,30 +21,44 @@ const client = new S3Client({
   forcePathStyle: true,
 });
 
+export function getExtension(contentType: string): string {
+  return EXT_MAP[contentType] ?? "jpg";
+}
+
 export function getPublicUrl(key: string): string {
   const base = env.R2_PUBLIC_BASE_URL.replace(/\/$/, "");
   return `${base}/${key}`;
 }
 
-export async function uploadImage(
-  buffer: Buffer,
+export async function getSignedUploadUrl(
+  key: string,
   contentType: string,
-  key?: string
+  expiresIn = 60
 ): Promise<string> {
-  if (!ALLOWED_TYPES.includes(contentType as (typeof ALLOWED_TYPES)[number])) {
-    throw new Error(`Unsupported image type: ${contentType}`);
-  }
-  const ext = EXT_MAP[contentType] ?? "jpg";
-  const objectKey = key ?? `images/${randomUUID()}.${ext}`;
+  const command = new PutObjectCommand({
+    Bucket: env.R2_BUCKET,
+    Key: key,
+    ContentType: contentType,
+  });
 
-  await client.send(
-    new PutObjectCommand({
-      Bucket: env.R2_BUCKET,
-      Key: objectKey,
-      Body: buffer,
-      ContentType: contentType,
-    })
-  );
+  return getSignedUrl(client, command, { expiresIn });
+}
 
-  return getPublicUrl(objectKey);
+export async function deleteImages(
+  keys: string[]
+): Promise<{ deleted: string[]; errors: string[] }> {
+  const command = new DeleteObjectsCommand({
+    Bucket: env.R2_BUCKET,
+    Delete: {
+      Objects: keys.map((Key) => ({ Key })),
+      Quiet: false,
+    },
+  });
+
+  const response = await client.send(command);
+
+  return {
+    deleted: (response.Deleted ?? []).map((obj) => obj.Key!),
+    errors: (response.Errors ?? []).map((err) => `${err.Key}: ${err.Message}`),
+  };
 }

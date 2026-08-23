@@ -2,6 +2,8 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/
 import {
   getClubById,
   getClubProfile,
+  getClubLogoUploadUrl,
+  getClubImagesUploadUrl,
   saveProfileRegistration,
   submitClubProfileRegistration,
 } from "@/server/api/modules/clubs/usecases";
@@ -10,6 +12,10 @@ import {
   GetClubByIdOutputDTOSchema,
   GetClubProfileInputDTOSchema,
   GetClubProfileOutputDTOSchema,
+  GetClubLogoUploadUrlInputDTOSchema,
+  GetClubLogoUploadUrlOutputDTOSchema,
+  GetClubImagesUploadUrlInputDTOSchema,
+  GetClubImagesUploadUrlOutputDTOSchema,
   SaveClubProfileRegistrationInputDTOSchema,
   SaveClubProfileRegistrationOutputDTOSchema,
   SubmitClubProfileRegistrationInputDTOSchema,
@@ -36,4 +42,14 @@ export const clubsRouter = createTRPCRouter({
     .input(GetClubProfileInputDTOSchema)
     .output(GetClubProfileOutputDTOSchema)
     .query(async ({ ctx }) => getClubProfile(ctx.session.user.id)),
+
+  getLogoUploadUrl: protectedProcedure
+    .input(GetClubLogoUploadUrlInputDTOSchema)
+    .output(GetClubLogoUploadUrlOutputDTOSchema)
+    .mutation(async ({ input, ctx }) => getClubLogoUploadUrl(ctx.session.user.id, input)),
+
+  getImagesUploadUrl: protectedProcedure
+    .input(GetClubImagesUploadUrlInputDTOSchema)
+    .output(GetClubImagesUploadUrlOutputDTOSchema)
+    .mutation(async ({ input, ctx }) => getClubImagesUploadUrl(ctx.session.user.id, input)),
 });
