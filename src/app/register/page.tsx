@@ -151,18 +151,17 @@ export default function Register() {
                       {...register("confirmPassword")}
                     />
                   </div>
-
-                  <Button type="submit" className="w-full" isLoading={isSubmitting}>
-                    ถัดไป
-                  </Button>
-
-                  <p className="text-foreground-secondary text-center text-sm font-medium">
-                    มีบัญชีอยู่แล้ว?{" "}
-                    <Link href="/login" className="text-primary font-medium">
-                      เข้าสู่ระบบ
-                    </Link>
-                  </p>
                 </div>
+                <Button type="submit" className="w-full" isLoading={isSubmitting}>
+                  ถัดไป
+                </Button>
+
+                <p className="text-foreground-secondary text-center text-sm font-medium">
+                  มีบัญชีอยู่แล้ว?{" "}
+                  <Link href="/login" className="text-primary font-medium">
+                    เข้าสู่ระบบ
+                  </Link>
+                </p>
               </fieldset>
             </form>
           </CardContent>
