@@ -12,7 +12,7 @@ export const toggleVariants = cva(
     variants: {
       variant: {
         outline:
-          "hover:bg-primary-lighter data-[state=on]:bg-primary data-[state=on]:text-white data-[state=on]:hover:bg-primary/90 disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-primary-light disabled:text-primary-light disabled:hover:bg-transparent disabled:data-[state=on]:bg-primary-light",
+          "cursor-pointer hover:bg-primary-lighter data-[state=on]:bg-primary data-[state=on]:text-white disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-primary-light disabled:text-primary-light disabled:hover:bg-transparent disabled:data-[state=on]:bg-primary-light",
       },
     },
     defaultVariants: {

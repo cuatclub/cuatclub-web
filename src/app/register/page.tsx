@@ -42,7 +42,7 @@ export default function Register() {
 
   return (
     <div className="flex flex-col bg-white">
-      <main className="flex justify-center px-4 pt-10 pb-16 md:pt-28 md:pb-24">
+      <main className="flex justify-center px-4 py-5 md:py-20">
         <Card className="h-fit w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-primary text-2xl font-bold md:text-3xl">
@@ -50,7 +50,7 @@ export default function Register() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form className="flex flex-col gap-8" onSubmit={onSubmit} noValidate>
+            <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
               <fieldset disabled={isSubmitting} className="contents">
                 <div className="flex flex-col gap-2">
                   <p
@@ -77,8 +77,8 @@ export default function Register() {
                   </ToggleGroup>
                 </div>
 
-                <p className="border-primary-light bg-primary-lighter/30 text-primary rounded-lg border border-dashed px-3 py-4 text-center text-sm leading-[23px]">
-                  หากต้องการสร้างแอคเคาท์ชมรม กรุณาติดต่อขอรหัสเชิญจากแอดมินผ่านทางไอจี
+                <p className="border-primary-light bg-primary-lighter/30 text-primary rounded-lg border border-dashed px-3 py-4 text-center text-xs md:text-sm">
+                  หากต้องการสร้างแอคเคาท์ชมรม กรุณาติดต่อขอรหัสเชิญ <br /> จากแอดมินผ่านทางไอจี
                   @cuatclub.chula
                 </p>
 
