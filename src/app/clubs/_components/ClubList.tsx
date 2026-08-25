@@ -90,7 +90,7 @@ export function ClubList() {
   const hasMore = lastPage < totalPages;
   const isLoadingMore = extraPages > 0 && (results.at(-1)?.isPending ?? false);
   /** Exactly as many skeletons as the incoming page has cards, so nothing shifts when they land. */
-  const incomingCount = Math.min(pageSize, total - (lastPage - 1) * pageSize);
+  const incomingCount = Math.max(0, Math.min(pageSize, total - (lastPage - 1) * pageSize));
 
   const listFoot = isLoadingMore
     ? "กำลังโหลดชมรมเพิ่ม"
