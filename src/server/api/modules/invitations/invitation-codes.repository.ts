@@ -13,6 +13,7 @@ export interface CreateInvitationCodeParams {
 export interface IInvitationCodesRepository {
   findByEmail(email: string, client?: DbClient): Promise<InvitationCode | null>;
   revoke(id: string, client?: DbClient): Promise<void>;
+  markUsed(id: string, client?: DbClient): Promise<void>;
   create(req: CreateInvitationCodeParams, client?: DbClient): Promise<InvitationCode>;
 }
 
@@ -38,6 +39,17 @@ class InvitationCodesRepository implements IInvitationCodesRepository {
     await client
       .update(invitationCodes)
       .set({ expiredAt: new Date() })
+      .where(eq(invitationCodes.id, id))
+      .catch(wrapRepoError);
+  }
+
+  // Marks a code consumed by registration — distinct from `revoke`, which only invalidates a
+  // superseded code. `findByEmail` filters on `usedAt IS NULL`, so once this runs the code can
+  // never be found (and therefore never reused) again.
+  async markUsed(id: string, client: DbClient = db): Promise<void> {
+    await client
+      .update(invitationCodes)
+      .set({ usedAt: new Date() })
       .where(eq(invitationCodes.id, id))
       .catch(wrapRepoError);
   }
