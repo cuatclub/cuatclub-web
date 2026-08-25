@@ -67,11 +67,16 @@ export function RegisterForm() {
     }
   }, [isSubmitting, errors.invitationCode?.type, setFocus]);
 
+  // The code-mismatch branch below sets a manual error on *both* fields but
+  // leaves email's message blank (see the comment there) — without the
+  // `errors.email.message` guard, this effect would fire in the same commit
+  // as the invitationCode one above and, running second, steal focus onto
+  // the blank field instead of the one actually carrying the message.
   useEffect(() => {
-    if (!isSubmitting && errors.email?.type === "manual") {
+    if (!isSubmitting && errors.email?.type === "manual" && errors.email.message) {
       setFocus("email");
     }
-  }, [isSubmitting, errors.email?.type, setFocus]);
+  }, [isSubmitting, errors.email?.type, errors.email?.message, setFocus]);
 
   const onSubmit = handleSubmit(async ({ invitationCode, email, password, confirmPassword }) => {
     try {
