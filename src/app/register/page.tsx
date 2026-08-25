@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { isTRPCClientError } from "@trpc/client";
 import { useForm } from "react-hook-form";
 import { User, Users } from "lucide-react";
 
+import { signIn } from "@/lib/auth-client";
+import { type AppRouter } from "@/server/api/root";
+import { api } from "@/trpc/react";
 import {
   Button,
   Card,
@@ -16,28 +21,111 @@ import {
   PasswordInput,
 } from "@/components";
 import { ToggleGroup, ToggleGroupItem } from "@/app/register/_components/ToggleGroup";
-import { registerClubSchema, type RegisterClubFormValues } from "./register-schema";
+import {
+  CODE_EMAIL_MISMATCH_MESSAGE,
+  classifyRegisterClubError,
+  EMAIL_ALREADY_USED_MESSAGE,
+  GENERIC_ERROR_MESSAGE,
+  registerClubSchema,
+  type RegisterClubFormValues,
+} from "./register-schema";
 
 type AccountType = "student" | "club";
 
 export default function Register() {
+  const router = useRouter();
+  const registerMutation = api.clubs.register.useMutation();
+
   // Student is out of scope for this issue — the toggle item stays disabled
   // (see #92 scope) so accountType can only ever settle on "club", but the
   // state stays generic for when student registration ships.
   const [accountType, setAccountType] = useState<AccountType>("club");
+  const rootErrorRef = useRef<HTMLParagraphElement>(null);
 
   const {
     register,
     handleSubmit,
+    setError,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<RegisterClubFormValues>({ resolver: zodResolver(registerClubSchema) });
 
-  const onSubmit = handleSubmit(() => {
-    // TODO(#97/#98): call the register-club API — validates the invitation
-    // code against the email via #67 (surfacing CODE_EMAIL_MISMATCH_MESSAGE /
-    // EMAIL_ALREADY_USED_MESSAGE via setError on the matching field, same as
-    // login-schema.ts's classifyAuthError does for sign-in), then creates the
-    // User and an empty, pending Club record.
+  // Same accessibility pattern as login/page.tsx — these errors land after
+  // RHF's own synchronous pass, from the async submit handler, so screen
+  // reader / keyboard users need to be moved there explicitly. Both effects
+  // wait for `!isSubmitting` because the fieldset is `disabled` mid-request,
+  // and focusing a disabled control is a silent no-op.
+  useEffect(() => {
+    if (!isSubmitting && errors.root?.message) {
+      rootErrorRef.current?.focus();
+    }
+  }, [isSubmitting, errors.root?.message]);
+
+  useEffect(() => {
+    if (!isSubmitting && errors.invitationCode?.type === "manual") {
+      setFocus("invitationCode");
+    }
+  }, [isSubmitting, errors.invitationCode?.type, setFocus]);
+
+  useEffect(() => {
+    if (!isSubmitting && errors.email?.type === "manual") {
+      setFocus("email");
+    }
+  }, [isSubmitting, errors.email?.type, setFocus]);
+
+  const onSubmit = handleSubmit(async ({ invitationCode, email, password, confirmPassword }) => {
+    try {
+      await registerMutation.mutateAsync({
+        inviteCode: invitationCode,
+        email,
+        password,
+        confirmPassword,
+      });
+    } catch (cause) {
+      const classification = classifyRegisterClubError(
+        isTRPCClientError<AppRouter>(cause) ? cause : null
+      );
+
+      if (classification === "email-taken") {
+        setError("email", { type: "manual", message: EMAIL_ALREADY_USED_MESSAGE });
+        return;
+      }
+
+      if (classification === "code-mismatch") {
+        // Never reveal which of the two was wrong — mark both, message only once.
+        setError("email", { type: "manual", message: "" });
+        setError("invitationCode", { type: "manual", message: CODE_EMAIL_MISMATCH_MESSAGE });
+        return;
+      }
+
+      console.error("[register] club registration failed", cause);
+      setError("root", { type: "manual", message: GENERIC_ERROR_MESSAGE });
+      return;
+    }
+
+    // clubs.register creates the User via a transaction-scoped better-auth
+    // instance (see register-club.usecase.ts) — there's no real HTTP response
+    // for it to set a session cookie on, so sign in explicitly here. Mirrors
+    // login/page.tsx's own try/catch: signIn.email resolves with `{ error }`
+    // for HTTP-level failures but rejects for a network-level one.
+    let signInError: { code?: string; message?: string } | null;
+    try {
+      ({ error: signInError } = await signIn.email({ email, password }));
+    } catch (cause) {
+      console.error("[register] post-registration sign-in request failed", cause);
+      setError("root", { type: "manual", message: GENERIC_ERROR_MESSAGE });
+      return;
+    }
+
+    if (signInError) {
+      console.error("[register] post-registration sign-in failed", signInError);
+      setError("root", { type: "manual", message: GENERIC_ERROR_MESSAGE });
+      return;
+    }
+
+    router.push("/register/club/profile");
+    // force server components to re-render with fresh session
+    router.refresh();
   });
 
   return (
@@ -152,6 +240,18 @@ export default function Register() {
                     />
                   </div>
                 </div>
+
+                {errors.root?.message && (
+                  <p
+                    ref={rootErrorRef}
+                    tabIndex={-1}
+                    role="alert"
+                    className="text-error text-center text-sm"
+                  >
+                    {errors.root.message}
+                  </p>
+                )}
+
                 <Button type="submit" className="w-full" isLoading={isSubmitting}>
                   ถัดไป
                 </Button>
