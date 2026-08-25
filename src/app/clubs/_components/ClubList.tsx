@@ -35,6 +35,17 @@ export function ClubList() {
   const listFootRef = useRef<HTMLParagraphElement>(null);
 
   const params = parseClubListParams(searchParams);
+  const query = buildClubListQuery(params);
+
+  // A different query is a different list: it starts again at the page the URL now names. Keyed
+  // off the URL itself rather than off the controls, because the back button changes it without
+  // going through them — a restored view would otherwise still hold the pages that were scrolled
+  // past in the list it left behind.
+  const [listQuery, setListQuery] = useState(query);
+  if (listQuery !== query) {
+    setListQuery(query);
+    setExtraPages(0);
+  }
 
   // Below `md` the list runs on, so it holds however many pages the visitor has scrolled past the
   // one in the URL. Desktop never grows it — see the foot of the list — so there this is always
@@ -55,8 +66,6 @@ export function ClubList() {
   /** Any change other than paging sends the visitor back to the first page of results. */
   const updateParams = (patch: Partial<ClubListParams>) => {
     const next = { ...params, page: 1, ...patch };
-    // A different query is a different list: it starts again at the page the URL now names.
-    setExtraPages(0);
     router.push(`${pathname}${buildClubListQuery(next)}`, { scroll: false });
   };
 
