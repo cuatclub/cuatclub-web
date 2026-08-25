@@ -1,4 +1,4 @@
-import { and, desc, eq, isNull } from "drizzle-orm";
+import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import { db, type DbClient } from "@/server/db";
 import { invitationCodes } from "@/server/db/schema/invitation-codes";
 import { wrapRepoError } from "@/server/errors";
@@ -24,10 +24,16 @@ class InvitationCodesRepository implements IInvitationCodesRepository {
   // `revoke` only ever touches `expiredAt`, never `usedAt`, so a given email can have several
   // rows with `usedAt IS NULL` over time (each past-invalidated code plus the current one) —
   // ordering by `createdAt desc` is what makes this "the most recent one", not just "a" one.
+  // Case-insensitive: registration and generation both normalise to lowercase now (see
+  // register-club.dto.ts / generate-invitation-code.dto.ts), but this stays independent of that
+  // so a row written any other way — or written before that normalisation existed — still matches.
   async findByEmail(email: string, client: DbClient = db): Promise<InvitationCode | null> {
     const res = await client.query.invitationCodes
       .findFirst({
-        where: and(eq(invitationCodes.email, email), isNull(invitationCodes.usedAt)),
+        where: and(
+          sql`lower(${invitationCodes.email}) = lower(${email})`,
+          isNull(invitationCodes.usedAt)
+        ),
         orderBy: desc(invitationCodes.createdAt),
       })
       .catch(wrapRepoError);
