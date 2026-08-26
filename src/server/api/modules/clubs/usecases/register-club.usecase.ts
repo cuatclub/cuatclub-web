@@ -8,7 +8,7 @@ import {
   type RegisterClubInputDTO,
   type RegisterClubOutputDTO,
 } from "@/server/api/modules/clubs/dto/register-club.dto";
-import { conflict, validationError } from "@/server/errors";
+import { conflict, notFound, validationError } from "@/server/errors";
 
 // better-auth rejects an empty `name`; this is a stand-in until the profile step overwrites it.
 const provisionalName = (email: string) => email.split("@")[0] ?? email;
@@ -22,7 +22,10 @@ export const registerClub = async (input: RegisterClubInputDTO): Promise<Registe
   }
 
   const invitation = await invitationCodesRepository.findByEmail(input.email);
-  if (!invitation || invitation.expiredAt <= new Date() || !invitation.validate(input.inviteCode)) {
+  if (!invitation) {
+    throw notFound("No invitation code found for this email.");
+  }
+  if (!invitation.validate(input.inviteCode)) {
     throw validationError("Invitation code does not match this email.");
   }
 
