@@ -6,3 +6,4 @@ export * from "@/server/api/modules/clubs/dto/get-club-logo-upload-url.dto";
 export * from "@/server/api/modules/clubs/dto/get-club-images-upload-url.dto";
 export * from "@/server/api/modules/clubs/dto/save-club-profile-registration.dto";
 export * from "@/server/api/modules/clubs/dto/submit-club-profile-registration.dto";
+export * from "@/server/api/modules/clubs/dto/register-club.dto";

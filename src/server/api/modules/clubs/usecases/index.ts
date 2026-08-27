@@ -4,3 +4,4 @@ export * from "@/server/api/modules/clubs/usecases/get-club-logo-upload-url.usec
 export * from "@/server/api/modules/clubs/usecases/get-club-images-upload-url.usecase";
 export * from "@/server/api/modules/clubs/usecases/save-club-profile-registration.usecase";
 export * from "@/server/api/modules/clubs/usecases/submit-club-profile-registration.usecase";
+export * from "@/server/api/modules/clubs/usecases/register-club.usecase";

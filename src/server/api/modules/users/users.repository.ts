@@ -6,15 +6,19 @@ import { wrapRepoError } from "@/server/errors";
 import { User, type UserRow } from "@/server/api/modules/users/user.entity";
 
 export type UpdateUserParams = Partial<Omit<UserRow, "id" | "createdAt" | "updatedAt">>;
-
 export interface IUsersRepository {
   getById(id: string): Promise<User | null>;
+  getByEmail(email: string): Promise<User | null>;
   updateById(id: string, update: UpdateUserParams, client?: DbClient): Promise<void>;
 }
 
 class UsersRepository implements IUsersRepository {
   async getById(id: string): Promise<User | null> {
     return this.getOneByFilter(eq(user.id, id));
+  }
+
+  async getByEmail(email: string): Promise<User | null> {
+    return this.getOneByFilter(eq(user.email, email));
   }
 
   private async getOneByFilter(filter: SQL): Promise<User | null> {

@@ -13,12 +13,13 @@ const STEP_PATH: Record<RegistrationStep, string> = {
 };
 
 /**
- * Guards /login: anonymous visitors are the expected case and render the
- * page as normal. Anyone already authenticated — any role, any
- * registrationStatus — has no business on the login page, so they're sent
- * home instead of back into their registration flow.
+ * Shared by loginGuard and registerGuard: anonymous visitors are the
+ * expected case and render the page as normal. Anyone already authenticated
+ * — any role, any registrationStatus — has no business signing in or
+ * creating another account, so they're sent home instead of back into their
+ * registration flow.
  */
-export async function loginGuard(): Promise<void> {
+async function guestOnlyGuard(): Promise<void> {
   try {
     await api.clubs.getClubProfile({});
   } catch (err) {
@@ -27,6 +28,23 @@ export async function loginGuard(): Promise<void> {
     throw err;
   }
   redirect("/");
+}
+
+/**
+ * Guards /login — see guestOnlyGuard.
+ */
+export async function loginGuard(): Promise<void> {
+  return guestOnlyGuard();
+}
+
+/**
+ * Guards /register (the account-creation page only — not /register/club/**,
+ * which guards itself per-step via clubRegistrationStepGuard and must stay
+ * reachable by an authenticated CLUB user mid-registration) — see
+ * guestOnlyGuard.
+ */
+export async function registerGuard(): Promise<void> {
+  return guestOnlyGuard();
 }
 
 /**

@@ -42,8 +42,10 @@ export class InvitationCode {
     return this.row;
   }
 
+  // Code match and expiry are both single-row rules, so both live here rather than being
+  // recomputed by whatever usecase calls this.
   validate(inviteCode: string): boolean {
-    return inviteCode === this.row.inviteCode;
+    return inviteCode === this.row.inviteCode && this.row.expiredAt > new Date();
   }
 
   toDTO(): GenerateInvitationCodeOutputDTO {

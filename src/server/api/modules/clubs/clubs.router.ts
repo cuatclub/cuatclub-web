@@ -6,6 +6,7 @@ import {
   getClubImagesUploadUrl,
   saveProfileRegistration,
   submitClubProfileRegistration,
+  registerClub,
 } from "@/server/api/modules/clubs/usecases";
 import {
   GetClubByIdInputDTOSchema,
@@ -20,6 +21,8 @@ import {
   SaveClubProfileRegistrationOutputDTOSchema,
   SubmitClubProfileRegistrationInputDTOSchema,
   SubmitClubProfileRegistrationOutputDTOSchema,
+  RegisterClubInputDTOSchema,
+  RegisterClubOutputDTOSchema,
 } from "@/server/api/modules/clubs/dto";
 
 export const clubsRouter = createTRPCRouter({
@@ -27,6 +30,11 @@ export const clubsRouter = createTRPCRouter({
     .input(GetClubByIdInputDTOSchema)
     .output(GetClubByIdOutputDTOSchema)
     .query(async ({ input }) => getClubById(input)),
+
+  register: publicProcedure
+    .input(RegisterClubInputDTOSchema)
+    .output(RegisterClubOutputDTOSchema)
+    .mutation(async ({ input }) => registerClub(input)),
 
   saveClubProfileRegistration: protectedProcedure
     .input(SaveClubProfileRegistrationInputDTOSchema)
