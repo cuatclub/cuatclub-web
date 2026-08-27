@@ -1,5 +1,14 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
-import { getAllClubs, getClubById, getClubProfile } from "@/server/api/modules/clubs/usecases";
+import {
+  getAllClubs,
+  getClubById,
+  getClubProfile,
+  getClubLogoUploadUrl,
+  getClubImagesUploadUrl,
+  saveProfileRegistration,
+  submitClubProfileRegistration,
+  registerClub,
+} from "@/server/api/modules/clubs/usecases";
 import {
   GetAllClubsInputDTOSchema,
   GetAllClubsOutputDTOSchema,
@@ -7,6 +16,16 @@ import {
   GetClubByIdOutputDTOSchema,
   GetClubProfileInputDTOSchema,
   GetClubProfileOutputDTOSchema,
+  GetClubLogoUploadUrlInputDTOSchema,
+  GetClubLogoUploadUrlOutputDTOSchema,
+  GetClubImagesUploadUrlInputDTOSchema,
+  GetClubImagesUploadUrlOutputDTOSchema,
+  SaveClubProfileRegistrationInputDTOSchema,
+  SaveClubProfileRegistrationOutputDTOSchema,
+  SubmitClubProfileRegistrationInputDTOSchema,
+  SubmitClubProfileRegistrationOutputDTOSchema,
+  RegisterClubInputDTOSchema,
+  RegisterClubOutputDTOSchema,
 } from "@/server/api/modules/clubs/dto";
 
 export const clubsRouter = createTRPCRouter({
@@ -20,8 +39,33 @@ export const clubsRouter = createTRPCRouter({
     .output(GetClubByIdOutputDTOSchema)
     .query(async ({ input }) => getClubById(input)),
 
+  register: publicProcedure
+    .input(RegisterClubInputDTOSchema)
+    .output(RegisterClubOutputDTOSchema)
+    .mutation(async ({ input }) => registerClub(input)),
+
+  saveClubProfileRegistration: protectedProcedure
+    .input(SaveClubProfileRegistrationInputDTOSchema)
+    .output(SaveClubProfileRegistrationOutputDTOSchema)
+    .mutation(async ({ ctx, input }) => saveProfileRegistration(ctx.session.user.id, input)),
+
+  submitClubProfileRegistration: protectedProcedure
+    .input(SubmitClubProfileRegistrationInputDTOSchema)
+    .output(SubmitClubProfileRegistrationOutputDTOSchema)
+    .mutation(async ({ ctx, input }) => submitClubProfileRegistration(ctx.session.user.id, input)),
+
   getClubProfile: protectedProcedure
     .input(GetClubProfileInputDTOSchema)
     .output(GetClubProfileOutputDTOSchema)
     .query(async ({ ctx }) => getClubProfile(ctx.session.user.id)),
+
+  getLogoUploadUrl: protectedProcedure
+    .input(GetClubLogoUploadUrlInputDTOSchema)
+    .output(GetClubLogoUploadUrlOutputDTOSchema)
+    .mutation(async ({ input, ctx }) => getClubLogoUploadUrl(ctx.session.user.id, input)),
+
+  getImagesUploadUrl: protectedProcedure
+    .input(GetClubImagesUploadUrlInputDTOSchema)
+    .output(GetClubImagesUploadUrlOutputDTOSchema)
+    .mutation(async ({ input, ctx }) => getClubImagesUploadUrl(ctx.session.user.id, input)),
 });

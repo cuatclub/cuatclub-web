@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 export const GenerateInvitationCodeInputDTOSchema = z.object({
-  email: z.string().min(1).max(254).email(),
+  // Lowercased to match how registration looks this row up (see register-club.dto.ts).
+  email: z.string().min(1).max(254).email().toLowerCase(),
   clubName: z.string().min(1).max(120).optional(),
 });
 

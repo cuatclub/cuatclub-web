@@ -53,9 +53,10 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
     };
 
     document.addEventListener("keydown", handleKeyDown);
+    const menuToggle = menuToggleRef.current;
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      menuToggleRef.current?.focus();
+      menuToggle?.focus();
     };
   }, [isSidebarOpen]);
 
