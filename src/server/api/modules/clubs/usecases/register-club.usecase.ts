@@ -10,9 +10,6 @@ import {
 } from "@/server/api/modules/clubs/dto/register-club.dto";
 import { conflict, notFound, validationError } from "@/server/errors";
 
-// better-auth rejects an empty `name`; this is a stand-in until the profile step overwrites it.
-const provisionalName = (email: string) => email.split("@")[0] ?? email;
-
 export const registerClub = async (input: RegisterClubInputDTO): Promise<RegisterClubOutputDTO> => {
   // Checked before the invite code: a resubmitted form would otherwise fail the (now-consumed)
   // code check and report a mismatch instead of "email already registered".
@@ -34,7 +31,7 @@ export const registerClub = async (input: RegisterClubInputDTO): Promise<Registe
       body: {
         email: input.email,
         password: input.password,
-        name: provisionalName(input.email),
+        name: "",
       },
     });
 
