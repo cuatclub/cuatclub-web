@@ -33,6 +33,7 @@ export function ClubCard({
   categories,
 }: ClubCardProps) {
   const visibleCategories = categories.slice(0, MAX_VISIBLE_CATEGORIES);
+  const hiddenCategoryCount = categories.length - visibleCategories.length;
 
   return (
     <Link
@@ -67,6 +68,11 @@ export function ClubCard({
                 </Tag>
               </li>
             ))}
+            {hiddenCategoryCount > 0 && (
+              <li>
+                <Tag>+{hiddenCategoryCount}</Tag>
+              </li>
+            )}
           </ul>
         )}
       </div>
