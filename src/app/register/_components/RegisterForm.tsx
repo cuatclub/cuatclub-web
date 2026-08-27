@@ -25,6 +25,7 @@ import {
   CODE_EMAIL_MISMATCH_MESSAGE,
   classifyRegisterClubError,
   EMAIL_ALREADY_USED_MESSAGE,
+  EMAIL_NOT_INVITED_MESSAGE,
   GENERIC_ERROR_MESSAGE,
   registerClubSchema,
   type RegisterClubFormValues,
@@ -93,6 +94,11 @@ export function RegisterForm() {
 
       if (classification === "email-taken") {
         setError("email", { type: "manual", message: EMAIL_ALREADY_USED_MESSAGE });
+        return;
+      }
+
+      if (classification === "email-not-invited") {
+        setError("email", { type: "manual", message: EMAIL_NOT_INVITED_MESSAGE });
         return;
       }
 

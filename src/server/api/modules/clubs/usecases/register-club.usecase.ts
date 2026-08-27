@@ -27,16 +27,20 @@ export const registerClub = async (input: RegisterClubInputDTO): Promise<Registe
   }
 
   const { clubId, userId } = await unitOfWork.run(async (client) => {
+    // better-auth's signUpEmail requires a non-empty `name`; the real one is set
+    // later in saveClubProfileRegistration, so the email is just a placeholder here.
     const { user } = await createTransactionAuth(client).api.signUpEmail({
       body: {
         email: input.email,
         password: input.password,
-        name: "",
+        name: input.email,
       },
     });
 
     // `role` is declared `input: false` in auth.ts, so sign-up can't set it directly.
-    await usersRepository.updateById(user.id, { role: "CLUB" }, client);
+    // Reset the placeholder `name` back to empty here too, now that sign-up is past
+    // better-auth's own non-empty check.
+    await usersRepository.updateById(user.id, { role: "CLUB", name: "" }, client);
     const clubId = await clubsRepository.create(
       { userId: user.id, registrationStatus: "PENDING" },
       client

@@ -24,6 +24,7 @@ export const GENERIC_ERROR_MESSAGE = "เกิดข้อผิดพลาด
 // setError, the same way login-schema.ts's classifyAuthError maps an async
 // failure onto a field.
 export const CODE_EMAIL_MISMATCH_MESSAGE = "อีเมลหรือรหัสเชิญไม่ถูกต้อง";
+export const EMAIL_NOT_INVITED_MESSAGE = "อีเมลนี้ยังไม่ได้รับคำเชิญ";
 export const EMAIL_ALREADY_USED_MESSAGE = "อีเมลนี้ถูกใช้ไปแล้ว";
 
 export const registerClubSchema = z
@@ -50,7 +51,11 @@ export const registerClubSchema = z
 
 export type RegisterClubFormValues = z.infer<typeof registerClubSchema>;
 
-export type RegisterClubErrorClassification = "code-mismatch" | "email-taken" | "generic";
+export type RegisterClubErrorClassification =
+  | "code-mismatch"
+  | "email-not-invited"
+  | "email-taken"
+  | "generic";
 
 /**
  * Decides how a `clubs.register` failure should be shown, without touching
@@ -62,6 +67,10 @@ export type RegisterClubErrorClassification = "code-mismatch" | "email-taken" | 
  * input-validation failure that bypassed the client schema — init.ts's
  * errorFormatter attaches `zodError` only for the latter, so that's the flag
  * used to tell them apart rather than trusting the code alone.
+ *
+ * `NOT_FOUND` ("no invitation exists for this email") gets its own
+ * classification, distinct from the BAD_REQUEST mismatch case, so the form
+ * can tell the user their email specifically hasn't been invited yet.
  */
 export function classifyRegisterClubError(
   error: { data?: { code?: string | null; zodError?: unknown } | null } | null | undefined
@@ -69,6 +78,7 @@ export function classifyRegisterClubError(
   if (!error) return null;
   const code = error.data?.code;
   if (code === "CONFLICT") return "email-taken";
+  if (code === "NOT_FOUND") return "email-not-invited";
   if (code === "BAD_REQUEST" && !error.data?.zodError) return "code-mismatch";
   return "generic";
 }

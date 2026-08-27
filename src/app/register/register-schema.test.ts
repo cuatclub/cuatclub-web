@@ -130,6 +130,10 @@ describe("classifyRegisterClubError", () => {
     expect(classifyRegisterClubError({ data: { code: "BAD_REQUEST" } })).toBe("code-mismatch");
   });
 
+  it("classifies a NOT_FOUND as an uninvited email", () => {
+    expect(classifyRegisterClubError({ data: { code: "NOT_FOUND" } })).toBe("email-not-invited");
+  });
+
   // A BAD_REQUEST carrying a zodError means the client schema was bypassed,
   // not that the invite code/email pair mismatched — don't blame the code.
   it("falls back to generic for a BAD_REQUEST that carries a zodError", () => {
