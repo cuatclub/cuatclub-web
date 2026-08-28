@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>cuatclub — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* cuatclub app tokens, copied verbatim from src/styles/globals.css */
+    --primary: #dd598c;
+    --primary-light: #eeacc5;
+    --primary-lighter: #f8dee8;
+    --foreground: #0a0a0a;
+    --foreground-secondary: #595959;
+    --foreground-muted: #707070;
+    --placeholder: #acacac;
+    --border: #ececec;
+    --surface: #f0f0f0;
+    --success: #00c951;
+    --error: #dc2626;
+
+    --tag-purple: #9333ea; --tag-purple-light: #f3e8ff;
+    --tag-pink: #db2777; --tag-pink-light: #fce7f3;
+    --tag-red: #dc2626; --tag-red-light: #fee2e2;
+    --tag-orange: #ea580c; --tag-orange-light: #ffedd5;
+    --tag-yellow: #ca8a24; --tag-yellow-light: #fef9c3;
+    --tag-lime: #65a30d; --tag-lime-light: #ecfccb;
+    --tag-green: #16a34a; --tag-green-light: #dcfce7;
+    --tag-cyan: #0891b2; --tag-cyan-light: #cffafe;
+    --tag-blue: #2563eb; --tag-blue-light: #dbeafe;
+    --tag-slate: #475569; --tag-slate-light: #e2e8f0;
+
+    --shadow-black: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+
+    /* doc-chrome tokens (not part of the app) */
+    --doc-bg: #f8fafc;
+    --doc-card: #ffffff;
+    --doc-header: #1e293b;
+    --doc-muted: #64748b;
+    --doc-code-bg: #f1f5f9;
+    --doc-border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #1e293b;
+    background: var(--doc-bg);
+  }
+  header.top {
+    background: var(--doc-header);
+    color: #fff;
+    padding: 1.25rem 2rem;
+  }
+  header.top h1 { margin: 0 0 0.25rem; font-size: 1.4rem; }
+  header.top p { margin: 0; color: #cbd5e1; font-size: 0.9rem; }
+  .layout { display: flex; align-items: flex-start; }
+  nav.sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1.5rem 1rem;
+    border-right: 1px solid var(--doc-border);
+    background: var(--doc-card);
+  }
+  nav.sidebar a {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    color: var(--doc-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-bottom: 0.15rem;
+  }
+  nav.sidebar a:hover { background: var(--doc-code-bg); color: #1e293b; }
+  main { flex: 1; padding: 2rem; max-width: 1040px; }
+  section { margin-bottom: 3rem; }
+  section h2 {
+    font-size: 1.2rem;
+    margin: 0 0 0.4rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--doc-border);
+  }
+  section > p.lede { color: var(--doc-muted); margin: 0 0 1.25rem; max-width: 70ch; }
+  .card {
+    background: var(--doc-card);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .grid { display: grid; gap: 1rem; }
+  .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 720px) {
+    .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; }
+    nav.sidebar { display: none; }
+  }
+
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--doc-code-bg);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--doc-border); vertical-align: top; }
+  th { color: var(--doc-muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+
+  /* ---- swatches ---- */
+  .swatch {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--doc-border);
+  }
+  .swatch .fill { height: 56px; }
+  .swatch .meta { padding: 0.5rem 0.65rem; background: #fff; }
+  .swatch .meta .name { font-weight: 600; font-size: 0.8rem; }
+  .swatch .meta .val { color: var(--doc-muted); font-size: 0.75rem; }
+  .tagpair .fill { display: flex; }
+  .tagpair .fill > span { flex: 1; height: 40px; }
+
+  /* ---- app-styled preview area: real app fonts/tokens live here ---- */
+  .preview {
+    font-family: "IBM Plex Sans Thai", "Sarabun", ui-sans-serif, system-ui, sans-serif;
+    color: var(--foreground);
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  /* ---- component recreations, matching src/components/ui/*.tsx class-for-class ---- */
+  .app-btn {
+    display: inline-flex; align-items: center; justify-content: center; height: 40px; gap: 0.75rem;
+    border-radius: 8px; padding: 0 1.5rem; font-weight: 600; font-size: 0.9rem; cursor: pointer;
+    transition: background-color .15s, border-color .15s, color .15s; border: none;
+  }
+  .app-btn.primary { background: var(--primary); color: #fff; }
+  .app-btn.primary:hover { background: color-mix(in srgb, var(--primary) 90%, black); }
+  .app-btn.primary:disabled { background: var(--primary-light); cursor: not-allowed; }
+  .app-btn.outline { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
+  .app-btn.outline:hover { background: var(--primary-lighter); }
+  .app-btn.outline:disabled { border-color: var(--primary-light); color: var(--primary-light); cursor: not-allowed; }
+
+  .app-tag {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+    border-radius: 9999px; padding: 0.25rem 0.75rem; font-weight: 500; font-size: 0.8rem;
+    border: 1.5px solid transparent;
+  }
+  .app-tag.outline { background: transparent; color: var(--primary); border-color: var(--primary); }
+
+  .app-field-label { display: block; font-weight: 500; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--foreground); }
+  .app-input {
+    height: 40px; width: 220px; border-radius: 8px; border: 1px solid var(--border);
+    padding: 0 0.75rem; font-size: 0.9rem; color: var(--foreground); background: #fff;
+    font-family: inherit; outline: none;
+  }
+  .app-input:hover { border-color: var(--primary-light); }
+  .app-input:focus { border-color: var(--primary); }
+  .app-input.error { border-color: var(--error); }
+  .app-input:disabled { background: var(--border); color: var(--placeholder); cursor: not-allowed; }
+  .app-error { display: block; color: var(--error); font-size: 0.75rem; margin-top: 0.3rem; }
+
+  .app-card {
+    background: #fff; border-radius: 12px; box-shadow: var(--shadow-black); padding: 1.5rem;
+    width: 220px; font-family: inherit;
+  }
+  .app-card h3 { margin: 0 0 0.35rem; font-size: 1rem; font-weight: 600; }
+  .app-card p { margin: 0; color: var(--foreground-muted); font-size: 0.85rem; }
+
+  .app-clubcard {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1rem;
+    width: 240px; font-family: inherit; transition: border-color .15s; text-decoration: none; color: inherit; display: block;
+  }
+  .app-clubcard:hover { border-color: var(--primary-light); }
+  .app-clubcard .avatar {
+    width: 48px; height: 48px; border-radius: 9999px; background: var(--primary-lighter); color: var(--primary);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem; margin-bottom: 0.75rem;
+  }
+  .app-clubcard h3 { margin: 0 0 0.25rem; font-size: 1.05rem; font-weight: 600; }
+  .app-clubcard p { margin: 0 0 0.75rem; color: var(--foreground-muted); font-size: 0.85rem; }
+  .app-clubcard .footer { border-top: 1px solid var(--border); padding-top: 0.6rem; display: flex; justify-content: flex-end; color: var(--primary); font-size: 0.85rem; font-weight: 500; }
+
+  .app-check {
+    width: 16px; height: 16px; border-radius: 2px; border: 1px solid rgba(89,89,89,0.3);
+    display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  }
+  .app-check.checked { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+  .app-pagecell {
+    font-family: inherit; height: 38px; min-width: 43px; border-radius: 8px; border: 1px solid var(--primary);
+    display: inline-flex; align-items: center; justify-content: center; padding: 0 1rem; font-size: 0.9rem;
+    font-weight: 500; color: var(--primary); background: #fff;
+  }
+  .app-pagecell.active { background: var(--primary); color: #fff; }
+
+  .type-row { display: flex; align-items: baseline; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--doc-border); }
+  .type-row:last-child { border-bottom: none; }
+  .type-row .label { width: 190px; flex-shrink: 0; color: var(--doc-muted); font-size: 0.78rem; }
+  .type-sample { font-family: "IBM Plex Sans Thai", sans-serif; color: var(--foreground); }
+
+  footer.doc { padding: 2rem; text-align: center; color: var(--doc-muted); font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>cuatclub — Design System</h1>
+  <p>Rendered companion to <code>docs/DESIGN.md</code> — tokens and base components as they exist in <code>src/styles/globals.css</code> and <code>src/components/ui/</code>.</p>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <a href="#colors">Colors</a>
+    <a href="#tags">Tag palette</a>
+    <a href="#type">Typography</a>
+    <a href="#shadow-radius">Shadow &amp; radius</a>
+    <a href="#buttons">Buttons</a>
+    <a href="#fields">Form fields</a>
+    <a href="#tag-component">Tag component</a>
+    <a href="#checkbox">Checkbox</a>
+    <a href="#pagination">Pagination</a>
+    <a href="#cards">Card idioms</a>
+    <a href="#principles">Principles</a>
+  </nav>
+
+  <main>
+
+    <section id="colors">
+      <h2>Colors</h2>
+      <p class="lede">Core semantic tokens, defined once in <code>globals.css</code> and exposed as Tailwind utilities (<code>bg-primary</code>, <code>text-foreground-muted</code>, …).</p>
+      <div class="grid cols-4" id="color-grid"></div>
+    </section>
+
+    <section id="tags">
+      <h2>Tag palette</h2>
+      <p class="lede">Nine hues, each with a solid + light-background pair, used for club category tags. Colors arrive as data (API-provided hex), not fixed Tailwind classes.</p>
+      <div class="grid cols-3" id="tag-grid"></div>
+    </section>
+
+    <section id="type">
+      <h2>Typography</h2>
+      <p class="lede">Body typeface is <strong>IBM Plex Sans Thai</strong> (<code>font-ibm-plex</code>) everywhere in the component library. Sarabun is loaded but not yet used by any component. Almost every text role follows the same two-step responsive scale: smaller below <code>md</code>, larger from <code>md</code> up.</p>
+      <div class="card">
+        <div class="type-row">
+          <div class="label">Card / section title<br><span class="mono">lg→xl, semibold</span></div>
+          <div class="type-sample" style="font-size:20px; line-height:33px; font-weight:600;">ชมรมดนตรีสากล จุฬาฯ</div>
+        </div>
+        <div class="type-row">
+          <div class="label">Body / control text<br><span class="mono">sm→base</span></div>
+          <div class="type-sample" style="font-size:16px; line-height:26px;">รวมชมรมและกิจกรรมจุฬาฯ ไว้ในที่เดียว</div>
+        </div>
+        <div class="type-row">
+          <div class="label">Label (medium)<br><span class="mono">sm→base, medium</span></div>
+          <div class="type-sample" style="font-size:16px; line-height:26px; font-weight:500;">อีเมล</div>
+        </div>
+        <div class="type-row">
+          <div class="label">Muted / description<br><span class="mono">sm→base, foreground-muted</span></div>
+          <div class="type-sample" style="font-size:16px; line-height:26px; color:var(--foreground-muted);">ค้นหาชมรมที่ใช่สำหรับคุณ</div>
+        </div>
+        <div class="type-row">
+          <div class="label">Small / tag text<br><span class="mono">xs→sm, medium</span></div>
+          <div class="type-sample" style="font-size:14px; line-height:23px; font-weight:500;">เทคโนโลยี</div>
+        </div>
+        <div class="type-row">
+          <div class="label">Error text<br><span class="mono">xs→sm, error</span></div>
+          <div class="type-sample" style="font-size:14px; line-height:23px; color:var(--error);">กรุณากรอกอีเมลให้ถูกต้อง</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="shadow-radius">
+      <h2>Shadow &amp; radius</h2>
+      <p class="lede">One shadow token in the whole system — a soft, wide, low-opacity ambient lift used for every elevated surface. Radius follows a small/interactive vs. large/container hierarchy.</p>
+      <div class="grid cols-3">
+        <div class="card" style="text-align:center;">
+          <div style="height:70px; background:#fff; border-radius:12px; box-shadow: var(--shadow-black); margin-bottom:0.75rem;"></div>
+          <div class="mono">shadow-black</div>
+          <div style="color:var(--doc-muted); font-size:0.78rem;">0 0 30px rgba(0,0,0,.1)</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="display:flex; gap:0.75rem; justify-content:center; align-items:flex-end; margin-bottom:0.75rem;">
+            <div style="width:40px; height:40px; background:var(--primary-lighter); border-radius:9999px;"></div>
+            <div style="width:40px; height:40px; background:var(--primary-lighter); border-radius:8px;"></div>
+            <div style="width:40px; height:40px; background:var(--primary-lighter); border-radius:12px;"></div>
+          </div>
+          <div class="mono">full / lg / xl</div>
+          <div style="color:var(--doc-muted); font-size:0.78rem;">pill · control · container</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="display:flex; gap:0.75rem; justify-content:center; align-items:center; margin-bottom:0.75rem;">
+            <div class="app-check checked"></div>
+          </div>
+          <div class="mono">rounded-[2px]</div>
+          <div style="color:var(--doc-muted); font-size:0.78rem;">checkbox — deliberate outlier</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="buttons">
+      <h2>Buttons</h2>
+      <p class="lede">Two <code>cva</code> variants. Fixed 40px height. Recreated here class-for-class from <code>Button.tsx</code>.</p>
+      <div class="preview">
+        <button class="app-btn primary">ลงทะเบียน</button>
+        <button class="app-btn primary" disabled>ลงทะเบียน</button>
+        <button class="app-btn outline">เข้าสู่ระบบ</button>
+        <button class="app-btn outline" disabled>เข้าสู่ระบบ</button>
+      </div>
+    </section>
+
+    <section id="fields">
+      <h2>Form fields</h2>
+      <p class="lede">Every field shares the same states: default border → hover (<code>primary-light</code>) → focus (<code>primary</code>), or entirely swapped to <code>error</code>. Border color is the focus indicator — no visible ring.</p>
+      <div class="preview">
+        <div>
+          <label class="app-field-label">อีเมล</label>
+          <input class="app-input" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label class="app-field-label">อีเมล</label>
+          <input class="app-input error" value="not-an-email" />
+          <span class="app-error">กรุณากรอกอีเมลให้ถูกต้อง</span>
+        </div>
+        <div>
+          <label class="app-field-label">อีเมล</label>
+          <input class="app-input" value="ปิดใช้งาน" disabled />
+        </div>
+      </div>
+    </section>
+
+    <section id="tag-component">
+      <h2>Tag component</h2>
+      <p class="lede"><code>solid</code> (static, default) · <code>outline</code> · <code>selectable</code> (button, toggles outline→solid with a ×). Solid colors are inline styles driven by data, defaulting to brand pink.</p>
+      <div class="preview">
+        <span class="app-tag" style="color:var(--primary); background:var(--primary-lighter); border-color:var(--primary-lighter);">เทคโนโลยี</span>
+        <span class="app-tag" style="color:var(--tag-cyan); background:var(--tag-cyan-light); border-color:var(--tag-cyan-light);">ดนตรี</span>
+        <span class="app-tag" style="color:var(--tag-orange); background:var(--tag-orange-light); border-color:var(--tag-orange-light);">กีฬา</span>
+        <span class="app-tag outline">เลือกฉัน</span>
+        <span class="app-tag" style="color:var(--primary); background:var(--primary-lighter); border-color:var(--primary-lighter);">เลือกแล้ว ×</span>
+      </div>
+    </section>
+
+    <section id="checkbox">
+      <h2>Checkbox</h2>
+      <div class="preview">
+        <label style="display:inline-flex; align-items:center; gap:0.5rem; cursor:pointer;">
+          <span class="app-check checked">&#10003;</span>
+          <span>รับข่าวสารทางอีเมล</span>
+        </label>
+        <label style="display:inline-flex; align-items:center; gap:0.5rem; cursor:pointer;">
+          <span class="app-check"></span>
+          <span>รับข่าวสารทางอีเมล</span>
+        </label>
+      </div>
+    </section>
+
+    <section id="pagination">
+      <h2>Pagination</h2>
+      <p class="lede">The one component with a visible focus ring instead of a border-color swap. Collapses long runs: <span class="mono">1 … 4 5 6 … 20</span>.</p>
+      <div class="preview">
+        <span class="app-pagecell active">4</span>
+        <span class="app-pagecell">5</span>
+        <span class="app-pagecell">6</span>
+        <span style="align-self:center; color:var(--primary); font-weight:500;">...</span>
+        <span class="app-pagecell">20</span>
+      </div>
+    </section>
+
+    <section id="cards">
+      <h2>Two card idioms</h2>
+      <p class="lede">Don't conflate these — they signal different things.</p>
+      <div class="preview">
+        <div class="app-card">
+          <h3>Elevated</h3>
+          <p>White surface, no border, <span class="mono">shadow-black</span>. For content that floats over the page.</p>
+        </div>
+        <a class="app-clubcard" href="#">
+          <div class="avatar">ด</div>
+          <h3>ชมรมดนตรีสากล</h3>
+          <p>ชมรมสำหรับผู้ที่รักเสียงดนตรีทุกแนว เปิดรับสมาชิกใหม่ทุกปี</p>
+          <div class="footer">เพิ่มเติม →</div>
+        </a>
+      </div>
+    </section>
+
+    <section id="principles">
+      <h2>Principles for new components</h2>
+      <table>
+        <tr><th>Rule</th><th>Why</th></tr>
+        <tr><td>Match an existing prop contract (<span class="mono">label / error / errorMessage / wrapperClassName</span>) before inventing a new one</td><td>Every form field already agrees on this shape</td></tr>
+        <tr><td>Use the two-step responsive text scale (sm/base) by default</td><td>It's the pattern in every component, not incidental tuning</td></tr>
+        <tr><td>Reach for <span class="mono">primary</span> / <span class="mono">primary-light</span> / <span class="mono">primary-lighter</span> for interactive state</td><td>Keeps hover/focus/selected visually consistent app-wide</td></tr>
+        <tr><td><span class="mono">rounded-lg</span> for controls, <span class="mono">rounded-xl</span> for containers, <span class="mono">rounded-full</span> for pills/avatars</td><td>Radius currently encodes "what kind of thing is this"</td></tr>
+        <tr><td>lucide-react only for icons</td><td>Enforced convention, see AGENTS.md</td></tr>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<footer class="doc">Generated from the live component source — see <code>docs/DESIGN.md</code> for the full write-up.</footer>
+
+<script>
+  const colors = [
+    ["primary", "#dd598c"], ["primary-light", "#eeacc5"], ["primary-lighter", "#f8dee8"],
+    ["foreground", "#0a0a0a"], ["foreground-secondary", "#595959"], ["foreground-muted", "#707070"],
+    ["placeholder", "#acacac"], ["border", "#ececec"], ["surface", "#f0f0f0"],
+    ["success", "#00c951"], ["error", "#dc2626"],
+  ];
+  const colorGrid = document.getElementById("color-grid");
+  colors.forEach(([name, val]) => {
+    const el = document.createElement("div");
+    el.className = "swatch";
+    el.innerHTML = `<div class="fill" style="background:${val}"></div><div class="meta"><div class="name">${name}</div><div class="val mono">${val}</div></div>`;
+    colorGrid.appendChild(el);
+  });
+
+  const tags = [
+    ["purple", "#9333ea", "#f3e8ff"], ["pink", "#db2777", "#fce7f3"], ["red", "#dc2626", "#fee2e2"],
+    ["orange", "#ea580c", "#ffedd5"], ["yellow", "#ca8a24", "#fef9c3"], ["lime", "#65a30d", "#ecfccb"],
+    ["green", "#16a34a", "#dcfce7"], ["cyan", "#0891b2", "#cffafe"], ["blue", "#2563eb", "#dbeafe"],
+    ["slate", "#475569", "#e2e8f0"],
+  ];
+  const tagGrid = document.getElementById("tag-grid");
+  tags.forEach(([name, solid, light]) => {
+    const el = document.createElement("div");
+    el.className = "swatch tagpair";
+    el.innerHTML = `<div class="fill"><span style="background:${solid}"></span><span style="background:${light}"></span></div><div class="meta"><div class="name">${name}</div><div class="val mono">${solid} / ${light}</div></div>`;
+    tagGrid.appendChild(el);
+  });
+</script>
+
+</body>
+</html>
