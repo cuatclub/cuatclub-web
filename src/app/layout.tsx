@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 
 import { auth } from "@/server/auth";
 import { TRPCReactProvider } from "@/trpc/react";
+import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
@@ -52,6 +53,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           userImage={session?.user.image}
         />
         <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Footer />
       </body>
     </html>
   );

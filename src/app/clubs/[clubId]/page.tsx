@@ -22,7 +22,7 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
 
   return (
     <>
-      <main className="mx-auto flex w-full max-w-[1512px] flex-col gap-9 px-5 py-2.5 md:gap-12 md:px-8 md:py-10 xl:px-25">
+      <main className="mx-auto flex w-full max-w-[1512px] flex-col gap-9 px-5 pt-2.5 pb-5 md:gap-12 md:px-8 md:py-10 xl:px-25">
         <BackLink />
 
         {/* Content sits 32px inside the back control on desktop, per the Figma frame. */}
