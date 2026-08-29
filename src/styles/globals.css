@@ -5,7 +5,7 @@
   --font-th-sarabun: var(--font-th-sarabun), var(--font-en), ui-sans-serif, system-ui, sans-serif;
   --font-ibm-plex: var(--font-ibm-plex), var(--font-en), ui-sans-serif, system-ui, sans-serif;
 
-  --shadow-black: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+  --shadow-black: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
 @theme inline {

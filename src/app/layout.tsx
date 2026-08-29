@@ -48,6 +48,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           isLoggedIn={!!session}
           userName={session?.user.name}
           userEmail={session?.user.email}
+          userRole={session?.user.role}
+          userImage={session?.user.image}
         />
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
