@@ -23,8 +23,8 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
   const hasContacts = contacts.some(({ value }) => Boolean(value?.trim()));
 
   return (
-    <Card className="w-full max-w-[874px] gap-0 py-0">
-      <div className="flex flex-col gap-8 px-8 py-8 md:gap-6">
+    <Card className="flex w-full max-w-[874px] flex-col gap-6 p-6 md:gap-8 md:py-8">
+      <div className="flex flex-col gap-6 md:gap-8">
         <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
           ตรวจสอบข้อมูล
         </h2>
@@ -89,7 +89,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
           </dl>
         </section>
 
-        <section className="flex flex-col gap-6">
+        <section className="flex flex-col gap-6 md:gap-8">
           <div className="flex flex-col gap-2">
             <h3 className="font-ibm-plex text-foreground text-base leading-[26px] font-semibold">
               คำอธิบายแบบย่อ
@@ -113,7 +113,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
             <h3 className="font-ibm-plex text-foreground text-base leading-[26px] font-semibold">
               รูปบรรยากาศชมรม
             </h3>
-            <ul className="grid min-w-0 grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-3 md:grid-cols-5">
+            <ul className="flex flex-wrap gap-3">
               {club.imageUrls.map((imageUrl, index) => (
                 <li key={imageUrl} className="min-w-0 overflow-hidden rounded-lg">
                   <Image
@@ -121,8 +121,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
                     alt={`รูปบรรยากาศชมรม ${club.name} รูปที่ ${index + 1}`}
                     width={160}
                     height={160}
-                    sizes="(min-width: 768px) 15vw, 160px"
-                    className="aspect-square w-full rounded-lg object-cover"
+                    className="size-20 rounded-lg object-cover md:size-30"
                   />
                 </li>
               ))}
@@ -155,7 +154,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
         </section>
       </div>
 
-      <div className="px-5 py-6 md:px-10 md:py-8">{actions}</div>
+      <div>{actions}</div>
     </Card>
   );
 }
