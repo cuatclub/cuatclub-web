@@ -24,6 +24,16 @@ export const LoggedIn: Story = {
     isLoggedIn: true,
     userName: "John Doe",
     userEmail: "example@gmail.com",
+    userRole: "CLUB",
+  },
+};
+
+export const LoggedInStudent: Story = {
+  args: {
+    isLoggedIn: true,
+    userName: "John Doe",
+    userEmail: "example@gmail.com",
+    userRole: "STUDENT",
   },
 };
 

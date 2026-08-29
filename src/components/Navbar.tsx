@@ -1,12 +1,29 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Bookmark, Menu, Settings, X } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Bookmark, LogOut, Menu, Settings, X } from "lucide-react";
 
-import { Button } from "@/components/ui/Button";
+import { buttonVariants } from "@/components/ui/Button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu";
+import { cn } from "@/lib/utils";
+import { signOut } from "@/lib/auth-client";
 
-const NAV_LINKS = ["ชมรม", "กิจกรรม", "เกี่ยวกับ"];
+type NavLink = { label: string; href: string | null };
+
+const NAV_LINKS: NavLink[] = [
+  { label: "ชมรม", href: "/clubs" },
+  { label: "กิจกรรม", href: null },
+  { label: "เกี่ยวกับ", href: null },
+];
 
 const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -15,12 +32,22 @@ type NavbarProps = {
   isLoggedIn?: boolean;
   userName?: string;
   userEmail?: string;
+  userRole?: string;
 };
 
-export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps) {
+export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: NavbarProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const isClub = isLoggedIn && userRole === "CLUB";
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+    router.refresh();
+  };
 
   useEffect(() => {
     if (!isSidebarOpen) return;
@@ -60,47 +87,110 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
     };
   }, [isSidebarOpen]);
 
+  const closeSidebar = () => setIsSidebarOpen(false);
+
   return (
     <nav className="relative flex items-center justify-between bg-white px-4 py-3 md:px-16">
       <div className="md:flex md:items-center">
-        <Image
-          src="/svg/logo.svg"
-          alt="CUatClub"
-          width={76}
-          height={40}
-          priority
-          className="h-7 w-[53px] md:h-10 md:w-[76px]"
-        />
+        <Link href="/" aria-label="CUatClub หน้าแรก">
+          <Image
+            src="/svg/logo.svg"
+            alt="CUatClub"
+            width={76}
+            height={40}
+            priority
+            className="h-7 w-[53px] md:h-10 md:w-[76px]"
+          />
+        </Link>
       </div>
 
       <div className="hidden items-center gap-6 md:absolute md:left-1/2 md:flex md:-translate-x-1/2">
-        {NAV_LINKS.map((label) => (
-          <button
-            key={label}
-            type="button"
-            className="font-ibm-plex text-foreground hover:text-primary cursor-pointer px-4 py-2 text-base font-medium"
-          >
-            {label}
-          </button>
-        ))}
+        {NAV_LINKS.map(({ label, href }) =>
+          href ? (
+            <Link
+              key={label}
+              href={href}
+              className="font-ibm-plex text-foreground hover:text-primary cursor-pointer px-4 py-2 text-base font-medium"
+            >
+              {label}
+            </Link>
+          ) : (
+            <button
+              key={label}
+              type="button"
+              disabled
+              aria-disabled="true"
+              className="font-ibm-plex text-placeholder cursor-not-allowed px-4 py-2 text-base font-medium"
+            >
+              {label}
+            </button>
+          )
+        )}
       </div>
 
       <div className={`hidden items-center justify-end md:flex ${isLoggedIn ? "gap-6" : "gap-3"}`}>
         {isLoggedIn ? (
           <>
-            <Button variant="outline">แดชบอร์ด</Button>
-            <Image
-              src="/svg/user_profile.svg"
-              alt="Profile"
-              width={40}
-              height={40}
-              className="h-10 w-10 rounded-full"
-            />
+            {isClub && (
+              <Link href="/dashboard" className={buttonVariants({ variant: "outline" })}>
+                แดชบอร์ด
+              </Link>
+            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                type="button"
+                aria-label="เมนูผู้ใช้"
+                className="cursor-pointer rounded-full"
+              >
+                <Image
+                  src="/svg/user_profile.svg"
+                  alt="Profile"
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 rounded-full"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <div className="flex items-center gap-2 pb-2">
+                  <Image
+                    src="/svg/user_profile.svg"
+                    alt="Profile"
+                    width={36}
+                    height={36}
+                    className="h-9 w-9 rounded-full"
+                  />
+                  <div className="flex flex-col">
+                    {userName && (
+                      <span className="font-ibm-plex text-foreground text-sm font-semibold">
+                        {userName}
+                      </span>
+                    )}
+                    {userEmail && (
+                      <span className="font-ibm-plex text-foreground-secondary text-xs">
+                        {userEmail}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onSelect={handleSignOut}
+                  className="text-foreground-secondary hover:text-error focus:text-error data-[highlighted]:text-error"
+                >
+                  <LogOut className="h-4 w-4" />
+                  ออกจากระบบ
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </>
         ) : (
           <>
-            <Button variant="outline">เข้าสู่ระบบ</Button>
-            <Button variant="primary">ลงทะเบียน</Button>
+            <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+              เข้าสู่ระบบ
+            </Link>
+            <Link href="/register" className={buttonVariants({ variant: "primary" })}>
+              ลงทะเบียน
+            </Link>
           </>
         )}
       </div>
@@ -120,7 +210,7 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
         <div className="fixed inset-0 flex md:hidden">
           <div
             className="absolute inset-0 z-20 bg-black/30"
-            onClick={() => setIsSidebarOpen(false)}
+            onClick={closeSidebar}
             aria-hidden="true"
           />
 
@@ -132,21 +222,34 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
             className="animate-in slide-in-from-right z-50 ml-auto flex h-full w-[300px] flex-col bg-white px-5 duration-300"
           >
             <div className="flex h-16 items-center justify-end">
-              <button type="button" aria-label="ปิดเมนู" onClick={() => setIsSidebarOpen(false)}>
+              <button type="button" aria-label="ปิดเมนู" onClick={closeSidebar}>
                 <X className="text-foreground h-5 w-5" />
               </button>
             </div>
 
             <div className="flex flex-col gap-3">
-              {NAV_LINKS.map((label) => (
-                <button
-                  key={label}
-                  type="button"
-                  className="font-ibm-plex text-foreground py-1 text-left text-sm font-medium"
-                >
-                  {label}
-                </button>
-              ))}
+              {NAV_LINKS.map(({ label, href }) =>
+                href ? (
+                  <Link
+                    key={label}
+                    href={href}
+                    onClick={closeSidebar}
+                    className="font-ibm-plex text-foreground py-1 text-left text-sm font-medium"
+                  >
+                    {label}
+                  </Link>
+                ) : (
+                  <button
+                    key={label}
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="font-ibm-plex text-placeholder cursor-not-allowed py-1 text-left text-sm font-medium"
+                  >
+                    {label}
+                  </button>
+                )
+              )}
             </div>
 
             <div className="border-border my-6 border-t" />
@@ -156,14 +259,18 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
                 <div className="flex flex-col gap-1">
                   <button
                     type="button"
-                    className="font-ibm-plex text-foreground flex items-center gap-2 rounded-lg p-2 text-sm font-medium"
+                    disabled
+                    aria-disabled="true"
+                    className="font-ibm-plex text-placeholder flex cursor-not-allowed items-center gap-2 rounded-lg p-2 text-sm font-medium"
                   >
                     <Bookmark className="h-4 w-4" />
                     ที่บันทึกไว้
                   </button>
                   <button
                     type="button"
-                    className="font-ibm-plex text-foreground flex items-center gap-2 rounded-lg p-2 text-sm font-medium"
+                    disabled
+                    aria-disabled="true"
+                    className="font-ibm-plex text-placeholder flex cursor-not-allowed items-center gap-2 rounded-lg p-2 text-sm font-medium"
                   >
                     <Settings className="h-4 w-4" />
                     ตั้งค่า
@@ -176,7 +283,7 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Image
-                        src="/images/user_profile.svg"
+                        src="/svg/user_profile.svg"
                         alt="Profile"
                         width={36}
                         height={36}
@@ -197,25 +304,40 @@ export function Navbar({ isLoggedIn = false, userName, userEmail }: NavbarProps)
                     </div>
                     <button
                       type="button"
-                      className="font-ibm-plex text-foreground-secondary text-[10px]"
+                      onClick={handleSignOut}
+                      className="font-ibm-plex text-foreground-secondary hover:text-error text-[10px]"
                     >
-                      Sign out
+                      ออกจากระบบ
                     </button>
                   </div>
                 )}
 
-                <Button variant="outline" className="mt-6 w-full">
-                  แดชบอร์ด
-                </Button>
+                {isClub && (
+                  <Link
+                    href="/dashboard"
+                    onClick={closeSidebar}
+                    className={cn(buttonVariants({ variant: "outline" }), "mt-6 w-full")}
+                  >
+                    แดชบอร์ด
+                  </Link>
+                )}
               </>
             ) : (
               <div className="flex flex-col gap-3">
-                <Button variant="primary" className="w-full">
+                <Link
+                  href="/register"
+                  onClick={closeSidebar}
+                  className={cn(buttonVariants({ variant: "primary" }), "w-full")}
+                >
                   ลงทะเบียน
-                </Button>
-                <Button variant="outline" className="w-full">
+                </Link>
+                <Link
+                  href="/login"
+                  onClick={closeSidebar}
+                  className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+                >
                   เข้าสู่ระบบ
-                </Button>
+                </Link>
               </div>
             )}
           </div>
