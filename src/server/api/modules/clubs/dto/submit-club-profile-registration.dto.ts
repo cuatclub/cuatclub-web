@@ -9,7 +9,7 @@ export type SubmitClubProfileRegistrationInputDTO = z.infer<
 >;
 
 export const SubmitClubProfileRegistrationOutputDTOSchema = z.object({
-  registrationStatus: z.enum(["COMPLETED"]).optional(),
+  registrationStatus: z.literal("COMPLETED"),
 });
 
 export type SubmitClubProfileRegistrationOutputDTO = z.infer<

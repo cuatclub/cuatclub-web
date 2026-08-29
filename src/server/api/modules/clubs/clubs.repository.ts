@@ -26,7 +26,7 @@ export type PublicClubsPage = {
   total: number;
 };
 
-// Shape of the join used by getDetailById. Lives here, not on ClubDetail — the
+// Shape of the join used by detail queries. Lives here, not on ClubDetail — the
 // repository owns persistence shape; the entity only knows about other entities.
 type ClubDetailRow = ClubRow & {
   user: typeof user.$inferSelect;
@@ -37,7 +37,8 @@ type ClubDetailRow = ClubRow & {
 export interface IClubsRepository {
   create(req: CreateClubParams, client?: DbClient): Promise<string>;
   getById(id: string): Promise<Club | null>;
-  getDetailById(id: string): Promise<ClubDetail | null>;
+  getDetailById(id: string, client?: DbClient): Promise<ClubDetail | null>;
+  getDetailByUserId(userId: string, client?: DbClient): Promise<ClubDetail | null>;
   getByUserId(userId: string): Promise<Club | null>;
   getByFilter(filter?: SQL): Promise<Club[]>;
   getAllDetailByFilter(params: GetPublicClubsParams): Promise<PublicClubsPage>;
@@ -62,8 +63,12 @@ class ClubsRepository implements IClubsRepository {
     return this.getOneByFilter(eq(clubs.id, id));
   }
 
-  async getDetailById(id: string): Promise<ClubDetail | null> {
-    return this.getOneDetailByFilter(eq(clubs.id, id));
+  async getDetailById(id: string, client: DbClient = db): Promise<ClubDetail | null> {
+    return this.getOneDetailByFilter(eq(clubs.id, id), client);
+  }
+
+  async getDetailByUserId(userId: string, client: DbClient = db): Promise<ClubDetail | null> {
+    return this.getOneDetailByFilter(eq(clubs.userId, userId), client);
   }
 
   async getByUserId(userId: string): Promise<Club | null> {
@@ -133,8 +138,8 @@ class ClubsRepository implements IClubsRepository {
     return res ? Club.toEntity(res) : null;
   }
 
-  private async getOneDetailByFilter(filter: SQL): Promise<ClubDetail | null> {
-    const res = await db.query.clubs
+  private async getOneDetailByFilter(filter: SQL, client: DbClient): Promise<ClubDetail | null> {
+    const res = await client.query.clubs
       .findFirst({
         where: filter,
         with: { user: true, affiliation: true, categories: { with: { category: true } } },

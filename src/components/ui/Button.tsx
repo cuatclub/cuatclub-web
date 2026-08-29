@@ -19,6 +19,16 @@ const buttonVariants = cva(
   }
 );
 
+/**
+ * `isLoading` still sets native `disabled` (blocks clicks, prevents double-submit), but the
+ * button should keep looking like its normal, interactive self rather than the grayed-out
+ * `disabled:` variant — that state is reserved for an actually-invalid/disabled action.
+ */
+const loadingVariantOverride: Record<"primary" | "outline", string> = {
+  primary: "disabled:bg-primary",
+  outline: "disabled:border-primary disabled:text-primary",
+};
+
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
@@ -28,7 +38,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, isLoading, disabled, children, ...props }, ref) => (
     <button
       ref={ref}
-      className={cn(buttonVariants({ variant }), className)}
+      className={cn(
+        buttonVariants({ variant }),
+        isLoading && loadingVariantOverride[variant ?? "primary"],
+        className
+      )}
       aria-busy={isLoading ?? undefined}
       disabled={disabled || isLoading}
       {...props}

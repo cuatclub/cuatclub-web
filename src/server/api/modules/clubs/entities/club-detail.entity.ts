@@ -4,7 +4,7 @@ import type {
   AffiliationRow,
   CategoryRow,
 } from "@/server/api/modules/master-data/master-data.entity";
-import type { GetClubByIdOutputDTO } from "@/server/api/modules/clubs/dto";
+import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 
 export class ClubDetail {
   private constructor(
@@ -63,7 +63,15 @@ export class ClubDetail {
     return this.club.isPubliclyVisible;
   }
 
-  toDTO(): GetClubByIdOutputDTO {
+  get isAwaitingRegistrationReview() {
+    return this.club.isAwaitingRegistrationReview;
+  }
+
+  get isRegistrationInProgress() {
+    return this.club.isRegistrationInProgress;
+  }
+
+  toDTO(): ClubDetailOutputDTO {
     return {
       id: this.id,
       name: this.name,
