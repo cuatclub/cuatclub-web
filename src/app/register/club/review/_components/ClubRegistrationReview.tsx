@@ -24,7 +24,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
 
   return (
     <Card className="w-full max-w-[874px] gap-0 py-0">
-      <div className="flex flex-col gap-8 px-8 py-8 md:gap-10">
+      <div className="flex flex-col gap-8 px-8 py-8 md:gap-6">
         <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
           ตรวจสอบข้อมูล
         </h2>
