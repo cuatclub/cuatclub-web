@@ -53,7 +53,7 @@ const SelectContent = forwardRef<
       )}
       {...props}
     >
-      <SelectPrimitive.Viewport className="flex flex-col gap-1">
+      <SelectPrimitive.Viewport className="no-scrollbar flex flex-col gap-1">
         {children}
       </SelectPrimitive.Viewport>
     </SelectPrimitive.Content>

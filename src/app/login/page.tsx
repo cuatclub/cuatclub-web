@@ -122,7 +122,11 @@ export default function Login() {
           </CardHeader>
           <CardContent>
             <form className="flex flex-col gap-4" onSubmit={onSubmit} noValidate>
-              <fieldset disabled={isSubmitting} className="contents">
+              <fieldset
+                inert={isSubmitting || undefined}
+                aria-busy={isSubmitting}
+                className="contents"
+              >
                 <div className="flex flex-col gap-1">
                   <label
                     htmlFor="email"

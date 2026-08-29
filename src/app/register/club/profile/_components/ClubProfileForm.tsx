@@ -125,18 +125,17 @@ export function ClubProfileForm({
   return (
     <Card className="w-full max-w-[874px] gap-0 p-6 md:py-8">
       <form onSubmit={submitForm} noValidate>
-        <fieldset disabled={isSubmitting} className="contents flex flex-col gap-6 md:gap-8">
+        <fieldset
+          inert={isSubmitting || undefined}
+          aria-busy={isSubmitting}
+          className="contents flex flex-col gap-6 md:gap-8"
+        >
           <CardContent className="flex flex-col gap-4 px-0 md:gap-6">
             <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
               ข้อมูลทั่วไป
             </h2>
 
-            <ClubLogoField
-              value={logo}
-              errorMessage={errors.logo?.message}
-              disabled={isSubmitting}
-              onChange={updateLogo}
-            />
+            <ClubLogoField value={logo} errorMessage={errors.logo?.message} onChange={updateLogo} />
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,3fr)_minmax(0,3fr)_minmax(0,2fr)] md:gap-5">
               <Input
@@ -163,7 +162,6 @@ export function ClubProfileForm({
                     placeholder="เลือกคณะ/สังกัด"
                     triggerClassName="outline-none"
                     className="min-w-0"
-                    disabled={isSubmitting}
                     error={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
                     onValueChange={(value) => {
@@ -186,7 +184,6 @@ export function ClubProfileForm({
                     value={field.value}
                     placeholder="เลือกหมวดหมู่"
                     className="min-w-0"
-                    disabled={isSubmitting}
                     error={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
                     onValueChange={(value) => {
@@ -222,7 +219,6 @@ export function ClubProfileForm({
             <ClubGalleryField
               value={atmospherePhotos}
               errorMessage={errors.atmospherePhotos?.message}
-              disabled={isSubmitting}
               onAddFiles={addAtmospherePhotos}
               onRemove={removeAtmospherePhoto}
             />

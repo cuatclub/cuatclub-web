@@ -21,7 +21,8 @@ export default async function RegisterClubInfoPage() {
                 กรอกข้อมูลชมรม
               </h1>
               <p className="font-ibm-plex text-foreground text-sm leading-[23px] md:text-lg md:leading-[30px]">
-                กรอกรายละเอียดเกี่ยวกับชมรมของคุณให้ครบถ้วน เพื่อให้ผู้อื่นเข้าใจชมรมได้ง่ายขึ้น
+                กรอกรายละเอียดเกี่ยวกับชมรมของคุณให้ครบถ้วน <br className="md:hidden" />
+                เพื่อให้ผู้อื่นเข้าใจชมรมได้ง่ายขึ้น
               </p>
             </div>
 

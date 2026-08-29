@@ -127,10 +127,10 @@ export function ClubLogoField({
                 type="button"
                 aria-label="ลบรูปโปรไฟล์"
                 disabled={disabled}
-                className="border-placeholder text-placeholder hover:border-primary-light hover:text-primary focus-visible:ring-primary disabled:bg-border flex size-9 cursor-pointer items-center justify-center rounded-lg border bg-white transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed"
+                className="border-placeholder text-placeholder hover:border-primary-light hover:text-primary focus-visible:ring-primary disabled:bg-border flex size-7 cursor-pointer items-center justify-center rounded-lg border bg-white transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed md:size-9"
                 onClick={() => onChange(null)}
               >
-                <Trash2 className="size-4" aria-hidden="true" />
+                <Trash2 className="size-3 md:size-4" aria-hidden="true" />
               </button>
             )}
             <label

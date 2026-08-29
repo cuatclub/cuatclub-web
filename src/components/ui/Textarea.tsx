@@ -52,7 +52,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           aria-invalid={mergedAriaInvalid}
           aria-describedby={describedByIds || undefined}
           className={cn(
-            "border-border font-ibm-plex text-foreground placeholder:text-placeholder flex min-h-24 w-full items-start rounded-lg border bg-white p-3 text-sm leading-[23px] transition-colors outline-none md:text-base md:leading-[26px]",
+            "no-scrollbar border-border font-ibm-plex text-foreground placeholder:text-placeholder flex min-h-24 w-full items-start rounded-lg border bg-white p-3 text-sm leading-[23px] transition-colors outline-none md:text-base md:leading-[26px]",
             "hover:border-primary-light focus:border-primary",
             "disabled:bg-border disabled:text-placeholder disabled:hover:border-border disabled:cursor-not-allowed",
             error && "border-error hover:border-error focus:border-error",
