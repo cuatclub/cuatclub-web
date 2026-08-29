@@ -1,14 +1,12 @@
 import { ClubRegistrationReview } from "@/app/register/club/review/_components/ClubRegistrationReview";
 import { ReviewActions } from "@/app/register/club/review/_components/ReviewActions";
-import {
-  MOCK_CLUB_REGISTRATION_REVIEW,
-  MOCK_REVIEW_REGISTRATION_STATUS,
-} from "@/app/register/club/review/review-mock-data";
 import { StepIndicator } from "@/app/register/club/_components/StepIndicator";
 import { clubRegistrationStepGuard } from "@/server/guard";
+import { api } from "@/trpc/server";
 
 export default async function RegisterReviewPage() {
-  await clubRegistrationStepGuard("INFO_SUBMITTED");
+  const registration = await clubRegistrationStepGuard("INFO_SUBMITTED");
+  const club = await api.clubs.getClubRegistrationDetails({});
 
   return (
     <div className="flex w-full flex-col bg-white">
@@ -24,13 +22,10 @@ export default async function RegisterReviewPage() {
               </p>
             </div>
 
-            <StepIndicator registrationStatus={MOCK_REVIEW_REGISTRATION_STATUS} />
+            <StepIndicator registrationStatus={registration.registrationStatus} />
           </div>
 
-          <ClubRegistrationReview
-            club={MOCK_CLUB_REGISTRATION_REVIEW}
-            actions={<ReviewActions />}
-          />
+          <ClubRegistrationReview club={club} actions={<ReviewActions clubId={club.id} />} />
         </div>
       </main>
     </div>

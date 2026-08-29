@@ -4,10 +4,10 @@ import { ImageIcon } from "lucide-react";
 
 import { Card } from "@/components/ui/Card";
 import { Tag } from "@/components/ui/Tag";
-import type { GetClubByIdOutputDTO } from "@/server/api/modules/clubs/dto";
+import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 
 type ClubRegistrationReviewProps = {
-  club: GetClubByIdOutputDTO;
+  club: ClubDetailOutputDTO;
   actions: ReactNode;
 };
 
