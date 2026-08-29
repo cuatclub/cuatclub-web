@@ -140,7 +140,9 @@ function SingleInviteForm() {
 
       {result && (
         <div className="border-border bg-primary-lighter/30 flex flex-col gap-1 rounded-lg border p-4">
-          <p className="text-foreground-muted text-sm">ส่งรหัสเชิญไปที่ {result.email} แล้ว</p>
+          <p className="text-foreground-muted text-sm">
+            สร้างรหัสเชิญสำหรับ {result.email} แล้ว กรุณาส่งรหัสนี้ให้ชมรม
+          </p>
           <p className="font-ibm-plex text-primary text-lg font-semibold tracking-widest">
             {result.inviteCode}
           </p>

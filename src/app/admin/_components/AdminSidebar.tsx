@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, type RefObject } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,14 +15,60 @@ const NAV_ITEMS = [
 const itemClass =
   "font-ibm-plex flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:text-base";
 
+const FOCUSABLE_SELECTOR =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 type AdminSidebarProps = {
   /** Drawer visibility below `md` — the desktop sidebar below always renders on its own. */
   mobileOpen: boolean;
   onMobileClose: () => void;
+  /** The header's hamburger button — focus returns here when the drawer closes. */
+  menuButtonRef: RefObject<HTMLButtonElement | null>;
 };
 
-export function AdminSidebar({ mobileOpen, onMobileClose }: AdminSidebarProps) {
+export function AdminSidebar({ mobileOpen, onMobileClose, menuButtonRef }: AdminSidebarProps) {
   const pathname = usePathname();
+  const drawerRef = useRef<HTMLDivElement>(null);
+
+  // Mirrors Navbar.tsx's mobile drawer: move focus in on open, trap Tab within it, close on
+  // Escape, and hand focus back to the opener button on close.
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const drawer = drawerRef.current;
+    const firstFocusable = drawer?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+    firstFocusable?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onMobileClose();
+        return;
+      }
+
+      if (event.key !== "Tab" || !drawer) return;
+
+      const focusable = Array.from(drawer.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    const menuButton = menuButtonRef.current;
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      menuButton?.focus();
+    };
+  }, [mobileOpen, onMobileClose, menuButtonRef]);
 
   const renderNavItems = (onNavigate?: () => void) =>
     NAV_ITEMS.map(({ href, label, icon: Icon, disabled }) => {
@@ -65,7 +112,7 @@ export function AdminSidebar({ mobileOpen, onMobileClose }: AdminSidebarProps) {
       {/* Desktop: always-visible full sidebar. */}
       <aside className="border-border hidden bg-white md:sticky md:top-0 md:flex md:h-screen md:w-64 md:shrink-0 md:flex-col md:border-r">
         <div className="flex items-center gap-2 px-5 py-4 md:px-6 md:py-3">
-          <Link href="/admin/dashboard" className="flex items-center gap-2">
+          <Link href="/admin/clubs" className="flex items-center gap-2">
             <Image
               src="/svg/logo.svg"
               alt="CUatClub"
@@ -91,17 +138,14 @@ export function AdminSidebar({ mobileOpen, onMobileClose }: AdminSidebarProps) {
             onClick={onMobileClose}
           />
           <div
+            ref={drawerRef}
             role="dialog"
             aria-modal="true"
             aria-label="เมนูแอดมิน"
             className="animate-in slide-in-from-left relative z-10 flex h-full w-[72%] max-w-xs flex-col bg-white shadow-xl duration-200"
           >
             <div className="border-border flex h-16 items-center justify-between border-b px-4">
-              <Link
-                href="/admin/dashboard"
-                onClick={onMobileClose}
-                className="flex items-center gap-2"
-              >
+              <Link href="/admin/clubs" onClick={onMobileClose} className="flex items-center gap-2">
                 <Image
                   src="/svg/logo.svg"
                   alt="CUatClub"

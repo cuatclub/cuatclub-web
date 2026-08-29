@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type RefObject } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut, Menu } from "lucide-react";
 
@@ -11,9 +11,10 @@ type AdminHeaderProps = {
   name: string;
   email: string;
   onMenuClick: () => void;
+  menuButtonRef: RefObject<HTMLButtonElement | null>;
 };
 
-export function AdminHeader({ name, email, onMenuClick }: AdminHeaderProps) {
+export function AdminHeader({ name, email, onMenuClick, menuButtonRef }: AdminHeaderProps) {
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
@@ -31,6 +32,7 @@ export function AdminHeader({ name, email, onMenuClick }: AdminHeaderProps) {
     <header className="border-border sticky top-0 z-10 flex h-14 items-center justify-between gap-2 border-b bg-white px-3 sm:h-16 sm:gap-4 sm:px-5 md:px-8">
       <div className="flex min-w-0 items-center gap-2">
         <button
+          ref={menuButtonRef}
           type="button"
           aria-label="เปิดเมนู"
           onClick={onMenuClick}
