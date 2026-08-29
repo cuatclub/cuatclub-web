@@ -1,7 +1,9 @@
 import "server-only";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { TRPCError } from "@trpc/server";
 import { api } from "@/trpc/server";
+import { auth } from "@/server/auth";
 import type { GetClubProfileOutputDTO } from "@/server/api/modules/clubs/dto";
 
 type RegistrationStep = "PENDING" | "INFO_SUBMITTED" | "COMPLETED";
@@ -70,4 +72,27 @@ export async function clubRegistrationStepGuard(
   }
 
   return club;
+}
+
+export interface AdminSessionUser {
+  name: string;
+  email: string;
+}
+
+/**
+ * Guards /admin/**: anonymous visitors go to /login, and anyone signed in
+ * without the ADMIN role goes home — mirrors adminProcedure's own check
+ * (procedures.ts) so the page never even renders for a non-admin, rather
+ * than relying solely on the tRPC calls inside it to reject.
+ *
+ * Returns the signed-in user so the admin layout's header can show it
+ * without a second session lookup.
+ */
+export async function adminGuard(): Promise<AdminSessionUser> {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session) redirect("/login");
+  if (session.user.role !== "ADMIN") redirect("/");
+
+  return { name: session.user.name, email: session.user.email };
 }
