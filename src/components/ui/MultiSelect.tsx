@@ -74,7 +74,6 @@ const MultiSelect = ({
             id={triggerId}
             disabled={disabled}
             aria-invalid={error}
-            aria-required={required}
             aria-labelledby={label ? `${labelId} ${triggerId}` : undefined}
             aria-describedby={error && errorMessage ? errorId : undefined}
             className={cn(
