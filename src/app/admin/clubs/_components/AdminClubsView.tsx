@@ -7,6 +7,7 @@ import { Building2, Search } from "lucide-react";
 
 import { api } from "@/trpc/react";
 import { Card, Input, Pagination, Tag } from "@/components";
+import { ClubDetailDialog } from "@/app/admin/clubs/_components/ClubDetailDialog";
 import { InviteClubDialog } from "@/app/admin/clubs/_components/InviteClubDialog";
 
 const PAGE_SIZE = 20;
@@ -14,6 +15,7 @@ const PAGE_SIZE = 20;
 export function AdminClubsView() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [selectedClubId, setSelectedClubId] = useState<string | null>(null);
 
   const { data, isLoading, isError } = api.clubs.getAll.useQuery(
     { search: search.trim() || undefined, sort: "NAME_ASC", page, pageSize: PAGE_SIZE },
@@ -87,7 +89,19 @@ export function AdminClubsView() {
                 </tr>
               )}
               {data?.clubs.map((club) => (
-                <tr key={club.id} className="border-border border-b last:border-b-0">
+                <tr
+                  key={club.id}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`ดูรายละเอียด${club.name}`}
+                  onClick={() => setSelectedClubId(club.id)}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Enter" && event.key !== " ") return;
+                    event.preventDefault();
+                    setSelectedClubId(club.id);
+                  }}
+                  className="border-border hover:bg-primary-lighter/30 focus-visible:ring-primary cursor-pointer border-b last:border-b-0 focus-visible:ring-2 focus-visible:-outline-offset-2 focus-visible:outline-none"
+                >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       {club.logoUrl ? (
@@ -135,6 +149,8 @@ export function AdminClubsView() {
       </Card>
 
       <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+
+      <ClubDetailDialog clubId={selectedClubId} onClose={() => setSelectedClubId(null)} />
     </div>
   );
 }
