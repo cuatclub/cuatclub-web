@@ -97,8 +97,6 @@ export function ClubProfileFormContainer({
       throw new Error("Gallery upload target count did not match");
     }
 
-    console.log(presignedGalleryUploads);
-
     const uploads: Promise<void>[] = [];
     if (newLogo && logoContentType && logoUpload) {
       uploads.push(

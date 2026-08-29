@@ -32,7 +32,7 @@ function NewGalleryPreview({ file }: { file: File }) {
   }, [file]);
 
   if (!previewUrl) {
-    return <div className="bg-surface size-full animate-pulse" aria-hidden="true" />;
+    return <div className="bg-surface size-full animate-pulse rounded-lg" aria-hidden="true" />;
   }
 
   return (
@@ -42,7 +42,7 @@ function NewGalleryPreview({ file }: { file: File }) {
       width={128}
       height={128}
       unoptimized
-      className="size-full object-cover"
+      className="size-full rounded-lg object-cover"
     />
   );
 }
@@ -80,7 +80,7 @@ export function ClubGalleryField({
                 ? image.url
                 : `${image.file.name}-${image.file.size}-${image.file.lastModified}-${index}`
             }
-            className="bg-surface relative size-30 shrink-0 overflow-hidden rounded-lg"
+            className="bg-surface relative size-30 shrink-0 rounded-lg"
           >
             {image.kind === "persisted" ? (
               <Image
@@ -88,24 +88,23 @@ export function ClubGalleryField({
                 alt={`รูปบรรยากาศชมรมปัจจุบัน ลำดับที่ ${index + 1}`}
                 width={128}
                 height={128}
-                className="size-full object-cover"
+                className="size-full rounded-lg object-cover"
               />
             ) : (
               <NewGalleryPreview file={image.file} />
             )}
             <Button
               type="button"
-              variant="outline"
               disabled={disabled}
               aria-label={`ลบรูป ${
                 image.kind === "persisted"
                   ? `ลำดับที่ ${index + 1}`
                   : image.file.name || `ลำดับที่ ${index + 1}`
               }`}
-              className="absolute top-1.5 right-1.5 size-8 bg-white/90 p-0"
+              className="bg-surface text-foreground hover:bg-border focus-visible:ring-primary disabled:bg-border disabled:text-placeholder absolute -top-2 -right-2 z-10 size-8 rounded-full p-0 shadow-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
               onClick={() => onRemove(index)}
             >
-              <X className="size-4" aria-hidden="true" />
+              <X className="size-4 stroke-2" aria-hidden="true" />
             </Button>
           </div>
         ))}

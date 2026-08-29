@@ -24,7 +24,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
 
   return (
     <Card className="w-full max-w-[874px] gap-0 py-0">
-      <div className="flex flex-col gap-8 px-5 py-8 md:gap-10">
+      <div className="flex flex-col gap-8 px-8 py-8 md:gap-10">
         <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
           ตรวจสอบข้อมูล
         </h2>
@@ -48,7 +48,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
           )}
 
           <dl className="grid min-w-0 grid-rows-3 gap-3 md:h-40 md:gap-0 md:self-stretch">
-            <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[128px_minmax(0,1fr)] md:gap-6">
+            <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[112px_minmax(0,1fr)] md:gap-4">
               <dt className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold md:text-base md:leading-[26px]">
                 ชื่อชมรม
               </dt>
@@ -56,7 +56,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
                 {club.name}
               </dd>
             </div>
-            <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[128px_minmax(0,1fr)] md:gap-6">
+            <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[112px_minmax(0,1fr)] md:gap-4">
               <dt className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold md:text-base md:leading-[26px]">
                 คณะ/สังกัด
               </dt>
@@ -64,7 +64,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
                 {club.affiliation?.label ?? "—"}
               </dd>
             </div>
-            <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[128px_minmax(0,1fr)] md:gap-6">
+            <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[112px_minmax(0,1fr)] md:gap-4">
               <dt className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold md:text-base md:leading-[26px]">
                 หมวดหมู่
               </dt>
@@ -138,10 +138,10 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
             <dl className="grid grid-cols-1 gap-x-10 gap-y-3 md:grid-flow-col md:grid-cols-2 md:grid-rows-2">
               {contacts.map(({ label, value }) => (
                 <div key={label} className="flex min-w-0 gap-4">
-                  <dt className="font-ibm-plex text-foreground-secondary w-20 shrink-0 text-sm leading-[23px] font-medium md:text-base md:leading-[26px]">
+                  <dt className="font-ibm-plex text-foreground w-20 shrink-0 text-sm leading-[23px] font-medium md:text-base md:leading-[26px]">
                     {label}
                   </dt>
-                  <dd className="font-ibm-plex text-foreground min-w-0 text-sm leading-[23px] wrap-break-word md:text-base md:leading-[26px]">
+                  <dd className="font-ibm-plex text-foreground-secondary min-w-0 text-sm leading-[23px] wrap-break-word md:text-base md:leading-[26px]">
                     {displayValue(value)}
                   </dd>
                 </div>
