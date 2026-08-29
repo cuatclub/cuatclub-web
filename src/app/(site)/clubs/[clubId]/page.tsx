@@ -5,7 +5,7 @@ import {
   ClubContacts,
   ClubGallery,
   ClubHeader,
-} from "@/app/clubs/[clubId]/_components";
+} from "@/app/(site)/clubs/[clubId]/_components";
 import { api } from "@/trpc/server";
 
 type ClubDetailPageProps = {

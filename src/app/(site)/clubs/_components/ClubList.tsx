@@ -5,18 +5,18 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { keepPreviousData } from "@tanstack/react-query";
 import { SearchX } from "lucide-react";
 
-import { CategoryFilterRow } from "@/app/clubs/_components/CategoryFilterRow";
-import { ClubCard } from "@/app/clubs/_components/ClubCard";
-import { ClubFilterModal } from "@/app/clubs/_components/ClubFilterModal";
-import { ClubSearchBar } from "@/app/clubs/_components/ClubSearchBar";
-import { ClubSortSelect } from "@/app/clubs/_components/ClubSortSelect";
+import { CategoryFilterRow } from "@/app/(site)/clubs/_components/CategoryFilterRow";
+import { ClubCard } from "@/app/(site)/clubs/_components/ClubCard";
+import { ClubFilterModal } from "@/app/(site)/clubs/_components/ClubFilterModal";
+import { ClubSearchBar } from "@/app/(site)/clubs/_components/ClubSearchBar";
+import { ClubSortSelect } from "@/app/(site)/clubs/_components/ClubSortSelect";
 import {
   buildClubListQuery,
   CLUBS_PER_PAGE,
   parseClubListParams,
   toClubsQueryInput,
   type ClubListParams,
-} from "@/app/clubs/_lib/club-list-params";
+} from "@/app/(site)/clubs/_lib/club-list-params";
 import { Pagination } from "@/components/ui/Pagination";
 import { api } from "@/trpc/react";
 

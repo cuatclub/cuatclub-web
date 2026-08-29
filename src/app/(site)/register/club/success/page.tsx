@@ -4,7 +4,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { clubRegistrationStepGuard } from "@/server/guard";
-import { StepIndicator } from "@/app/register/club/_components/StepIndicator";
+import { StepIndicator } from "@/app/(site)/register/club/_components/StepIndicator";
 
 export default async function ClubRegisterSuccess() {
   const club = await clubRegistrationStepGuard("COMPLETED");

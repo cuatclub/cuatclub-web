@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import { PhotoLightbox } from "@/app/clubs/[clubId]/_components/PhotoLightbox";
+import { PhotoLightbox } from "@/app/(site)/clubs/[clubId]/_components/PhotoLightbox";
 
 type ClubGalleryProps = {
   photos: string[];

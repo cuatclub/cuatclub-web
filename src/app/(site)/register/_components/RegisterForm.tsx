@@ -20,7 +20,7 @@ import {
   Input,
   PasswordInput,
 } from "@/components";
-import { ToggleGroup, ToggleGroupItem } from "@/app/register/_components/ToggleGroup";
+import { ToggleGroup, ToggleGroupItem } from "@/app/(site)/register/_components/ToggleGroup";
 import {
   CODE_EMAIL_MISMATCH_MESSAGE,
   classifyRegisterClubError,
@@ -29,7 +29,7 @@ import {
   GENERIC_ERROR_MESSAGE,
   registerClubSchema,
   type RegisterClubFormValues,
-} from "@/app/register/register-schema";
+} from "@/app/(site)/register/register-schema";
 
 type AccountType = "student" | "club";
 

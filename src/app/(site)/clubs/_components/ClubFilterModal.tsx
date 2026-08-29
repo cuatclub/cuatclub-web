@@ -3,8 +3,8 @@
 import { useState, type RefObject } from "react";
 import { X } from "lucide-react";
 
-import { ClubSortSelect } from "@/app/clubs/_components/ClubSortSelect";
-import type { ClubListParams } from "@/app/clubs/_lib/club-list-params";
+import { ClubSortSelect } from "@/app/(site)/clubs/_components/ClubSortSelect";
+import type { ClubListParams } from "@/app/(site)/clubs/_lib/club-list-params";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";

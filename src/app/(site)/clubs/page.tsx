@@ -1,7 +1,11 @@
 import { Suspense } from "react";
 
-import { ClubList } from "@/app/clubs/_components";
-import { parseClubListParams, toClubsQueryInput, toQueryParamReader } from "@/app/clubs/_lib";
+import { ClubList } from "@/app/(site)/clubs/_components";
+import {
+  parseClubListParams,
+  toClubsQueryInput,
+  toQueryParamReader,
+} from "@/app/(site)/clubs/_lib";
 import { api, HydrateClient } from "@/trpc/server";
 
 type ClubListPageProps = {
