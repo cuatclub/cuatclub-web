@@ -22,7 +22,7 @@ export const getClubImagesUploadUrl = async (
 
   const presignedUrls = await Promise.all(
     input.files.map(async (file, index) => {
-      const key = `clubs/${club.id}/${randomUUID()}/image${index + 1}.${getExtension(file.contentType)}`;
+      const key = `clubs/${club.id}/${randomUUID()}${index}.${getExtension(file.contentType)}`;
       const url = await getSignedUploadUrl(key, file.contentType);
       return { key, url, publicUrl: getPublicUrl(key) };
     })
