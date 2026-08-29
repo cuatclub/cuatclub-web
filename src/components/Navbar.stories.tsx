@@ -25,6 +25,7 @@ export const LoggedIn: Story = {
     userName: "John Doe",
     userEmail: "example@gmail.com",
     userRole: "CLUB",
+    userImage: "https://placehold.co/80x80",
   },
 };
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Bookmark, LogOut, Menu, Settings, X } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/Button";
@@ -33,13 +33,22 @@ type NavbarProps = {
   userName?: string;
   userEmail?: string;
   userRole?: string;
+  userImage?: string | null;
 };
 
-export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: NavbarProps) {
+export function Navbar({
+  isLoggedIn = false,
+  userName,
+  userEmail,
+  userRole,
+  userImage,
+}: NavbarProps) {
+  const profileImageSrc = userImage ?? "/svg/user_profile.svg";
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   const isClub = isLoggedIn && userRole === "CLUB";
 
@@ -90,7 +99,7 @@ export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: Na
   const closeSidebar = () => setIsSidebarOpen(false);
 
   return (
-    <nav className="relative flex items-center justify-between bg-white px-4 py-3 md:px-16">
+    <nav className="sticky top-0 z-30 flex items-center justify-between bg-white px-4 py-3 shadow-black md:px-16">
       <div className="md:flex md:items-center">
         <Link href="/" aria-label="CUatClub หน้าแรก">
           <Image
@@ -105,12 +114,17 @@ export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: Na
       </div>
 
       <div className="hidden items-center gap-6 md:absolute md:left-1/2 md:flex md:-translate-x-1/2">
-        {NAV_LINKS.map(({ label, href }) =>
-          href ? (
+        {NAV_LINKS.map(({ label, href }) => {
+          const isActive = href !== null && pathname === href;
+
+          return href ? (
             <Link
               key={label}
               href={href}
-              className="font-ibm-plex text-foreground hover:text-primary cursor-pointer px-4 py-2 text-base font-medium"
+              className={cn(
+                "font-ibm-plex after:bg-primary hover:text-primary relative cursor-pointer px-4 py-2 text-base font-medium after:absolute after:right-4 after:-bottom-3 after:left-4 after:h-1 after:rounded-full after:transition-transform after:content-[''] hover:after:scale-x-100",
+                isActive ? "text-primary after:scale-x-100" : "text-foreground after:scale-x-0"
+              )}
             >
               {label}
             </Link>
@@ -124,8 +138,8 @@ export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: Na
             >
               {label}
             </button>
-          )
-        )}
+          );
+        })}
       </div>
 
       <div className={`hidden items-center justify-end md:flex ${isLoggedIn ? "gap-6" : "gap-3"}`}>
@@ -143,7 +157,7 @@ export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: Na
                 className="cursor-pointer rounded-full"
               >
                 <Image
-                  src="/svg/user_profile.svg"
+                  src={profileImageSrc}
                   alt="Profile"
                   width={40}
                   height={40}
@@ -153,7 +167,7 @@ export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: Na
               <DropdownMenuContent>
                 <div className="flex items-center gap-2 pb-2">
                   <Image
-                    src="/svg/user_profile.svg"
+                    src={profileImageSrc}
                     alt="Profile"
                     width={36}
                     height={36}
@@ -175,7 +189,7 @@ export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: Na
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onSelect={handleSignOut}
-                  className="text-foreground-secondary hover:text-error focus:text-error data-[highlighted]:text-error"
+                  className="text-foreground-secondary bg-text-error hover:text-error focus:text-error data-[highlighted]:text-error data-[highlighted]:bg-tag-red-light"
                 >
                   <LogOut className="h-4 w-4" />
                   ออกจากระบบ
@@ -228,13 +242,18 @@ export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: Na
             </div>
 
             <div className="flex flex-col gap-3">
-              {NAV_LINKS.map(({ label, href }) =>
-                href ? (
+              {NAV_LINKS.map(({ label, href }) => {
+                const isActive = href !== null && pathname === href;
+
+                return href ? (
                   <Link
                     key={label}
                     href={href}
                     onClick={closeSidebar}
-                    className="font-ibm-plex text-foreground py-1 text-left text-sm font-medium"
+                    className={cn(
+                      "font-ibm-plex py-1 text-left text-sm font-medium",
+                      isActive ? "text-primary" : "text-foreground"
+                    )}
                   >
                     {label}
                   </Link>
@@ -248,8 +267,8 @@ export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: Na
                   >
                     {label}
                   </button>
-                )
-              )}
+                );
+              })}
             </div>
 
             <div className="border-border my-6 border-t" />
@@ -283,7 +302,7 @@ export function Navbar({ isLoggedIn = false, userName, userEmail, userRole }: Na
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Image
-                        src="/svg/user_profile.svg"
+                        src={profileImageSrc}
                         alt="Profile"
                         width={36}
                         height={36}
