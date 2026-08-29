@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,28 +13,15 @@ import {
   clubProfileSchema,
   getImageFileValidationMessage,
   MAX_ATMOSPHERE_PHOTOS,
+  type ClubProfileImage,
   type ClubProfileFormValues,
 } from "@/app/register/club/profile/profile-schema";
 
 type ClubProfileFormProps = {
   affiliations: readonly string[];
   categories: readonly string[];
-};
-
-const DEFAULT_VALUES: ClubProfileFormValues = {
-  logo: null,
-  name: "",
-  affiliation: "",
-  categories: [],
-  shortDescription: "",
-  longDescription: "",
-  atmospherePhotos: [],
-  contacts: {
-    instagram: "",
-    facebook: "",
-    tiktok: "",
-    lineOa: "",
-  },
+  initialValues: ClubProfileFormValues;
+  onSubmit: (values: ClubProfileFormValues) => Promise<void>;
 };
 
 const valueUpdateOptions = {
@@ -45,8 +33,14 @@ const valueUpdateOptions = {
 const labelClassName =
   "font-ibm-plex text-foreground text-sm leading-[23px] font-medium md:text-base md:leading-[26px]";
 
-export function ClubProfileForm({ affiliations, categories }: ClubProfileFormProps) {
+export function ClubProfileForm({
+  affiliations,
+  categories,
+  initialValues,
+  onSubmit,
+}: ClubProfileFormProps) {
   const router = useRouter();
+  const submitErrorRef = useRef<HTMLParagraphElement>(null);
   const {
     control,
     register,
@@ -57,7 +51,7 @@ export function ClubProfileForm({ affiliations, categories }: ClubProfileFormPro
     formState: { errors, isSubmitting, isValid },
   } = useForm<ClubProfileFormValues>({
     resolver: zodResolver(clubProfileSchema),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: initialValues,
     mode: "onTouched",
     reValidateMode: "onChange",
   });
@@ -65,8 +59,13 @@ export function ClubProfileForm({ affiliations, categories }: ClubProfileFormPro
   const logo = useWatch({ control, name: "logo" });
   const atmospherePhotos = useWatch({ control, name: "atmospherePhotos" });
 
-  const updateLogo = (file: File | null) => {
-    const validationMessage = file ? getImageFileValidationMessage(file) : null;
+  useEffect(() => {
+    if (errors.root?.submit) submitErrorRef.current?.focus();
+  }, [errors.root?.submit]);
+
+  const updateLogo = (image: ClubProfileImage | null) => {
+    const validationMessage =
+      image?.kind === "new" ? getImageFileValidationMessage(image.file) : null;
     if (validationMessage) {
       setValue("logo", logo, valueUpdateOptions);
       setError("logo", { type: "manual", message: validationMessage });
@@ -74,7 +73,7 @@ export function ClubProfileForm({ affiliations, categories }: ClubProfileFormPro
     }
 
     clearErrors("logo");
-    setValue("logo", file, valueUpdateOptions);
+    setValue("logo", image, valueUpdateOptions);
   };
 
   const addAtmospherePhotos = (files: File[]) => {
@@ -98,7 +97,11 @@ export function ClubProfileForm({ affiliations, categories }: ClubProfileFormPro
     }
 
     clearErrors("atmospherePhotos");
-    setValue("atmospherePhotos", [...atmospherePhotos, ...files], valueUpdateOptions);
+    setValue(
+      "atmospherePhotos",
+      [...atmospherePhotos, ...files.map((file) => ({ kind: "new" as const, file }))],
+      valueUpdateOptions
+    );
   };
 
   const removeAtmospherePhoto = (index: number) => {
@@ -110,13 +113,21 @@ export function ClubProfileForm({ affiliations, categories }: ClubProfileFormPro
     );
   };
 
-  const onSubmit = handleSubmit(() => {
-    router.push("/register/club/review");
+  const submitForm = handleSubmit(async (values) => {
+    clearErrors("root.submit");
+    try {
+      await onSubmit(values);
+    } catch {
+      setError("root.submit", {
+        type: "server",
+        message: "ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง",
+      });
+    }
   });
 
   return (
     <Card className="w-full max-w-[874px] gap-0 py-0">
-      <form onSubmit={onSubmit} noValidate>
+      <form onSubmit={submitForm} noValidate>
         <fieldset disabled={isSubmitting} className="contents">
           <CardContent className="flex flex-col gap-6 px-8 py-8">
             <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
@@ -280,10 +291,25 @@ export function ClubProfileForm({ affiliations, categories }: ClubProfileFormPro
               >
                 ย้อนกลับ
               </Button>
-              <Button type="submit" className="w-full sm:w-1/4" disabled={!isValid || isSubmitting}>
+              <Button
+                type="submit"
+                className="w-full sm:w-1/4"
+                disabled={!isValid || isSubmitting}
+                isLoading={isSubmitting}
+              >
                 ถัดไป
               </Button>
             </div>
+            {errors.root?.submit?.message && (
+              <p
+                ref={submitErrorRef}
+                tabIndex={-1}
+                role="alert"
+                className="font-ibm-plex text-error text-sm leading-[23px] outline-none"
+              >
+                {errors.root.submit.message}
+              </p>
+            )}
           </CardContent>
         </fieldset>
       </form>

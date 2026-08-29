@@ -7,6 +7,7 @@ import {
   CATEGORIES_UNIQUE_MESSAGE,
   CLUB_NAME_REQUIRED_MESSAGE,
   clubProfileSchema,
+  getClubImageContentType,
   IMAGE_SIZE_MESSAGE,
   IMAGE_TYPE_MESSAGE,
   LOGO_REQUIRED_MESSAGE,
@@ -19,7 +20,7 @@ import {
 const makeFileMetadata = (name: string, type: string, size = 1) => ({ name, type, size });
 
 const validInput = {
-  logo: makeFileMetadata("logo.png", "image/png"),
+  logo: { kind: "new" as const, file: makeFileMetadata("logo.png", "image/png") },
   name: "ชมรมตัวอย่าง",
   affiliation: "วิศวกรรมศาสตร์",
   categories: ["เทคโนโลยี"],
@@ -90,24 +91,67 @@ describe("clubProfileSchema", () => {
     ["IMAGE.HEIC", ""],
   ])("accepts supported image metadata for %s", (name, type) => {
     expect(
-      clubProfileSchema.safeParse({ ...validInput, logo: makeFileMetadata(name, type) }).success
+      clubProfileSchema.safeParse({
+        ...validInput,
+        logo: { kind: "new", file: makeFileMetadata(name, type) },
+      }).success
     ).toBe(true);
+  });
+
+  it.each([
+    ["image.png", "image/png", "image/png"],
+    ["image.jpg", "image/jpeg", "image/jpeg"],
+    ["image.jpeg", "", "image/jpeg"],
+    ["IMAGE.HEIC", "", "image/heic"],
+  ] as const)("resolves the canonical content type for %s", (name, type, expected) => {
+    expect(getClubImageContentType(makeFileMetadata(name, type))).toBe(expected);
+  });
+
+  it("does not fall back to the extension for a non-empty unsupported MIME type", () => {
+    expect(getClubImageContentType(makeFileMetadata("image.png", "image/webp"))).toBeNull();
+  });
+
+  it("accepts persisted logo and gallery URLs", () => {
+    expect(
+      clubProfileSchema.safeParse({
+        ...validInput,
+        logo: { kind: "persisted", url: "https://cdn.example.com/logo.png" },
+        atmospherePhotos: [{ kind: "persisted", url: "https://cdn.example.com/gallery.png" }],
+      }).success
+    ).toBe(true);
+  });
+
+  it("rejects an invalid persisted image URL", () => {
+    expectIssue(
+      { ...validInput, logo: { kind: "persisted", url: "not-a-url" } },
+      "logo.url",
+      "Invalid url"
+    );
   });
 
   it("rejects unsupported MIME types and extensions", () => {
     expectIssue(
-      { ...validInput, logo: makeFileMetadata("image.gif", "image/gif") },
-      "logo",
+      {
+        ...validInput,
+        logo: { kind: "new", file: makeFileMetadata("image.gif", "image/gif") },
+      },
+      "logo.file",
       IMAGE_TYPE_MESSAGE
     );
     expectIssue(
-      { ...validInput, logo: makeFileMetadata("image.png", "image/webp") },
-      "logo",
+      {
+        ...validInput,
+        logo: { kind: "new", file: makeFileMetadata("image.png", "image/webp") },
+      },
+      "logo.file",
       IMAGE_TYPE_MESSAGE
     );
     expectIssue(
-      { ...validInput, logo: makeFileMetadata("image.svg", "") },
-      "logo",
+      {
+        ...validInput,
+        logo: { kind: "new", file: makeFileMetadata("image.svg", "") },
+      },
+      "logo.file",
       IMAGE_TYPE_MESSAGE
     );
   });
@@ -116,9 +160,12 @@ describe("clubProfileSchema", () => {
     expectIssue(
       {
         ...validInput,
-        logo: makeFileMetadata("image.png", "image/png", MAX_IMAGE_FILE_SIZE + 1),
+        logo: {
+          kind: "new",
+          file: makeFileMetadata("image.png", "image/png", MAX_IMAGE_FILE_SIZE + 1),
+        },
       },
-      "logo",
+      "logo.file",
       IMAGE_SIZE_MESSAGE
     );
   });
@@ -126,16 +173,20 @@ describe("clubProfileSchema", () => {
   it("accepts zero and five atmosphere photos and rejects six", () => {
     expect(clubProfileSchema.safeParse({ ...validInput, atmospherePhotos: [] }).success).toBe(true);
 
-    const fivePhotos = Array.from({ length: 5 }, (_, index) =>
-      makeFileMetadata(`photo-${index}.jpg`, "image/jpeg")
-    );
+    const fivePhotos = Array.from({ length: 5 }, (_, index) => ({
+      kind: "new" as const,
+      file: makeFileMetadata(`photo-${index}.jpg`, "image/jpeg"),
+    }));
     expect(
       clubProfileSchema.safeParse({ ...validInput, atmospherePhotos: fivePhotos }).success
     ).toBe(true);
     expectIssue(
       {
         ...validInput,
-        atmospherePhotos: [...fivePhotos, makeFileMetadata("photo-6.jpg", "image/jpeg")],
+        atmospherePhotos: [
+          ...fivePhotos,
+          { kind: "new", file: makeFileMetadata("photo-6.jpg", "image/jpeg") },
+        ],
       },
       "atmospherePhotos",
       ATMOSPHERE_PHOTOS_MAX_MESSAGE

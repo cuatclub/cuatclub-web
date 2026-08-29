@@ -4,21 +4,24 @@ import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import { ImagePlus, X } from "lucide-react";
 
+import {
+  MAX_ATMOSPHERE_PHOTOS,
+  type ClubProfileImage,
+} from "@/app/register/club/profile/profile-schema";
 import { Button } from "@/components/ui";
-import { MAX_ATMOSPHERE_PHOTOS } from "@/app/register/club/profile/profile-schema";
 import { cn } from "@/lib/utils";
 
 const IMAGE_ACCEPT = ".png,.jpg,.jpeg,.heic,image/png,image/jpeg,image/heic";
 
 type ClubGalleryFieldProps = {
-  value: File[];
+  value: ClubProfileImage[];
   errorMessage?: string;
   disabled?: boolean;
   onAddFiles: (files: File[]) => void;
   onRemove: (index: number) => void;
 };
 
-function GalleryPreview({ file }: { file: File }) {
+function NewGalleryPreview({ file }: { file: File }) {
   const [previewUrl, setPreviewUrl] = useState<string>();
 
   useEffect(() => {
@@ -70,17 +73,35 @@ export function ClubGalleryField({
       </span>
 
       <div className="flex flex-wrap gap-3">
-        {value.map((file, index) => (
+        {value.map((image, index) => (
           <div
-            key={`${file.name}-${file.size}-${file.lastModified}-${index}`}
+            key={
+              image.kind === "persisted"
+                ? image.url
+                : `${image.file.name}-${image.file.size}-${image.file.lastModified}-${index}`
+            }
             className="bg-surface relative size-30 shrink-0 overflow-hidden rounded-lg"
           >
-            <GalleryPreview file={file} />
+            {image.kind === "persisted" ? (
+              <Image
+                src={image.url}
+                alt={`รูปบรรยากาศชมรมปัจจุบัน ลำดับที่ ${index + 1}`}
+                width={128}
+                height={128}
+                className="size-full object-cover"
+              />
+            ) : (
+              <NewGalleryPreview file={image.file} />
+            )}
             <Button
               type="button"
               variant="outline"
               disabled={disabled}
-              aria-label={`ลบรูป ${file.name || `ลำดับที่ ${index + 1}`}`}
+              aria-label={`ลบรูป ${
+                image.kind === "persisted"
+                  ? `ลำดับที่ ${index + 1}`
+                  : image.file.name || `ลำดับที่ ${index + 1}`
+              }`}
               className="absolute top-1.5 right-1.5 size-8 bg-white/90 p-0"
               onClick={() => onRemove(index)}
             >

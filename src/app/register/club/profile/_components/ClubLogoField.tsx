@@ -4,18 +4,19 @@ import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import { ImageIcon, Trash2 } from "lucide-react";
 
+import type { ClubProfileImage } from "@/app/register/club/profile/profile-schema";
 import { cn } from "@/lib/utils";
 
 const IMAGE_ACCEPT = ".png,.jpg,.jpeg,.heic,image/png,image/jpeg,image/heic";
 
 type ClubLogoFieldProps = {
-  value: File | null;
+  value: ClubProfileImage | null;
   errorMessage?: string;
   disabled?: boolean;
-  onChange: (file: File | null) => void;
+  onChange: (image: ClubProfileImage | null) => void;
 };
 
-function LogoPreview({ file }: { file: File }) {
+function NewLogoPreview({ file }: { file: File }) {
   const [previewUrl, setPreviewUrl] = useState<string>();
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export function ClubLogoField({
 
   const handleSelection = (files: FileList | null) => {
     const selectedFile = files?.item(0) ?? null;
-    if (selectedFile) onChange(selectedFile);
+    if (selectedFile) onChange({ kind: "new", file: selectedFile });
     if (inputRef.current) inputRef.current.value = "";
   };
 
@@ -63,7 +64,17 @@ export function ClubLogoField({
     <div className="grid grid-cols-1 gap-4 md:grid-cols-[160px_minmax(0,1fr)] md:gap-5">
       <div className="bg-surface flex size-[160px] shrink-0 items-center justify-center overflow-hidden rounded-lg">
         {value ? (
-          <LogoPreview file={value} />
+          value.kind === "persisted" ? (
+            <Image
+              src={value.url}
+              alt="โลโก้ชมรมปัจจุบัน"
+              width={160}
+              height={160}
+              className="size-full object-cover"
+            />
+          ) : (
+            <NewLogoPreview file={value.file} />
+          )
         ) : (
           <ImageIcon className="text-placeholder size-10" aria-hidden="true" />
         )}
@@ -104,7 +115,11 @@ export function ClubLogoField({
               disabled && "pointer-events-none cursor-not-allowed"
             )}
           >
-            {value ? value.name : "รูปโปรไฟล์"}
+            {value
+              ? value.kind === "persisted"
+                ? "รูปโปรไฟล์ปัจจุบัน"
+                : value.file.name
+              : "รูปโปรไฟล์"}
           </label>
 
           <div className="flex shrink-0 items-center gap-2">

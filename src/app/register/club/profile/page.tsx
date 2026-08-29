@@ -1,10 +1,15 @@
-import { ClubProfileForm } from "@/app/register/club/profile/_components/ClubProfileForm";
-import { MOCK_AFFILIATIONS, MOCK_CATEGORIES } from "@/app/register/club/profile/profile-mock-data";
+import { ClubProfileFormContainer } from "@/app/register/club/profile/_components/ClubProfileFormContainer";
 import { StepIndicator } from "@/app/register/club/_components/StepIndicator";
 import { clubRegistrationStepGuard } from "@/server/guard";
+import { api } from "@/trpc/server";
 
 export default async function RegisterClubInfoPage() {
-  const club = await clubRegistrationStepGuard("PENDING");
+  const registration = await clubRegistrationStepGuard("PENDING");
+  const [affiliations, categories, existingProfile] = await Promise.all([
+    api.masterData.affiliations.getAll({}),
+    api.masterData.categories.getAll({}),
+    api.clubs.getClubRegistrationDetails({}),
+  ]);
 
   return (
     <div className="flex w-full flex-col bg-white">
@@ -20,10 +25,15 @@ export default async function RegisterClubInfoPage() {
               </p>
             </div>
 
-            <StepIndicator registrationStatus={club.registrationStatus} />
+            <StepIndicator registrationStatus={registration.registrationStatus} />
           </div>
 
-          <ClubProfileForm affiliations={MOCK_AFFILIATIONS} categories={MOCK_CATEGORIES} />
+          <ClubProfileFormContainer
+            clubId={registration.id}
+            affiliations={affiliations}
+            categories={categories}
+            existingProfile={existingProfile}
+          />
         </div>
       </main>
     </div>

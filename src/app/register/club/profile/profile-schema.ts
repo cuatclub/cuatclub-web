@@ -19,8 +19,26 @@ export const CONTACT_MAX_MESSAGE = "ข้อมูลติดต่อแต�
 
 type ImageFileLike = Pick<File, "name" | "size" | "type">;
 
-const ALLOWED_IMAGE_MIME_TYPES = new Set(["image/png", "image/jpeg", "image/heic"]);
-const ALLOWED_IMAGE_FILE_EXTENSION = /\.(?:png|jpe?g|heic)$/i;
+export type ClubImageContentType = "image/png" | "image/jpeg" | "image/heic";
+
+export type ClubProfileImage = { kind: "persisted"; url: string } | { kind: "new"; file: File };
+
+const ALLOWED_IMAGE_MIME_TYPES = new Set<ClubImageContentType>([
+  "image/png",
+  "image/jpeg",
+  "image/heic",
+]);
+
+const EXTENSION_CONTENT_TYPES: Record<string, ClubImageContentType> = {
+  png: "image/png",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  heic: "image/heic",
+};
+
+function isClubImageContentType(value: string): value is ClubImageContentType {
+  return value === "image/png" || value === "image/jpeg" || value === "image/heic";
+}
 
 function isImageFileLike(value: unknown): value is ImageFileLike {
   if (typeof value !== "object" || value === null) return false;
@@ -37,14 +55,21 @@ function isImageFileLike(value: unknown): value is ImageFileLike {
 
 export function getImageFileValidationMessage(value: unknown): string | null {
   if (!isImageFileLike(value)) return IMAGE_TYPE_MESSAGE;
-
-  const hasAcceptedType = value.type
-    ? ALLOWED_IMAGE_MIME_TYPES.has(value.type.toLowerCase())
-    : ALLOWED_IMAGE_FILE_EXTENSION.test(value.name);
-
-  if (!hasAcceptedType) return IMAGE_TYPE_MESSAGE;
+  if (!getClubImageContentType(value)) return IMAGE_TYPE_MESSAGE;
   if (value.size > MAX_IMAGE_FILE_SIZE) return IMAGE_SIZE_MESSAGE;
   return null;
+}
+
+export function getClubImageContentType(file: ImageFileLike): ClubImageContentType | null {
+  if (file.type) {
+    const contentType = file.type.toLowerCase();
+    return isClubImageContentType(contentType) && ALLOWED_IMAGE_MIME_TYPES.has(contentType)
+      ? contentType
+      : null;
+  }
+
+  const extension = file.name.split(".").pop()?.toLowerCase();
+  return extension ? (EXTENSION_CONTENT_TYPES[extension] ?? null) : null;
 }
 
 const imageFileSchema = z
@@ -56,8 +81,13 @@ const imageFileSchema = z
     }
   });
 
-const logoSchema = imageFileSchema.nullable().superRefine((file, ctx) => {
-  if (file === null) {
+const clubProfileImageSchema = z.discriminatedUnion("kind", [
+  z.object({ kind: z.literal("persisted"), url: z.string().url() }),
+  z.object({ kind: z.literal("new"), file: imageFileSchema }),
+]);
+
+const logoSchema = clubProfileImageSchema.nullable().superRefine((image, ctx) => {
+  if (image === null) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: LOGO_REQUIRED_MESSAGE });
   }
 });
@@ -79,7 +109,7 @@ export const clubProfileSchema = z.object({
     .max(180, SHORT_DESCRIPTION_MAX_MESSAGE),
   longDescription: z.string().trim().min(1, LONG_DESCRIPTION_REQUIRED_MESSAGE),
   atmospherePhotos: z
-    .array(imageFileSchema)
+    .array(clubProfileImageSchema)
     .max(MAX_ATMOSPHERE_PHOTOS, ATMOSPHERE_PHOTOS_MAX_MESSAGE),
   contacts: z.object({
     instagram: contactSchema,
