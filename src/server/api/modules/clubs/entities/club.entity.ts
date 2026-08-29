@@ -5,6 +5,7 @@ export type ClubRow = typeof clubs.$inferSelect;
 
 export class Club {
   static readonly PUBLICLY_VISIBLE_STATUS = "COMPLETED";
+  static readonly REGISTRATION_PROFILE_STATUS = "PENDING";
   static readonly REGISTRATION_REVIEW_STATUS = "INFO_SUBMITTED";
 
   private constructor(private row: ClubRow) {}
@@ -17,6 +18,14 @@ export class Club {
 
   get isAwaitingRegistrationReview() {
     return this.row.registrationStatus === Club.REGISTRATION_REVIEW_STATUS;
+  }
+
+  get isAwaitingProfileInformation() {
+    return this.row.registrationStatus === Club.REGISTRATION_PROFILE_STATUS;
+  }
+
+  get isRegistrationInProgress() {
+    return this.isAwaitingProfileInformation || this.isAwaitingRegistrationReview;
   }
 
   // Getter function

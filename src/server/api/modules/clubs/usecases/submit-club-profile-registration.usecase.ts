@@ -3,7 +3,7 @@ import {
   SubmitClubProfileRegistrationOutputDTOSchema,
   type SubmitClubProfileRegistrationInputDTO,
   type SubmitClubProfileRegistrationOutputDTO,
-} from "@/server/api/modules/clubs/dto/submit-club-profile-registration.dto";
+} from "@/server/api/modules/clubs/dto";
 import { validationError, notFound } from "@/server/errors";
 import { usersRepository } from "@/server/api/modules/users/users.repository";
 import { unitOfWork } from "@/server/db/unit-of-work";
@@ -23,7 +23,7 @@ export const submitClubProfileRegistration = async (
     throw validationError("You are not the owner of this club.");
   }
 
-  if (club.registrationStatus !== "INFO_SUBMITTED") {
+  if (!club.isAwaitingRegistrationReview) {
     throw validationError("Club registration information must be submitted first.");
   }
 

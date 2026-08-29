@@ -67,6 +67,10 @@ export class ClubDetail {
     return this.club.isAwaitingRegistrationReview;
   }
 
+  get isRegistrationInProgress() {
+    return this.club.isRegistrationInProgress;
+  }
+
   toDTO(): ClubDetailOutputDTO {
     return {
       id: this.id,
