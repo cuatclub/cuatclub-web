@@ -2,18 +2,11 @@ import { DeleteObjectsCommand, PutObjectCommand, S3Client } from "@aws-sdk/clien
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { env } from "@/config/env";
 
-export const ALLOWED_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/heic",
-  "image/webp",
-  "image/gif",
-] as const;
+export const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
 
 const EXT_MAP: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
-  "image/heic": "heic",
   "image/webp": "webp",
   "image/gif": "gif",
 };

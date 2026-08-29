@@ -12,6 +12,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
       label,
+      required,
       error,
       errorMessage,
       className,
@@ -39,13 +40,15 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             htmlFor={inputId}
             className="font-ibm-plex text-foreground text-sm leading-[23px] font-medium md:text-base md:leading-[26px]"
           >
-            {label}
+            {label} {required && <span className="text-error">*</span>}
           </label>
         )}
         <textarea
           ref={ref}
           id={inputId}
           disabled={disabled}
+          required={required}
+          aria-required={required}
           aria-invalid={mergedAriaInvalid}
           aria-describedby={describedByIds || undefined}
           className={cn(

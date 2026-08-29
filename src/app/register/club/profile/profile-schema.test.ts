@@ -84,11 +84,9 @@ describe("clubProfileSchema", () => {
     ["image.png", "image/png"],
     ["image.jpg", "image/jpeg"],
     ["image.jpeg", "image/jpeg"],
-    ["image.heic", "image/heic"],
     ["IMAGE.PNG", ""],
     ["IMAGE.JPG", ""],
     ["IMAGE.JPEG", ""],
-    ["IMAGE.HEIC", ""],
   ])("accepts supported image metadata for %s", (name, type) => {
     expect(
       clubProfileSchema.safeParse({
@@ -102,9 +100,13 @@ describe("clubProfileSchema", () => {
     ["image.png", "image/png", "image/png"],
     ["image.jpg", "image/jpeg", "image/jpeg"],
     ["image.jpeg", "", "image/jpeg"],
-    ["IMAGE.HEIC", "", "image/heic"],
   ] as const)("resolves the canonical content type for %s", (name, type, expected) => {
     expect(getClubImageContentType(makeFileMetadata(name, type))).toBe(expected);
+  });
+
+  it("rejects HEIC files", () => {
+    expect(getClubImageContentType(makeFileMetadata("image.heic", "image/heic"))).toBeNull();
+    expect(getClubImageContentType(makeFileMetadata("IMAGE.HEIC", ""))).toBeNull();
   });
 
   it("does not fall back to the extension for a non-empty unsupported MIME type", () => {

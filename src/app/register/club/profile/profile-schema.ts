@@ -12,32 +12,27 @@ export const CATEGORIES_UNIQUE_MESSAGE = "หมวดหมู่ต้อง�
 export const SHORT_DESCRIPTION_REQUIRED_MESSAGE = "กรุณากรอกคำอธิบายแบบย่อ";
 export const SHORT_DESCRIPTION_MAX_MESSAGE = "คำอธิบายแบบย่อต้องมีความยาวไม่เกิน 180 ตัวอักษร";
 export const LONG_DESCRIPTION_REQUIRED_MESSAGE = "กรุณากรอกคำอธิบายแบบละเอียด";
-export const IMAGE_TYPE_MESSAGE = "รองรับเฉพาะไฟล์ PNG, JPG/JPEG หรือ HEIC";
+export const IMAGE_TYPE_MESSAGE = "รองรับเฉพาะไฟล์ PNG หรือ JPG/JPEG";
 export const IMAGE_SIZE_MESSAGE = "ขนาดไฟล์ต้องไม่เกิน 10 MB";
 export const ATMOSPHERE_PHOTOS_MAX_MESSAGE = "อัปโหลดรูปบรรยากาศได้สูงสุด 5 รูป";
 export const CONTACT_MAX_MESSAGE = "ข้อมูลติดต่อแต่ละช่องต้องมีความยาวไม่เกิน 255 ตัวอักษร";
 
 type ImageFileLike = Pick<File, "name" | "size" | "type">;
 
-export type ClubImageContentType = "image/png" | "image/jpeg" | "image/heic";
+export type ClubImageContentType = "image/png" | "image/jpeg";
 
 export type ClubProfileImage = { kind: "persisted"; url: string } | { kind: "new"; file: File };
 
-const ALLOWED_IMAGE_MIME_TYPES = new Set<ClubImageContentType>([
-  "image/png",
-  "image/jpeg",
-  "image/heic",
-]);
+const ALLOWED_IMAGE_MIME_TYPES = new Set<ClubImageContentType>(["image/png", "image/jpeg"]);
 
 const EXTENSION_CONTENT_TYPES: Record<string, ClubImageContentType> = {
   png: "image/png",
   jpg: "image/jpeg",
   jpeg: "image/jpeg",
-  heic: "image/heic",
 };
 
 function isClubImageContentType(value: string): value is ClubImageContentType {
-  return value === "image/png" || value === "image/jpeg" || value === "image/heic";
+  return value === "image/png" || value === "image/jpeg";
 }
 
 function isImageFileLike(value: unknown): value is ImageFileLike {

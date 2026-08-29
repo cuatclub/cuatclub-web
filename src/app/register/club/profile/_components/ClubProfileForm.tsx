@@ -30,9 +30,6 @@ const valueUpdateOptions = {
   shouldValidate: true,
 } as const;
 
-const labelClassName =
-  "font-ibm-plex text-foreground text-sm leading-[23px] font-medium md:text-base md:leading-[26px]";
-
 export function ClubProfileForm({
   affiliations,
   categories,
@@ -126,10 +123,10 @@ export function ClubProfileForm({
   });
 
   return (
-    <Card className="w-full max-w-[874px] gap-0 py-0">
+    <Card className="w-full max-w-[874px] gap-0 p-6 md:py-8">
       <form onSubmit={submitForm} noValidate>
-        <fieldset disabled={isSubmitting} className="contents">
-          <CardContent className="flex flex-col gap-6 px-8 py-8">
+        <fieldset disabled={isSubmitting} className="contents flex flex-col gap-6 md:gap-8">
+          <CardContent className="flex flex-col gap-4 px-0 md:gap-6">
             <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
               ข้อมูลทั่วไป
             </h2>
@@ -142,43 +139,38 @@ export function ClubProfileForm({
             />
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,3fr)_minmax(0,3fr)_minmax(0,2fr)] md:gap-5">
-              <div className="flex min-w-0 flex-col gap-1">
-                <label htmlFor="club-name" className={labelClassName}>
-                  ชื่อชมรม <span className="text-error">*</span>
-                </label>
-                <Input
-                  id="club-name"
-                  placeholder="กรอกชื่อชมรม"
-                  aria-required="true"
-                  error={!!errors.name}
-                  errorMessage={errors.name?.message}
-                  {...register("name")}
-                />
-              </div>
+              <Input
+                id="club-name"
+                label="ชื่อชมรม"
+                required
+                placeholder="กรอกชื่อชมรม"
+                error={!!errors.name}
+                errorMessage={errors.name?.message}
+                wrapperClassName="min-w-0"
+                {...register("name")}
+              />
 
               <Controller
                 control={control}
                 name="affiliation"
                 render={({ field, fieldState }) => (
-                  <label className="flex min-w-0 flex-col gap-1">
-                    <span className={labelClassName}>
-                      คณะ/สังกัด <span className="text-error">*</span>
-                    </span>
-                    <Select
-                      name={field.name}
-                      options={[...affiliations]}
-                      value={field.value}
-                      placeholder="เลือกคณะ/สังกัด"
-                      triggerClassName="outline-none"
-                      disabled={isSubmitting}
-                      error={!!fieldState.error}
-                      errorMessage={fieldState.error?.message}
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        field.onBlur();
-                      }}
-                    />
-                  </label>
+                  <Select
+                    label="คณะ/สังกัด"
+                    required
+                    name={field.name}
+                    options={[...affiliations]}
+                    value={field.value}
+                    placeholder="เลือกคณะ/สังกัด"
+                    triggerClassName="outline-none"
+                    className="min-w-0"
+                    disabled={isSubmitting}
+                    error={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      field.onBlur();
+                    }}
+                  />
                 )}
               />
 
@@ -186,56 +178,46 @@ export function ClubProfileForm({
                 control={control}
                 name="categories"
                 render={({ field, fieldState }) => (
-                  <label className="flex min-w-0 flex-col gap-1">
-                    <span className={labelClassName}>
-                      หมวดหมู่ <span className="text-error">*</span>
-                    </span>
-                    <MultiSelect
-                      name={field.name}
-                      options={[...categories]}
-                      value={field.value}
-                      placeholder="เลือกหมวดหมู่"
-                      disabled={isSubmitting}
-                      error={!!fieldState.error}
-                      errorMessage={fieldState.error?.message}
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        field.onBlur();
-                      }}
-                    />
-                  </label>
+                  <MultiSelect
+                    label="หมวดหมู่"
+                    required
+                    name={field.name}
+                    options={[...categories]}
+                    value={field.value}
+                    placeholder="เลือกหมวดหมู่"
+                    className="min-w-0"
+                    disabled={isSubmitting}
+                    error={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      field.onBlur();
+                    }}
+                  />
                 )}
               />
             </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="short-description" className={labelClassName}>
-                คำอธิบายแบบย่อ <span className="text-error">*</span>
-              </label>
-              <Textarea
-                id="short-description"
-                placeholder="กรอกคำอธิบายเกี่ยวกับชมรมของคุณแบบย่อ (ความยาวไม่เกิน 180 ตัวอักษร)"
-                aria-required="true"
-                error={!!errors.shortDescription}
-                errorMessage={errors.shortDescription?.message}
-                {...register("shortDescription")}
-              />
-            </div>
+            <Textarea
+              id="short-description"
+              label="คำอธิบายแบบย่อ"
+              required
+              placeholder="กรอกคำอธิบายเกี่ยวกับชมรมของคุณแบบย่อ (ความยาวไม่เกิน 180 ตัวอักษร)"
+              error={!!errors.shortDescription}
+              errorMessage={errors.shortDescription?.message}
+              {...register("shortDescription")}
+            />
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="long-description" className={labelClassName}>
-                คำอธิบายแบบละเอียด <span className="text-error">*</span>
-              </label>
-              <Textarea
-                id="long-description"
-                placeholder="กรอกคำอธิบายเกี่ยวกับชมรมของคุณแบบละเอียด"
-                aria-required="true"
-                error={!!errors.longDescription}
-                errorMessage={errors.longDescription?.message}
-                className="min-h-40"
-                {...register("longDescription")}
-              />
-            </div>
+            <Textarea
+              id="long-description"
+              label="คำอธิบายแบบละเอียด"
+              required
+              placeholder="กรอกคำอธิบายเกี่ยวกับชมรมของคุณแบบละเอียด"
+              error={!!errors.longDescription}
+              errorMessage={errors.longDescription?.message}
+              className="min-h-40"
+              {...register("longDescription")}
+            />
 
             <ClubGalleryField
               value={atmospherePhotos}
@@ -246,7 +228,9 @@ export function ClubProfileForm({
             />
           </CardContent>
 
-          <CardContent className="border-border flex flex-col gap-6 border-t px-8 py-6">
+          <div className="border-border border-t"></div>
+
+          <CardContent className="flex flex-col gap-4 px-0 md:gap-6">
             <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
               ช่องทางติดต่อ
             </h2>
@@ -281,36 +265,35 @@ export function ClubProfileForm({
                 {...register("contacts.lineOa")}
               />
             </div>
-
-            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full sm:w-1/4"
-                onClick={() => router.back()}
-              >
-                ย้อนกลับ
-              </Button>
-              <Button
-                type="submit"
-                className="w-full sm:w-1/4"
-                disabled={!isValid || isSubmitting}
-                isLoading={isSubmitting}
-              >
-                ถัดไป
-              </Button>
-            </div>
-            {errors.root?.submit?.message && (
-              <p
-                ref={submitErrorRef}
-                tabIndex={-1}
-                role="alert"
-                className="font-ibm-plex text-error text-sm leading-[23px] outline-none"
-              >
-                {errors.root.submit.message}
-              </p>
-            )}
           </CardContent>
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full sm:w-1/4"
+              onClick={() => router.back()}
+            >
+              ย้อนกลับ
+            </Button>
+            <Button
+              type="submit"
+              className="w-full sm:w-1/4"
+              disabled={!isValid || isSubmitting}
+              isLoading={isSubmitting}
+            >
+              ถัดไป
+            </Button>
+          </div>
+          {errors.root?.submit?.message && (
+            <p
+              ref={submitErrorRef}
+              tabIndex={-1}
+              role="alert"
+              className="font-ibm-plex text-error text-sm leading-[23px] outline-none"
+            >
+              {errors.root.submit.message}
+            </p>
+          )}
         </fieldset>
       </form>
     </Card>

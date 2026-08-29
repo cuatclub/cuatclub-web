@@ -108,6 +108,7 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 export interface SelectProps {
   label?: string;
+  required?: boolean;
   placeholder?: string;
   options: string[];
   value?: string;
@@ -126,6 +127,7 @@ export interface SelectProps {
 
 const Select = ({
   label,
+  required,
   placeholder,
   options,
   value,
@@ -149,7 +151,7 @@ const Select = ({
     <div className={cn("flex flex-col gap-1", className)}>
       {label && (
         <span id={labelId} className={cn("font-ibm-plex text-foreground font-medium", textSize)}>
-          {label}
+          {label} {required && <span className="text-error">*</span>}
         </span>
       )}
       <SelectRoot
@@ -161,6 +163,7 @@ const Select = ({
         onOpenChange={onOpenChange}
         disabled={disabled}
         name={name}
+        required={required}
       >
         <SelectTrigger
           id={triggerId}
@@ -168,6 +171,7 @@ const Select = ({
           className={triggerClassName}
           aria-labelledby={label ? `${labelId} ${triggerId}` : undefined}
           aria-describedby={error && errorMessage ? errorId : undefined}
+          aria-required={required}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

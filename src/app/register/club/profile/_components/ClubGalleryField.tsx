@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
-const IMAGE_ACCEPT = ".png,.jpg,.jpeg,.heic,image/png,image/jpeg,image/heic";
+const IMAGE_ACCEPT = ".png,.jpg,.jpeg,image/png,image/jpeg";
 
 type ClubGalleryFieldProps = {
   value: ClubProfileImage[];
@@ -67,12 +67,12 @@ export function ClubGalleryField({
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       <span className="font-ibm-plex text-foreground text-sm leading-[23px] font-medium md:text-base md:leading-[26px]">
         รูปบรรยากาศชมรม (สูงสุด {MAX_ATMOSPHERE_PHOTOS} รูป)
       </span>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-4">
         {value.map((image, index) => (
           <div
             key={
@@ -80,7 +80,7 @@ export function ClubGalleryField({
                 ? image.url
                 : `${image.file.name}-${image.file.size}-${image.file.lastModified}-${index}`
             }
-            className="bg-surface relative size-30 shrink-0 rounded-lg"
+            className="bg-surface relative size-21 shrink-0 rounded-lg md:size-30"
           >
             {image.kind === "persisted" ? (
               <Image
@@ -101,16 +101,16 @@ export function ClubGalleryField({
                   ? `ลำดับที่ ${index + 1}`
                   : image.file.name || `ลำดับที่ ${index + 1}`
               }`}
-              className="bg-surface text-foreground hover:bg-border focus-visible:ring-primary disabled:bg-border disabled:text-placeholder absolute -top-2 -right-2 z-10 size-8 rounded-full p-0 shadow-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="bg-surface text-foreground hover:bg-border focus-visible:ring-primary disabled:bg-border disabled:text-placeholder absolute -top-2 -right-2 z-10 size-4 rounded-full p-0 shadow-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:size-8"
               onClick={() => onRemove(index)}
             >
-              <X className="size-4 stroke-2" aria-hidden="true" />
+              <X className="size-3 stroke-2 md:size-4" aria-hidden="true" />
             </Button>
           </div>
         ))}
 
         {value.length < MAX_ATMOSPHERE_PHOTOS && (
-          <div className="size-30 shrink-0">
+          <div className="size-21 shrink-0 md:size-30">
             <input
               ref={inputRef}
               id={inputId}
@@ -127,7 +127,7 @@ export function ClubGalleryField({
             <label
               htmlFor={inputId}
               aria-disabled={disabled}
-              className="border-primary bg-primary-lighter/30 hover:bg-primary-lighter/50 peer-focus-visible:ring-primary peer-disabled:border-placeholder peer-disabled:bg-border flex size-full cursor-pointer items-center justify-center rounded-xl border-2 border-dashed transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:outline-none peer-disabled:pointer-events-none peer-disabled:cursor-not-allowed"
+              className="border-primary bg-primary-lighter/30 hover:bg-primary-lighter/50 peer-focus-visible:ring-primary peer-disabled:border-placeholder peer-disabled:bg-border flex size-full cursor-pointer items-center justify-center rounded-xl border border-dashed transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:outline-none peer-disabled:pointer-events-none peer-disabled:cursor-not-allowed"
             >
               <ImagePlus
                 className={cn("text-primary size-6", disabled && "text-placeholder")}
@@ -139,7 +139,7 @@ export function ClubGalleryField({
       </div>
 
       <p id={helperId} className="font-ibm-plex text-placeholder text-xs leading-[23px] md:text-sm">
-        รองรับ PNG, JPG/JPEG และ HEIC ขนาดไฟล์ละไม่เกิน 10 MB
+        รองรับ PNG, JPG/JPEG ขนาดไฟล์ละไม่เกิน 10 MB
       </p>
       {errorMessage && (
         <p

@@ -7,7 +7,7 @@ import { ImageIcon, Trash2 } from "lucide-react";
 import type { ClubProfileImage } from "@/app/register/club/profile/profile-schema";
 import { cn } from "@/lib/utils";
 
-const IMAGE_ACCEPT = ".png,.jpg,.jpeg,.heic,image/png,image/jpeg,image/heic";
+const IMAGE_ACCEPT = ".png,.jpg,.jpeg,image/png,image/jpeg";
 
 type ClubLogoFieldProps = {
   value: ClubProfileImage | null;
@@ -50,9 +50,7 @@ export function ClubLogoField({
 }: ClubLogoFieldProps) {
   const inputId = useId();
   const helperId = useId();
-  const errorId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
-  const describedBy = [helperId, errorMessage ? errorId : undefined].filter(Boolean).join(" ");
 
   const handleSelection = (files: FileList | null) => {
     const selectedFile = files?.item(0) ?? null;
@@ -96,14 +94,15 @@ export function ClubLogoField({
           disabled={disabled}
           aria-required="true"
           aria-invalid={!!errorMessage}
-          aria-describedby={describedBy}
+          aria-describedby={helperId}
           className="peer sr-only"
           onChange={(event) => handleSelection(event.currentTarget.files)}
         />
 
         <div
           className={cn(
-            "border-placeholder hover:border-primary-light peer-focus-visible:border-primary flex h-11 w-full items-center justify-between gap-2 rounded-lg border border-dashed bg-white px-3 transition-colors md:h-16 md:px-5",
+            "border-placeholder peer-focus-visible:border-primary flex h-11 w-full items-center justify-between gap-2 rounded-lg border border-dashed bg-white px-3 transition-colors md:h-16 md:px-5",
+            errorMessage && "border-error",
             disabled && "bg-border text-placeholder hover:border-placeholder cursor-not-allowed"
           )}
         >
@@ -138,7 +137,7 @@ export function ClubLogoField({
               htmlFor={inputId}
               aria-disabled={disabled}
               className={cn(
-                "border-placeholder text-placeholder font-ibm-plex flex h-9 shrink-0 cursor-pointer items-center rounded-lg border bg-white px-4 text-xs leading-[20px] font-semibold md:text-sm md:leading-[23px]",
+                "border-placeholder text-placeholder font-ibm-plex flex h-7 shrink-0 cursor-pointer items-center rounded-lg border bg-white px-2 text-xs leading-[20px] font-semibold md:h-9 md:px-4 md:text-sm md:leading-[23px]",
                 disabled && "bg-border pointer-events-none cursor-not-allowed"
               )}
             >
@@ -149,19 +148,14 @@ export function ClubLogoField({
 
         <p
           id={helperId}
-          className="font-ibm-plex text-placeholder text-xs leading-[23px] md:text-sm"
+          role={errorMessage ? "alert" : undefined}
+          className={cn(
+            "font-ibm-plex text-xs leading-[23px] md:text-sm",
+            errorMessage ? "text-error" : "text-placeholder"
+          )}
         >
-          ขนาดไฟล์ไม่เกิน 10 MB
+          {errorMessage ?? "รองรับ PNG, JPG/JPEG ขนาดไฟล์ไม่เกิน 10 MB"}
         </p>
-        {errorMessage && (
-          <p
-            id={errorId}
-            role="alert"
-            className="font-ibm-plex text-error text-xs leading-[23px] md:text-sm"
-          >
-            {errorMessage}
-          </p>
-        )}
       </div>
     </div>
   );
