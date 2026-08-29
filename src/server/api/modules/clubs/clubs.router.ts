@@ -3,6 +3,7 @@ import {
   getAllClubs,
   getClubById,
   getClubProfile,
+  getClubRegistrationReview,
   getClubLogoUploadUrl,
   getClubImagesUploadUrl,
   saveProfileRegistration,
@@ -16,6 +17,8 @@ import {
   GetClubByIdOutputDTOSchema,
   GetClubProfileInputDTOSchema,
   GetClubProfileOutputDTOSchema,
+  GetClubRegistrationReviewInputDTOSchema,
+  GetClubRegistrationReviewOutputDTOSchema,
   GetClubLogoUploadUrlInputDTOSchema,
   GetClubLogoUploadUrlOutputDTOSchema,
   GetClubImagesUploadUrlInputDTOSchema,
@@ -58,6 +61,11 @@ export const clubsRouter = createTRPCRouter({
     .input(GetClubProfileInputDTOSchema)
     .output(GetClubProfileOutputDTOSchema)
     .query(async ({ ctx }) => getClubProfile(ctx.session.user.id)),
+
+  getClubRegistrationReview: protectedProcedure
+    .input(GetClubRegistrationReviewInputDTOSchema)
+    .output(GetClubRegistrationReviewOutputDTOSchema)
+    .query(async ({ ctx }) => getClubRegistrationReview(ctx.session.user.id)),
 
   getLogoUploadUrl: protectedProcedure
     .input(GetClubLogoUploadUrlInputDTOSchema)
