@@ -33,13 +33,21 @@ const affiliationLabels = [
 const categorySeeds = [
   { label: "การศึกษา", fontColor: "#475569", backgroundColor: "#E2E8F0" },
   { label: "กีฬา", fontColor: "#EA580C", backgroundColor: "#FFEDD5" },
+  { label: "การเงิน", fontColor: "#059669", backgroundColor: "#D1FAE5" },
+  { label: "เกม", fontColor: "#7C3AED", backgroundColor: "#EDE9FE" },
+  { label: "จิตอาสา", fontColor: "#0D9488", backgroundColor: "#CCFBF1" },
   { label: "ดนตรี", fontColor: "#DC2626", backgroundColor: "#FEE2E2" },
   { label: "เทคโนโลยี", fontColor: "#0891B2", backgroundColor: "#CFFAFE" },
   { label: "ธุรกิจ", fontColor: "#9333EA", backgroundColor: "#F3E8FF" },
-  { label: "พัฒนาชุมชน", fontColor: "#16A34A", backgroundColor: "#DCFCE7" },
-  { label: "แพทย์", fontColor: "#CA8A24", backgroundColor: "#FEF9C3" },
+  { label: "พัฒนาตนเอง", fontColor: "#4F46E5", backgroundColor: "#E0E7FF" },
+  { label: "ภาษาและวัฒนธรรม", fontColor: "#E11D48", backgroundColor: "#FFE4E6" },
   { label: "วิชาการ", fontColor: "#2563EB", backgroundColor: "#DBEAFE" },
+  { label: "ไลฟ์สไตล์", fontColor: "#0284C7", backgroundColor: "#E0F2FE" },
   { label: "ศิลปะ", fontColor: "#DB2777", backgroundColor: "#FCE7F3" },
+  { label: "สายอาชีพ", fontColor: "#D97706", backgroundColor: "#FEF3C7" },
+  { label: "สิ่งแวดล้อม", fontColor: "#16A34A", backgroundColor: "#DCFCE7" },
+  { label: "สุขภาพ", fontColor: "#65A30D", backgroundColor: "#ECFCCB" },
+  { label: "ความบันเทิง", fontColor: "#C026D3", backgroundColor: "#FAE8FF" },
 ];
 
 const thCollator = new Intl.Collator("th");
