@@ -150,7 +150,11 @@ export function RegisterForm() {
           </CardHeader>
           <CardContent>
             <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
-              <fieldset disabled={isSubmitting} className="contents">
+              <fieldset
+                inert={isSubmitting || undefined}
+                aria-busy={isSubmitting}
+                className="contents"
+              >
                 <div className="flex flex-col gap-2">
                   <p
                     id="account-type-label"

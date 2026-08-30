@@ -7,6 +7,7 @@ const textSize = "text-sm leading-[23px] md:text-base md:leading-[26px]";
 
 export interface MultiSelectProps {
   label?: string;
+  required?: boolean;
   placeholder?: string;
   options: string[];
   value?: string[];
@@ -25,6 +26,7 @@ export interface MultiSelectProps {
 
 const MultiSelect = ({
   label,
+  required,
   placeholder,
   options,
   value,
@@ -61,7 +63,7 @@ const MultiSelect = ({
     <div className={cn("flex flex-col gap-1", className)}>
       {label && (
         <span id={labelId} className={cn("font-ibm-plex text-foreground font-medium", textSize)}>
-          {label}
+          {label} {required && <span className="text-error">*</span>}
         </span>
       )}
       <DropdownMenuPrimitive.Root defaultOpen={defaultOpen} open={open} onOpenChange={onOpenChange}>

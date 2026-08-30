@@ -4,7 +4,7 @@ import type { ClubOutputDTO } from "@/server/api/modules/clubs/dto/club.dto";
 
 type RegistrationStatus = ClubOutputDTO["registrationStatus"];
 
-const STEPS = ["สร้างบัญชี", "กรอกข้อมูลชมรม", "เสร็จสิ้น"] as const;
+const STEPS = ["สร้างบัญชี", "กรอกข้อมูล", "เสร็จสิ้น"] as const;
 
 const STATUS_STEP_INDEX: Record<RegistrationStatus, number> = {
   PENDING: 0,
@@ -33,8 +33,12 @@ export function StepIndicator({ registrationStatus }: StepIndicatorProps) {
                   isDone ? "bg-success" : "bg-placeholder"
                 )}
               >
-                {isDone && (
+                {isDone ? (
                   <Check className="h-3.5 w-3.5 text-white md:h-4 md:w-4" strokeWidth={2} />
+                ) : (
+                  <span className="w-[7px] text-xs text-white md:w-[8px] md:text-sm">
+                    {index + 1}
+                  </span>
                 )}
               </span>
               <span

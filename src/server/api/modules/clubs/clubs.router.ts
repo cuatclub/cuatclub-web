@@ -3,10 +3,12 @@ import {
   getAllClubs,
   getClubById,
   getClubProfile,
+  getClubRegistrationDetails,
   getClubLogoUploadUrl,
   getClubImagesUploadUrl,
   saveProfileRegistration,
   submitClubProfileRegistration,
+  reopenClubProfileRegistration,
   registerClub,
 } from "@/server/api/modules/clubs/usecases";
 import {
@@ -16,6 +18,8 @@ import {
   GetClubByIdOutputDTOSchema,
   GetClubProfileInputDTOSchema,
   GetClubProfileOutputDTOSchema,
+  GetClubRegistrationDetailsInputDTOSchema,
+  GetClubRegistrationDetailsOutputDTOSchema,
   GetClubLogoUploadUrlInputDTOSchema,
   GetClubLogoUploadUrlOutputDTOSchema,
   GetClubImagesUploadUrlInputDTOSchema,
@@ -24,6 +28,8 @@ import {
   SaveClubProfileRegistrationOutputDTOSchema,
   SubmitClubProfileRegistrationInputDTOSchema,
   SubmitClubProfileRegistrationOutputDTOSchema,
+  ReopenClubProfileRegistrationInputDTOSchema,
+  ReopenClubProfileRegistrationOutputDTOSchema,
   RegisterClubInputDTOSchema,
   RegisterClubOutputDTOSchema,
 } from "@/server/api/modules/clubs/dto";
@@ -54,10 +60,20 @@ export const clubsRouter = createTRPCRouter({
     .output(SubmitClubProfileRegistrationOutputDTOSchema)
     .mutation(async ({ ctx, input }) => submitClubProfileRegistration(ctx.session.user.id, input)),
 
+  reopenClubProfileRegistration: protectedProcedure
+    .input(ReopenClubProfileRegistrationInputDTOSchema)
+    .output(ReopenClubProfileRegistrationOutputDTOSchema)
+    .mutation(async ({ ctx }) => reopenClubProfileRegistration(ctx.session.user.id)),
+
   getClubProfile: protectedProcedure
     .input(GetClubProfileInputDTOSchema)
     .output(GetClubProfileOutputDTOSchema)
     .query(async ({ ctx }) => getClubProfile(ctx.session.user.id)),
+
+  getClubRegistrationDetails: protectedProcedure
+    .input(GetClubRegistrationDetailsInputDTOSchema)
+    .output(GetClubRegistrationDetailsOutputDTOSchema)
+    .query(async ({ ctx }) => getClubRegistrationDetails(ctx.session.user.id)),
 
   getLogoUploadUrl: protectedProcedure
     .input(GetClubLogoUploadUrlInputDTOSchema)

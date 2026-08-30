@@ -4,10 +4,10 @@ import {
   SaveClubProfileRegistrationOutputDTOSchema,
   type SaveClubProfileRegistrationInputDTO,
   type SaveClubProfileRegistrationOutputDTO,
-} from "@/server/api/modules/clubs/dto/save-club-profile-registration.dto";
+} from "@/server/api/modules/clubs/dto";
 import { notFound, validationError } from "@/server/errors";
 import { unitOfWork } from "@/server/db/unit-of-work";
-import { clubCategoriesRepository } from "../club-categories.repository";
+import { clubCategoriesRepository } from "@/server/api/modules/clubs/club-categories.repository";
 
 export const saveProfileRegistration = async (
   userId: string,
@@ -23,6 +23,10 @@ export const saveProfileRegistration = async (
 
   if (club.userId !== userId) {
     throw validationError("You are not the owner of this club.");
+  }
+
+  if (!club.isAwaitingProfileInformation) {
+    throw validationError("Club profile information cannot be changed at this step.");
   }
 
   await unitOfWork.run(async (client) => {

@@ -24,6 +24,17 @@ export const LoggedIn: Story = {
     isLoggedIn: true,
     userName: "John Doe",
     userEmail: "example@gmail.com",
+    userRole: "CLUB",
+    userImage: "https://placehold.co/80x80",
+  },
+};
+
+export const LoggedInStudent: Story = {
+  args: {
+    isLoggedIn: true,
+    userName: "John Doe",
+    userEmail: "example@gmail.com",
+    userRole: "STUDENT",
   },
 };
 
