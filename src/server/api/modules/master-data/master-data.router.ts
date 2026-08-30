@@ -1,10 +1,25 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { getAllAffiliations, getAllCategories } from "@/server/api/modules/master-data/usecases";
+import { adminProcedure, createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
+  createAffiliation,
+  createCategory,
+  getAllAffiliations,
+  getAllCategories,
+  updateAffiliation,
+  updateCategory,
+} from "@/server/api/modules/master-data/usecases";
+import {
+  CreateAffiliationInputDTOSchema,
+  CreateAffiliationOutputDTOSchema,
+  CreateCategoryInputDTOSchema,
+  CreateCategoryOutputDTOSchema,
   GetAllAffiliationsInputDTOSchema,
   GetAllAffiliationsOutputDTOSchema,
   GetAllCategoriesInputDTOSchema,
   GetAllCategoriesOutputDTOSchema,
+  UpdateAffiliationInputDTOSchema,
+  UpdateAffiliationOutputDTOSchema,
+  UpdateCategoryInputDTOSchema,
+  UpdateCategoryOutputDTOSchema,
 } from "@/server/api/modules/master-data/dto";
 
 const affiliationsRouter = createTRPCRouter({
@@ -12,6 +27,14 @@ const affiliationsRouter = createTRPCRouter({
     .input(GetAllAffiliationsInputDTOSchema)
     .output(GetAllAffiliationsOutputDTOSchema)
     .query(async () => getAllAffiliations()),
+  create: adminProcedure
+    .input(CreateAffiliationInputDTOSchema)
+    .output(CreateAffiliationOutputDTOSchema)
+    .mutation(async ({ input }) => createAffiliation(input)),
+  update: adminProcedure
+    .input(UpdateAffiliationInputDTOSchema)
+    .output(UpdateAffiliationOutputDTOSchema)
+    .mutation(async ({ input }) => updateAffiliation(input)),
 });
 
 const categoriesRouter = createTRPCRouter({
@@ -19,6 +42,14 @@ const categoriesRouter = createTRPCRouter({
     .input(GetAllCategoriesInputDTOSchema)
     .output(GetAllCategoriesOutputDTOSchema)
     .query(async () => getAllCategories()),
+  create: adminProcedure
+    .input(CreateCategoryInputDTOSchema)
+    .output(CreateCategoryOutputDTOSchema)
+    .mutation(async ({ input }) => createCategory(input)),
+  update: adminProcedure
+    .input(UpdateCategoryInputDTOSchema)
+    .output(UpdateCategoryOutputDTOSchema)
+    .mutation(async ({ input }) => updateCategory(input)),
 });
 
 export const masterDataRouter = createTRPCRouter({

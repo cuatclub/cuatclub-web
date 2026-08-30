@@ -4,12 +4,13 @@ import { useEffect, useRef, type RefObject } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, X } from "lucide-react";
+import { LayoutDashboard, Tags, Users, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/admin/dashboard", label: "แดชบอร์ด", icon: LayoutDashboard, disabled: true },
   { href: "/admin/clubs", label: "ชมรม", icon: Users, disabled: false },
+  { href: "/admin/master-data", label: "ข้อมูลหลัก", icon: Tags, disabled: false },
 ] as const;
 
 const itemClass =

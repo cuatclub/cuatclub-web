@@ -6,3 +6,7 @@ export const AffiliationOutputDTOSchema = z.object({
 });
 
 export type AffiliationOutputDTO = z.infer<typeof AffiliationOutputDTOSchema>;
+
+export const AffiliationBaseInputDTOSchema = z.object({
+  label: z.string().trim().min(1).max(100),
+});
