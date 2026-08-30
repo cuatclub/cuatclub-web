@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Tag } from "@/components/ui/Tag";
+import { TagSelection } from "@/components/ui/TagSelection";
 import type { RouterOutputs } from "@/trpc/react";
 
 type Category = RouterOutputs["masterData"]["categories"]["getAll"][number];
@@ -37,29 +37,33 @@ export function CategoryFilterRow({ categories, selectedIds, onToggle }: Categor
     isExpanded || !canExpand ? orderedCategories : orderedCategories.slice(0, COLLAPSED_COUNT);
 
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-      {visibleCategories.map((category) => (
-        <Tag
-          key={category.id}
-          type="selectable"
-          selected={selectedIds.includes(category.id)}
-          color={category.fontColor}
-          bgColor={category.backgroundColor}
-          onClick={() => onToggle(category.id)}
-        >
-          {category.label}
-        </Tag>
-      ))}
-
-      {canExpand && (
-        <button
-          type="button"
-          onClick={() => setIsExpanded((expanded) => !expanded)}
-          className="font-ibm-plex text-foreground-secondary hover:text-primary focus-visible:ring-primary cursor-pointer rounded-sm text-sm leading-[23px] font-medium underline-offset-4 transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:text-base md:leading-[26px]"
-        >
-          {isExpanded ? "ย่อลง" : "ดูทั้งหมด"}
-        </button>
-      )}
-    </div>
+    <TagSelection
+      className="max-w-[600px]"
+      options={visibleCategories.map((category) => ({
+        value: category.id,
+        label: category.label,
+        color: category.fontColor,
+        bgColor: category.backgroundColor,
+      }))}
+      value={selectedIds}
+      onValueChange={(next) => {
+        const toggledId =
+          next.length > selectedIds.length
+            ? next.find((id) => !selectedIds.includes(id))
+            : selectedIds.find((id) => !next.includes(id));
+        if (toggledId !== undefined) onToggle(toggledId);
+      }}
+      trailing={
+        canExpand && (
+          <button
+            type="button"
+            onClick={() => setIsExpanded((expanded) => !expanded)}
+            className="font-ibm-plex text-foreground-secondary hover:text-primary focus-visible:ring-primary cursor-pointer rounded-sm text-sm leading-[23px] font-medium underline-offset-4 transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:text-base md:leading-[26px]"
+          >
+            {isExpanded ? "ย่อลง" : "ดูทั้งหมด"}
+          </button>
+        )
+      }
+    />
   );
 }
