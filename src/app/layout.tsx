@@ -44,7 +44,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="th" className={`${sarabun.variable} ${plexThai.variable}`}>
-      <body>
+      <body className="flex min-h-screen flex-col">
         <Navbar
           isLoggedIn={!!session}
           userName={session?.user.name}
@@ -52,7 +52,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           userRole={session?.user.role}
           userImage={session?.user.image}
         />
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <div className="flex-1">
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </div>
         <Footer />
       </body>
     </html>
