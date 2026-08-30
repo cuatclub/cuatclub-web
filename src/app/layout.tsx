@@ -1,12 +1,8 @@
 import { type Metadata } from "next";
 import { IBM_Plex_Sans_Thai, Sarabun } from "next/font/google";
-import { headers } from "next/headers";
 import "@/styles/globals.css";
 
-import { auth } from "@/server/auth";
 import { TRPCReactProvider } from "@/trpc/react";
-import { Footer } from "@/components/Footer";
-import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: {
@@ -40,22 +36,12 @@ const plexThai = IBM_Plex_Sans_Thai({
 });
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const session = await auth.api.getSession({ headers: await headers() });
-
   return (
     <html lang="th" className={`${sarabun.variable} ${plexThai.variable}`}>
       <body className="flex min-h-screen flex-col">
-        <Navbar
-          isLoggedIn={!!session}
-          userName={session?.user.name}
-          userEmail={session?.user.email}
-          userRole={session?.user.role}
-          userImage={session?.user.image}
-        />
         <div className="flex-1">
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </div>
-        <Footer />
       </body>
     </html>
   );
