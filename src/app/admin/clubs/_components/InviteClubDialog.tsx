@@ -158,12 +158,22 @@ function BulkSuccessView({ results, onInviteAnother }: BulkSuccessViewProps) {
   const succeeded = results.filter((r) => r.success);
   const failed = results.filter((r) => !r.success);
 
+  const allFailed = succeeded.length === 0;
+
   return (
     <div className="animate-in fade-in-0 zoom-in-95 flex flex-col gap-6 duration-200 motion-reduce:animate-none">
       <div className="flex flex-col items-center gap-2 text-center">
-        <CheckCircle2 aria-hidden="true" className="text-primary size-10" />
-        <DialogTitle>เชิญสำเร็จ</DialogTitle>
-        <DialogDescription>ส่งรหัสเชิญให้แต่ละอีเมลทางอีเมลแล้ว</DialogDescription>
+        {allFailed ? (
+          <XCircle aria-hidden="true" className="text-error size-10" />
+        ) : (
+          <CheckCircle2 aria-hidden="true" className="text-primary size-10" />
+        )}
+        <DialogTitle>{allFailed ? "เชิญไม่สำเร็จ" : "เชิญสำเร็จ"}</DialogTitle>
+        <DialogDescription>
+          {allFailed
+            ? "ไม่สามารถสร้างรหัสเชิญให้อีเมลที่ระบุได้เลย"
+            : "ส่งรหัสเชิญให้แต่ละอีเมลทางอีเมลแล้ว"}
+        </DialogDescription>
       </div>
 
       <div className="flex flex-col gap-3">

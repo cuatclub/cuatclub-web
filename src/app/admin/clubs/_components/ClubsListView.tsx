@@ -17,7 +17,7 @@ export function ClubsListView({ search }: { search: string }) {
 
   useEffect(() => setPage(1), [search]);
 
-  const { data, isLoading, isError } = api.clubs.getAll.useQuery(
+  const { data, isLoading, isError } = api.clubs.getAllForAdmin.useQuery(
     { search: search.trim() || undefined, sort: "NAME_ASC", page, pageSize: PAGE_SIZE },
     { placeholderData: keepPreviousData }
   );

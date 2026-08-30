@@ -64,7 +64,6 @@ export function ClubProfileForm({
     const validationMessage =
       image?.kind === "new" ? getImageFileValidationMessage(image.file) : null;
     if (validationMessage) {
-      setValue("logo", logo, valueUpdateOptions);
       setError("logo", { type: "manual", message: validationMessage });
       return;
     }
@@ -79,13 +78,11 @@ export function ClubProfileForm({
       .find((message): message is string => message !== null);
 
     if (validationMessage) {
-      setValue("atmospherePhotos", atmospherePhotos, valueUpdateOptions);
       setError("atmospherePhotos", { type: "manual", message: validationMessage });
       return;
     }
 
     if (atmospherePhotos.length + files.length > MAX_ATMOSPHERE_PHOTOS) {
-      setValue("atmospherePhotos", atmospherePhotos, valueUpdateOptions);
       setError("atmospherePhotos", {
         type: "manual",
         message: ATMOSPHERE_PHOTOS_MAX_MESSAGE,
@@ -128,7 +125,7 @@ export function ClubProfileForm({
         <fieldset
           inert={isSubmitting || undefined}
           aria-busy={isSubmitting}
-          className="contents flex flex-col gap-6 md:gap-8"
+          className="m-0 flex flex-col gap-6 border-0 p-0 md:gap-8"
         >
           <CardContent className="flex flex-col gap-4 px-0 md:gap-6">
             <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">

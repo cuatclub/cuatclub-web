@@ -31,7 +31,7 @@ export function ClubGallery({ photos, clubName }: ClubGalleryProps) {
                 alt={`ภาพบรรยากาศ${clubName} รูปที่ ${index + 1}`}
                 width={240}
                 height={180}
-                className="size-[140px] object-cover md:h-[180px] md:w-[240px]"
+                className="size-[140px] object-cover md:size-[160px]"
               />
             </button>
           </li>
