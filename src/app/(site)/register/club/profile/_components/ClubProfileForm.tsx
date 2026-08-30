@@ -5,7 +5,7 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button, Card, CardContent, Input, MultiSelect, Select, Textarea } from "@/components/ui";
+import { Button, Card, CardContent, Input, Select, TagSelection, Textarea } from "@/components/ui";
 import { ClubGalleryField } from "@/app/(site)/register/club/profile/_components/ClubGalleryField";
 import { ClubLogoField } from "@/app/(site)/register/club/profile/_components/ClubLogoField";
 import {
@@ -134,7 +134,7 @@ export function ClubProfileForm({
 
             <ClubLogoField value={logo} errorMessage={errors.logo?.message} onChange={updateLogo} />
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,3fr)_minmax(0,3fr)_minmax(0,2fr)] md:gap-5">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
               <Input
                 id="club-name"
                 label="ชื่อชมรม"
@@ -168,29 +168,27 @@ export function ClubProfileForm({
                   />
                 )}
               />
-
-              <Controller
-                control={control}
-                name="categories"
-                render={({ field, fieldState }) => (
-                  <MultiSelect
-                    label="หมวดหมู่"
-                    required
-                    name={field.name}
-                    options={[...categories]}
-                    value={field.value}
-                    placeholder="เลือกหมวดหมู่"
-                    className="min-w-0"
-                    error={!!fieldState.error}
-                    errorMessage={fieldState.error?.message}
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      field.onBlur();
-                    }}
-                  />
-                )}
-              />
             </div>
+
+            <Controller
+              control={control}
+              name="categories"
+              render={({ field, fieldState }) => (
+                <TagSelection
+                  label="หมวดหมู่"
+                  required
+                  name={field.name}
+                  options={categories.map((category) => ({ value: category, label: category }))}
+                  value={field.value}
+                  error={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    field.onBlur();
+                  }}
+                />
+              )}
+            />
 
             <Textarea
               id="short-description"
