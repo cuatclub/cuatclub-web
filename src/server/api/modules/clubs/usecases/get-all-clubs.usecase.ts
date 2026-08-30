@@ -8,6 +8,7 @@ export const getAllClubs = async (input: GetAllClubsInputDTO): Promise<GetAllClu
     clubs: clubs.map((club) => ({
       id: club.id,
       name: club.name,
+      email: club.email,
       logoUrl: club.logoUrl,
       shortDescription: club.shortDescription,
       affiliation: club.affiliation,

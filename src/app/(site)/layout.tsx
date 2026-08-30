@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 
 import { auth } from "@/server/auth";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components";
+import { Footer } from "@/components/Footer";
 
 export default async function SiteLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const session = await auth.api.getSession({ headers: await headers() });

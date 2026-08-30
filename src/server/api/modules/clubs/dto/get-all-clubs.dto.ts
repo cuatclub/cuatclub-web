@@ -23,6 +23,7 @@ export const ClubListItemDTOSchema = ClubOutputDTOSchema.pick({
   shortDescription: true,
 }).extend({
   name: z.string(),
+  email: z.string(),
   logoUrl: z.string().nullable(),
   affiliation: AffiliationOutputDTOSchema.nullable(),
   categories: z.array(CategoryOutputDTOSchema),

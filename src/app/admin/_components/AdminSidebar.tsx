@@ -98,7 +98,9 @@ export function AdminSidebar({ mobileOpen, onMobileClose, menuButtonRef }: Admin
           onClick={onNavigate}
           className={cn(
             itemClass,
-            isActive ? "bg-primary text-white" : "text-foreground hover:bg-primary-lighter"
+            isActive
+              ? "bg-primary text-white"
+              : "text-foreground hover:bg-primary-lighter hover:text-primary"
           )}
         >
           <Icon aria-hidden="true" className="size-5 shrink-0" />
