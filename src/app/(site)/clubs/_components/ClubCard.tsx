@@ -38,7 +38,7 @@ export function ClubCard({
   return (
     <Link
       href={`/clubs/${id}`}
-      className="border-border hover:border-primary-light focus-visible:ring-primary group flex h-full flex-col gap-4 rounded-xl border bg-white p-4 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:p-6"
+      className="hover:border-primary-light focus-visible:ring-primary group flex h-full flex-col gap-4 rounded-xl border border-white bg-white p-4 shadow-black transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:p-6"
     >
       <div className="flex items-start justify-between gap-3">
         {logoUrl ? (

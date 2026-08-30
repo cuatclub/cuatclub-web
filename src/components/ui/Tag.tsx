@@ -9,8 +9,7 @@ const tagVariants = cva(
     variants: {
       variant: {
         solid: "border-[1.5px]",
-        outline:
-          "border-[1.5px] border-primary bg-transparent text-primary hover:bg-primary-lighter",
+        outline: "border-[1.5px] border-border bg-transparent text-foreground hover:border-primary",
       },
     },
     defaultVariants: {
