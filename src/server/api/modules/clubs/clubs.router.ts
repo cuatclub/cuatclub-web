@@ -1,6 +1,12 @@
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  adminProcedure,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 import {
   getAllClubs,
+  getAllClubsForAdmin,
   getClubById,
   getClubProfile,
   getClubRegistrationDetails,
@@ -14,6 +20,8 @@ import {
 import {
   GetAllClubsInputDTOSchema,
   GetAllClubsOutputDTOSchema,
+  GetAllClubsAdminInputDTOSchema,
+  GetAllClubsAdminOutputDTOSchema,
   GetClubByIdInputDTOSchema,
   GetClubByIdOutputDTOSchema,
   GetClubProfileInputDTOSchema,
@@ -39,6 +47,11 @@ export const clubsRouter = createTRPCRouter({
     .input(GetAllClubsInputDTOSchema)
     .output(GetAllClubsOutputDTOSchema)
     .query(async ({ input }) => getAllClubs(input)),
+
+  getAllForAdmin: adminProcedure
+    .input(GetAllClubsAdminInputDTOSchema)
+    .output(GetAllClubsAdminOutputDTOSchema)
+    .query(async ({ input }) => getAllClubsForAdmin(input)),
 
   getById: publicProcedure
     .input(GetClubByIdInputDTOSchema)

@@ -1,6 +1,7 @@
-import { and, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, count, desc, eq, ilike, isNull, sql } from "drizzle-orm";
 import { db, type DbClient } from "@/server/db";
 import { invitationCodes } from "@/server/db/schema/invitation-codes";
+import { clubs, user } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
 import { InvitationCode } from "@/server/api/modules/invitations/invitation-code.entity";
 
@@ -10,11 +11,26 @@ export interface CreateInvitationCodeParams {
   expiredAt: Date;
 }
 
+export interface FindAllInvitationCodesParams {
+  search?: string;
+  page: number;
+  pageSize: number;
+}
+
+export interface InvitationHistoryRow {
+  code: InvitationCode;
+  redeemedByClub: { id: string; name: string } | null;
+}
+
 export interface IInvitationCodesRepository {
   findByEmail(email: string, client?: DbClient): Promise<InvitationCode | null>;
   revoke(id: string, client?: DbClient): Promise<void>;
   markUsed(id: string, client?: DbClient): Promise<void>;
   create(req: CreateInvitationCodeParams, client?: DbClient): Promise<InvitationCode>;
+  findAll(
+    params: FindAllInvitationCodesParams,
+    client?: DbClient
+  ): Promise<{ items: InvitationHistoryRow[]; total: number }>;
 }
 
 class InvitationCodesRepository implements IInvitationCodesRepository {
@@ -64,6 +80,40 @@ class InvitationCodesRepository implements IInvitationCodesRepository {
     const res = await client.insert(invitationCodes).values(req).returning().catch(wrapRepoError);
 
     return InvitationCode.toEntity(res[0]!);
+  }
+
+  // Redemption isn't tracked on the invitation row itself — a code is "redeemed" once a user
+  // account with a matching email owns a club, the same lookup `findByEmail` relies on
+  // elsewhere, just widened here into a list join instead of a single lookup.
+  async findAll(
+    params: FindAllInvitationCodesParams,
+    client: DbClient = db
+  ): Promise<{ items: InvitationHistoryRow[]; total: number }> {
+    const filter = params.search
+      ? ilike(invitationCodes.email, `%${params.search.replace(/[\\%_]/g, "\\$&")}%`)
+      : undefined;
+
+    const [rows, totalRes] = await Promise.all([
+      client
+        .select({ code: invitationCodes, clubId: clubs.id, clubName: user.name })
+        .from(invitationCodes)
+        .leftJoin(user, sql`lower(${user.email}) = lower(${invitationCodes.email})`)
+        .leftJoin(clubs, eq(clubs.userId, user.id))
+        .where(filter)
+        .orderBy(desc(invitationCodes.createdAt))
+        .limit(params.pageSize)
+        .offset((params.page - 1) * params.pageSize)
+        .catch(wrapRepoError),
+      client.select({ value: count() }).from(invitationCodes).where(filter).catch(wrapRepoError),
+    ]);
+
+    return {
+      items: rows.map(({ code, clubId, clubName }) => ({
+        code: InvitationCode.toEntity(code),
+        redeemedByClub: clubId ? { id: clubId, name: clubName! } : null,
+      })),
+      total: totalRes[0]?.value ?? 0,
+    };
   }
 }
 

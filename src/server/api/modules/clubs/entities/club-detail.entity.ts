@@ -31,6 +31,10 @@ export class ClubDetail {
     return this.owner.name;
   }
 
+  get email() {
+    return this.owner.email;
+  }
+
   get logoUrl() {
     return this.owner.image;
   }

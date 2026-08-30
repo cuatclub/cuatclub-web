@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useId, useState, type InputHTMLAttributes } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import { cn } from "@/lib/utils";
