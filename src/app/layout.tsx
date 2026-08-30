@@ -38,10 +38,8 @@ const plexThai = IBM_Plex_Sans_Thai({
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="th" className={`${sarabun.variable} ${plexThai.variable}`}>
-      <body className="flex min-h-screen flex-col">
-        <div className="flex-1">
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-        </div>
+      <body>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
   );
