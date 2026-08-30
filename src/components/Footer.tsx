@@ -1,8 +1,8 @@
 import type { ComponentType, SVGProps } from "react";
-import { Github, Instagram } from "lucide-react";
+import { Instagram } from "lucide-react";
 import Image from "next/image";
 
-import { TiktokIcon } from "@/components/icons";
+import { GithubIcon, TiktokIcon } from "@/components/icons";
 
 type SocialLink = {
   label: string;
@@ -14,7 +14,7 @@ type SocialLink = {
 const SOCIAL_LINKS: SocialLink[] = [
   { label: "Instagram", href: "https://www.instagram.com/cuatclub.chula/", Icon: Instagram },
   // { label: "TikTok", href: "", Icon: TiktokIcon },
-  { label: "GitHub", href: "https://github.com/cuatclub/cuatclub-web", Icon: Github },
+  { label: "GitHub", href: "https://github.com/cuatclub/cuatclub-web", Icon: GithubIcon },
 ];
 
 export function Footer() {
