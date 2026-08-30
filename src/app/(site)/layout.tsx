@@ -8,7 +8,7 @@ export default async function SiteLayout({ children }: Readonly<{ children: Reac
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (
-    <body className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <Navbar
         isLoggedIn={!!session}
         userName={session?.user.name}
@@ -18,6 +18,6 @@ export default async function SiteLayout({ children }: Readonly<{ children: Reac
       />
       <div className="flex-1">{children}</div>
       <Footer />
-    </body>
+    </div>
   );
 }
