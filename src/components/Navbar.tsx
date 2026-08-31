@@ -51,6 +51,7 @@ export function Navbar({
   const pathname = usePathname();
 
   const isClub = isLoggedIn && userRole === "CLUB";
+  const isAdmin = isLoggedIn && userRole === "ADMIN";
 
   const handleSignOut = async () => {
     await signOut();
@@ -147,6 +148,11 @@ export function Navbar({
           <>
             {isClub && (
               <Link href="/dashboard" className={buttonVariants({ variant: "outline" })}>
+                แดชบอร์ด
+              </Link>
+            )}
+            {isAdmin && (
+              <Link href="/admin" className={buttonVariants({ variant: "outline" })}>
                 แดชบอร์ด
               </Link>
             )}
@@ -334,6 +340,15 @@ export function Navbar({
                 {isClub && (
                   <Link
                     href="/dashboard"
+                    onClick={closeSidebar}
+                    className={cn(buttonVariants({ variant: "outline" }), "mt-6 w-full")}
+                  >
+                    แดชบอร์ด
+                  </Link>
+                )}
+                {isAdmin && (
+                  <Link
+                    href="/admin"
                     onClick={closeSidebar}
                     className={cn(buttonVariants({ variant: "outline" }), "mt-6 w-full")}
                   >

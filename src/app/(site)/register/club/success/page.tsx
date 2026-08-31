@@ -35,10 +35,10 @@ export default async function ClubRegisterSuccess() {
           />
 
           <Link
-            href="/dashboard"
+            href="/"
             className={cn(buttonVariants({ variant: "primary" }), "w-60 md:w-[300px]")}
           >
-            แดชบอร์ด
+            กลับหน้าแรก
           </Link>
         </div>
       </main>
