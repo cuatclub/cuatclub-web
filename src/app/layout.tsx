@@ -6,7 +6,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
   title: {
-    default: "CUatClub - รวมชมรมและกิจกรรมจุฬาฯ ไว้ในที่เดียว",
+    default: "รวมชมรม และกิจกรรม ในจุฬาฯไว้ในที่เดียว | CUatClub",
     template: "%s | CUatClub",
   },
   description:

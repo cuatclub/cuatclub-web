@@ -16,6 +16,10 @@ import {
   submitClubProfileRegistration,
   reopenClubProfileRegistration,
   registerClub,
+  adminUpdateClub,
+  adminDeleteClub,
+  adminGetClubLogoUploadUrl,
+  adminGetClubImagesUploadUrl,
 } from "@/server/api/modules/clubs/usecases";
 import {
   GetAllClubsInputDTOSchema,
@@ -40,6 +44,14 @@ import {
   ReopenClubProfileRegistrationOutputDTOSchema,
   RegisterClubInputDTOSchema,
   RegisterClubOutputDTOSchema,
+  AdminUpdateClubInputDTOSchema,
+  AdminUpdateClubOutputDTOSchema,
+  AdminDeleteClubInputDTOSchema,
+  AdminDeleteClubOutputDTOSchema,
+  AdminGetClubLogoUploadUrlInputDTOSchema,
+  AdminGetClubLogoUploadUrlOutputDTOSchema,
+  AdminGetClubImagesUploadUrlInputDTOSchema,
+  AdminGetClubImagesUploadUrlOutputDTOSchema,
 } from "@/server/api/modules/clubs/dto";
 
 export const clubsRouter = createTRPCRouter({
@@ -97,4 +109,24 @@ export const clubsRouter = createTRPCRouter({
     .input(GetClubImagesUploadUrlInputDTOSchema)
     .output(GetClubImagesUploadUrlOutputDTOSchema)
     .mutation(async ({ input, ctx }) => getClubImagesUploadUrl(ctx.session.user.id, input)),
+
+  updateForAdmin: adminProcedure
+    .input(AdminUpdateClubInputDTOSchema)
+    .output(AdminUpdateClubOutputDTOSchema)
+    .mutation(async ({ input }) => adminUpdateClub(input)),
+
+  deleteForAdmin: adminProcedure
+    .input(AdminDeleteClubInputDTOSchema)
+    .output(AdminDeleteClubOutputDTOSchema)
+    .mutation(async ({ input }) => adminDeleteClub(input)),
+
+  getLogoUploadUrlForAdmin: adminProcedure
+    .input(AdminGetClubLogoUploadUrlInputDTOSchema)
+    .output(AdminGetClubLogoUploadUrlOutputDTOSchema)
+    .mutation(async ({ input }) => adminGetClubLogoUploadUrl(input)),
+
+  getImagesUploadUrlForAdmin: adminProcedure
+    .input(AdminGetClubImagesUploadUrlInputDTOSchema)
+    .output(AdminGetClubImagesUploadUrlOutputDTOSchema)
+    .mutation(async ({ input }) => adminGetClubImagesUploadUrl(input)),
 });

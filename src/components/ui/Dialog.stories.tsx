@@ -132,3 +132,39 @@ export const Anchored: Story = {
     );
   },
 };
+
+/**
+ * `placement="modal"` is a centred card at every screen size — no right-hand drawer on mobile.
+ * Use it for short dialogs that read oddly as a full-height drawer on phones: confirmations,
+ * read-only detail views.
+ */
+export const Modal: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>ลบรายการ</Button>
+        <DialogRoot open={open} onOpenChange={setOpen}>
+          <DialogContent placement="modal" className="gap-6 p-6 md:p-8">
+            <div className="flex items-start justify-between gap-4">
+              <DialogTitle>ลบรายการ</DialogTitle>
+              <DialogClose aria-label="ปิด" className={closeButtonClass}>
+                <X aria-hidden="true" className="size-5" />
+              </DialogClose>
+            </div>
+            <DialogDescription>คุณต้องการลบรายการนี้ใช่หรือไม่</DialogDescription>
+            <div className="flex justify-end gap-3">
+              <Button variant="outline" onClick={() => setOpen(false)}>
+                ยกเลิก
+              </Button>
+              <Button variant="destructive" onClick={() => setOpen(false)}>
+                ยืนยัน
+              </Button>
+            </div>
+          </DialogContent>
+        </DialogRoot>
+      </>
+    );
+  },
+};

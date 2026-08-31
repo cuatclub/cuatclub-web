@@ -33,6 +33,10 @@ const panelClass =
 const noSlideClass =
   "md:data-[state=open]:slide-in-from-right-0 md:data-[state=closed]:slide-out-to-right-0";
 
+/** Same panel look as `panelClass`, but a plain zoom in/out — no slide-in-from-right at any size. */
+const modalPanelClass =
+  "flex flex-col bg-white rounded-xl shadow-black outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 duration-200 motion-reduce:animate-none";
+
 export interface DialogContentProps extends ComponentPropsWithoutRef<
   typeof DialogPrimitive.Content
 > {
@@ -41,10 +45,13 @@ export interface DialogContentProps extends ComponentPropsWithoutRef<
    * drops it out of the nearest positioned ancestor, 6px below it and matched to its width, so it
    * reads as part of the control that opened it. Below `md` both are the same right-hand drawer.
    *
+   * `modal` is a centred card at every size, including mobile — no drawer, no slide. Use it for
+   * dialogs that read oddly as a full-height side drawer on phones (confirmations, detail views).
+   *
    * An `anchored` panel is normally paired with `modal={false}` on `DialogRoot`: it has no scrim,
    * and locking the page would strand the bottom of a tall panel below the fold.
    */
-  placement?: "centered" | "anchored";
+  placement?: "centered" | "anchored" | "modal";
 }
 
 /**
@@ -56,6 +63,27 @@ export interface DialogContentProps extends ComponentPropsWithoutRef<
  */
 const DialogContent = forwardRef<ElementRef<typeof DialogPrimitive.Content>, DialogContentProps>(
   ({ className, children, placement = "centered", ...props }, ref) => {
+    if (placement === "modal") {
+      return (
+        <DialogPrimitive.Portal>
+          <DialogOverlay />
+          <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
+            <DialogPrimitive.Content
+              ref={ref}
+              className={cn(
+                modalPanelClass,
+                "pointer-events-auto max-h-[85vh] w-full max-w-[400px]",
+                className
+              )}
+              {...props}
+            >
+              {children}
+            </DialogPrimitive.Content>
+          </div>
+        </DialogPrimitive.Portal>
+      );
+    }
+
     if (placement === "anchored") {
       return (
         <>

@@ -9,3 +9,7 @@ export * from "@/server/api/modules/clubs/usecases/save-club-profile-registratio
 export * from "@/server/api/modules/clubs/usecases/submit-club-profile-registration.usecase";
 export * from "@/server/api/modules/clubs/usecases/reopen-club-profile-registration.usecase";
 export * from "@/server/api/modules/clubs/usecases/register-club.usecase";
+export * from "@/server/api/modules/clubs/usecases/admin-update-club.usecase";
+export * from "@/server/api/modules/clubs/usecases/admin-delete-club.usecase";
+export * from "@/server/api/modules/clubs/usecases/admin-get-club-logo-upload-url.usecase";
+export * from "@/server/api/modules/clubs/usecases/admin-get-club-images-upload-url.usecase";

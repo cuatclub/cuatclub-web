@@ -43,6 +43,7 @@ export interface IClubsRepository {
   getByFilter(filter?: SQL): Promise<Club[]>;
   getAllDetailByFilter(params: GetPublicClubsParams): Promise<PublicClubsPage>;
   updateById(id: string, update: UpdateClubParams, client?: DbClient): Promise<void>;
+  deleteById(id: string, client?: DbClient): Promise<void>;
 }
 
 class ClubsRepository implements IClubsRepository {
@@ -128,6 +129,10 @@ class ClubsRepository implements IClubsRepository {
 
   async updateById(id: string, update: UpdateClubParams, client: DbClient = db): Promise<void> {
     return this.updateByFilter(eq(clubs.id, id), update, client);
+  }
+
+  async deleteById(id: string, client: DbClient = db): Promise<void> {
+    await client.delete(clubs).where(eq(clubs.id, id)).catch(wrapRepoError);
   }
 
   // Returns null when nothing matches — that's a normal result, not a

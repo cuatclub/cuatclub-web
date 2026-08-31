@@ -13,7 +13,7 @@ const meta = {
   argTypes: {
     variant: {
       control: "radio",
-      options: ["primary", "outline"],
+      options: ["primary", "outline", "destructive", "outline-destructive"],
     },
     isLoading: {
       control: "boolean",
@@ -39,6 +39,18 @@ export const Primary: Story = {
 export const Outline: Story = {
   args: {
     variant: "outline",
+  },
+};
+
+export const Destructive: Story = {
+  args: {
+    variant: "destructive",
+  },
+};
+
+export const OutlineDestructive: Story = {
+  args: {
+    variant: "outline-destructive",
   },
 };
 

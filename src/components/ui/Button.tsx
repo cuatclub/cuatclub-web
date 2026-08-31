@@ -11,6 +11,9 @@ const buttonVariants = cva(
         primary: "bg-primary text-white hover:bg-primary/90 disabled:bg-primary-light",
         outline:
           "border border-primary bg-transparent text-primary hover:bg-primary-lighter disabled:border-primary-light disabled:text-primary-light",
+        destructive: "bg-error text-white hover:bg-error/90 disabled:bg-error/40",
+        "outline-destructive":
+          "border border-error bg-transparent text-error hover:bg-error/10 disabled:border-error/40 disabled:text-error/40",
       },
     },
     defaultVariants: {
@@ -24,9 +27,14 @@ const buttonVariants = cva(
  * button should keep looking like its normal, interactive self rather than the grayed-out
  * `disabled:` variant — that state is reserved for an actually-invalid/disabled action.
  */
-const loadingVariantOverride: Record<"primary" | "outline", string> = {
+const loadingVariantOverride: Record<
+  "primary" | "outline" | "destructive" | "outline-destructive",
+  string
+> = {
   primary: "disabled:bg-primary",
   outline: "disabled:border-primary disabled:text-primary",
+  destructive: "disabled:bg-error",
+  "outline-destructive": "disabled:border-error disabled:text-error",
 };
 
 export interface ButtonProps

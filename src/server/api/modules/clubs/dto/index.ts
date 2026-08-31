@@ -12,3 +12,7 @@ export * from "@/server/api/modules/clubs/dto/save-club-profile-registration.dto
 export * from "@/server/api/modules/clubs/dto/submit-club-profile-registration.dto";
 export * from "@/server/api/modules/clubs/dto/reopen-club-profile-registration.dto";
 export * from "@/server/api/modules/clubs/dto/register-club.dto";
+export * from "@/server/api/modules/clubs/dto/admin-update-club.dto";
+export * from "@/server/api/modules/clubs/dto/admin-delete-club.dto";
+export * from "@/server/api/modules/clubs/dto/admin-get-club-logo-upload-url.dto";
+export * from "@/server/api/modules/clubs/dto/admin-get-club-images-upload-url.dto";
