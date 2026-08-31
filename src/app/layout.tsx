@@ -1,5 +1,6 @@
 import { type Metadata } from "next";
 import { IBM_Plex_Sans_Thai, Sarabun } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "@/styles/globals.css";
 
 import { TRPCReactProvider } from "@/trpc/react";
@@ -40,6 +41,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="th" className={`${sarabun.variable} ${plexThai.variable}`}>
       <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Analytics />
       </body>
     </html>
   );
