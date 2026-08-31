@@ -36,7 +36,7 @@ export function ConfirmModal({
   confirmVariant = "default",
   confirmColor = "destructive",
   cancelVariant = "outline",
-  cancelColor = "primary",
+  cancelColor = "destructive",
   isLoading = false,
   onConfirm,
 }: ConfirmModalProps) {
@@ -55,7 +55,7 @@ export function ConfirmModal({
 
         {description && <DialogDescription>{description}</DialogDescription>}
 
-        <div className="flex justify-end gap-3">
+        <div className="flex w-full justify-end gap-3">
           <Button
             type="button"
             variant={cancelVariant}
