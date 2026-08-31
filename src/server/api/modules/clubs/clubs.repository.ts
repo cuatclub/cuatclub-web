@@ -44,6 +44,7 @@ export interface IClubsRepository {
   getAllDetailByFilter(params: GetPublicClubsParams): Promise<PublicClubsPage>;
   updateById(id: string, update: UpdateClubParams, client?: DbClient): Promise<void>;
   deleteById(id: string, client?: DbClient): Promise<void>;
+  existsByAffiliationId(affiliationId: number): Promise<boolean>;
 }
 
 class ClubsRepository implements IClubsRepository {
@@ -133,6 +134,14 @@ class ClubsRepository implements IClubsRepository {
 
   async deleteById(id: string, client: DbClient = db): Promise<void> {
     await client.delete(clubs).where(eq(clubs.id, id)).catch(wrapRepoError);
+  }
+
+  async existsByAffiliationId(affiliationId: number): Promise<boolean> {
+    const res = await db.query.clubs
+      .findFirst({ where: eq(clubs.affiliationId, affiliationId) })
+      .catch(wrapRepoError);
+
+    return !!res;
   }
 
   // Returns null when nothing matches — that's a normal result, not a

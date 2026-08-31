@@ -28,6 +28,8 @@ export interface IMasterDataRepository {
     update: UpdateAffiliationParams,
     client?: DbClient
   ): Promise<AffiliationRow | null>;
+  deleteCategory(id: number, client?: DbClient): Promise<void>;
+  deleteAffiliation(id: number, client?: DbClient): Promise<void>;
 }
 
 class MasterDataRepository implements IMasterDataRepository {
@@ -82,6 +84,14 @@ class MasterDataRepository implements IMasterDataRepository {
       .catch(wrapRepoError);
 
     return res[0] ?? null;
+  }
+
+  async deleteCategory(id: number, client: DbClient = db): Promise<void> {
+    await client.delete(categories).where(eq(categories.id, id)).catch(wrapRepoError);
+  }
+
+  async deleteAffiliation(id: number, client: DbClient = db): Promise<void> {
+    await client.delete(affiliations).where(eq(affiliations.id, id)).catch(wrapRepoError);
   }
 }
 

@@ -6,6 +6,8 @@ import {
   getAllCategories,
   updateAffiliation,
   updateCategory,
+  deleteCategory,
+  deleteAffiliation,
 } from "@/server/api/modules/master-data/usecases";
 import {
   CreateAffiliationInputDTOSchema,
@@ -20,6 +22,10 @@ import {
   UpdateAffiliationOutputDTOSchema,
   UpdateCategoryInputDTOSchema,
   UpdateCategoryOutputDTOSchema,
+  DeleteCategoryInputDTOSchema,
+  DeleteCategoryOutputDTOSchema,
+  DeleteAffiliationInputDTOSchema,
+  DeleteAffiliationOutputDTOSchema,
 } from "@/server/api/modules/master-data/dto";
 
 const affiliationsRouter = createTRPCRouter({
@@ -35,6 +41,10 @@ const affiliationsRouter = createTRPCRouter({
     .input(UpdateAffiliationInputDTOSchema)
     .output(UpdateAffiliationOutputDTOSchema)
     .mutation(async ({ input }) => updateAffiliation(input)),
+  delete: adminProcedure
+    .input(DeleteAffiliationInputDTOSchema)
+    .output(DeleteAffiliationOutputDTOSchema)
+    .mutation(async ({ input }) => deleteAffiliation(input)),
 });
 
 const categoriesRouter = createTRPCRouter({
@@ -50,6 +60,10 @@ const categoriesRouter = createTRPCRouter({
     .input(UpdateCategoryInputDTOSchema)
     .output(UpdateCategoryOutputDTOSchema)
     .mutation(async ({ input }) => updateCategory(input)),
+  delete: adminProcedure
+    .input(DeleteCategoryInputDTOSchema)
+    .output(DeleteCategoryOutputDTOSchema)
+    .mutation(async ({ input }) => deleteCategory(input)),
 });
 
 export const masterDataRouter = createTRPCRouter({

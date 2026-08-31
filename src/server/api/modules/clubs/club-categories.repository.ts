@@ -5,6 +5,7 @@ import { wrapRepoError } from "@/server/errors";
 
 export interface IClubCategoriesRepository {
   createCategoryClubByClubId(clubId: string, update: number[], client?: DbClient): Promise<void>;
+  existsByCategoryId(categoryId: number): Promise<boolean>;
 }
 
 class ClubCategoriesRepository implements IClubCategoriesRepository {
@@ -23,6 +24,14 @@ class ClubCategoriesRepository implements IClubCategoriesRepository {
       .catch(wrapRepoError);
 
     return;
+  }
+
+  async existsByCategoryId(categoryId: number): Promise<boolean> {
+    const res = await db.query.clubCategories
+      .findFirst({ where: eq(clubCategories.categoryId, categoryId) })
+      .catch(wrapRepoError);
+
+    return !!res;
   }
 }
 

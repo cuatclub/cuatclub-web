@@ -6,3 +6,5 @@ export * from "@/server/api/modules/master-data/dto/get-all-affiliations.dto";
 export * from "@/server/api/modules/master-data/dto/get-all-categories.dto";
 export * from "@/server/api/modules/master-data/dto/update-affiliation.dto";
 export * from "@/server/api/modules/master-data/dto/update-category.dto";
+export * from "@/server/api/modules/master-data/dto/delete-category.dto";
+export * from "@/server/api/modules/master-data/dto/delete-affiliation.dto";
