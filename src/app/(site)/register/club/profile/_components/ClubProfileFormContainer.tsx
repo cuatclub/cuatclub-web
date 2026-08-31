@@ -165,7 +165,7 @@ export function ClubProfileFormContainer({
   return (
     <ClubProfileForm
       affiliations={affiliations.map(({ label }) => label)}
-      categories={categories.map(({ label }) => label)}
+      categories={categories}
       initialValues={initialValues}
       onSubmit={handleSubmit}
     />

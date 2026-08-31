@@ -302,7 +302,12 @@ export function EditClubForm({
               label="หมวดหมู่"
               required
               name={field.name}
-              options={categories.map(({ label }) => ({ value: label, label }))}
+              options={categories.map(({ label, fontColor, backgroundColor }) => ({
+                value: label,
+                label,
+                color: fontColor,
+                bgColor: backgroundColor,
+              }))}
               value={field.value}
               error={!!fieldState.error}
               errorMessage={fieldState.error?.message}

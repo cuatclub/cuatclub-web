@@ -16,10 +16,11 @@ import {
   type ClubProfileImage,
   type ClubProfileFormValues,
 } from "@/app/(site)/register/club/profile/profile-schema";
+import type { CategoryOutputDTO } from "@/server/api/modules/master-data/dto";
 
 type ClubProfileFormProps = {
   affiliations: readonly string[];
-  categories: readonly string[];
+  categories: readonly CategoryOutputDTO[];
   initialValues: ClubProfileFormValues;
   onSubmit: (values: ClubProfileFormValues) => Promise<void>;
 };
@@ -178,7 +179,12 @@ export function ClubProfileForm({
                   label="หมวดหมู่"
                   required
                   name={field.name}
-                  options={categories.map((category) => ({ value: category, label: category }))}
+                  options={categories.map((category) => ({
+                    value: category.label,
+                    label: category.label,
+                    color: category.fontColor,
+                    bgColor: category.backgroundColor,
+                  }))}
                   value={field.value}
                   error={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
