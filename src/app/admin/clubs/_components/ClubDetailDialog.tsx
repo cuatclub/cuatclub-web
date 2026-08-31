@@ -86,7 +86,8 @@ export function ClubDetailDialog({ clubId, onClose }: ClubDetailDialogProps) {
                 </Button>
                 <Button
                   type="button"
-                  variant="outline-destructive"
+                  variant="outline"
+                  color="destructive"
                   className="h-8 gap-1.5 px-3 text-xs md:h-9 md:text-sm"
                   onClick={() => setIsConfirmingDelete(true)}
                 >

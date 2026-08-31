@@ -13,7 +13,11 @@ const meta = {
   argTypes: {
     variant: {
       control: "radio",
-      options: ["primary", "outline", "destructive", "outline-destructive"],
+      options: ["default", "outline"],
+    },
+    color: {
+      control: "radio",
+      options: ["primary", "destructive"],
     },
     isLoading: {
       control: "boolean",
@@ -32,31 +36,36 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    variant: "primary",
+    variant: "default",
+    color: "primary",
   },
 };
 
 export const Outline: Story = {
   args: {
     variant: "outline",
+    color: "primary",
   },
 };
 
 export const Destructive: Story = {
   args: {
-    variant: "destructive",
+    variant: "default",
+    color: "destructive",
   },
 };
 
 export const OutlineDestructive: Story = {
   args: {
-    variant: "outline-destructive",
+    variant: "outline",
+    color: "destructive",
   },
 };
 
 export const PrimaryLoading: Story = {
   args: {
-    variant: "primary",
+    variant: "default",
+    color: "primary",
     isLoading: true,
   },
 };
@@ -64,13 +73,15 @@ export const PrimaryLoading: Story = {
 export const OutlineLoading: Story = {
   args: {
     variant: "outline",
+    color: "primary",
     isLoading: true,
   },
 };
 
 export const PrimaryDisabled: Story = {
   args: {
-    variant: "primary",
+    variant: "default",
+    color: "primary",
     disabled: true,
   },
 };
@@ -78,6 +89,7 @@ export const PrimaryDisabled: Story = {
 export const OutlineDisabled: Story = {
   args: {
     variant: "outline",
+    color: "primary",
     disabled: true,
   },
 };
@@ -102,17 +114,18 @@ export const AllStates: Story = {
     ];
 
     const cell = (
-      variant: "primary" | "outline",
+      variant: "default" | "outline",
       size: string,
       props: Partial<{ isLoading: boolean; disabled: boolean }>,
       hoverFake?: boolean
     ) => (
       <Button
         variant={variant}
+        color="primary"
         {...props}
         className={cn(
           size,
-          hoverFake && variant === "primary" && "bg-primary/90",
+          hoverFake && variant === "default" && "bg-primary/90",
           hoverFake && variant === "outline" && "bg-primary-lighter"
         )}
       >
@@ -136,13 +149,13 @@ export const AllStates: Story = {
           <Fragment key={row.label}>
             <div className="text-foreground-muted text-sm">{row.label}</div>
             <div className="flex justify-center">
-              {cell("primary", desktopSize, row.props, row.hoverFake)}
+              {cell("default", desktopSize, row.props, row.hoverFake)}
             </div>
             <div className="flex justify-center">
               {cell("outline", desktopSize, row.props, row.hoverFake)}
             </div>
             <div className="flex justify-center">
-              {cell("primary", mobileSize, row.props, row.hoverFake)}
+              {cell("default", mobileSize, row.props, row.hoverFake)}
             </div>
             <div className="flex justify-center">
               {cell("outline", mobileSize, row.props, row.hoverFake)}

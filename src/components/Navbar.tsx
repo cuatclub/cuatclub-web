@@ -208,7 +208,7 @@ export function Navbar({
             <Link href="/login" className={buttonVariants({ variant: "outline" })}>
               เข้าสู่ระบบ
             </Link>
-            <Link href="/register" className={buttonVariants({ variant: "primary" })}>
+            <Link href="/register" className={buttonVariants()}>
               ลงทะเบียน
             </Link>
           </>
@@ -361,7 +361,7 @@ export function Navbar({
                 <Link
                   href="/register"
                   onClick={closeSidebar}
-                  className={cn(buttonVariants({ variant: "primary" }), "w-full")}
+                  className={cn(buttonVariants(), "w-full")}
                 >
                   ลงทะเบียน
                 </Link>

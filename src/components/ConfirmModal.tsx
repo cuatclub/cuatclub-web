@@ -19,6 +19,9 @@ export type ConfirmModalProps = {
   confirmLabel?: string;
   cancelLabel?: string;
   confirmVariant?: ButtonProps["variant"];
+  confirmColor?: ButtonProps["color"];
+  cancelVariant?: ButtonProps["variant"];
+  cancelColor?: ButtonProps["color"];
   isLoading?: boolean;
   onConfirm: () => void;
 };
@@ -30,7 +33,10 @@ export function ConfirmModal({
   description,
   confirmLabel = "ยืนยัน",
   cancelLabel = "ยกเลิก",
-  confirmVariant = "destructive",
+  confirmVariant = "default",
+  confirmColor = "destructive",
+  cancelVariant = "outline",
+  cancelColor = "primary",
   isLoading = false,
   onConfirm,
 }: ConfirmModalProps) {
@@ -52,13 +58,20 @@ export function ConfirmModal({
         <div className="flex justify-end gap-3">
           <Button
             type="button"
-            variant="outline"
+            variant={cancelVariant}
+            color={cancelColor}
             disabled={isLoading}
             onClick={() => onOpenChange(false)}
           >
             {cancelLabel}
           </Button>
-          <Button type="button" variant={confirmVariant} isLoading={isLoading} onClick={onConfirm}>
+          <Button
+            type="button"
+            variant={confirmVariant}
+            color={confirmColor}
+            isLoading={isLoading}
+            onClick={onConfirm}
+          >
             {confirmLabel}
           </Button>
         </div>

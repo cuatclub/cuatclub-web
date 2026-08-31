@@ -158,7 +158,7 @@ export const Modal: Story = {
               <Button variant="outline" onClick={() => setOpen(false)}>
                 ยกเลิก
               </Button>
-              <Button variant="destructive" onClick={() => setOpen(false)}>
+              <Button color="destructive" onClick={() => setOpen(false)}>
                 ยืนยัน
               </Button>
             </div>

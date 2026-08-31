@@ -34,10 +34,7 @@ export default async function ClubRegisterSuccess() {
             className="h-[200px] w-60 md:h-60 md:w-72"
           />
 
-          <Link
-            href="/"
-            className={cn(buttonVariants({ variant: "primary" }), "w-60 md:w-[300px]")}
-          >
+          <Link href="/" className={cn(buttonVariants(), "w-60 md:w-[300px]")}>
             กลับหน้าแรก
           </Link>
         </div>

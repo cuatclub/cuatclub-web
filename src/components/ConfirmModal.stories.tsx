@@ -27,7 +27,7 @@ export const Default: Story = {
 
     return (
       <>
-        <Button variant="destructive" onClick={() => setOpen(true)}>
+        <Button color="destructive" onClick={() => setOpen(true)}>
           ลบโพสต์
         </Button>
         <ConfirmModal
