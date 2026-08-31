@@ -10,6 +10,7 @@ export interface IUsersRepository {
   getById(id: string): Promise<User | null>;
   getByEmail(email: string): Promise<User | null>;
   updateById(id: string, update: UpdateUserParams, client?: DbClient): Promise<void>;
+  deleteById(id: string, client?: DbClient): Promise<void>;
 }
 
 class UsersRepository implements IUsersRepository {
@@ -37,6 +38,10 @@ class UsersRepository implements IUsersRepository {
     client: DbClient = db
   ): Promise<void> {
     await client.update(user).set(update).where(filter).catch(wrapRepoError);
+  }
+
+  async deleteById(id: string, client: DbClient = db): Promise<void> {
+    await client.delete(user).where(eq(user.id, id)).catch(wrapRepoError);
   }
 }
 

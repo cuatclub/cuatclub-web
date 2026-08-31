@@ -1,4 +1,5 @@
 import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
+import { usersRepository } from "@/server/api/modules/users/users.repository";
 import { unitOfWork } from "@/server/db/unit-of-work";
 import { notFound } from "@/server/errors";
 import { deleteImages } from "@/server/services/r2";
@@ -24,7 +25,10 @@ export const adminDeleteClub = async (
     .map(toR2Key);
 
   await unitOfWork.run(async (client) => {
+    // The club row must go first — clubs.userId has no ON DELETE cascade, so
+    // deleting the user first would fail the FK check while the club still exists.
     await clubsRepository.deleteById(input.id, client);
+    await usersRepository.deleteById(detail.ownerId, client);
   });
 
   if (keys.length > 0) {

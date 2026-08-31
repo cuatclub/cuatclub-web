@@ -27,6 +27,10 @@ export class ClubDetail {
     return this.club.id;
   }
 
+  get ownerId() {
+    return this.owner.id;
+  }
+
   get name() {
     return this.owner.name;
   }
