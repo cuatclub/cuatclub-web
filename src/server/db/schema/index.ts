@@ -7,4 +7,7 @@ export * from "./affiliations";
 export * from "./invitation-codes";
 export * from "./clubs";
 export * from "./club-categories";
+export * from "./activity-types";
+export * from "./activities";
+export * from "./activity-categories";
 export * from "./relations";
