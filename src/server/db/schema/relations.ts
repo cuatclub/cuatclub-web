@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import { user } from "./user";
 import { affiliations } from "./affiliations";
+import { faculties } from "./faculties";
 import { categories } from "./categories";
 import { clubs } from "./clubs";
 import { clubCategories } from "./club-categories";
@@ -10,6 +11,9 @@ import { activityCategories } from "./activity-categories";
 
 export const affiliationsRelations = relations(affiliations, ({ many }) => ({
   clubs: many(clubs),
+}));
+
+export const facultiesRelations = relations(faculties, ({ many }) => ({
   activities: many(activities),
 }));
 
@@ -55,9 +59,9 @@ export const activitiesRelations = relations(activities, ({ one, many }) => ({
     fields: [activities.activityTypeId],
     references: [activityTypes.id],
   }),
-  affiliation: one(affiliations, {
-    fields: [activities.affiliationId],
-    references: [affiliations.id],
+  faculty: one(faculties, {
+    fields: [activities.facultyId],
+    references: [faculties.id],
   }),
   categories: many(activityCategories),
 }));

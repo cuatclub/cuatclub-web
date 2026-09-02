@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, uuid, smallint, index, pgEnum } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { clubs } from "./clubs";
-import { affiliations } from "./affiliations";
+import { faculties } from "./faculties";
 import { activityTypes } from "./activity-types";
 
 export const activityAudienceEnum = pgEnum("activity_audience", [
@@ -26,7 +26,7 @@ export const activities = pgTable(
     posterUrl: text("poster_url"),
     audiences: activityAudienceEnum("audiences").array().default([]).notNull(),
     yearLevels: smallint("year_levels").array().default([]).notNull(),
-    affiliationId: smallint("affiliation_id").references(() => affiliations.id),
+    facultyId: smallint("faculty_id").references(() => faculties.id),
     applicationStartAt: timestamp("application_start_at", { withTimezone: true }),
     applicationEndAt: timestamp("application_end_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
@@ -38,6 +38,6 @@ export const activities = pgTable(
   (t) => [
     index("activities_club_id_idx").on(t.clubId),
     index("activities_activity_type_id_idx").on(t.activityTypeId),
-    index("activities_affiliation_id_idx").on(t.affiliationId),
+    index("activities_faculty_id_idx").on(t.facultyId),
   ]
 );

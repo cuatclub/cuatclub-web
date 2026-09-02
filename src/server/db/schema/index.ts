@@ -4,6 +4,7 @@ export * from "./account";
 export * from "./verification";
 export * from "./categories";
 export * from "./affiliations";
+export * from "./faculties";
 export * from "./invitation-codes";
 export * from "./clubs";
 export * from "./club-categories";
