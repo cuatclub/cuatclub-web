@@ -1,5 +1,5 @@
 {
-  "id": "671a29e1-7d49-4574-bae4-329f93ff1b5f",
+  "id": "01b2a593-ab07-4970-af20-ae14344953c0",
   "prevId": "2b0b5688-330f-49a2-aaa3-c85d1fbd2dbf",
   "version": "7",
   "dialect": "postgresql",
@@ -139,21 +139,20 @@
           "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "poster_url": {
           "name": "poster_url",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "audiences": {
-          "name": "audiences",
-          "type": "activity_audience[]",
+        "audience": {
+          "name": "audience",
+          "type": "activity_audience",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'"
+          "notNull": true
         },
         "year_levels": {
           "name": "year_levels",
@@ -162,23 +161,30 @@
           "notNull": true,
           "default": "'{}'"
         },
-        "faculty_id": {
-          "name": "faculty_id",
-          "type": "smallint",
+        "faculty_ids": {
+          "name": "faculty_ids",
+          "type": "smallint[]",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "'{}'"
+        },
+        "application_form_url": {
+          "name": "application_form_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "application_start_at": {
           "name": "application_start_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "application_end_at": {
           "name": "application_end_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -226,11 +232,11 @@
           "method": "btree",
           "with": {}
         },
-        "activities_faculty_id_idx": {
-          "name": "activities_faculty_id_idx",
+        "activities_audience_idx": {
+          "name": "activities_audience_idx",
           "columns": [
             {
-              "expression": "faculty_id",
+              "expression": "audience",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -239,6 +245,36 @@
           "isUnique": false,
           "concurrently": false,
           "method": "btree",
+          "with": {}
+        },
+        "activities_year_levels_idx": {
+          "name": "activities_year_levels_idx",
+          "columns": [
+            {
+              "expression": "year_levels",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "activities_faculty_ids_idx": {
+          "name": "activities_faculty_ids_idx",
+          "columns": [
+            {
+              "expression": "faculty_ids",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
           "with": {}
         }
       },
@@ -260,21 +296,17 @@
           "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
-        },
-        "activities_faculty_id_faculties_id_fk": {
-          "name": "activities_faculty_id_faculties_id_fk",
-          "tableFrom": "activities",
-          "tableTo": "faculties",
-          "columnsFrom": ["faculty_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "activities_application_window_check": {
+          "name": "activities_application_window_check",
+          "value": "\"activities\".\"application_end_at\" >= \"activities\".\"application_start_at\""
+        }
+      },
       "isRLSEnabled": false
     },
     "public.activity_categories": {

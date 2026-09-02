@@ -4,15 +4,17 @@ CREATE TABLE "activities" (
 	"club_id" uuid NOT NULL,
 	"activity_type_id" smallint NOT NULL,
 	"title" text NOT NULL,
-	"description" text,
-	"poster_url" text,
-	"audiences" "activity_audience"[] DEFAULT '{}' NOT NULL,
+	"description" text NOT NULL,
+	"poster_url" text NOT NULL,
+	"audience" "activity_audience" NOT NULL,
 	"year_levels" smallint[] DEFAULT '{}' NOT NULL,
-	"faculty_id" smallint,
-	"application_start_at" timestamp with time zone,
-	"application_end_at" timestamp with time zone,
+	"faculty_ids" smallint[] DEFAULT '{}' NOT NULL,
+	"application_form_url" text NOT NULL,
+	"application_start_at" timestamp with time zone NOT NULL,
+	"application_end_at" timestamp with time zone NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "activities_application_window_check" CHECK ("activities"."application_end_at" >= "activities"."application_start_at")
 );
 --> statement-breakpoint
 CREATE TABLE "activity_categories" (
@@ -35,10 +37,11 @@ CREATE TABLE "faculties" (
 --> statement-breakpoint
 ALTER TABLE "activities" ADD CONSTRAINT "activities_club_id_clubs_id_fk" FOREIGN KEY ("club_id") REFERENCES "public"."clubs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "activities" ADD CONSTRAINT "activities_activity_type_id_activity_types_id_fk" FOREIGN KEY ("activity_type_id") REFERENCES "public"."activity_types"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "activities" ADD CONSTRAINT "activities_faculty_id_faculties_id_fk" FOREIGN KEY ("faculty_id") REFERENCES "public"."faculties"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "activity_categories" ADD CONSTRAINT "activity_categories_activity_id_activities_id_fk" FOREIGN KEY ("activity_id") REFERENCES "public"."activities"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "activity_categories" ADD CONSTRAINT "activity_categories_category_id_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."categories"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "activities_club_id_idx" ON "activities" USING btree ("club_id");--> statement-breakpoint
 CREATE INDEX "activities_activity_type_id_idx" ON "activities" USING btree ("activity_type_id");--> statement-breakpoint
-CREATE INDEX "activities_faculty_id_idx" ON "activities" USING btree ("faculty_id");--> statement-breakpoint
+CREATE INDEX "activities_audience_idx" ON "activities" USING btree ("audience");--> statement-breakpoint
+CREATE INDEX "activities_year_levels_idx" ON "activities" USING gin ("year_levels");--> statement-breakpoint
+CREATE INDEX "activities_faculty_ids_idx" ON "activities" USING gin ("faculty_ids");--> statement-breakpoint
 CREATE INDEX "activity_categories_category_id_idx" ON "activity_categories" USING btree ("category_id");
