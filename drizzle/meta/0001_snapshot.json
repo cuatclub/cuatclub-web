@@ -1,5 +1,5 @@
 {
-  "id": "01b2a593-ab07-4970-af20-ae14344953c0",
+  "id": "aef30905-85c0-4c3e-b350-be2d9c1c0498",
   "prevId": "2b0b5688-330f-49a2-aaa3-c85d1fbd2dbf",
   "version": "7",
   "dialect": "postgresql",
@@ -161,13 +161,6 @@
           "notNull": true,
           "default": "'{}'"
         },
-        "faculty_ids": {
-          "name": "faculty_ids",
-          "type": "smallint[]",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'"
-        },
         "application_form_url": {
           "name": "application_form_url",
           "type": "text",
@@ -252,21 +245,6 @@
           "columns": [
             {
               "expression": "year_levels",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "gin",
-          "with": {}
-        },
-        "activities_faculty_ids_idx": {
-          "name": "activities_faculty_ids_idx",
-          "columns": [
-            {
-              "expression": "faculty_ids",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -367,6 +345,71 @@
         "activity_categories_activity_id_category_id_pk": {
           "name": "activity_categories_activity_id_category_id_pk",
           "columns": ["activity_id", "category_id"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.activity_faculties": {
+      "name": "activity_faculties",
+      "schema": "",
+      "columns": {
+        "activity_id": {
+          "name": "activity_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "faculty_id": {
+          "name": "faculty_id",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "activity_faculties_faculty_id_idx": {
+          "name": "activity_faculties_faculty_id_idx",
+          "columns": [
+            {
+              "expression": "faculty_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "activity_faculties_activity_id_activities_id_fk": {
+          "name": "activity_faculties_activity_id_activities_id_fk",
+          "tableFrom": "activity_faculties",
+          "tableTo": "activities",
+          "columnsFrom": ["activity_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "activity_faculties_faculty_id_faculties_id_fk": {
+          "name": "activity_faculties_faculty_id_faculties_id_fk",
+          "tableFrom": "activity_faculties",
+          "tableTo": "faculties",
+          "columnsFrom": ["faculty_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "activity_faculties_activity_id_faculty_id_pk": {
+          "name": "activity_faculties_activity_id_faculty_id_pk",
+          "columns": ["activity_id", "faculty_id"]
         }
       },
       "uniqueConstraints": {},

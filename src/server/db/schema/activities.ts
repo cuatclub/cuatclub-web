@@ -34,7 +34,6 @@ export const activities = pgTable(
     posterUrl: text("poster_url").notNull(),
     audience: activityAudienceEnum("audience").notNull(),
     yearLevels: smallint("year_levels").array().default([]).notNull(),
-    facultyIds: smallint("faculty_ids").array().default([]).notNull(),
     applicationFormUrl: text("application_form_url").notNull(),
     applicationStartAt: timestamp("application_start_at", { withTimezone: true }).notNull(),
     applicationEndAt: timestamp("application_end_at", { withTimezone: true }).notNull(),
@@ -49,7 +48,6 @@ export const activities = pgTable(
     index("activities_activity_type_id_idx").on(t.activityTypeId),
     index("activities_audience_idx").on(t.audience),
     index("activities_year_levels_idx").using("gin", t.yearLevels),
-    index("activities_faculty_ids_idx").using("gin", t.facultyIds),
     check(
       "activities_application_window_check",
       sql`${t.applicationEndAt} >= ${t.applicationStartAt}`

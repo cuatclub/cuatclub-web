@@ -4,9 +4,11 @@ import { affiliations } from "./affiliations";
 import { categories } from "./categories";
 import { clubs } from "./clubs";
 import { clubCategories } from "./club-categories";
+import { faculties } from "./faculties";
 import { activities } from "./activities";
 import { activityTypes } from "./activity-types";
 import { activityCategories } from "./activity-categories";
+import { activityFaculties } from "./activity-faculties";
 
 export const affiliationsRelations = relations(affiliations, ({ many }) => ({
   clubs: many(clubs),
@@ -41,6 +43,10 @@ export const clubCategoriesRelations = relations(clubCategories, ({ one }) => ({
   }),
 }));
 
+export const facultiesRelations = relations(faculties, ({ many }) => ({
+  activityFaculties: many(activityFaculties),
+}));
+
 export const activityTypesRelations = relations(activityTypes, ({ many }) => ({
   activities: many(activities),
 }));
@@ -55,6 +61,7 @@ export const activitiesRelations = relations(activities, ({ one, many }) => ({
     references: [activityTypes.id],
   }),
   categories: many(activityCategories),
+  faculties: many(activityFaculties),
 }));
 
 export const activityCategoriesRelations = relations(activityCategories, ({ one }) => ({
@@ -65,5 +72,16 @@ export const activityCategoriesRelations = relations(activityCategories, ({ one 
   category: one(categories, {
     fields: [activityCategories.categoryId],
     references: [categories.id],
+  }),
+}));
+
+export const activityFacultiesRelations = relations(activityFaculties, ({ one }) => ({
+  activity: one(activities, {
+    fields: [activityFaculties.activityId],
+    references: [activities.id],
+  }),
+  faculty: one(faculties, {
+    fields: [activityFaculties.facultyId],
+    references: [faculties.id],
   }),
 }));
