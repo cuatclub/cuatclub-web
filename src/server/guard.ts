@@ -124,6 +124,7 @@ export async function clubDashboardGuard(): Promise<ClubDashboardSessionUser> {
   try {
     club = await api.clubs.getClubProfile({});
   } catch (err) {
+    if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
     if (err instanceof TRPCError && err.code === "NOT_FOUND") redirect("/");
     throw err;
   }

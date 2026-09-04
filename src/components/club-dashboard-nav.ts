@@ -22,5 +22,7 @@ export const CLUB_DASHBOARD_NAV_ITEMS: ReadonlyArray<{
  * tab too.
  */
 export function isClubDashboardNavActive(pathname: string, href: string): boolean {
-  return href === "/dashboard" ? pathname === href : pathname.startsWith(href);
+  return href === "/dashboard"
+    ? pathname === href
+    : pathname === href || pathname.startsWith(`${href}/`);
 }
