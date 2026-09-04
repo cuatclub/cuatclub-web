@@ -16,6 +16,10 @@ import {
 } from "@/components/ui/DropdownMenu";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/auth-client";
+import {
+  CLUB_DASHBOARD_NAV_ITEMS,
+  isClubDashboardNavActive,
+} from "@/components/club-dashboard-nav";
 
 type NavLink = { label: string; href: string | null };
 
@@ -282,6 +286,28 @@ export function Navbar({
             {isLoggedIn ? (
               <>
                 <div className="flex flex-col gap-1">
+                  {isClub &&
+                    CLUB_DASHBOARD_NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+                      const isActive = isClubDashboardNavActive(pathname, href);
+
+                      return (
+                        <Link
+                          key={href}
+                          href={href}
+                          onClick={closeSidebar}
+                          aria-current={isActive ? "page" : undefined}
+                          className={cn(
+                            "font-ibm-plex flex items-center gap-2 rounded-lg p-2 text-sm font-medium",
+                            isActive
+                              ? "bg-primary text-white"
+                              : "text-foreground hover:bg-primary-lighter hover:text-primary"
+                          )}
+                        >
+                          <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />
+                          {label}
+                        </Link>
+                      );
+                    })}
                   <button
                     type="button"
                     disabled
@@ -337,15 +363,6 @@ export function Navbar({
                   </div>
                 )}
 
-                {isClub && (
-                  <Link
-                    href="/dashboard"
-                    onClick={closeSidebar}
-                    className={cn(buttonVariants({ variant: "outline" }), "mt-6 w-full")}
-                  >
-                    แดชบอร์ด
-                  </Link>
-                )}
                 {isAdmin && (
                   <Link
                     href="/admin"
