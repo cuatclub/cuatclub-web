@@ -46,7 +46,7 @@ export function ClubProfileForm({
     setValue,
     setError,
     clearErrors,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
   } = useForm<ClubProfileFormValues>({
     resolver: zodResolver(clubProfileSchema),
     defaultValues: initialValues,
@@ -275,7 +275,7 @@ export function ClubProfileForm({
             <Button
               type="submit"
               className="w-full sm:w-1/4"
-              disabled={!isValid || isSubmitting}
+              disabled={isSubmitting}
               isLoading={isSubmitting}
             >
               ถัดไป
