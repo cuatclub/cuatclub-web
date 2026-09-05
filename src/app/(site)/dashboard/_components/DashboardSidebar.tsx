@@ -6,10 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 
 import { signOut } from "@/lib/auth-client";
-import {
-  CLUB_DASHBOARD_NAV_ITEMS,
-  isClubDashboardNavActive,
-} from "@/components/club-dashboard-nav";
+import { CLUB_DASHBOARD_NAV_ITEMS, isClubDashboardNavActive } from "@/components/Navbar";
 import { cn } from "@/lib/utils";
 
 const itemClass =

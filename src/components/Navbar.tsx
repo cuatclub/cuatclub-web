@@ -4,7 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Bookmark, LogOut, Menu, Settings, X } from "lucide-react";
+import {
+  Bookmark,
+  LogOut,
+  Menu,
+  Settings,
+  X,
+  FilePlus2,
+  List,
+  UserRoundCog,
+  type LucideIcon,
+} from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/Button";
 import {
@@ -16,10 +26,6 @@ import {
 } from "@/components/ui/DropdownMenu";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/auth-client";
-import {
-  CLUB_DASHBOARD_NAV_ITEMS,
-  isClubDashboardNavActive,
-} from "@/components/club-dashboard-nav";
 
 type NavLink = { label: string; href: string | null };
 
@@ -28,6 +34,22 @@ const NAV_LINKS: NavLink[] = [
   { label: "กิจกรรม", href: null },
   { label: "เกี่ยวกับ", href: null },
 ];
+
+export const CLUB_DASHBOARD_NAV_ITEMS: ReadonlyArray<{
+  href: string;
+  label: string;
+  icon: LucideIcon;
+}> = [
+  { href: "/dashboard", label: "โพสต์ของฉัน", icon: List },
+  { href: "/dashboard/posts/new", label: "สร้างโพสต์", icon: FilePlus2 },
+  { href: "/dashboard/profile", label: "จัดการโปรไฟล์", icon: UserRoundCog },
+];
+
+export function isClubDashboardNavActive(pathname: string, href: string): boolean {
+  return href === "/dashboard"
+    ? pathname === href
+    : pathname === href || pathname.startsWith(`${href}/`);
+}
 
 const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
