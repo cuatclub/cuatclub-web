@@ -42,18 +42,19 @@ export function ConfirmModal({
 }: ConfirmModalProps) {
   return (
     <DialogRoot open={open} onOpenChange={onOpenChange}>
-      <DialogContent placement="modal" className="gap-6 p-6 md:p-8">
-        <div className="flex items-start justify-between gap-4">
-          <DialogTitle>{title}</DialogTitle>
-          <DialogClose
-            aria-label="ปิด"
-            className="text-placeholder hover:text-foreground focus-visible:ring-primary shrink-0 cursor-pointer rounded-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-          >
-            <X aria-hidden="true" className="size-5" />
-          </DialogClose>
+      <DialogContent placement="modal" className="w-[520px] max-w-[520px] gap-4 p-6">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-start justify-between gap-4">
+            <DialogTitle>{title}</DialogTitle>
+            <DialogClose
+              aria-label="ปิด"
+              className="text-placeholder hover:text-foreground focus-visible:ring-primary shrink-0 cursor-pointer rounded-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            >
+              <X aria-hidden="true" className="size-5" />
+            </DialogClose>
+          </div>
+          {description && <DialogDescription>{description}</DialogDescription>}
         </div>
-
-        {description && <DialogDescription>{description}</DialogDescription>}
 
         <div className="flex w-full justify-end gap-3">
           <Button
