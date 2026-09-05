@@ -1,5 +1,5 @@
 import { clubDashboardGuard } from "@/server/guard";
-import { DashboardShell } from "@/app/(site)/dashboard/_components/DashboardShell";
+import { DashboardShell } from "@/app/(site)/club/dashboard/_components/DashboardShell";
 
 export default async function DashboardLayout({
   children,

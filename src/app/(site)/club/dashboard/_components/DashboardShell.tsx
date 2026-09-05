@@ -1,4 +1,4 @@
-import { DashboardSidebar } from "@/app/(site)/dashboard/_components/DashboardSidebar";
+import { DashboardSidebar } from "@/app/(site)/club/dashboard/_components/DashboardSidebar";
 
 type DashboardShellProps = {
   name: string;

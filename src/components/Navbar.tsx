@@ -40,13 +40,21 @@ export const CLUB_DASHBOARD_NAV_ITEMS: ReadonlyArray<{
   label: string;
   icon: LucideIcon;
 }> = [
-  { href: "/dashboard", label: "โพสต์ของฉัน", icon: List },
-  { href: "/dashboard/posts/new", label: "สร้างโพสต์", icon: FilePlus2 },
-  { href: "/dashboard/profile", label: "จัดการโปรไฟล์", icon: UserRoundCog },
+  { href: "/club/dashboard/posts", label: "โพสต์ของฉัน", icon: List },
+  { href: "/club/dashboard/posts/upload", label: "สร้างโพสต์", icon: FilePlus2 },
+  { href: "/club/dashboard/profile", label: "จัดการโปรไฟล์", icon: UserRoundCog },
 ];
 
+/**
+ * "/club/dashboard/posts" is a prefix of "/club/dashboard/posts/upload", so any item that's a
+ * prefix of a sibling needs an exact match — a bare `startsWith` would keep "My Posts"
+ * highlighted while on "Create Post" too.
+ */
 export function isClubDashboardNavActive(pathname: string, href: string): boolean {
-  return href === "/dashboard"
+  const isPrefixOfSibling = CLUB_DASHBOARD_NAV_ITEMS.some(
+    (item) => item.href !== href && item.href.startsWith(`${href}/`)
+  );
+  return isPrefixOfSibling
     ? pathname === href
     : pathname === href || pathname.startsWith(`${href}/`);
 }
@@ -173,7 +181,7 @@ export function Navbar({
         {isLoggedIn ? (
           <>
             {isClub && (
-              <Link href="/dashboard" className={buttonVariants({ variant: "outline" })}>
+              <Link href="/club/dashboard" className={buttonVariants({ variant: "outline" })}>
                 แดชบอร์ด
               </Link>
             )}
@@ -273,7 +281,7 @@ export function Navbar({
               </button>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
               {NAV_LINKS.map(({ label, href }) => {
                 const isActive = href !== null && pathname === href;
 
@@ -282,9 +290,12 @@ export function Navbar({
                     key={label}
                     href={href}
                     onClick={closeSidebar}
+                    aria-current={isActive ? "page" : undefined}
                     className={cn(
-                      "font-ibm-plex py-1 text-left text-sm font-medium",
-                      isActive ? "text-primary" : "text-foreground"
+                      "font-ibm-plex rounded-lg p-2 text-left text-sm font-medium",
+                      isActive
+                        ? "bg-primary text-white"
+                        : "text-foreground hover:bg-primary-lighter hover:text-primary"
                     )}
                   >
                     {label}
@@ -295,7 +306,7 @@ export function Navbar({
                     type="button"
                     disabled
                     aria-disabled="true"
-                    className="font-ibm-plex text-placeholder cursor-not-allowed py-1 text-left text-sm font-medium"
+                    className="font-ibm-plex text-placeholder cursor-not-allowed rounded-lg p-2 text-left text-sm font-medium"
                   >
                     {label}
                   </button>
