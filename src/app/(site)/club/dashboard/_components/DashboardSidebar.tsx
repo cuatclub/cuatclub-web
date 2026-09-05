@@ -37,9 +37,9 @@ export function DashboardSidebar({ name, email, image }: DashboardSidebarProps) 
     // *opt it out* of that stretch (a flex item's own specified cross-size always wins), and
     // percentage heights don't resolve reliably through a flex-grown ancestor anyway — see
     // DashboardShell's comment.
-    <aside className="border-border hidden bg-white md:flex md:w-64 md:shrink-0 md:flex-col md:justify-between md:border-r">
-      <div>
-        <div className="flex items-center gap-3 px-5 py-4 md:px-6">
+    <aside className="border-border hidden bg-white py-6 md:flex md:w-64 md:shrink-0 md:flex-col md:justify-between md:border-r md:px-8">
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center gap-3">
           <Image
             src={avatarSrc}
             alt="Profile"
@@ -54,9 +54,9 @@ export function DashboardSidebar({ name, email, image }: DashboardSidebarProps) 
             <span className="font-ibm-plex text-foreground-muted truncate text-xs">{email}</span>
           </div>
         </div>
-        <div className="border-border mx-5 border-t md:mx-6" />
+        <div className="border-border border-t" />
 
-        <nav className="flex flex-col gap-1 px-3 py-3" aria-label="เมนูแดชบอร์ด">
+        <nav className="flex flex-col gap-1" aria-label="เมนูแดชบอร์ด">
           {CLUB_DASHBOARD_NAV_ITEMS.map(({ href, label, icon: Icon }) => {
             const isActive = isClubDashboardNavActive(pathname, href);
 
@@ -80,21 +80,19 @@ export function DashboardSidebar({ name, email, image }: DashboardSidebarProps) 
         </nav>
       </div>
 
-      <div>
-        <div className="border-border mx-5 border-t md:mx-6" />
-        <div className="px-3 py-3">
-          <button
-            type="button"
-            onClick={() => void handleLogout()}
-            className={cn(
-              itemClass,
-              "text-foreground-muted hover:bg-primary-lighter hover:text-primary w-full"
-            )}
-          >
-            <LogOut aria-hidden="true" className="size-5 shrink-0" />
-            ออกจากระบบ
-          </button>
-        </div>
+      <div className="flex flex-col gap-6">
+        <div className="border-border border-t" />
+        <button
+          type="button"
+          onClick={() => void handleLogout()}
+          className={cn(
+            itemClass,
+            "text-foreground-muted hover:bg-primary-lighter hover:text-primary w-full"
+          )}
+        >
+          <LogOut aria-hidden="true" className="size-5 shrink-0" />
+          ออกจากระบบ
+        </button>
       </div>
     </aside>
   );
