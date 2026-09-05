@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -7,6 +8,7 @@ import { LogOut } from "lucide-react";
 
 import { signOut } from "@/lib/auth-client";
 import { CLUB_DASHBOARD_NAV_ITEMS, isClubDashboardNavActive } from "@/components/Navbar";
+import { ConfirmModal } from "@/components";
 import { cn } from "@/lib/utils";
 
 const itemClass =
@@ -24,8 +26,11 @@ export function DashboardSidebar({ name, email, image }: DashboardSidebarProps) 
   const pathname = usePathname();
   const router = useRouter();
   const avatarSrc = image ?? "/svg/user_profile.svg";
+  const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     await signOut();
     router.push("/");
     router.refresh();
@@ -84,16 +89,27 @@ export function DashboardSidebar({ name, email, image }: DashboardSidebarProps) 
         <div className="border-border border-t" />
         <button
           type="button"
-          onClick={() => void handleLogout()}
+          onClick={() => setIsLogoutConfirmOpen(true)}
           className={cn(
             itemClass,
-            "text-foreground-muted hover:bg-primary-lighter hover:text-primary w-full"
+            "text-foreground-muted hover:bg-tag-red-light hover:text-tag-red w-full cursor-pointer"
           )}
         >
           <LogOut aria-hidden="true" className="size-5 shrink-0" />
           ออกจากระบบ
         </button>
       </div>
+
+      <ConfirmModal
+        open={isLogoutConfirmOpen}
+        onOpenChange={setIsLogoutConfirmOpen}
+        title="ออกจากระบบ"
+        description="คุณต้องการออกจากระบบใช่หรือไม่"
+        confirmLabel="ยืนยัน"
+        cancelLabel="ยกเลิก"
+        isLoading={isLoggingOut}
+        onConfirm={() => void handleLogout()}
+      />
     </aside>
   );
 }
