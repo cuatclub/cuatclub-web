@@ -141,7 +141,7 @@ export function RegisterForm() {
 
   return (
     <div className="flex flex-col bg-white">
-      <main className="flex justify-center px-4 py-5 md:py-20">
+      <main className="flex justify-center px-4 pt-5 pb-8 md:pt-20 md:pb-16">
         <Card className="h-fit w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-primary text-2xl font-bold md:text-3xl">
