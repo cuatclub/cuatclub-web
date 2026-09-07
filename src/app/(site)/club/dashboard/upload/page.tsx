@@ -14,7 +14,7 @@ export default async function UploadPostPage() {
         <h1 className="font-ibm-plex text-primary text-[28px] leading-[38px] font-bold">
           สร้างโพสต์
         </h1>
-        <p className="font-ibm-plex text-foreground-secondary text-base">
+        <p className="font-ibm-plex text-foreground-secondary text-base font-medium">
           อัพโหลดกิจกรรมใหม่ของคุณได้ที่นี่
         </p>
       </div>
