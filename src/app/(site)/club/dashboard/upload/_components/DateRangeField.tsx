@@ -109,7 +109,7 @@ export function DateRangeField({
           aria-describedby={error && errorMessage ? errorId : undefined}
           className={cn(
             "border-border font-ibm-plex group flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 text-sm leading-[23px] transition-colors outline-none md:text-base md:leading-[26px]",
-            "hover:border-primary-light data-[state=open]:border-primary",
+            "hover:border-primary-light focus-visible:border-primary data-[state=open]:border-primary",
             startValue ? "text-foreground" : "text-placeholder",
             "disabled:bg-border disabled:text-placeholder disabled:cursor-not-allowed",
             error && "border-error hover:border-error data-[state=open]:border-error"

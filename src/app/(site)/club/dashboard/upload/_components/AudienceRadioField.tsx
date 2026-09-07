@@ -65,7 +65,7 @@ export function AudienceRadioField({
               <span
                 aria-hidden="true"
                 className={cn(
-                  "flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors",
+                  "peer-focus-visible:ring-primary flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
                   checked ? "border-primary" : "border-placeholder",
                   error && !checked && "border-error"
                 )}
