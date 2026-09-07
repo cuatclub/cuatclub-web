@@ -39,7 +39,7 @@ export function AudienceRadioField({
         {label} {required && <span className="text-error">*</span>}
       </legend>
       <div
-        className="flex flex-wrap gap-6"
+        className="flex flex-wrap gap-8"
         role="radiogroup"
         aria-describedby={error && errorMessage ? errorId : undefined}
       >
@@ -65,14 +65,14 @@ export function AudienceRadioField({
               <span
                 aria-hidden="true"
                 className={cn(
-                  "peer-focus-visible:ring-primary flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
-                  checked ? "border-primary" : "border-placeholder",
+                  "peer-focus-visible:ring-primary flex size-4 shrink-0 items-center justify-center rounded-full border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
+                  checked ? "border-primary" : "border-foreground-secondary",
                   error && !checked && "border-error"
                 )}
               >
                 <span
                   className={cn(
-                    "bg-primary size-2.5 rounded-full transition-transform",
+                    "bg-primary size-2 rounded-full transition-transform",
                     checked ? "scale-100" : "scale-0"
                   )}
                 />

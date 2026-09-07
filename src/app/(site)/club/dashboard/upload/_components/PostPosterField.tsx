@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
-import { ImageIcon, Trash2 } from "lucide-react";
+import { Trash2, Upload } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -56,7 +56,7 @@ export function PostPosterField({
   };
 
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex w-full max-w-[282px] flex-col gap-2">
       <input
         ref={inputRef}
         id={inputId}
@@ -71,7 +71,7 @@ export function PostPosterField({
 
       <div
         className={cn(
-          "border-placeholder bg-surface peer-focus-visible:border-primary relative aspect-[3/4] w-full overflow-hidden rounded-xl border border-dashed transition-colors",
+          "bg-primary/5 border-primary peer-focus-visible:ring-primary relative flex aspect-[282/360] w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-xl border-2 border-dashed peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
           errorMessage && "border-error",
           disabled && "cursor-not-allowed opacity-60"
         )}
@@ -91,41 +91,36 @@ export function PostPosterField({
             )}
           </>
         ) : (
-          <label
-            htmlFor={inputId}
-            className={cn(
-              "text-placeholder flex size-full cursor-pointer flex-col items-center justify-center gap-3 px-6 text-center",
-              disabled && "pointer-events-none cursor-not-allowed"
-            )}
-          >
-            <ImageIcon className="size-12" aria-hidden="true" />
-            <span className="font-ibm-plex text-sm leading-[23px] md:text-base">
-              คลิกเพื่ออัปโหลดรูปโปสเตอร์
-            </span>
-          </label>
+          <>
+            <div className="flex flex-col items-center gap-2.5">
+              <Upload className="text-primary size-12" aria-hidden="true" />
+              <span className="font-ibm-plex text-primary text-base leading-6 font-medium">
+                อัพโหลดโปสเตอร์ที่นี่
+              </span>
+            </div>
+            <label
+              htmlFor={inputId}
+              className={cn(
+                "bg-primary font-ibm-plex flex h-[39px] cursor-pointer items-center rounded-lg px-6 text-base font-semibold text-white",
+                disabled && "pointer-events-none cursor-not-allowed"
+              )}
+            >
+              อัพโหลด
+            </label>
+          </>
         )}
       </div>
 
-      <div className="flex items-center justify-between gap-2">
-        <p
-          id={helperId}
-          role={errorMessage ? "alert" : undefined}
-          className={cn(
-            "font-ibm-plex text-xs leading-[23px] md:text-sm",
-            errorMessage ? "text-error" : "text-placeholder"
-          )}
-        >
-          {errorMessage ?? "รองรับ PNG, JPG/JPEG ขนาดไฟล์ไม่เกิน 10 MB"}
-        </p>
-        {value && !disabled && (
-          <label
-            htmlFor={inputId}
-            className="border-placeholder text-placeholder font-ibm-plex flex h-9 shrink-0 cursor-pointer items-center rounded-lg border bg-white px-4 text-sm leading-[23px] font-semibold"
-          >
-            เปลี่ยนรูป
-          </label>
+      <p
+        id={helperId}
+        role={errorMessage ? "alert" : undefined}
+        className={cn(
+          "font-ibm-plex text-xs leading-[23px] md:text-sm",
+          errorMessage ? "text-error" : "text-placeholder"
         )}
-      </div>
+      >
+        {errorMessage ?? "รองรับ PNG, JPG/JPEG ขนาดไฟล์ไม่เกิน 10 MB"}
+      </p>
     </div>
   );
 }

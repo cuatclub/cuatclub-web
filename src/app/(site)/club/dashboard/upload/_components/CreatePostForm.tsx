@@ -104,19 +104,19 @@ export function CreatePostForm({
   });
 
   return (
-    <Card className="w-full max-w-[874px] gap-0 p-6 md:py-8">
+    <Card className="w-full max-w-[1076px] gap-0 p-6 md:px-6 md:py-8">
       <form onSubmit={submitForm} noValidate>
         <fieldset
           inert={isSubmitting || undefined}
           aria-busy={isSubmitting}
-          className="m-0 flex flex-col gap-6 border-0 p-0 md:gap-8"
+          className="m-0 flex flex-col gap-8 border-0 p-0 md:gap-9"
         >
           <CardContent className="flex flex-col gap-4 px-0 md:gap-6">
-            <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
+            <h2 className="font-ibm-plex text-primary text-xl leading-[27px] font-bold">
               ข้อมูลทั่วไป
             </h2>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-[300px_minmax(0,1fr)]">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-[282px_minmax(0,1fr)] md:gap-9">
               <Controller
                 control={control}
                 name="poster"
@@ -132,7 +132,7 @@ export function CreatePostForm({
                 )}
               />
 
-              <div className="flex min-w-0 flex-col gap-4 md:gap-6">
+              <div className="flex min-w-0 flex-col gap-6">
                 <Input
                   id="post-title"
                   label="หัวข้อ"
@@ -153,7 +153,7 @@ export function CreatePostForm({
                   {...register("applicationFormUrl")}
                 />
 
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <DateRangeField
                     label="ช่วงเวลา"
                     required
@@ -221,7 +221,7 @@ export function CreatePostForm({
                   label="รายละเอียด"
                   required
                   placeholder="กรอกรายละเอียดกิจกรรม"
-                  className="min-h-40"
+                  className="min-h-[120px]"
                   error={!!errors.description}
                   errorMessage={errors.description?.message}
                   {...register("description")}
@@ -233,7 +233,7 @@ export function CreatePostForm({
           <div className="border-border border-t" />
 
           <CardContent className="flex flex-col gap-4 px-0 md:gap-6">
-            <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
+            <h2 className="font-ibm-plex text-primary text-xl leading-[27px] font-bold">
               คุณสมบัติ
             </h2>
 
@@ -328,18 +328,18 @@ export function CreatePostForm({
             />
           </CardContent>
 
-          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+          <div className="flex flex-col-reverse gap-4 sm:flex-row sm:justify-between">
             <Button
               type="button"
               variant="outline"
-              className="w-full sm:w-1/4"
+              className="w-full sm:w-[200px]"
               onClick={() => reset(EMPTY_VALUES)}
             >
               ล้างทั้งหมด
             </Button>
             <Button
               type="submit"
-              className="w-full sm:w-1/4"
+              className="w-full sm:w-[200px]"
               disabled={isSubmitting}
               isLoading={isSubmitting}
             >
