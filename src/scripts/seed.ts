@@ -2,6 +2,8 @@ import "dotenv/config";
 import { db } from "@/server/db";
 import { affiliations } from "@/server/db/schema/affiliations";
 import { categories } from "@/server/db/schema/categories";
+import { activityTypes } from "@/server/db/schema/activity-types";
+import { faculties } from "@/server/db/schema/faculties";
 
 const affiliationLabels = [
   "เกษตรศาสตร์บูรณาการ",
@@ -50,6 +52,33 @@ const categorySeeds = [
   { label: "ความบันเทิง", fontColor: "#C026D3", backgroundColor: "#FAE8FF" },
 ];
 
+// Activity-post "type" tag shown in the upload form's ประเภทกิจกรรม dropdown.
+const activityTypeLabels = ["รับสมัคร", "ประชาสัมพันธ์", "กิจกรรมทั่วไป"] as const;
+
+// Chula faculties offered as the คณะ filter on an activity post. Subset of
+// `affiliationLabels` that are actual faculties (excludes อบจ. divisions / hubs).
+const facultyLabels = [
+  "ครุศาสตร์",
+  "จิตวิทยา",
+  "ทันตแพทยศาสตร์",
+  "นิติศาสตร์",
+  "นิเทศศาสตร์",
+  "พยาบาลศาสตร์",
+  "เภสัชศาสตร์",
+  "รัฐศาสตร์",
+  "วิทยาศาสตร์",
+  "วิทยาศาสตร์การกีฬา",
+  "วิศวกรรมศาสตร์",
+  "ศิลปกรรมศาสตร์",
+  "เศรษฐศาสตร์",
+  "สถาปัตยกรรมศาสตร์",
+  "สหเวชศาสตร์",
+  "สัตวแพทยศาสตร์",
+  "อักษรศาสตร์",
+  "เกษตรศาสตร์บูรณาการ",
+  "สถาบันนวัตกรรมบูรณาการ",
+] as const;
+
 const thCollator = new Intl.Collator("th");
 const byLabel = <T extends { label: string }>(a: T, b: T) => thCollator.compare(a.label, b.label);
 
@@ -73,9 +102,31 @@ async function seedCategories() {
   console.log(`Seeded ${sorted.length} categories.`);
 }
 
+async function seedActivityTypes() {
+  console.log("Seeding activity types...");
+
+  const rows = [...activityTypeLabels].map((label) => ({ label }));
+
+  await db.insert(activityTypes).values(rows).onConflictDoNothing({ target: activityTypes.label });
+
+  console.log(`Seeded ${rows.length} activity types.`);
+}
+
+async function seedFaculties() {
+  console.log("Seeding faculties...");
+
+  const sorted = [...facultyLabels].map((label) => ({ label })).sort(byLabel);
+
+  await db.insert(faculties).values(sorted).onConflictDoNothing({ target: faculties.label });
+
+  console.log(`Seeded ${sorted.length} faculties.`);
+}
+
 async function main() {
   await seedAffiliations();
   await seedCategories();
+  await seedActivityTypes();
+  await seedFaculties();
 }
 
 main()

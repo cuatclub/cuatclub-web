@@ -41,14 +41,14 @@ export const CLUB_DASHBOARD_NAV_ITEMS: ReadonlyArray<{
   icon: LucideIcon;
 }> = [
   { href: "/club/dashboard/posts", label: "โพสต์ของฉัน", icon: List },
-  { href: "/club/dashboard/posts/upload", label: "สร้างโพสต์", icon: FilePlus2 },
+  { href: "/club/dashboard/upload", label: "สร้างโพสต์", icon: FilePlus2 },
   { href: "/club/dashboard/profile", label: "จัดการโปรไฟล์", icon: UserRoundCog },
 ];
 
 /**
- * "/club/dashboard/posts" is a prefix of "/club/dashboard/posts/upload", so any item that's a
- * prefix of a sibling needs an exact match — a bare `startsWith` would keep "My Posts"
- * highlighted while on "Create Post" too.
+ * Any item whose href is a prefix of a sibling's href needs an exact match — a bare
+ * `startsWith` would keep the parent highlighted while on the child route too. The current
+ * items don't overlap, but the check stays so adding a nested route later is safe.
  */
 export function isClubDashboardNavActive(pathname: string, href: string): boolean {
   const isPrefixOfSibling = CLUB_DASHBOARD_NAV_ITEMS.some(
