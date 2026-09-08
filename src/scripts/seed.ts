@@ -52,8 +52,20 @@ const categorySeeds = [
   { label: "ความบันเทิง", fontColor: "#C026D3", backgroundColor: "#FAE8FF" },
 ];
 
-// Activity-post "type" tag shown in the upload form's ประเภทกิจกรรม dropdown.
-const activityTypeLabels = ["รับสมัคร", "ประชาสัมพันธ์", "กิจกรรมทั่วไป"] as const;
+// Activity-post "type" — the ประเภทกิจกรรม set from the Figma design file, plus
+// ประชาสัมพันธ์. Order follows the design; kept unsorted on insert.
+const activityTypeLabels = [
+  "การแข่งขัน",
+  "เวิร์กช็อป",
+  "บรรยาย",
+  "ค่าย",
+  "เทศกาล",
+  "รับสมัคร",
+  "จิตอาสา",
+  "การแสดง",
+  "นิทรรศการ",
+  "ประชาสัมพันธ์",
+] as const;
 
 // Chula faculties offered as the คณะ filter on an activity post. Subset of
 // `affiliationLabels` that are actual faculties (excludes อบจ. divisions / hubs).
