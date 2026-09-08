@@ -5,38 +5,133 @@ import { Popover } from "radix-ui";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import {
-  THAI_WEEKDAYS_SHORT,
-  buildMonthGrid,
-  isBetween,
-  isSameDay,
-  startOfDay,
-  toBuddhistDisplay,
-  toBuddhistMonthLabel,
-} from "@/app/(site)/club/dashboard/upload/_lib/date";
 
-type DateRangeFieldProps = {
-  label: string;
+const THAI_MONTHS_LONG = [
+  "มกราคม",
+  "กุมภาพันธ์",
+  "มีนาคม",
+  "เมษายน",
+  "พฤษภาคม",
+  "มิถุนายน",
+  "กรกฎาคม",
+  "สิงหาคม",
+  "กันยายน",
+  "ตุลาคม",
+  "พฤศจิกายน",
+  "ธันวาคม",
+] as const;
+
+const THAI_MONTHS_SHORT = [
+  "ม.ค.",
+  "ก.พ.",
+  "มี.ค.",
+  "เม.ย.",
+  "พ.ค.",
+  "มิ.ย.",
+  "ก.ค.",
+  "ส.ค.",
+  "ก.ย.",
+  "ต.ค.",
+  "พ.ย.",
+  "ธ.ค.",
+] as const;
+
+// Sunday-first, matching a standard month grid.
+const THAI_WEEKDAYS_SHORT = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"] as const;
+
+const BUDDHIST_YEAR_OFFSET = 543;
+
+function startOfDay(date: Date): Date {
+  const copy = new Date(date);
+  copy.setHours(0, 0, 0, 0);
+  return copy;
+}
+
+function isSameDay(a: Date, b: Date): boolean {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+function isBetween(day: Date, start: Date, end: Date): boolean {
+  const time = startOfDay(day).getTime();
+  return time > startOfDay(start).getTime() && time < startOfDay(end).getTime();
+}
+
+/** e.g. `new Date(2026, 8, 6)` -> "6 ก.ย. 2569" */
+function toBuddhistDisplay(date: Date): string {
+  return `${date.getDate()} ${THAI_MONTHS_SHORT[date.getMonth()]} ${
+    date.getFullYear() + BUDDHIST_YEAR_OFFSET
+  }`;
+}
+
+/** e.g. viewYear 2026, viewMonth 8 -> "กันยายน 2569" */
+function toBuddhistMonthLabel(viewYear: number, viewMonth: number): string {
+  return `${THAI_MONTHS_LONG[viewMonth]} ${viewYear + BUDDHIST_YEAR_OFFSET}`;
+}
+
+/**
+ * A fixed 6-row (42-cell) grid for the given month, filled with the days from
+ * the adjacent months so every cell is a real Date. `isCurrentMonth` lets the
+ * caller dim the overflow days.
+ */
+function buildMonthGrid(
+  viewYear: number,
+  viewMonth: number
+): { date: Date; isCurrentMonth: boolean }[] {
+  const firstOfMonth = new Date(viewYear, viewMonth, 1);
+  const gridStart = new Date(viewYear, viewMonth, 1 - firstOfMonth.getDay());
+
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(
+      gridStart.getFullYear(),
+      gridStart.getMonth(),
+      gridStart.getDate() + index
+    );
+    return { date, isCurrentMonth: date.getMonth() === viewMonth };
+  });
+}
+
+function toISODate(date: Date): string {
+  return startOfDay(date).toISOString().slice(0, 10);
+}
+
+export interface DateRangeFieldProps {
+  label?: string;
   required?: boolean;
   startValue: Date | null;
   endValue: Date | null;
+  onChange: (start: Date | null, end: Date | null) => void;
   disabled?: boolean;
   error?: boolean;
   errorMessage?: string;
   placeholder?: string;
-  onChange: (start: Date | null, end: Date | null) => void;
-};
+  /** When set, two hidden inputs (`<name>Start` / `<name>End`) carry the ISO dates for native form submits. */
+  name?: string;
+  className?: string;
+}
 
+/**
+ * Single trigger that opens a month calendar and captures a start/end date pair.
+ * First click sets the start, the next click sets the end (an earlier click
+ * restarts the range); hovering previews the span. Dates display in the Buddhist
+ * era. Same label / required / error / errorMessage / name contract as
+ * {@link TagSelection} and {@link Select}.
+ */
 export function DateRangeField({
   label,
   required,
   startValue,
   endValue,
+  onChange,
   disabled = false,
   error,
   errorMessage,
   placeholder = "เลือกช่วงเวลา",
-  onChange,
+  name,
+  className,
 }: DateRangeFieldProps) {
   const labelId = useId();
   const errorId = useId();
@@ -92,19 +187,21 @@ export function DateRangeField({
         : placeholder;
 
   return (
-    <div className="flex flex-col gap-1">
-      <span
-        id={labelId}
-        className="font-ibm-plex text-foreground text-sm leading-[23px] font-medium md:text-base md:leading-[26px]"
-      >
-        {label} {required && <span className="text-error">*</span>}
-      </span>
+    <div className={cn("flex flex-col gap-1", className)}>
+      {label && (
+        <span
+          id={labelId}
+          className="font-ibm-plex text-foreground text-sm leading-[23px] font-medium md:text-base md:leading-[26px]"
+        >
+          {label} {required && <span className="text-error">*</span>}
+        </span>
+      )}
 
       <Popover.Root open={open} onOpenChange={handleOpenChange}>
         <Popover.Trigger
           type="button"
           disabled={disabled}
-          aria-labelledby={labelId}
+          aria-labelledby={label ? labelId : undefined}
           aria-invalid={error}
           aria-describedby={error && errorMessage ? errorId : undefined}
           className={cn(
@@ -190,6 +287,17 @@ export function DateRangeField({
           </Popover.Content>
         </Popover.Portal>
       </Popover.Root>
+
+      {name && (
+        <>
+          <input
+            type="hidden"
+            name={`${name}Start`}
+            value={startValue ? toISODate(startValue) : ""}
+          />
+          <input type="hidden" name={`${name}End`} value={endValue ? toISODate(endValue) : ""} />
+        </>
+      )}
 
       {error && errorMessage && (
         <span

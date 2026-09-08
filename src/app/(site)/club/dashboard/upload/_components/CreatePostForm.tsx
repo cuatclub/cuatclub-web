@@ -8,21 +8,29 @@ import {
   Button,
   Card,
   CardContent,
+  DateRangeField,
   Input,
+  RadioGroup,
   Select,
   Tag,
   TagSelection,
   Textarea,
+  type RadioGroupOption,
 } from "@/components/ui";
 import { PostPosterField } from "@/app/(site)/club/dashboard/upload/_components/PostPosterField";
-import { DateRangeField } from "@/app/(site)/club/dashboard/upload/_components/DateRangeField";
-import { AudienceRadioField } from "@/app/(site)/club/dashboard/upload/_components/AudienceRadioField";
 import {
   YEAR_LEVELS,
   createPostSchema,
   SUBMIT_ERROR_MESSAGE,
   type CreatePostFormValues,
 } from "@/app/(site)/club/dashboard/upload/create-post-schema";
+
+type AudienceValue = NonNullable<CreatePostFormValues["audience"]>;
+
+const AUDIENCE_OPTIONS: RadioGroupOption<AudienceValue>[] = [
+  { value: "CHULA_STUDENT", label: "นิสิตจุฬาฯ" },
+  { value: "GENERAL_PUBLIC", label: "บุคคลทั่วไป" },
+];
 
 export type ActivityTypeOption = { id: number; label: string };
 export type CategoryOption = {
@@ -243,13 +251,14 @@ export function CreatePostForm({
               control={control}
               name="audience"
               render={({ field, fieldState }) => (
-                <AudienceRadioField
+                <RadioGroup<AudienceValue>
                   label="ผู้มีสิทธิ์เข้าร่วม"
                   required
+                  options={AUDIENCE_OPTIONS}
                   value={field.value}
                   error={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
-                  onChange={(value) => {
+                  onValueChange={(value) => {
                     field.onChange(value);
                     field.onBlur();
                   }}
