@@ -85,7 +85,7 @@ export function CreatePostForm({
     setError,
     clearErrors,
     reset,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting, isValid, isSubmitted },
   } = useForm<CreatePostFormValues>({
     resolver: zodResolver(createPostSchema),
     defaultValues: EMPTY_VALUES,
@@ -216,8 +216,8 @@ export function CreatePostForm({
                         bgColor: category.backgroundColor,
                       }))}
                       value={field.value}
-                      error={!!fieldState.error}
-                      errorMessage={fieldState.error?.message}
+                      error={isSubmitted && !!fieldState.error}
+                      errorMessage={isSubmitted ? fieldState.error?.message : undefined}
                       onValueChange={(value) => {
                         field.onChange(value);
                         field.onBlur();
@@ -277,8 +277,8 @@ export function CreatePostForm({
                     required
                     options={YEAR_LEVEL_OPTIONS}
                     value={field.value}
-                    error={!!fieldState.error}
-                    errorMessage={fieldState.error?.message}
+                    error={isSubmitted && !!fieldState.error}
+                    errorMessage={isSubmitted ? fieldState.error?.message : undefined}
                     onValueChange={(value) => {
                       field.onChange(value);
                       field.onBlur();
@@ -315,8 +315,8 @@ export function CreatePostForm({
                       label: faculty.label,
                     }))}
                     value={field.value}
-                    error={!!fieldState.error}
-                    errorMessage={fieldState.error?.message}
+                    error={isSubmitted && !!fieldState.error}
+                    errorMessage={isSubmitted ? fieldState.error?.message : undefined}
                     onValueChange={(value) => {
                       field.onChange(value);
                       field.onBlur();
