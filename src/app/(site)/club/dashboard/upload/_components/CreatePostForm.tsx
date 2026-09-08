@@ -111,7 +111,7 @@ export function CreatePostForm({
         <fieldset
           inert={isSubmitting || undefined}
           aria-busy={isSubmitting}
-          className="m-0 flex flex-col gap-8 border-0 p-0 md:gap-9"
+          className="m-0 flex flex-col gap-6 border-0 p-0 md:gap-9"
         >
           <CardContent className="flex flex-col gap-4 px-0 md:gap-6">
             <h2 className="font-ibm-plex text-primary text-xl leading-[27px] font-bold">

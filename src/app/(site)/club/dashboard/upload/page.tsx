@@ -9,7 +9,7 @@ export default async function UploadPostPage() {
   ]);
 
   return (
-    <div className="flex w-full flex-col gap-9">
+    <div className="flex w-full flex-col gap-6 md:gap-9">
       <div className="flex flex-col gap-1">
         <h1 className="font-ibm-plex text-primary text-[28px] leading-[38px] font-bold">
           สร้างโพสต์

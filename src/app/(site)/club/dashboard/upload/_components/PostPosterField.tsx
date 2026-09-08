@@ -56,7 +56,7 @@ export function PostPosterField({
   };
 
   return (
-    <div className="flex w-full max-w-[282px] flex-col gap-2">
+    <div className="flex w-full max-w-[188px] flex-col gap-2 md:max-w-[282px]">
       <input
         ref={inputRef}
         id={inputId}
@@ -93,8 +93,8 @@ export function PostPosterField({
         ) : (
           <>
             <div className="flex flex-col items-center gap-2.5">
-              <Upload className="text-primary size-12" aria-hidden="true" />
-              <span className="font-ibm-plex text-primary text-base leading-6 font-medium">
+              <Upload className="text-primary size-10 md:size-12" aria-hidden="true" />
+              <span className="font-ibm-plex text-primary text-sm leading-6 font-medium md:text-base">
                 อัพโหลดโปสเตอร์ที่นี่
               </span>
             </div>
