@@ -39,7 +39,7 @@ export function AudienceRadioField({
         {label} {required && <span className="text-error">*</span>}
       </legend>
       <div
-        className="flex flex-wrap gap-8"
+        className="flex h-[26px] items-center gap-8"
         role="radiogroup"
         aria-describedby={error && errorMessage ? errorId : undefined}
       >
