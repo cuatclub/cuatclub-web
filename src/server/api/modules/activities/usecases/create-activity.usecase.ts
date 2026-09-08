@@ -30,10 +30,18 @@ export const createActivity = async (
       { ...activityInput, clubId: club.id },
       client
     );
-    await activityCategoriesRepository.setForActivity(created.id, categoryIds, client);
-    await activityFacultiesRepository.setForActivity(created.id, facultyIds, client);
+    await activityCategoriesRepository.createActivityCategoryByActivityId(
+      created.id,
+      categoryIds,
+      client
+    );
+    await activityFacultiesRepository.createActivityFacultyByActivityId(
+      created.id,
+      facultyIds,
+      client
+    );
     return created;
   });
 
-  return CreateActivityOutputDTOSchema.parse(activity.toDTO());
+  return CreateActivityOutputDTOSchema.parse(activity);
 };

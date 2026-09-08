@@ -17,13 +17,13 @@ import {
   Textarea,
   type RadioGroupOption,
 } from "@/components/ui";
-import { PostPosterField } from "@/app/(site)/club/dashboard/upload/_components/PostPosterField";
+import { PostPosterField } from "@/app/(site)/club/dashboard/posts/upload/_components/PostPosterField";
 import {
   YEAR_LEVELS,
   createPostSchema,
   SUBMIT_ERROR_MESSAGE,
   type CreatePostFormValues,
-} from "@/app/(site)/club/dashboard/upload/create-post-schema";
+} from "@/app/(site)/club/dashboard/posts/upload/create-post-schema";
 
 type AudienceValue = NonNullable<CreatePostFormValues["audience"]>;
 

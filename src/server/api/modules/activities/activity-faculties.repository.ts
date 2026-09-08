@@ -4,13 +4,17 @@ import { activityFaculties } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
 
 export interface IActivityFacultiesRepository {
-  setForActivity(activityId: string, facultyIds: number[], client?: DbClient): Promise<void>;
+  createActivityFacultyByActivityId(
+    activityId: string,
+    update: number[],
+    client?: DbClient
+  ): Promise<void>;
 }
 
 class ActivityFacultiesRepository implements IActivityFacultiesRepository {
-  async setForActivity(
+  async createActivityFacultyByActivityId(
     activityId: string,
-    facultyIds: number[],
+    update: number[],
     client: DbClient = db
   ): Promise<void> {
     await client
@@ -19,7 +23,7 @@ class ActivityFacultiesRepository implements IActivityFacultiesRepository {
       .catch(wrapRepoError);
     await client
       .insert(activityFaculties)
-      .values(facultyIds.map((facultyId) => ({ activityId, facultyId })))
+      .values(update.map((facultyId) => ({ activityId, facultyId })))
       .catch(wrapRepoError);
 
     return;

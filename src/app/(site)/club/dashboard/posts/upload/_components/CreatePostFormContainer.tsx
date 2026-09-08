@@ -8,12 +8,12 @@ import {
   type ActivityTypeOption,
   type CategoryOption,
   type FacultyOption,
-} from "@/app/(site)/club/dashboard/upload/_components/CreatePostForm";
-import { uploadActivityPoster } from "@/app/(site)/club/dashboard/upload/_lib/upload-activity-poster";
+} from "@/app/(site)/club/dashboard/posts/upload/_components/CreatePostForm";
+import { uploadActivityPoster } from "@/app/(site)/club/dashboard/posts/upload/_lib/upload-activity-poster";
 import {
   getPosterContentType,
   type CreatePostFormValues,
-} from "@/app/(site)/club/dashboard/upload/create-post-schema";
+} from "@/app/(site)/club/dashboard/posts/upload/create-post-schema";
 
 type CreatePostFormContainerProps = {
   activityTypes: ActivityTypeOption[];

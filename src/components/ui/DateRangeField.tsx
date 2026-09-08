@@ -5,98 +5,16 @@ import { Popover } from "radix-ui";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-
-const THAI_MONTHS_LONG = [
-  "มกราคม",
-  "กุมภาพันธ์",
-  "มีนาคม",
-  "เมษายน",
-  "พฤษภาคม",
-  "มิถุนายน",
-  "กรกฎาคม",
-  "สิงหาคม",
-  "กันยายน",
-  "ตุลาคม",
-  "พฤศจิกายน",
-  "ธันวาคม",
-] as const;
-
-const THAI_MONTHS_SHORT = [
-  "ม.ค.",
-  "ก.พ.",
-  "มี.ค.",
-  "เม.ย.",
-  "พ.ค.",
-  "มิ.ย.",
-  "ก.ค.",
-  "ส.ค.",
-  "ก.ย.",
-  "ต.ค.",
-  "พ.ย.",
-  "ธ.ค.",
-] as const;
-
-// Sunday-first, matching a standard month grid.
-const THAI_WEEKDAYS_SHORT = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"] as const;
-
-const BUDDHIST_YEAR_OFFSET = 543;
-
-function startOfDay(date: Date): Date {
-  const copy = new Date(date);
-  copy.setHours(0, 0, 0, 0);
-  return copy;
-}
-
-function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-function isBetween(day: Date, start: Date, end: Date): boolean {
-  const time = startOfDay(day).getTime();
-  return time > startOfDay(start).getTime() && time < startOfDay(end).getTime();
-}
-
-/** e.g. `new Date(2026, 8, 6)` -> "6 ก.ย. 2569" */
-function toBuddhistDisplay(date: Date): string {
-  return `${date.getDate()} ${THAI_MONTHS_SHORT[date.getMonth()]} ${
-    date.getFullYear() + BUDDHIST_YEAR_OFFSET
-  }`;
-}
-
-/** e.g. viewYear 2026, viewMonth 8 -> "กันยายน 2569" */
-function toBuddhistMonthLabel(viewYear: number, viewMonth: number): string {
-  return `${THAI_MONTHS_LONG[viewMonth]} ${viewYear + BUDDHIST_YEAR_OFFSET}`;
-}
-
-/**
- * A fixed 6-row (42-cell) grid for the given month, filled with the days from
- * the adjacent months so every cell is a real Date. `isCurrentMonth` lets the
- * caller dim the overflow days.
- */
-function buildMonthGrid(
-  viewYear: number,
-  viewMonth: number
-): { date: Date; isCurrentMonth: boolean }[] {
-  const firstOfMonth = new Date(viewYear, viewMonth, 1);
-  const gridStart = new Date(viewYear, viewMonth, 1 - firstOfMonth.getDay());
-
-  return Array.from({ length: 42 }, (_, index) => {
-    const date = new Date(
-      gridStart.getFullYear(),
-      gridStart.getMonth(),
-      gridStart.getDate() + index
-    );
-    return { date, isCurrentMonth: date.getMonth() === viewMonth };
-  });
-}
-
-function toISODate(date: Date): string {
-  return startOfDay(date).toISOString().slice(0, 10);
-}
+import {
+  THAI_WEEKDAYS_SHORT,
+  buildMonthGrid,
+  isBetween,
+  isSameDay,
+  startOfDay,
+  toBuddhistDisplay,
+  toBuddhistMonthLabel,
+  toISODate,
+} from "@/lib/date";
 
 export interface DateRangeFieldProps {
   label?: string;

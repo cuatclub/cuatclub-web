@@ -1,4 +1,4 @@
-import type { PosterImageContentType } from "@/app/(site)/club/dashboard/upload/create-post-schema";
+import type { PosterImageContentType } from "@/app/(site)/club/dashboard/posts/upload/create-post-schema";
 
 type PosterUploadTarget = {
   url: string;

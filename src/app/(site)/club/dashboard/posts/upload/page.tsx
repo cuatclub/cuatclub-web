@@ -1,5 +1,5 @@
 import { api } from "@/trpc/server";
-import { CreatePostFormContainer } from "@/app/(site)/club/dashboard/upload/_components/CreatePostFormContainer";
+import { CreatePostFormContainer } from "@/app/(site)/club/dashboard/posts/upload/_components/CreatePostFormContainer";
 
 export default async function UploadPostPage() {
   const [activityTypes, categories, faculties] = await Promise.all([
