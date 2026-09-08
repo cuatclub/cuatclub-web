@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db, type DbClient } from "@/server/db";
 import { activities } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
@@ -10,6 +11,7 @@ export type CreateActivityParams = Omit<
 
 export interface IActivitiesRepository {
   create(params: CreateActivityParams, client?: DbClient): Promise<Activity>;
+  existsByPosterUrl(posterUrl: string): Promise<boolean>;
 }
 
 class ActivitiesRepository implements IActivitiesRepository {
@@ -19,6 +21,14 @@ class ActivitiesRepository implements IActivitiesRepository {
     const res = await client.insert(activities).values(params).returning().catch(wrapRepoError);
 
     return Activity.toEntity(res[0]!);
+  }
+
+  async existsByPosterUrl(posterUrl: string): Promise<boolean> {
+    const res = await db.query.activities
+      .findFirst({ where: eq(activities.posterUrl, posterUrl) })
+      .catch(wrapRepoError);
+
+    return !!res;
   }
 }
 

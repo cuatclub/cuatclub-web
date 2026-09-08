@@ -3,8 +3,9 @@ import {
   type DeleteActivityPosterInputDTO,
   type DeleteActivityPosterOutputDTO,
 } from "@/server/api/modules/activities/dto";
+import { activitiesRepository } from "@/server/api/modules/activities/activities.repository";
 import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
-import { deleteImages } from "@/server/services/r2";
+import { deleteImages, getPublicUrl } from "@/server/services/r2";
 import { notFound, validationError } from "@/server/errors";
 
 /**
@@ -25,6 +26,12 @@ export const deleteActivityPoster = async (
   const allowedPrefix = `clubs/${club.id}/activities/`;
   if (!input.key.startsWith(allowedPrefix) || input.key.includes("..")) {
     throw validationError("This poster key does not belong to your club.");
+  }
+
+  // Only orphaned uploads may be removed — refuse a key that an activity already
+  // points at, so this can't be used to wipe a live post's poster.
+  if (await activitiesRepository.existsByPosterUrl(getPublicUrl(input.key))) {
+    throw validationError("This poster is attached to an activity and cannot be deleted.");
   }
 
   const result = await deleteImages([input.key]);

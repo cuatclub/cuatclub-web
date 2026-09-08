@@ -81,11 +81,10 @@ export function CreatePostForm({
   } = useForm<CreatePostFormValues>({
     resolver: zodResolver(createPostSchema),
     defaultValues: EMPTY_VALUES,
-    // Validate on submit (not on blur) so a field the user tabbed through without
-    // filling doesn't immediately show a "required" error; re-validate live once
-    // they've tried to submit.
-    mode: "onSubmit",
-    reValidateMode: "onChange",
+    // "onChange" (not "onTouched"): a field the user only tabs through — focus
+    // then blur without typing — stays silent, but `isValid` is kept live so the
+    // submit button can reflect completeness and the first submit still works.
+    mode: "onChange",
   });
 
   const applicationStartAt = useWatch({ control, name: "applicationStartAt" });
