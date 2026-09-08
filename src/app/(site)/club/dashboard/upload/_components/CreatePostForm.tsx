@@ -77,11 +77,14 @@ export function CreatePostForm({
     setError,
     clearErrors,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<CreatePostFormValues>({
     resolver: zodResolver(createPostSchema),
     defaultValues: EMPTY_VALUES,
-    mode: "onTouched",
+    // Validate on submit (not on blur) so a field the user tabbed through without
+    // filling doesn't immediately show a "required" error; re-validate live once
+    // they've tried to submit.
+    mode: "onSubmit",
     reValidateMode: "onChange",
   });
 
@@ -340,7 +343,7 @@ export function CreatePostForm({
             <Button
               type="submit"
               className="w-full sm:w-[200px]"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isValid}
               isLoading={isSubmitting}
             >
               ยืนยัน

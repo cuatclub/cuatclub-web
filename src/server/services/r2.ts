@@ -33,12 +33,16 @@ export function getPublicUrl(key: string): string {
 export async function getSignedUploadUrl(
   key: string,
   contentType: string,
-  expiresIn = 60
+  expiresIn = 60,
+  contentLength?: number
 ): Promise<string> {
   const command = new PutObjectCommand({
     Bucket: env.R2_BUCKET,
     Key: key,
     ContentType: contentType,
+    // When provided, the byte count is folded into the signature, so R2 rejects
+    // any upload whose Content-Length does not match exactly.
+    ...(contentLength !== undefined ? { ContentLength: contentLength } : {}),
   });
 
   return getSignedUrl(client, command, { expiresIn });

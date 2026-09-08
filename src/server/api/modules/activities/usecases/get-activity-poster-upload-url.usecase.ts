@@ -21,7 +21,7 @@ export const getActivityPosterUploadUrl = async (
   }
 
   const key = `clubs/${club.id}/activities/${randomUUID()}.${getExtension(input.contentType)}`;
-  const url = await getSignedUploadUrl(key, input.contentType);
+  const url = await getSignedUploadUrl(key, input.contentType, undefined, input.contentLength);
 
   return GetActivityPosterUploadUrlOutputDTOSchema.parse({
     key,
