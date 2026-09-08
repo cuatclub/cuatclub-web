@@ -71,7 +71,7 @@ export const RadioGroup = <T extends string | number = string>({
   return (
     <fieldset className={cn("m-0 flex flex-col gap-2 border-0 p-0", className)}>
       {label && (
-        <legend className="font-ibm-plex text-foreground text-sm leading-[23px] font-medium md:text-base md:leading-[26px]">
+        <legend className="font-ibm-plex text-foreground mb-2 text-sm leading-[23px] font-medium md:text-base md:leading-[26px]">
           {label} {required && <span className="text-error">*</span>}
         </legend>
       )}
