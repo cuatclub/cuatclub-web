@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { db, type DbClient } from "@/server/db";
 import { user } from "@/server/db/schema/user";
 import { wrapRepoError } from "@/server/errors";
-import { User, type UserRow } from "@/server/api/modules/users/user.entity";
+import { User, type UserRow } from "@/server/api/modules/users/entities/user.entity";
 
 export type UpdateUserParams = Partial<Omit<UserRow, "id" | "createdAt" | "updatedAt">>;
 export interface IUsersRepository {

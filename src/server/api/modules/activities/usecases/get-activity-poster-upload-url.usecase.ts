@@ -3,7 +3,7 @@ import {
   GetActivityPosterUploadUrlOutputDTOSchema,
   type GetActivityPosterUploadUrlInputDTO,
 } from "@/server/api/modules/activities/dto";
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
 import { getExtension, getPublicUrl, getSignedUploadUrl } from "@/server/services/r2";
 import { notFound, validationError } from "@/server/errors";
 

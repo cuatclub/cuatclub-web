@@ -1,7 +1,7 @@
 import { randomInt } from "crypto";
 import { TRPCError } from "@trpc/server";
 import { unitOfWork } from "@/server/db/unit-of-work";
-import { invitationCodesRepository } from "@/server/api/modules/invitations/invitation-codes.repository";
+import { invitationCodesRepository } from "@/server/api/modules/invitations/repositories/invitation-codes.repository";
 import type {
   GenerateInvitationCodeInputDTO,
   GenerateInvitationCodeOutputDTO,

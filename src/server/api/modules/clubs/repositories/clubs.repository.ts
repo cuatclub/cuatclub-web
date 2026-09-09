@@ -5,9 +5,9 @@ import { db, type DbClient } from "@/server/db";
 import { affiliations, categories, clubCategories, clubs, user } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
 import { Club, type ClubRow } from "@/server/api/modules/clubs/entities/club.entity";
-import { User } from "@/server/api/modules/users/user.entity";
+import { User } from "@/server/api/modules/users/entities/user.entity";
 import { ClubDetail } from "@/server/api/modules/clubs/entities/club-detail.entity";
-import type { CategoryRow } from "@/server/api/modules/master-data/master-data.entity";
+import type { CategoryRow } from "@/server/api/modules/master-data/entities/master-data.entity";
 
 export type CreateClubParams = Omit<typeof clubs.$inferInsert, "id" | "createdAt" | "updatedAt">;
 export type UpdateClubParams = Partial<Omit<ClubRow, "id" | "userId" | "createdAt" | "updatedAt">>;

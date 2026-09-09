@@ -1,4 +1,4 @@
-import { invitationCodesRepository } from "@/server/api/modules/invitations/invitation-codes.repository";
+import { invitationCodesRepository } from "@/server/api/modules/invitations/repositories/invitation-codes.repository";
 import type {
   GetAllInvitationsInputDTO,
   GetAllInvitationsOutputDTO,

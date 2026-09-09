@@ -8,7 +8,7 @@ import type {
   AffiliationRow,
   CategoryRow,
   FacultyRow,
-} from "@/server/api/modules/master-data/master-data.entity";
+} from "@/server/api/modules/master-data/entities/master-data.entity";
 
 export type UpdateCategoryParams = Pick<CategoryRow, "label" | "fontColor" | "backgroundColor">;
 export type UpdateAffiliationParams = Pick<AffiliationRow, "label">;

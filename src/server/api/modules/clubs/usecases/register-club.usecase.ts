@@ -1,8 +1,8 @@
 import { createTransactionAuth } from "@/server/auth";
 import { unitOfWork } from "@/server/db/unit-of-work";
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
-import { usersRepository } from "@/server/api/modules/users/users.repository";
-import { invitationCodesRepository } from "@/server/api/modules/invitations/invitation-codes.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
+import { usersRepository } from "@/server/api/modules/users/repositories/users.repository";
+import { invitationCodesRepository } from "@/server/api/modules/invitations/repositories/invitation-codes.repository";
 import {
   RegisterClubOutputDTOSchema,
   type RegisterClubInputDTO,

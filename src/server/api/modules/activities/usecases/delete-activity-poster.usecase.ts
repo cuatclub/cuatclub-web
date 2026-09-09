@@ -3,8 +3,8 @@ import {
   type DeleteActivityPosterInputDTO,
   type DeleteActivityPosterOutputDTO,
 } from "@/server/api/modules/activities/dto";
-import { activitiesRepository } from "@/server/api/modules/activities/activities.repository";
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
+import { activitiesRepository } from "@/server/api/modules/activities/repositories/activities.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
 import { deleteImages, getPublicUrl } from "@/server/services/r2";
 import { notFound, validationError } from "@/server/errors";
 

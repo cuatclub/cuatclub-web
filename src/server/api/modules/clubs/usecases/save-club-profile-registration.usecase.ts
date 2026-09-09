@@ -1,5 +1,5 @@
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
-import { usersRepository } from "@/server/api/modules/users/users.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
+import { usersRepository } from "@/server/api/modules/users/repositories/users.repository";
 import {
   SaveClubProfileRegistrationOutputDTOSchema,
   type SaveClubProfileRegistrationInputDTO,
@@ -7,7 +7,7 @@ import {
 } from "@/server/api/modules/clubs/dto";
 import { notFound, validationError } from "@/server/errors";
 import { unitOfWork } from "@/server/db/unit-of-work";
-import { clubCategoriesRepository } from "@/server/api/modules/clubs/club-categories.repository";
+import { clubCategoriesRepository } from "@/server/api/modules/clubs/repositories/club-categories.repository";
 
 export const saveProfileRegistration = async (
   userId: string,
