@@ -37,23 +37,22 @@ export function DashboardSidebar({ name, email, image }: DashboardSidebarProps) 
   };
 
   return (
-    // No explicit height here: DashboardShell's default `align-items: stretch` (it's the flex
-    // row) already matches this to `main`'s height. Giving this its own `h-full` would instead
-    // *opt it out* of that stretch (a flex item's own specified cross-size always wins), and
-    // percentage heights don't resolve reliably through a flex-grown ancestor anyway — see
-    // DashboardShell's comment.
-    <aside className="border-border hidden bg-white py-6 md:flex md:w-64 md:shrink-0 md:flex-col md:justify-between md:border-r md:px-8">
+    // `top-16`/`h-[calc(100vh-4rem)]` match the shared Navbar's fixed 64px height (see
+    // Navbar.tsx) so the sidebar always fills the remaining viewport and stays stuck to the
+    // bottom of the navbar while scrolling — it only scrolls away once its flex-row container
+    // (which ends where the page's Footer begins) runs out of room.
+    <aside className="border-border hidden bg-white px-6 py-8 md:sticky md:top-16 md:flex md:h-[calc(100vh-4rem)] md:w-64 md:shrink-0 md:flex-col md:justify-between md:border-r">
       <div className="flex flex-col gap-6">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Image
             src={avatarSrc}
             alt="Profile"
-            width={40}
-            height={40}
-            className="h-10 w-10 shrink-0 rounded-full object-cover"
+            width={48}
+            height={48}
+            className="h-12 w-12 shrink-0 rounded-[10px] object-cover"
           />
           <div className="flex min-w-0 flex-col leading-tight">
-            <span className="font-ibm-plex text-foreground truncate text-sm font-semibold">
+            <span className="font-ibm-plex text-foreground truncate text-base font-semibold">
               {name}
             </span>
             <span className="font-ibm-plex text-foreground-muted truncate text-xs">{email}</span>
