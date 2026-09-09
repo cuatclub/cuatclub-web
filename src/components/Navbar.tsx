@@ -16,7 +16,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import { buttonVariants } from "@/components/ui/Button";
+import { buttonVariants, ConfirmModal } from "@/components";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -79,6 +79,8 @@ export function Navbar({
 }: NavbarProps) {
   const profileImageSrc = userImage ?? "/svg/user_profile.svg";
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -88,6 +90,7 @@ export function Navbar({
   const isAdmin = isLoggedIn && userRole === "ADMIN";
 
   const handleSignOut = async () => {
+    setIsLoggingOut(true);
     await signOut();
     router.push("/");
     router.refresh();
@@ -228,7 +231,7 @@ export function Navbar({
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onSelect={handleSignOut}
+                  onSelect={() => setIsLogoutConfirmOpen(true)}
                   className="text-foreground-secondary bg-text-error hover:text-error focus:text-error data-[highlighted]:text-error data-[highlighted]:bg-tag-red-light"
                 >
                   <LogOut className="h-4 w-4" />
@@ -388,7 +391,7 @@ export function Navbar({
                     </div>
                     <button
                       type="button"
-                      onClick={handleSignOut}
+                      onClick={() => setIsLogoutConfirmOpen(true)}
                       className="font-ibm-plex text-foreground-secondary hover:text-error text-[10px]"
                     >
                       ออกจากระบบ
@@ -427,6 +430,17 @@ export function Navbar({
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={isLogoutConfirmOpen}
+        onOpenChange={setIsLogoutConfirmOpen}
+        title="ออกจากระบบ"
+        description="คุณต้องการออกจากระบบใช่หรือไม่"
+        confirmLabel="ยืนยัน"
+        cancelLabel="ยกเลิก"
+        isLoading={isLoggingOut}
+        onConfirm={() => void handleSignOut()}
+      />
     </nav>
   );
 }
