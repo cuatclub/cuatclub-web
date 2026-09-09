@@ -43,5 +43,5 @@ export const createActivity = async (
     return created;
   });
 
-  return CreateActivityOutputDTOSchema.parse(activity);
+  return CreateActivityOutputDTOSchema.parse(activity.toDTO());
 };
