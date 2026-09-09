@@ -3,7 +3,7 @@ import { db, type DbClient } from "@/server/db";
 import { invitationCodes } from "@/server/db/schema/invitation-codes";
 import { clubs, user } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
-import { InvitationCode } from "@/server/api/modules/invitations/invitation-code.entity";
+import { InvitationCode } from "@/server/api/modules/invitations/entities/invitation-code.entity";
 
 export interface CreateInvitationCodeParams {
   email: string;

@@ -1,9 +1,9 @@
 import type { Club } from "@/server/api/modules/clubs/entities/club.entity";
-import type { User } from "@/server/api/modules/users/user.entity";
+import type { User } from "@/server/api/modules/users/entities/user.entity";
 import type {
   AffiliationRow,
   CategoryRow,
-} from "@/server/api/modules/master-data/master-data.entity";
+} from "@/server/api/modules/master-data/entities/master-data.entity";
 import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 
 export class ClubDetail {
