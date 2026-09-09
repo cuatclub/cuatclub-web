@@ -4,8 +4,10 @@ import { affiliations } from "@/server/db/schema/affiliations";
 import { categories } from "@/server/db/schema/categories";
 import { wrapRepoError } from "@/server/errors";
 import type {
+  ActivityTypeRow,
   AffiliationRow,
   CategoryRow,
+  FacultyRow,
 } from "@/server/api/modules/master-data/master-data.entity";
 
 export type UpdateCategoryParams = Pick<CategoryRow, "label" | "fontColor" | "backgroundColor">;
@@ -15,6 +17,8 @@ export type CreateAffiliationParams = Pick<AffiliationRow, "label">;
 
 export interface IMasterDataRepository {
   getAllAffiliations(): Promise<AffiliationRow[]>;
+  getAllActivityTypes(): Promise<ActivityTypeRow[]>;
+  getAllFaculties(): Promise<FacultyRow[]>;
   getAllCategories(): Promise<CategoryRow[]>;
   createCategory(create: CreateCategoryParams, client?: DbClient): Promise<CategoryRow>;
   createAffiliation(create: CreateAffiliationParams, client?: DbClient): Promise<AffiliationRow>;
@@ -35,6 +39,14 @@ export interface IMasterDataRepository {
 class MasterDataRepository implements IMasterDataRepository {
   async getAllAffiliations(): Promise<AffiliationRow[]> {
     return db.query.affiliations.findMany().catch(wrapRepoError);
+  }
+
+  async getAllActivityTypes(): Promise<ActivityTypeRow[]> {
+    return db.query.activityTypes.findMany().catch(wrapRepoError);
+  }
+
+  async getAllFaculties(): Promise<FacultyRow[]> {
+    return db.query.faculties.findMany().catch(wrapRepoError);
   }
 
   async getAllCategories(): Promise<CategoryRow[]> {

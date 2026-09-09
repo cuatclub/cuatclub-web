@@ -3,6 +3,8 @@ import {
   createAffiliation,
   createCategory,
   getAllAffiliations,
+  getAllActivityTypes,
+  getAllFaculties,
   getAllCategories,
   updateAffiliation,
   updateCategory,
@@ -16,6 +18,10 @@ import {
   CreateCategoryOutputDTOSchema,
   GetAllAffiliationsInputDTOSchema,
   GetAllAffiliationsOutputDTOSchema,
+  GetAllActivityTypesInputDTOSchema,
+  GetAllActivityTypesOutputDTOSchema,
+  GetAllFacultiesInputDTOSchema,
+  GetAllFacultiesOutputDTOSchema,
   GetAllCategoriesInputDTOSchema,
   GetAllCategoriesOutputDTOSchema,
   UpdateAffiliationInputDTOSchema,
@@ -66,7 +72,23 @@ const categoriesRouter = createTRPCRouter({
     .mutation(async ({ input }) => deleteCategory(input)),
 });
 
+const activityTypesRouter = createTRPCRouter({
+  getAll: publicProcedure
+    .input(GetAllActivityTypesInputDTOSchema)
+    .output(GetAllActivityTypesOutputDTOSchema)
+    .query(async () => getAllActivityTypes()),
+});
+
+const facultiesRouter = createTRPCRouter({
+  getAll: publicProcedure
+    .input(GetAllFacultiesInputDTOSchema)
+    .output(GetAllFacultiesOutputDTOSchema)
+    .query(async () => getAllFaculties()),
+});
+
 export const masterDataRouter = createTRPCRouter({
   affiliations: affiliationsRouter,
   categories: categoriesRouter,
+  activityTypes: activityTypesRouter,
+  faculties: facultiesRouter,
 });
