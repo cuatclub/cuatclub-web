@@ -1,5 +1,5 @@
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
-import { usersRepository } from "@/server/api/modules/users/users.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
+import { usersRepository } from "@/server/api/modules/users/repositories/users.repository";
 import { unitOfWork } from "@/server/db/unit-of-work";
 import { notFound } from "@/server/errors";
 import { deleteImages } from "@/server/services/r2";

@@ -3,10 +3,10 @@ import {
   type CreateActivityInputDTO,
   type CreateActivityOutputDTO,
 } from "@/server/api/modules/activities/dto";
-import { activitiesRepository } from "@/server/api/modules/activities/activities.repository";
-import { activityCategoriesRepository } from "@/server/api/modules/activities/activity-categories.repository";
-import { activityFacultiesRepository } from "@/server/api/modules/activities/activity-faculties.repository";
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
+import { activitiesRepository } from "@/server/api/modules/activities/repositories/activities.repository";
+import { activityCategoriesRepository } from "@/server/api/modules/activities/repositories/activity-categories.repository";
+import { activityFacultiesRepository } from "@/server/api/modules/activities/repositories/activity-faculties.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
 import { notFound, validationError } from "@/server/errors";
 import { unitOfWork } from "@/server/db/unit-of-work";
 

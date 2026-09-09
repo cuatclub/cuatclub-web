@@ -2,7 +2,7 @@ import {
   GetClubImagesUploadUrlOutputDTOSchema,
   type GetClubImagesUploadUrlInputDTO,
 } from "@/server/api/modules/clubs/dto";
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
 import { getExtension, getPublicUrl, getSignedUploadUrl } from "@/server/services/r2";
 import { notFound, validationError } from "@/server/errors";
 import { randomUUID } from "crypto";

@@ -1,4 +1,4 @@
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
 import type { GetAllClubsInputDTO, GetAllClubsOutputDTO } from "@/server/api/modules/clubs/dto";
 
 export const getAllClubs = async (input: GetAllClubsInputDTO): Promise<GetAllClubsOutputDTO> => {
