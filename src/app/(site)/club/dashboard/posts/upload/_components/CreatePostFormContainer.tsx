@@ -13,7 +13,7 @@ import { uploadActivityPoster } from "@/app/(site)/club/dashboard/posts/upload/_
 import {
   getPosterContentType,
   type CreatePostFormValues,
-} from "@/app/(site)/club/dashboard/posts/upload/create-post-schema";
+} from "@/app/(site)/club/dashboard/posts/post-schema";
 
 type CreatePostFormContainerProps = {
   activityTypes: ActivityTypeOption[];
@@ -34,6 +34,11 @@ export function CreatePostFormContainer({
   const handleSubmit = async (values: CreatePostFormValues) => {
     // The schema guarantees these are set by the time submit runs; narrow for TS.
     if (!values.poster) throw new Error("Poster is required");
+    // This page only ever creates a post, so `poster` (widened to also allow an existing
+    // poster's URL for the edit case elsewhere) is always a freshly picked File here.
+    if (typeof values.poster === "string") {
+      throw new Error("Poster must be a newly uploaded file");
+    }
     if (!values.applicationStartAt || !values.applicationEndAt) {
       throw new Error("Application window is required");
     }

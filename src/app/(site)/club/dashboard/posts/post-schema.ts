@@ -25,6 +25,13 @@ export type PosterImageContentType = "image/png" | "image/jpeg";
 
 type ImageFileLike = Pick<File, "name" | "size" | "type">;
 
+/**
+ * The poster field's value: a newly picked `File` pending upload, the URL string of an
+ * already-uploaded poster (an existing post opened for editing keeps its poster unless the
+ * user picks a replacement), or `null` when nothing is selected yet.
+ */
+export type PosterFieldValue = File | string | null;
+
 const EXTENSION_CONTENT_TYPES: Record<string, PosterImageContentType> = {
   png: "image/png",
   jpg: "image/jpeg",
@@ -43,6 +50,10 @@ function isImageFileLike(value: unknown): value is ImageFileLike {
   );
 }
 
+function isPosterUrl(value: unknown): value is string {
+  return typeof value === "string" && value.length > 0;
+}
+
 export function getPosterContentType(file: ImageFileLike): PosterImageContentType | null {
   if (file.type) {
     const contentType = file.type.toLowerCase();
@@ -59,15 +70,21 @@ function getPosterFileValidationMessage(value: unknown): string | null {
   return null;
 }
 
+// Newly picked files still get the PNG/JPEG + 10 MB validation; an existing poster URL (a
+// string) is assumed already valid, since it was uploaded and accepted before. `null` is only
+// rejected by the required check below, so it doesn't also get flagged as the wrong type.
 const posterSchema = z
-  .custom<File>(isImageFileLike, POSTER_TYPE_MESSAGE)
-  .superRefine((file, ctx) => {
-    const message = getPosterFileValidationMessage(file);
+  .custom<PosterFieldValue>(
+    (value) => value === null || isPosterUrl(value) || isImageFileLike(value),
+    POSTER_TYPE_MESSAGE
+  )
+  .superRefine((value, ctx) => {
+    if (value === null || typeof value === "string") return;
+    const message = getPosterFileValidationMessage(value);
     if (message) ctx.addIssue({ code: z.ZodIssueCode.custom, message });
   })
-  .nullable()
-  .superRefine((file, ctx) => {
-    if (file === null)
+  .superRefine((value, ctx) => {
+    if (value === null)
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: POSTER_REQUIRED_MESSAGE });
   });
 
@@ -122,3 +139,17 @@ export const createPostSchema = z
   });
 
 export type CreatePostFormValues = z.infer<typeof createPostSchema>;
+
+export const EMPTY_POST_FORM_VALUES: CreatePostFormValues = {
+  poster: null,
+  title: "",
+  applicationFormUrl: "",
+  applicationStartAt: null,
+  applicationEndAt: null,
+  activityType: "",
+  categoryIds: [],
+  description: "",
+  audience: null,
+  yearLevels: [],
+  facultyIds: [],
+};
