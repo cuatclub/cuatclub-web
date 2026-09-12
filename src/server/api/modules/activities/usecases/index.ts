@@ -5,3 +5,4 @@ export * from "@/server/api/modules/activities/usecases/get-my-activities.usecas
 export * from "@/server/api/modules/activities/usecases/update-activity.usecase";
 export * from "@/server/api/modules/activities/usecases/delete-activity.usecase";
 export * from "@/server/api/modules/activities/usecases/get-all-activities.usecase";
+export * from "@/server/api/modules/activities/usecases/get-activity-by-id.usecase";

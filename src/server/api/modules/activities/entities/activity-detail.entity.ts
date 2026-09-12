@@ -52,6 +52,14 @@ export class ActivityDetail {
     return { id: this.club.id, name: this.owner.name, logoUrl: this.owner.image };
   }
 
+  get clubContacts() {
+    return this.club.contacts;
+  }
+
+  get isClubPubliclyVisible() {
+    return this.club.isPubliclyVisible;
+  }
+
   get activityType() {
     return this.activityTypeRow;
   }
