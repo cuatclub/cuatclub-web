@@ -1,7 +1,8 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
 import {
   createActivity,
   deleteActivityPoster,
+  getActivityById,
   getActivityPosterUploadUrl,
 } from "@/server/api/modules/activities/usecases";
 import {
@@ -9,11 +10,18 @@ import {
   CreateActivityOutputDTOSchema,
   DeleteActivityPosterInputDTOSchema,
   DeleteActivityPosterOutputDTOSchema,
+  GetActivityByIdInputDTOSchema,
+  GetActivityByIdOutputDTOSchema,
   GetActivityPosterUploadUrlInputDTOSchema,
   GetActivityPosterUploadUrlOutputDTOSchema,
 } from "@/server/api/modules/activities/dto";
 
 export const activitiesRouter = createTRPCRouter({
+  getById: publicProcedure
+    .input(GetActivityByIdInputDTOSchema)
+    .output(GetActivityByIdOutputDTOSchema)
+    .query(async ({ input }) => getActivityById(input)),
+
   getPosterUploadUrl: protectedProcedure
     .input(GetActivityPosterUploadUrlInputDTOSchema)
     .output(GetActivityPosterUploadUrlOutputDTOSchema)
