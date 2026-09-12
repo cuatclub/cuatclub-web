@@ -2,17 +2,11 @@ import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.r
 import { usersRepository } from "@/server/api/modules/users/repositories/users.repository";
 import { unitOfWork } from "@/server/db/unit-of-work";
 import { notFound } from "@/server/errors";
-import { deleteImages } from "@/server/services/r2";
-import { env } from "@/config/env";
+import { deleteImages, toR2Key } from "@/server/services/r2";
 import type {
   AdminDeleteClubInputDTO,
   AdminDeleteClubOutputDTO,
 } from "@/server/api/modules/clubs/dto";
-
-const toR2Key = (url: string): string => {
-  const base = env.R2_PUBLIC_BASE_URL.replace(/\/$/, "");
-  return url.startsWith(`${base}/`) ? url.slice(base.length + 1) : url;
-};
 
 export const adminDeleteClub = async (
   input: AdminDeleteClubInputDTO
