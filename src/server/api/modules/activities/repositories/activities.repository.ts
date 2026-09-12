@@ -8,7 +8,8 @@ import {
   type ActivityRow,
 } from "@/server/api/modules/activities/entities/activity.entity";
 import { ActivityDetail } from "@/server/api/modules/activities/entities/activity-detail.entity";
-import { Club } from "@/server/api/modules/clubs/entities/club.entity";
+import { Club, type ClubRow } from "@/server/api/modules/clubs/entities/club.entity";
+import { User, type UserRow } from "@/server/api/modules/users/entities/user.entity";
 import type {
   ActivityTypeRow,
   CategoryRow,
@@ -29,6 +30,7 @@ export type GetRelatedActivitiesParams = {
 // Shape of the join used by detail queries. Lives here, not on ActivityDetail — the
 // repository owns persistence shape; the entity only knows about other entities.
 type ActivityDetailRow = ActivityRow & {
+  club: ClubRow & { user: UserRow };
   activityType: ActivityTypeRow;
   categories: { category: CategoryRow }[];
   faculties: { faculty: FacultyRow }[];
@@ -61,6 +63,7 @@ class ActivitiesRepository implements IActivitiesRepository {
       .findFirst({
         where: eq(activities.id, id),
         with: {
+          club: { with: { user: true } },
           activityType: true,
           categories: { with: { category: true } },
           faculties: { with: { faculty: true } },
@@ -83,6 +86,7 @@ class ActivitiesRepository implements IActivitiesRepository {
           this.isFromPubliclyVisibleClub()
         ),
         with: {
+          club: { with: { user: true } },
           activityType: true,
           categories: { with: { category: true } },
           faculties: { with: { faculty: true } },
@@ -106,6 +110,8 @@ class ActivitiesRepository implements IActivitiesRepository {
   private toActivityDetail(row: ActivityDetailRow): ActivityDetail {
     return ActivityDetail.compose({
       activity: Activity.toEntity(row),
+      club: Club.toEntity(row.club),
+      owner: User.toEntity(row.club.user),
       activityType: row.activityType,
       categories: row.categories.map(({ category }) => category),
       faculties: row.faculties.map(({ faculty }) => faculty),

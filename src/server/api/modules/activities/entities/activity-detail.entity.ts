@@ -1,4 +1,6 @@
 import type { Activity } from "@/server/api/modules/activities/entities/activity.entity";
+import type { Club } from "@/server/api/modules/clubs/entities/club.entity";
+import type { User } from "@/server/api/modules/users/entities/user.entity";
 import type {
   ActivityTypeRow,
   CategoryRow,
@@ -9,6 +11,8 @@ import type { ActivityDetailOutputDTO } from "@/server/api/modules/activities/dt
 export class ActivityDetail {
   private constructor(
     private activity: Activity,
+    private club: Club,
+    private owner: User,
     private activityTypeRow: ActivityTypeRow,
     private categoryRows: CategoryRow[],
     private facultyRows: FacultyRow[]
@@ -16,12 +20,16 @@ export class ActivityDetail {
 
   static compose(parts: {
     activity: Activity;
+    club: Club;
+    owner: User;
     activityType: ActivityTypeRow;
     categories: CategoryRow[];
     faculties: FacultyRow[];
   }): ActivityDetail {
     return new ActivityDetail(
       parts.activity,
+      parts.club,
+      parts.owner,
       parts.activityType,
       parts.categories,
       parts.faculties
@@ -30,10 +38,6 @@ export class ActivityDetail {
 
   get id() {
     return this.activity.id;
-  }
-
-  get clubId() {
-    return this.activity.clubId;
   }
 
   get title() {
@@ -80,8 +84,31 @@ export class ActivityDetail {
     return this.facultyRows;
   }
 
+  // The club that posted the activity — its name and logo live on the owning user,
+  // the same split ClubDetail uses.
+
+  get clubId() {
+    return this.club.id;
+  }
+
+  get clubName() {
+    return this.owner.name;
+  }
+
+  get clubLogoUrl() {
+    return this.owner.image;
+  }
+
+  get clubContacts() {
+    return this.club.contacts;
+  }
+
   get isApplicationOpen() {
     return this.activity.isApplicationOpen;
+  }
+
+  get isClubPubliclyVisible() {
+    return this.club.isPubliclyVisible;
   }
 
   toDTO(): ActivityDetailOutputDTO {
@@ -99,6 +126,12 @@ export class ActivityDetail {
       categories: this.categories,
       faculties: this.faculties,
       isApplicationOpen: this.isApplicationOpen,
+      club: {
+        id: this.clubId,
+        name: this.clubName,
+        logoUrl: this.clubLogoUrl,
+        contacts: this.clubContacts,
+      },
     };
   }
 }

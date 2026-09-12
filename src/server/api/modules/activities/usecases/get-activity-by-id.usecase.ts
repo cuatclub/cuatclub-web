@@ -1,5 +1,4 @@
 import { activitiesRepository } from "@/server/api/modules/activities/repositories/activities.repository";
-import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
 import type {
   GetActivityByIdInputDTO,
   GetActivityByIdOutputDTO,
@@ -15,11 +14,9 @@ export const getActivityById = async (
   input: GetActivityByIdInputDTO
 ): Promise<GetActivityByIdOutputDTO> => {
   const activity = await activitiesRepository.getDetailById(input.activityId);
-  if (!activity) throw notFound("Activity not found");
 
   // An activity is only public while the club that posted it is.
-  const club = await clubsRepository.getDetailById(activity.clubId);
-  if (!club?.isPubliclyVisible) throw notFound("Activity not found");
+  if (!activity?.isClubPubliclyVisible) throw notFound("Activity not found");
 
   const categoryIds = activity.categories.map((category) => category.id);
   const relatedActivities = categoryIds.length
@@ -32,16 +29,19 @@ export const getActivityById = async (
 
   return {
     ...activity.toDTO(),
-    club: { id: club.id, name: club.name, logoUrl: club.logoUrl },
     relatedActivities: relatedActivities.map((related) => ({
       id: related.id,
       title: related.title,
+      description: related.description,
       posterUrl: related.posterUrl,
+      audience: related.audience,
+      yearLevels: related.yearLevels,
       activityType: related.activityType,
       categories: related.categories,
+      faculties: related.faculties,
       applicationStartAt: related.applicationStartAt,
       applicationEndAt: related.applicationEndAt,
-      isApplicationOpen: related.isApplicationOpen,
+      club: { id: related.clubId, name: related.clubName, logoUrl: related.clubLogoUrl },
     })),
   };
 };
