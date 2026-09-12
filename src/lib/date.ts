@@ -64,6 +64,11 @@ export function toBuddhistDisplay(date: Date): string {
   }`;
 }
 
+/** Same as `toBuddhistDisplay` but without the year, e.g. "6 ก.ย." — for a same-context date range. */
+export function toShortDisplay(date: Date): string {
+  return `${date.getDate()} ${THAI_MONTHS_SHORT[date.getMonth()]}`;
+}
+
 /** e.g. viewYear 2026, viewMonth 8 -> "กันยายน 2569" */
 export function toBuddhistMonthLabel(viewYear: number, viewMonth: number): string {
   return `${THAI_MONTHS_LONG[viewMonth]} ${viewYear + BUDDHIST_YEAR_OFFSET}`;
