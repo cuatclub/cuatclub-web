@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 
 import { Tag } from "@/components/ui";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { toShortDisplay } from "@/lib/date";
 import { YEAR_LEVELS } from "@/app/(site)/club/dashboard/posts/post-schema";
 import type { ActivityTypeOption } from "@/app/(site)/club/dashboard/posts/_components/PostForm";
@@ -21,9 +20,6 @@ const AUDIENCE_LABEL: Record<Activity["audience"], string> = {
   CHULA_STUDENT: "นิสิตจุฬาฯ",
   GENERAL_PUBLIC: "บุคคลทั่วไป",
 };
-
-/** Tailwind's `md`, where the club name and tag list split onto their own rows. */
-const DESKTOP_QUERY = "(min-width: 48rem)";
 
 /** On mobile the name+tags row is only ~170px wide, so a single category is all that fits. */
 const MAX_VISIBLE_CATEGORIES_MOBILE = 1;
@@ -97,19 +93,16 @@ export function PostCard({
   onOpen,
   onDeleteRequest,
 }: PostCardProps) {
-  // `useMediaQuery` returns `false` on the server and on the first client render (see its
-  // docstring), so querying for desktop — rather than mobile — means that first paint always
-  // uses the mobile (1-tag) cap everywhere, including on desktop before hydration. That first
-  // paint is a tidy, correct-looking card; it just briefly under-counts on desktop until
-  // hydration flips `isDesktop` to `true` and it expands to three tags. Querying for mobile
-  // instead would do the opposite: phones would briefly render the clipped three-tag layout
-  // this cap exists to prevent. Don't flip this query.
-  const isDesktop = useMediaQuery(DESKTOP_QUERY);
-  const maxVisibleCategories = isDesktop
-    ? MAX_VISIBLE_CATEGORIES_DESKTOP
-    : MAX_VISIBLE_CATEGORIES_MOBILE;
-  const visibleCategories = activity.categories.slice(0, maxVisibleCategories);
-  const hiddenCategoryCount = activity.categories.length - visibleCategories.length;
+  // The visible-category cap depends on the `md` breakpoint, which a JS media-query hook can
+  // only apply after hydration (and, per `useMediaQuery`'s docstring, not even reliably then —
+  // it only re-evaluates on a `resize`-driven `change` event on the MediaQueryList). That means
+  // first paint can't know the cap from JS. Instead, all categories up to the desktop cap are
+  // always rendered, and CSS alone (`hidden md:list-item` / `md:hidden`) decides which ones —
+  // and which "+N" chip — are actually visible at a given width, so mobile and desktop are each
+  // correct from first paint with no client-side correction step.
+  const visibleCategories = activity.categories.slice(0, MAX_VISIBLE_CATEGORIES_DESKTOP);
+  const hiddenCategoryCountMobile = activity.categories.length - MAX_VISIBLE_CATEGORIES_MOBILE;
+  const hiddenCategoryCountDesktop = activity.categories.length - MAX_VISIBLE_CATEGORIES_DESKTOP;
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     // A keydown on the trash button bubbles here too (it's a descendant, not a separate
@@ -189,16 +182,28 @@ export function PostCard({
 
           {visibleCategories.length > 0 && (
             <ul className="ml-auto flex shrink-0 flex-wrap items-center gap-1.5 md:ml-0">
-              {visibleCategories.map((category) => (
-                <li key={category.id}>
+              {visibleCategories.map((category, index) => (
+                <li
+                  key={category.id}
+                  // The first `MAX_VISIBLE_CATEGORIES_MOBILE` tags are always shown; the rest,
+                  // up to `MAX_VISIBLE_CATEGORIES_DESKTOP`, only appear at `md`+.
+                  className={
+                    index >= MAX_VISIBLE_CATEGORIES_MOBILE ? "hidden md:list-item" : undefined
+                  }
+                >
                   <Tag color={category.fontColor} bgColor={category.backgroundColor}>
                     {category.label}
                   </Tag>
                 </li>
               ))}
-              {hiddenCategoryCount > 0 && (
-                <li>
-                  <Tag>+{hiddenCategoryCount}</Tag>
+              {hiddenCategoryCountMobile > 0 && (
+                <li className="md:hidden">
+                  <Tag>+{hiddenCategoryCountMobile}</Tag>
+                </li>
+              )}
+              {hiddenCategoryCountDesktop > 0 && (
+                <li className="hidden md:list-item">
+                  <Tag>+{hiddenCategoryCountDesktop}</Tag>
                 </li>
               )}
             </ul>
