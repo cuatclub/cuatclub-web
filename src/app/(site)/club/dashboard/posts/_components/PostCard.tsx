@@ -210,11 +210,11 @@ export function PostCard({
           )}
         </div>
 
-        <h3 className="font-ibm-plex text-foreground line-clamp-2 text-lg leading-[30px] font-semibold md:text-xl md:leading-[33px]">
+        <h3 className="font-ibm-plex text-foreground line-clamp-2 text-xs leading-5 font-semibold md:text-lg md:leading-[30px]">
           {activity.title}
         </h3>
 
-        <p className="font-ibm-plex text-foreground-muted line-clamp-3 text-sm leading-[23px] md:text-base md:leading-[26px]">
+        <p className="font-ibm-plex text-foreground-muted line-clamp-3 text-[10px] leading-[15px] md:text-sm md:leading-[21px]">
           {activity.description}
         </p>
 
