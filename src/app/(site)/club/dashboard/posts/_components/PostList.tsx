@@ -90,11 +90,13 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
   const activities = data?.activities ?? [];
 
   return (
-    // Asymmetric padding (40px left / 100px right at md+) is applied here rather than in
+    // Asymmetric padding (40px left / 100px right at xl+) is applied here rather than in
     // `DashboardShell`, whose `<main>` already contributes the symmetric 40px both pages share —
     // this row only adds the extra 60px of right padding "My Posts" needs to land its list
-    // column at 792px, and the other dashboard pages that share the shell stay untouched.
-    <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-6 md:pr-[60px]">
+    // column at 792px, and the other dashboard pages that share the shell stay untouched. The
+    // rail only sits beside the list from `xl` (1280px) up — below that, the 300px card plus this
+    // padding doesn't leave room for a readable post column (crushed as low as ~205px at md).
+    <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:gap-6 xl:pr-[60px]">
       <div className="flex min-w-0 flex-1 flex-col gap-6 md:gap-9">
         <Greeting clubName={clubName} />
 
@@ -158,11 +160,13 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
         </div>
       </div>
 
-      {/* Figma's mobile frame has no support card at all — hidden below `md`, not reflowed to
-          the top. From `md` up it sticks under the navbar (mirrors `DashboardSidebar`'s own
-          `md:sticky md:top-16`) so it stays visible while the list scrolls; `top-20` (80px)
-          adds a 16px gap under the fixed 64px navbar instead of sitting flush against it. */}
-      <PostSupportCard className="hidden shrink-0 md:sticky md:top-20 md:block md:w-[300px]" />
+      {/* Figma's mobile frame has no support card at all — hidden below `xl`, not reflowed to
+          the top (there's no tablet frame either, and the 300px rail doesn't leave room for a
+          readable post column before `xl`; see the row's own comment above). From `xl` up it
+          sticks under the navbar (mirrors `DashboardSidebar`'s own `md:sticky md:top-16`) so it
+          stays visible while the list scrolls; `top-20` (80px) adds a 16px gap under the fixed
+          64px navbar instead of sitting flush against it. */}
+      <PostSupportCard className="hidden shrink-0 xl:sticky xl:top-20 xl:block xl:w-[300px]" />
 
       <PostDetailsDialog
         activity={selectedActivity}
