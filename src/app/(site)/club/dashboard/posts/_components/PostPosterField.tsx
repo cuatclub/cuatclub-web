@@ -5,46 +5,50 @@ import Image from "next/image";
 import { Trash2, Upload } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import type { PosterFieldValue } from "@/app/(site)/club/dashboard/posts/post-schema";
 
 const IMAGE_ACCEPT = ".png,.jpg,.jpeg,image/png,image/jpeg";
 
 type PostPosterFieldProps = {
-  value: File | null;
+  value: PosterFieldValue;
   errorMessage?: string;
-  disabled?: boolean;
   onChange: (file: File | null) => void;
 };
 
-function PosterPreview({ file }: { file: File }) {
-  const [previewUrl, setPreviewUrl] = useState<string>();
+/**
+ * Resolves a preview URL for either a newly picked `File` (via a revocable object URL) or an
+ * already-uploaded poster passed as a URL string. Always calls the same hooks regardless of
+ * which case `value` is, so the branch below can vary without breaking the rules of hooks.
+ */
+function usePosterPreviewUrl(value: File | string): string | undefined {
+  const isFile = value instanceof File;
+  const [objectUrl, setObjectUrl] = useState<string>();
 
   useEffect(() => {
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [file]);
+    if (!isFile) {
+      setObjectUrl(undefined);
+      return;
+    }
+    const url = URL.createObjectURL(value);
+    setObjectUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [value, isFile]);
+
+  return isFile ? objectUrl : value;
+}
+
+function PosterPreview({ value }: { value: File | string }) {
+  const previewUrl = usePosterPreviewUrl(value);
+  const alt = typeof value === "string" ? "ตัวอย่างโปสเตอร์" : `ตัวอย่างโปสเตอร์ ${value.name}`;
 
   if (!previewUrl) {
     return <div className="bg-surface size-full animate-pulse" aria-hidden="true" />;
   }
 
-  return (
-    <Image
-      src={previewUrl}
-      alt={`ตัวอย่างโปสเตอร์ ${file.name}`}
-      fill
-      unoptimized
-      className="object-cover"
-    />
-  );
+  return <Image src={previewUrl} alt={alt} fill unoptimized className="object-cover" />;
 }
 
-export function PostPosterField({
-  value,
-  errorMessage,
-  disabled = false,
-  onChange,
-}: PostPosterFieldProps) {
+export function PostPosterField({ value, errorMessage, onChange }: PostPosterFieldProps) {
   const inputId = useId();
   const helperId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -62,7 +66,6 @@ export function PostPosterField({
         id={inputId}
         type="file"
         accept={IMAGE_ACCEPT}
-        disabled={disabled}
         aria-invalid={!!errorMessage}
         aria-describedby={helperId}
         className="peer sr-only"
@@ -72,23 +75,20 @@ export function PostPosterField({
       <div
         className={cn(
           "bg-primary/5 border-primary peer-focus-visible:ring-primary relative flex aspect-[282/360] w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-xl border-2 border-dashed peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
-          errorMessage && "border-error",
-          disabled && "cursor-not-allowed opacity-60"
+          errorMessage && "border-error"
         )}
       >
         {value ? (
           <>
-            <PosterPreview file={value} />
-            {!disabled && (
-              <button
-                type="button"
-                aria-label="ลบรูปโปสเตอร์"
-                className="border-placeholder text-foreground-muted hover:border-primary hover:text-primary absolute top-3 right-3 flex size-9 cursor-pointer items-center justify-center rounded-lg border bg-white/90 transition-colors"
-                onClick={() => onChange(null)}
-              >
-                <Trash2 className="size-4" aria-hidden="true" />
-              </button>
-            )}
+            <PosterPreview value={value} />
+            <button
+              type="button"
+              aria-label="ลบรูปโปสเตอร์"
+              className="border-placeholder text-foreground-muted hover:border-primary hover:text-primary absolute top-3 right-3 flex size-9 cursor-pointer items-center justify-center rounded-lg border bg-white/90 transition-colors"
+              onClick={() => onChange(null)}
+            >
+              <Trash2 className="size-4" aria-hidden="true" />
+            </button>
           </>
         ) : (
           <>
@@ -100,10 +100,7 @@ export function PostPosterField({
             </div>
             <label
               htmlFor={inputId}
-              className={cn(
-                "bg-primary font-ibm-plex flex h-[39px] cursor-pointer items-center rounded-lg px-6 text-base font-semibold text-white",
-                disabled && "pointer-events-none cursor-not-allowed"
-              )}
+              className="bg-primary font-ibm-plex flex h-[39px] cursor-pointer items-center rounded-lg px-6 text-base font-semibold text-white"
             >
               อัพโหลด
             </label>

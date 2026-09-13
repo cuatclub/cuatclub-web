@@ -1,4 +1,5 @@
 import type { ClubSortOption } from "@/server/api/modules/clubs/dto";
+import type { QueryParamReader } from "@/lib/search-params";
 
 /**
  * The club list keeps its whole state in the URL, so a filtered view can be shared, bookmarked,
@@ -24,9 +25,6 @@ export type ClubListParams = {
   sort: ClubSortOption;
   page: number;
 };
-
-/** Anything that reads query params by name — `URLSearchParams` and Next's `ReadonlyURLSearchParams`. */
-type QueryParamReader = { get: (key: string) => string | null };
 
 /** Ids travel as a comma-separated list (`?cat=1,4`) to keep shared URLs short. */
 const parseIds = (raw: string | null): number[] => {
@@ -87,21 +85,4 @@ export function buildClubListQuery(params: ClubListParams): string {
 
   const query = searchParams.toString();
   return query ? `?${query}` : "";
-}
-
-/** Next hands a server component its query as a plain record; the parser wants a reader. */
-export function toQueryParamReader(
-  record: Record<string, string | string[] | undefined>
-): URLSearchParams {
-  const searchParams = new URLSearchParams();
-
-  for (const [key, value] of Object.entries(record)) {
-    if (Array.isArray(value)) {
-      value.forEach((item) => searchParams.append(key, item));
-    } else if (value !== undefined) {
-      searchParams.set(key, value);
-    }
-  }
-
-  return searchParams;
 }

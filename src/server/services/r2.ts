@@ -30,6 +30,25 @@ export function getPublicUrl(key: string): string {
   return `${base}/${key}`;
 }
 
+// Inverse of getPublicUrl — strips the public base URL back down to the R2 object
+// key, e.g. before passing a stored *Url column to deleteImages(). Returns the
+// input unchanged if it doesn't start with the configured base.
+export function toR2Key(url: string): string {
+  const base = env.R2_PUBLIC_BASE_URL.replace(/\/$/, "");
+  return url.startsWith(`${base}/`) ? url.slice(base.length + 1) : url;
+}
+
+/**
+ * Whether an object key sits inside the given prefix, e.g. one club's own upload
+ * folder. `*Url` columns are written from client input, so a caller can name any
+ * object it likes — check the key before deleting anything derived from one, or a
+ * post can be pointed at another club's image and made to delete it. `..` is
+ * rejected so a traversal segment can't walk back out of the prefix.
+ */
+export function isKeyWithinPrefix(key: string, prefix: string): boolean {
+  return key.startsWith(prefix) && !key.includes("..");
+}
+
 export async function getSignedUploadUrl(
   key: string,
   contentType: string,

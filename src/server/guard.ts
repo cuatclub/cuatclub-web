@@ -1,5 +1,6 @@
 import "server-only";
 import { headers } from "next/headers";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { TRPCError } from "@trpc/server";
 import { api } from "@/trpc/server";
@@ -97,6 +98,13 @@ export async function adminGuard(): Promise<AdminSessionUser> {
   return { name: session.user.name, email: session.user.email };
 }
 
+/**
+ * Memoized per request: a dashboard layout's guard and the page inside it both need the
+ * session, and a layout can't hand its result down to the page. cache() collapses those
+ * into one lookup per render pass.
+ */
+export const getSessionOnce = cache(async () => auth.api.getSession({ headers: await headers() }));
+
 export interface ClubDashboardSessionUser {
   name: string;
   email: string;
@@ -116,7 +124,7 @@ export interface ClubDashboardSessionUser {
  * club's name/email/avatar without a second session lookup.
  */
 export async function clubDashboardGuard(): Promise<ClubDashboardSessionUser> {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSessionOnce();
   if (!session) redirect("/login");
   if (session.user.role !== "CLUB") redirect("/");
 
