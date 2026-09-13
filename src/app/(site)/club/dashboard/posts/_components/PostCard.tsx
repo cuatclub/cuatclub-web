@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { Tag } from "@/components/ui";
+import { cn } from "@/lib/utils";
 import { toShortDisplay } from "@/lib/date";
 import { YEAR_LEVELS } from "@/app/(site)/club/dashboard/posts/post-schema";
 import type { ActivityTypeOption } from "@/app/(site)/club/dashboard/posts/_components/PostForm";
@@ -127,7 +128,12 @@ export function PostCard({
       tabIndex={0}
       onClick={onOpen}
       onKeyDown={handleKeyDown}
-      className="hover:border-primary-light focus-visible:ring-primary relative flex cursor-pointer gap-4 rounded-xl border border-white bg-white p-4 shadow-black transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:gap-5 md:p-6"
+      // `contain-inline-size` stops this card's content (specifically the `nowrap` tag list
+      // below) from contributing its min-content width to ancestors. Without it, a long
+      // untruncated tag label raises this card's intrinsic width, which propagates up the flex
+      // chain and widens the dashboard shell's `<main>` past the viewport, causing horizontal
+      // page scroll — even though the tag label itself is truncated by CSS.
+      className="hover:border-primary-light focus-visible:ring-primary relative flex cursor-pointer gap-4 rounded-xl border border-white bg-white p-4 shadow-black transition-colors contain-inline-size focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:gap-5 md:p-6"
     >
       {/* Figma's mobile variant has no delete control at all — `hidden` (not just visually
           hidden) below `md` takes it out of the layout and, since `display: none` elements are
@@ -154,18 +160,27 @@ export function PostCard({
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col gap-3 md:pr-12">
-        {/* Club name + tags share one row on mobile (name truncates first, tags stay pushed to
-            the right via `ml-auto`) but split into two on desktop: `md:w-full md:flex-none`
-            forces the name group to claim the whole row width, so the tag list — the row's
-            other flex child — has nowhere left to go but wrap onto its own line below, matching
-            the desktop-only "name row, then tag row" shape from one copy of the tag markup
-            instead of two. The name group takes `min-w-0` so it can shrink below its content
-            width. A fixed pixel floor here can only be correct at one viewport: 64px fit the
-            402px design frame but overflowed the row by 8px at 375px, because the floor plus the
-            tag list simply exceed the available width. What keeps the club identifiable is the
-            avatar's own `shrink-0` — the name truncates around it instead of the row spilling. */}
+        {/* Two different shapes, matching the two Figma variants. On mobile the tags sit at the
+            top right of the club-name row (where desktop puts the trash button, which the mobile
+            variant doesn't have) — `ml-auto` pushes them there. At `md`+ the design puts the tags
+            on their own row below the name, left-aligned: `md:w-full md:flex-none` makes the name
+            group claim the whole row so the tag list, the row's other flex child, wraps onto the
+            line below. That yields both shapes from one copy of the tag markup.
+
+            The name group takes `min-w-7` — exactly the 28px avatar width, not an arbitrary pixel
+            floor — so the row can never shrink the group below the avatar itself; the avatar's
+            own `shrink-0` would otherwise let it overflow the group and get painted over by the
+            tag list. The name text still truncates inside that floor.
+
+            The tag `ul` is `shrink-0` with `max-w-[calc(100%-36px)]` (36 = the 28px avatar plus
+            the 8px row gap): it keeps its natural width — short labels never truncate — and is
+            only capped once it would reach into the avatar's space, at which point the first
+            category label truncates instead. The name gives up space before the tags do.
+            `flex-nowrap` keeps a mobile `+N` chip beside its tag instead of wrapping away; at
+            `md`+, `flex-wrap` plus `w-full` and `max-w-full` let extra tags wrap onto more lines
+            inside the column instead of overflowing it. */}
         <div className="flex min-w-0 items-center gap-x-2 gap-y-3 overflow-hidden md:flex-wrap md:overflow-visible">
-          <div className="flex min-w-0 items-center gap-2 md:w-full md:flex-none">
+          <div className="flex min-w-7 items-center gap-2 md:w-full md:flex-none">
             <Image
               src={clubAvatarUrl}
               alt=""
@@ -181,28 +196,34 @@ export function PostCard({
           </div>
 
           {visibleCategories.length > 0 && (
-            <ul className="ml-auto flex shrink-0 flex-wrap items-center gap-1.5 md:ml-0">
+            <ul className="ml-auto flex max-w-[calc(100%-36px)] shrink-0 flex-nowrap items-center gap-1.5 md:ml-0 md:w-full md:max-w-full md:flex-wrap">
               {visibleCategories.map((category, index) => (
                 <li
                   key={category.id}
                   // The first `MAX_VISIBLE_CATEGORIES_MOBILE` tags are always shown; the rest,
-                  // up to `MAX_VISIBLE_CATEGORIES_DESKTOP`, only appear at `md`+.
-                  className={
+                  // up to `MAX_VISIBLE_CATEGORIES_DESKTOP`, only appear at `md`+. `min-w-0` lets
+                  // the label truncate instead of overflowing the row.
+                  className={cn(
+                    "min-w-0",
                     index >= MAX_VISIBLE_CATEGORIES_MOBILE ? "hidden md:list-item" : undefined
-                  }
+                  )}
                 >
-                  <Tag color={category.fontColor} bgColor={category.backgroundColor}>
-                    {category.label}
+                  <Tag
+                    color={category.fontColor}
+                    bgColor={category.backgroundColor}
+                    className="max-w-full"
+                  >
+                    <span className="truncate">{category.label}</span>
                   </Tag>
                 </li>
               ))}
               {hiddenCategoryCountMobile > 0 && (
-                <li className="md:hidden">
+                <li className="shrink-0 md:hidden">
                   <Tag>+{hiddenCategoryCountMobile}</Tag>
                 </li>
               )}
               {hiddenCategoryCountDesktop > 0 && (
-                <li className="hidden md:list-item">
+                <li className="hidden shrink-0 md:list-item">
                   <Tag>+{hiddenCategoryCountDesktop}</Tag>
                 </li>
               )}
