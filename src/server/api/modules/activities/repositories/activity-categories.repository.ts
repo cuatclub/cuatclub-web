@@ -1,4 +1,4 @@
-import { eq, inArray } from "drizzle-orm";
+import { asc, eq, inArray } from "drizzle-orm";
 import { db, type DbClient } from "@/server/db";
 import { activityCategories, categories } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
@@ -43,6 +43,7 @@ class ActivityCategoriesRepository implements IActivityCategoriesRepository {
       .from(activityCategories)
       .innerJoin(categories, eq(activityCategories.categoryId, categories.id))
       .where(inArray(activityCategories.activityId, activityIds))
+      .orderBy(asc(categories.id))
       .catch(wrapRepoError);
 
     const byActivityId = new Map<string, CategoryRow[]>();
