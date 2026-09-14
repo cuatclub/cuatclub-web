@@ -118,6 +118,17 @@ export function ActivityList() {
     return () => observer.disconnect();
   }, [hasMore, isLoadingMore]);
 
+  // A `?page=` past the last real page (e.g. a filter applied while further along than it now
+  // has room for) would otherwise render the empty state even though matches exist — clamp back
+  // to the last page instead. Genuinely zero results (`total === 0`) are left to the empty state.
+  useEffect(() => {
+    if (isPending || total === 0 || params.page <= totalPages) return;
+
+    router.replace(`${pathname}${buildActivityListQuery({ ...params, page: totalPages })}`, {
+      scroll: false,
+    });
+  }, [isPending, total, totalPages, params, pathname, router]);
+
   return (
     <div className="flex flex-col gap-8 md:gap-12">
       <div className="mx-auto w-full max-w-[680px] md:relative">

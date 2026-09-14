@@ -32,8 +32,23 @@ const AUDIENCE_LABEL: Record<Activity["audience"], string> = {
 const formatYearLevels = (yearLevels: number[]): string =>
   yearLevels.length === 0 ? "ทุกชั้นปี" : yearLevels.map((level) => `ปี ${level}`).join(", ");
 
-const formatShortDate = (date: Date): string =>
-  `${date.getDate()} ${THAI_MONTHS_SHORT[date.getMonth()]}`;
+/** The app's one domain timezone — the server (often UTC) and a visitor's browser otherwise
+ *  disagree on which day an `applicationStartAt`/`applicationEndAt` falls on, which would
+ *  desync the server-rendered HTML from the client's hydration render. */
+const ACTIVITY_TIME_ZONE = "Asia/Bangkok";
+
+const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: ACTIVITY_TIME_ZONE,
+  day: "numeric",
+  month: "numeric",
+});
+
+const formatShortDate = (date: Date): string => {
+  const parts = shortDateFormatter.formatToParts(date);
+  const day = parts.find((part) => part.type === "day")?.value ?? "";
+  const month = Number(parts.find((part) => part.type === "month")?.value ?? 1) - 1;
+  return `${day} ${THAI_MONTHS_SHORT[month]}`;
+};
 
 /**
  * A single activity in the activity list. Unlike `ClubCard` this is not a link — there is no
