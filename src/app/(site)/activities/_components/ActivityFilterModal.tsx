@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, type RefObject } from "react";
-import { X } from "lucide-react";
+import { useState, type ReactNode, type RefObject } from "react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
 
 import { ActivitySortSelect } from "@/app/(site)/activities/_components/ActivitySortSelect";
 import type { ActivityListParams } from "@/app/(site)/activities/_lib/activity-list-params";
@@ -9,6 +9,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { DialogClose, DialogContent, DialogRoot, DialogTitle } from "@/components/ui/Dialog";
+import { cn } from "@/lib/utils";
 import { api, type RouterOutputs } from "@/trpc/react";
 
 type Category = RouterOutputs["masterData"]["categories"]["getAll"][number];
@@ -138,8 +139,7 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
       </div>
 
       <div className="flex flex-1 flex-col overflow-y-auto px-5 md:px-6">
-        <section className="flex flex-col gap-3 pb-4">
-          <h3 className={sectionTitleClass}>หมวดหมู่</h3>
+        <FilterSection title="หมวดหมู่" isFirst>
           {categories.length === 0 ? (
             <p className="font-ibm-plex text-foreground-muted text-sm leading-[23px]">
               ยังไม่มีหมวดหมู่ให้เลือก
@@ -151,10 +151,9 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
               onToggle={(id) => toggle("categoryIds", id)}
             />
           )}
-        </section>
+        </FilterSection>
 
-        <section className="border-border flex flex-col gap-3 border-t py-5">
-          <h3 className={sectionTitleClass}>ประเภทกิจกรรม</h3>
+        <FilterSection title="ประเภทกิจกรรม">
           {isActivityTypesPending ? (
             <FilterOptionsSkeleton />
           ) : (
@@ -164,11 +163,9 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
               onToggle={(id) => toggle("activityTypeIds", id)}
             />
           )}
-        </section>
+        </FilterSection>
 
-        <section className="border-border flex flex-col gap-3 border-t py-5">
-          <h3 className={sectionTitleClass}>คุณสมบัติ</h3>
-
+        <FilterSection title="คุณสมบัติ">
           <div className="flex flex-col gap-3 pl-2">
             <div className="flex flex-col gap-2">
               <h4 className="font-ibm-plex text-foreground text-xs leading-[20px] font-semibold md:text-sm md:leading-[23px]">
@@ -217,10 +214,9 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
               </div>
             </div>
           </div>
-        </section>
+        </FilterSection>
 
-        <section className="border-border flex flex-col gap-3 border-t py-5">
-          <h3 className={sectionTitleClass}>คณะ</h3>
+        <FilterSection title="คณะ">
           {isFacultiesPending ? (
             <FilterOptionsSkeleton />
           ) : (
@@ -232,7 +228,7 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
               />
             </div>
           )}
-        </section>
+        </FilterSection>
 
         <section className="border-border border-t py-5 md:hidden">
           <ActivitySortSelect
@@ -265,6 +261,38 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
         </button>
       </div>
     </>
+  );
+}
+
+type FilterSectionProps = {
+  title: string;
+  /** Drops the divider/top padding a section otherwise gets from sitting below a sibling. */
+  isFirst?: boolean;
+  children: ReactNode;
+};
+
+/** One collapsible facet group — matches the design's chevron-per-section accordion, so a long
+ *  panel (faculty's list runs to dozens of rows) can be collapsed back down to just its title. */
+function FilterSection({ title, isFirst, children }: FilterSectionProps) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <section className={cn("flex flex-col gap-3 py-5", !isFirst && "border-border border-t")}>
+      <button
+        type="button"
+        onClick={() => setIsOpen((open) => !open)}
+        aria-expanded={isOpen}
+        className="focus-visible:ring-primary flex w-full cursor-pointer items-center justify-between rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+      >
+        <h3 className={sectionTitleClass}>{title}</h3>
+        {isOpen ? (
+          <ChevronUp aria-hidden="true" className="text-foreground-muted size-5 shrink-0" />
+        ) : (
+          <ChevronDown aria-hidden="true" className="text-foreground-muted size-5 shrink-0" />
+        )}
+      </button>
+      {isOpen && children}
+    </section>
   );
 }
 
