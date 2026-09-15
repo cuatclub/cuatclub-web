@@ -233,12 +233,12 @@ function ActivityCardSkeleton() {
   return (
     <div
       aria-hidden="true"
-      className="border-border flex flex-col gap-4 rounded-xl border bg-white p-4 md:h-[294px] md:flex-row md:gap-5"
+      className="border-border flex gap-4 rounded-xl border bg-white p-4 md:h-[294px] md:gap-5"
     >
-      <div className="bg-surface h-[180px] w-full shrink-0 animate-pulse rounded-xl md:h-full md:w-[205px]" />
+      <div className="bg-surface h-[160px] w-[125px] shrink-0 animate-pulse rounded-xl md:h-full md:w-[205px]" />
       <div className="flex flex-1 flex-col gap-3">
         <div className="flex items-center gap-2">
-          <div className="bg-surface size-8 shrink-0 animate-pulse rounded-full" />
+          <div className="bg-surface size-6 shrink-0 animate-pulse rounded-full md:size-8" />
           <div className="bg-surface h-4 w-20 animate-pulse rounded" />
         </div>
         <div className="bg-surface h-6 w-2/5 animate-pulse rounded" />

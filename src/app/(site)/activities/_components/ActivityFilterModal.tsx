@@ -213,21 +213,24 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
                 </label>
               </div>
             </div>
-          </div>
-        </FilterSection>
 
-        <FilterSection title="คณะ">
-          {isFacultiesPending ? (
-            <FilterOptionsSkeleton />
-          ) : (
-            <div className="max-h-64 overflow-y-auto pr-1">
-              <OptionCheckboxes
-                options={faculties ?? []}
-                selectedIds={draft.facultyIds}
-                onToggle={(id) => toggle("facultyIds", id)}
-              />
+            <div className="flex flex-col gap-2">
+              <h4 className="font-ibm-plex text-foreground text-xs leading-[20px] font-semibold md:text-sm md:leading-[23px]">
+                คณะ
+              </h4>
+              {isFacultiesPending ? (
+                <FilterOptionsSkeleton />
+              ) : (
+                <div className="max-h-64 overflow-y-auto pr-1">
+                  <OptionCheckboxes
+                    options={faculties ?? []}
+                    selectedIds={draft.facultyIds}
+                    onToggle={(id) => toggle("facultyIds", id)}
+                  />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </FilterSection>
 
         <section className="border-border border-t py-5 md:hidden">
