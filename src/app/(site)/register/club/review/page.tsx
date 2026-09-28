@@ -1,6 +1,6 @@
-import { ClubRegistrationReview } from "@/app/(site)/register/club/review/_components/ClubRegistrationReview";
 import { ReviewActions } from "@/app/(site)/register/club/review/_components/ReviewActions";
 import { StepIndicator } from "@/app/(site)/register/club/_components/StepIndicator";
+import { ClubProfileDetails } from "@/features/club-profile";
 import { clubRegistrationStepGuard } from "@/server/guard";
 import { api } from "@/trpc/server";
 
@@ -26,7 +26,11 @@ export default async function RegisterReviewPage() {
             <StepIndicator registrationStatus={registration.registrationStatus} />
           </div>
 
-          <ClubRegistrationReview club={club} actions={<ReviewActions clubId={club.id} />} />
+          <ClubProfileDetails
+            club={club}
+            title="ตรวจสอบข้อมูล"
+            actions={<ReviewActions clubId={club.id} />}
+          />
         </div>
       </main>
     </div>

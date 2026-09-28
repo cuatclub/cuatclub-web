@@ -2,13 +2,14 @@
 
 import { useRouter } from "next/navigation";
 
-import { ClubProfileForm } from "@/app/(site)/register/club/profile/_components/ClubProfileForm";
-import { uploadClubImage } from "@/app/(site)/register/club/profile/_lib/club-profile-upload";
 import {
+  buildClubProfileFormValues,
+  ClubProfileForm,
   getClubImageContentType,
+  uploadClubImage,
   type ClubImageContentType,
   type ClubProfileFormValues,
-} from "@/app/(site)/register/club/profile/profile-schema";
+} from "@/features/club-profile";
 import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 import type { AffiliationOutputDTO, CategoryOutputDTO } from "@/server/api/modules/master-data/dto";
 import { api } from "@/trpc/react";
@@ -19,24 +20,6 @@ type ClubProfileFormContainerProps = {
   categories: CategoryOutputDTO[];
   existingProfile: ClubDetailOutputDTO;
 };
-
-function buildInitialValues(existingProfile: ClubDetailOutputDTO): ClubProfileFormValues {
-  return {
-    logo: existingProfile.logoUrl ? { kind: "persisted", url: existingProfile.logoUrl } : null,
-    name: existingProfile.name,
-    affiliation: existingProfile.affiliation?.label ?? "",
-    categories: existingProfile.categories.map(({ label }) => label),
-    shortDescription: existingProfile.shortDescription ?? "",
-    longDescription: existingProfile.longDescription ?? "",
-    atmospherePhotos: existingProfile.imageUrls.map((url) => ({ kind: "persisted", url })),
-    contacts: {
-      instagram: existingProfile.contacts?.instagram ?? "",
-      facebook: existingProfile.contacts?.facebook ?? "",
-      tiktok: existingProfile.contacts?.tiktok ?? "",
-      lineOa: existingProfile.contacts?.line_oa ?? "",
-    },
-  };
-}
 
 function requireContentType(file: File): ClubImageContentType {
   const contentType = getClubImageContentType(file);
@@ -55,7 +38,7 @@ export function ClubProfileFormContainer({
   const getImagesUploadUrl = api.clubs.getImagesUploadUrl.useMutation();
   const saveProfile = api.clubs.saveClubProfileRegistration.useMutation();
 
-  const initialValues = buildInitialValues(existingProfile);
+  const initialValues = buildClubProfileFormValues(existingProfile);
 
   const handleSubmit = async (values: ClubProfileFormValues) => {
     const affiliation = affiliations.find(({ label }) => label === values.affiliation);
@@ -168,6 +151,9 @@ export function ClubProfileFormContainer({
       categories={categories}
       initialValues={initialValues}
       onSubmit={handleSubmit}
+      onCancel={() => router.back()}
+      cancelLabel="ย้อนกลับ"
+      submitLabel="ถัดไป"
     />
   );
 }

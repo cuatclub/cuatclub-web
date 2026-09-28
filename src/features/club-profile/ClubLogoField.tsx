@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import { ImageIcon, Trash2 } from "lucide-react";
 
-import type { ClubProfileImage } from "@/app/(site)/register/club/profile/profile-schema";
+import type { ClubProfileImage } from "@/features/club-profile/club-profile-schema";
 import { cn } from "@/lib/utils";
 
 const IMAGE_ACCEPT = ".png,.jpg,.jpeg,image/png,image/jpeg";

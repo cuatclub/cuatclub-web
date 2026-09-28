@@ -6,14 +6,15 @@ import { Card } from "@/components/ui/Card";
 import { Tag } from "@/components/ui/Tag";
 import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 
-type ClubRegistrationReviewProps = {
+type ClubProfileDetailsProps = {
   club: ClubDetailOutputDTO;
-  actions: ReactNode;
+  title: string;
+  actions?: ReactNode;
 };
 
 const displayValue = (value: string | null | undefined) => (value?.trim() ? value : "—");
 
-export function ClubRegistrationReview({ club, actions }: ClubRegistrationReviewProps) {
+export function ClubProfileDetails({ club, title, actions }: ClubProfileDetailsProps) {
   const contacts = [
     { label: "Instagram", value: club.contacts?.instagram },
     { label: "Facebook", value: club.contacts?.facebook },
@@ -26,7 +27,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
     <Card className="flex w-full max-w-[874px] flex-col gap-6 p-6 md:gap-8 md:py-8">
       <div className="flex flex-col gap-6 md:gap-8">
         <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
-          ตรวจสอบข้อมูล
+          {title}
         </h2>
 
         <section className="flex flex-col gap-5 md:grid md:grid-cols-[160px_minmax(0,1fr)] md:gap-10">
@@ -154,7 +155,7 @@ export function ClubRegistrationReview({ club, actions }: ClubRegistrationReview
         </section>
       </div>
 
-      <div>{actions}</div>
+      {actions !== undefined && actions !== null && <div>{actions}</div>}
     </Card>
   );
 }

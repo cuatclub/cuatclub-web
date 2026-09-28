@@ -7,7 +7,7 @@ import { ImagePlus, X } from "lucide-react";
 import {
   MAX_ATMOSPHERE_PHOTOS,
   type ClubProfileImage,
-} from "@/app/(site)/register/club/profile/profile-schema";
+} from "@/features/club-profile/club-profile-schema";
 import { Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
