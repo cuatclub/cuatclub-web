@@ -16,8 +16,8 @@ export const getClubImagesUploadUrl = async (
     throw notFound("Club not found for this user");
   }
 
-  if (!club.isAwaitingProfileInformation) {
-    throw validationError("Club profile information cannot be changed at this step.");
+  if (!club.canUploadProfileImages) {
+    throw validationError("Club profile images cannot be changed at this step.");
   }
 
   const presignedUrls = await Promise.all(
