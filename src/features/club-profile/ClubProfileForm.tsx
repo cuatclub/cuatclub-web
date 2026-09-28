@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -25,6 +25,7 @@ type ClubProfileFormProps = {
   onCancel: () => void;
   cancelLabel: string;
   submitLabel: string;
+  headerAccessory?: ReactNode;
 };
 
 const valueUpdateOptions = {
@@ -41,6 +42,7 @@ export function ClubProfileForm({
   onCancel,
   cancelLabel,
   submitLabel,
+  headerAccessory,
 }: ClubProfileFormProps) {
   const submitErrorRef = useRef<HTMLParagraphElement>(null);
   const {
@@ -133,9 +135,12 @@ export function ClubProfileForm({
           className="m-0 flex flex-col gap-6 border-0 p-0 md:gap-8"
         >
           <CardContent className="flex flex-col gap-4 px-0 md:gap-6">
-            <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
-              ข้อมูลทั่วไป
-            </h2>
+            <div className="flex items-start justify-between gap-4">
+              <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
+                ข้อมูลทั่วไป
+              </h2>
+              {headerAccessory}
+            </div>
 
             <ClubLogoField value={logo} errorMessage={errors.logo?.message} onChange={updateLogo} />
 

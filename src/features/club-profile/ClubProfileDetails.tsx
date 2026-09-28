@@ -9,12 +9,18 @@ import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 type ClubProfileDetailsProps = {
   club: ClubDetailOutputDTO;
   title: string;
+  headerAction?: ReactNode;
   actions?: ReactNode;
 };
 
 const displayValue = (value: string | null | undefined) => (value?.trim() ? value : "—");
 
-export function ClubProfileDetails({ club, title, actions }: ClubProfileDetailsProps) {
+export function ClubProfileDetails({
+  club,
+  title,
+  headerAction,
+  actions,
+}: ClubProfileDetailsProps) {
   const contacts = [
     { label: "Instagram", value: club.contacts?.instagram },
     { label: "Facebook", value: club.contacts?.facebook },
@@ -26,9 +32,12 @@ export function ClubProfileDetails({ club, title, actions }: ClubProfileDetailsP
   return (
     <Card className="flex w-full max-w-[874px] flex-col gap-6 p-6 md:gap-8 md:py-8">
       <div className="flex flex-col gap-6 md:gap-8">
-        <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
-          {title}
-        </h2>
+        <div className="flex items-start justify-between gap-4">
+          <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
+            {title}
+          </h2>
+          {headerAction}
+        </div>
 
         <section className="flex flex-col gap-5 md:grid md:grid-cols-[160px_minmax(0,1fr)] md:gap-10">
           {club.logoUrl ? (
@@ -48,7 +57,7 @@ export function ClubProfileDetails({ club, title, actions }: ClubProfileDetailsP
             </div>
           )}
 
-          <dl className="grid min-w-0 grid-rows-3 gap-3 md:h-40 md:gap-0 md:self-stretch">
+          <dl className="grid min-w-0 gap-3 md:h-40 md:grid-rows-3 md:gap-0 md:self-stretch">
             <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[112px_minmax(0,1fr)] md:gap-4">
               <dt className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold md:text-base md:leading-[26px]">
                 ชื่อชมรม
