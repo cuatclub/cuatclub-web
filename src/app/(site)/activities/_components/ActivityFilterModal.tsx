@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode, type RefObject } from "react";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 
 import { ActivitySortSelect } from "@/app/(site)/activities/_components/ActivitySortSelect";
 import type { ActivityListParams } from "@/app/(site)/activities/_lib/activity-list-params";
@@ -9,6 +9,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { DialogClose, DialogContent, DialogRoot, DialogTitle } from "@/components/ui/Dialog";
+import { RadioGroup } from "@/components/ui/RadioGroup";
 import { cn } from "@/lib/utils";
 import { api, type RouterOutputs } from "@/trpc/react";
 
@@ -112,12 +113,6 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
         : [...current[key], id],
     }));
 
-  const toggleAudience = (audience: Audience) =>
-    setDraft((current) => ({
-      ...current,
-      audience: current.audience === audience ? undefined : audience,
-    }));
-
   const toggleYearLevel = (level: number) =>
     setDraft((current) => ({
       ...current,
@@ -128,7 +123,7 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
 
   return (
     <>
-      <div className="flex items-center justify-between gap-4 px-5 pt-5 pb-4 md:px-6 md:pt-6">
+      <div className="flex items-center justify-between gap-4 px-5 pt-5 pb-4 md:px-6 md:pt-6 md:pb-0">
         <DialogTitle className="text-primary">ตัวกรอง</DialogTitle>
         <DialogClose
           aria-label="ปิด"
@@ -138,7 +133,7 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
         </DialogClose>
       </div>
 
-      <div className="flex flex-1 flex-col overflow-y-auto px-5 md:px-6">
+      <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-5 md:px-6 md:py-4">
         <FilterSection title="หมวดหมู่" isFirst>
           {categories.length === 0 ? (
             <p className="font-ibm-plex text-foreground-muted text-sm leading-[23px]">
@@ -167,24 +162,15 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
 
         <FilterSection title="คุณสมบัติ">
           <div className="flex flex-col gap-3 pl-2">
-            <div className="flex flex-col gap-2">
-              <h4 className="font-ibm-plex text-foreground text-xs leading-[20px] font-semibold md:text-sm md:leading-[23px]">
-                ผู้มีสิทธิ์เข้าร่วม
-              </h4>
-              <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-y-3">
-                {AUDIENCE_OPTIONS.map((option) => (
-                  <label key={option.id} className="flex cursor-pointer items-center gap-2">
-                    <Checkbox
-                      checked={draft.audience === option.id}
-                      onCheckedChange={() => toggleAudience(option.id)}
-                    />
-                    <span className="font-ibm-plex text-foreground text-xs leading-[20px] md:text-sm md:leading-[23px]">
-                      {option.label}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
+            <RadioGroup
+              label="ผู้มีสิทธิ์เข้าร่วม"
+              options={AUDIENCE_OPTIONS.map((option) => ({
+                value: option.id,
+                label: option.label,
+              }))}
+              value={draft.audience}
+              onValueChange={(audience) => setDraft((current) => ({ ...current, audience }))}
+            />
 
             <div className="flex flex-col gap-2">
               <h4 className="font-ibm-plex text-foreground text-xs leading-[20px] font-semibold md:text-sm md:leading-[23px]">
@@ -202,15 +188,6 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
                     </span>
                   </label>
                 ))}
-                <label className="flex cursor-pointer items-center gap-2">
-                  <Checkbox
-                    checked={draft.yearLevels.length === 0}
-                    onCheckedChange={() => setDraft((current) => ({ ...current, yearLevels: [] }))}
-                  />
-                  <span className="font-ibm-plex text-foreground text-xs leading-[20px] md:text-sm md:leading-[23px]">
-                    ทุกชั้นปี
-                  </span>
-                </label>
               </div>
             </div>
 
@@ -280,7 +257,7 @@ function FilterSection({ title, isFirst, children }: FilterSectionProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <section className={cn("flex flex-col gap-3 py-5", !isFirst && "border-border border-t")}>
+    <section className={cn("flex flex-col gap-3", !isFirst && "border-border border-t pt-4")}>
       <button
         type="button"
         onClick={() => setIsOpen((open) => !open)}
@@ -288,13 +265,22 @@ function FilterSection({ title, isFirst, children }: FilterSectionProps) {
         className="focus-visible:ring-primary flex w-full cursor-pointer items-center justify-between rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         <h3 className={sectionTitleClass}>{title}</h3>
-        {isOpen ? (
-          <ChevronUp aria-hidden="true" className="text-foreground-muted size-5 shrink-0" />
-        ) : (
-          <ChevronDown aria-hidden="true" className="text-foreground-muted size-5 shrink-0" />
-        )}
+        <ChevronDown
+          aria-hidden="true"
+          className={cn(
+            "text-foreground-muted size-5 shrink-0 transition-transform duration-200 motion-reduce:transition-none",
+            isOpen && "rotate-180"
+          )}
+        />
       </button>
-      {isOpen && children}
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-200 ease-in-out motion-reduce:transition-none",
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        )}
+      >
+        <div className="min-h-0 overflow-hidden">{children}</div>
+      </div>
     </section>
   );
 }
