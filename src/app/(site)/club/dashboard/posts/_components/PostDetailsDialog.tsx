@@ -1,5 +1,6 @@
 "use client";
 
+import type { RefObject } from "react";
 import { X } from "lucide-react";
 
 import { Button, DialogClose, DialogContent, DialogRoot, DialogTitle } from "@/components/ui";
@@ -47,6 +48,8 @@ type PostDetailsDialogProps = {
   activityTypes: readonly ActivityTypeOption[];
   categories: readonly CategoryOption[];
   faculties: readonly FacultyOption[];
+  /** The element to focus when the dialog closes — the control that opened it. */
+  returnFocusRef: RefObject<HTMLElement | null>;
   onOpenChange: (open: boolean) => void;
   /** Called after a successful save — the caller re-queries the list and closes the dialog. */
   onUpdated: () => void;
@@ -58,6 +61,7 @@ export function PostDetailsDialog({
   activityTypes,
   categories,
   faculties,
+  returnFocusRef,
   onOpenChange,
   onUpdated,
   onDeleteRequest,
@@ -127,6 +131,12 @@ export function PostDetailsDialog({
       <DialogContent
         placement="modal"
         aria-describedby={undefined}
+        // Controlled dialog with no DialogTrigger, so Radix can't restore focus itself. The opener is
+        // passed in because Safari doesn't focus a button on click (activeElement would be <body>).
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          returnFocusRef.current?.focus();
+        }}
         className="relative w-full md:w-[900px] md:max-w-[900px]"
       >
         {/* Radix needs a title for the accessible name; the visible heading is

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { keepPreviousData } from "@tanstack/react-query";
@@ -48,6 +48,8 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
 
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Activity | null>(null);
+  // The edit button that opened the details dialog, so closing it can hand focus back there.
+  const editTriggerRef = useRef<HTMLButtonElement | null>(null);
 
   const params = parsePostListParams(searchParams);
 
@@ -135,7 +137,10 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
                   totalFacultyCount={faculties?.length ?? 0}
                   clubName={clubName}
                   clubAvatarUrl={clubAvatarUrl}
-                  onEditRequest={() => setSelectedActivity(activity)}
+                  onEditRequest={(trigger) => {
+                    editTriggerRef.current = trigger;
+                    setSelectedActivity(activity);
+                  }}
                   onDeleteRequest={() => setDeleteTarget(activity)}
                 />
               ))}
@@ -157,6 +162,7 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
         activityTypes={activityTypes ?? []}
         categories={categories ?? []}
         faculties={faculties ?? []}
+        returnFocusRef={editTriggerRef}
         onOpenChange={(open) => !open && setSelectedActivity(null)}
         onUpdated={() => {
           void refreshList();

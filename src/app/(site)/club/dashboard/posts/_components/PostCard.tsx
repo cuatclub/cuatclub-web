@@ -72,8 +72,8 @@ type PostCardProps = {
   totalFacultyCount: number;
   clubName: string;
   clubAvatarUrl: string;
-  /** Opens the edit dialog. Invoked by the edit button. */
-  onEditRequest: () => void;
+  /** Called with the edit button, so focus can return to it when the dialog closes. */
+  onEditRequest: (trigger: HTMLButtonElement) => void;
   onDeleteRequest: () => void;
 };
 
@@ -126,7 +126,7 @@ export function PostCard({
           <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
-              onClick={onEditRequest}
+              onClick={(event) => onEditRequest(event.currentTarget)}
               aria-label="แก้ไขโพสต์"
               className="border-primary text-primary hover:bg-primary/10 focus-visible:ring-primary flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
