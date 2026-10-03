@@ -18,7 +18,7 @@ export const getClubLogoUploadUrl = async (userId: string, input: GetClubLogoUpl
   }
 
   const key = `clubs/${club.id}/logo-${randomUUID()}.${getExtension(input.contentType)}`;
-  const url = await getSignedUploadUrl(key, input.contentType);
+  const url = await getSignedUploadUrl(key, input.contentType, undefined, input.contentLength);
 
   return GetClubLogoUploadUrlOutputDTOSchema.parse({ key, url, publicUrl: getPublicUrl(key) });
 };

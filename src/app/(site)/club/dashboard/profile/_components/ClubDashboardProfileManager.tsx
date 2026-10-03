@@ -73,11 +73,17 @@ export function ClubDashboardProfileManager({
 
     const [logoUpload, galleryUploads] = await Promise.all([
       newLogo && logoContentType
-        ? getLogoUploadUrl.mutateAsync({ contentType: logoContentType })
+        ? getLogoUploadUrl.mutateAsync({
+            contentType: logoContentType,
+            contentLength: newLogo.size,
+          })
         : Promise.resolve(null),
       galleryContentTypes.length > 0
         ? getImagesUploadUrl.mutateAsync({
-            files: galleryContentTypes.map((contentType) => ({ contentType })),
+            files: newGalleryFiles.map((file) => ({
+              contentType: requireContentType(file),
+              contentLength: file.size,
+            })),
           })
         : Promise.resolve(null),
     ]);
