@@ -124,7 +124,7 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
   return (
     <>
       <div className="flex items-center justify-between gap-4 px-5 pt-5 pb-4 md:px-6 md:pt-6 md:pb-0">
-        <DialogTitle className="text-primary">ตัวกรอง</DialogTitle>
+        <DialogTitle className="text-primary font-bold">ตัวกรอง</DialogTitle>
         <DialogClose
           aria-label="ปิด"
           className="text-placeholder hover:text-foreground focus-visible:ring-primary shrink-0 cursor-pointer rounded-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
@@ -134,7 +134,7 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
       </div>
 
       <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-5 md:px-6 md:py-4">
-        <FilterSection title="หมวดหมู่" isFirst>
+        <FilterSection title="หมวดหมู่">
           {categories.length === 0 ? (
             <p className="font-ibm-plex text-foreground-muted text-sm leading-[23px]">
               ยังไม่มีหมวดหมู่ให้เลือก
@@ -148,6 +148,8 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
           )}
         </FilterSection>
 
+        <hr className="border-border" />
+
         <FilterSection title="ประเภทกิจกรรม">
           {isActivityTypesPending ? (
             <FilterOptionsSkeleton />
@@ -160,10 +162,13 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
           )}
         </FilterSection>
 
+        <hr className="border-border" />
+
         <FilterSection title="คุณสมบัติ">
           <div className="flex flex-col gap-3 pl-2">
             <RadioGroup
               label="ผู้มีสิทธิ์เข้าร่วม"
+              size="sm"
               options={AUDIENCE_OPTIONS.map((option) => ({
                 value: option.id,
                 label: option.label,
@@ -176,7 +181,7 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
               <h4 className="font-ibm-plex text-foreground text-xs leading-[20px] font-semibold md:text-sm md:leading-[23px]">
                 ชั้นปี
               </h4>
-              <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-y-3">
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
                 {YEAR_LEVEL_OPTIONS.map((level) => (
                   <label key={level} className="flex cursor-pointer items-center gap-2">
                     <Checkbox
@@ -210,7 +215,9 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
           </div>
         </FilterSection>
 
-        <section className="border-border border-t py-5 md:hidden">
+        <hr className="border-border md:hidden" />
+
+        <section className="py-5 md:hidden">
           <ActivitySortSelect
             value={draft.sort}
             onValueChange={(sort) => setDraft((current) => ({ ...current, sort }))}
@@ -246,18 +253,16 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
 
 type FilterSectionProps = {
   title: string;
-  /** Drops the divider/top padding a section otherwise gets from sitting below a sibling. */
-  isFirst?: boolean;
   children: ReactNode;
 };
 
 /** One collapsible facet group — matches the design's chevron-per-section accordion, so a long
  *  panel (faculty's list runs to dozens of rows) can be collapsed back down to just its title. */
-function FilterSection({ title, isFirst, children }: FilterSectionProps) {
+function FilterSection({ title, children }: FilterSectionProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <section className={cn("flex flex-col gap-3", !isFirst && "border-border border-t pt-4")}>
+    <section>
       <button
         type="button"
         onClick={() => setIsOpen((open) => !open)}
@@ -279,7 +284,9 @@ function FilterSection({ title, isFirst, children }: FilterSectionProps) {
           isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
         )}
       >
-        <div className="min-h-0 overflow-hidden">{children}</div>
+        <div className="min-h-0 overflow-hidden">
+          <div className="pt-4">{children}</div>
+        </div>
       </div>
     </section>
   );
@@ -295,7 +302,7 @@ type OptionCheckboxesProps = {
  *  where they land rather than into columns sized for the longest faculty name. */
 function OptionCheckboxes({ options, selectedIds, onToggle }: OptionCheckboxesProps) {
   return (
-    <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-y-3">
+    <div className="flex flex-wrap gap-x-4 gap-y-2">
       {options.map((option) => (
         <label key={option.id} className="flex cursor-pointer items-center gap-2">
           <Checkbox
@@ -313,7 +320,7 @@ function OptionCheckboxes({ options, selectedIds, onToggle }: OptionCheckboxesPr
 
 function FilterOptionsSkeleton() {
   return (
-    <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-y-3">
+    <div className="flex flex-wrap gap-x-4 gap-y-2">
       {Array.from({ length: 8 }, (_, index) => (
         <div key={index} className="bg-surface h-5 w-24 animate-pulse rounded" />
       ))}

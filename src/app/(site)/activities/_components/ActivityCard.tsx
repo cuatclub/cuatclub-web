@@ -36,7 +36,7 @@ const DESKTOP_TAG_CLASS =
 
 /** Mobile rows are a fixed 20px tall with no row gap; desktop spaces them by 6px instead. */
 const FOOTER_ITEM_CLASS =
-  "font-ibm-plex text-foreground-muted flex min-h-5 items-center gap-1 text-[8px] font-medium md:min-h-0 md:gap-2 md:text-xs md:font-bold";
+  "font-ibm-plex text-foreground-muted flex min-h-5 items-center gap-1 text-[8px] font-medium md:min-h-0 md:gap-2 md:text-xs";
 
 const TOTAL_YEAR_LEVELS = 4;
 
@@ -205,7 +205,7 @@ export function ActivityCard({
             <h3 className="font-ibm-plex text-foreground line-clamp-1 text-xs leading-[normal] font-semibold md:text-lg">
               {title}
             </h3>
-            <p className="font-ibm-plex text-foreground-muted line-clamp-4 text-[10px] leading-[1.5] md:line-clamp-3 md:text-sm">
+            <p className="font-ibm-plex text-foreground-muted line-clamp-4 text-[10px] leading-[1.5] md:text-sm">
               {description}
             </p>
           </div>
