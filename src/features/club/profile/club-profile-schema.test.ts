@@ -15,7 +15,7 @@ import {
   MAX_IMAGE_FILE_SIZE,
   SHORT_DESCRIPTION_MAX_MESSAGE,
   SHORT_DESCRIPTION_REQUIRED_MESSAGE,
-} from "@/app/(site)/register/club/profile/profile-schema";
+} from "@/features/club/profile/club-profile-schema";
 
 const makeFileMetadata = (name: string, type: string, size = 1) => ({ name, type, size });
 
