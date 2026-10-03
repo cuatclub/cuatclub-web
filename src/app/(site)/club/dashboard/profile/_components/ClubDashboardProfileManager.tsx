@@ -1,9 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { SquarePen } from "lucide-react";
 
+import { Button } from "@/components/ui";
 import {
   buildClubProfileFormValues,
+  ClubProfileDetails,
   ClubProfileForm,
   getClubImageContentType,
   uploadClubImage,
@@ -14,11 +18,10 @@ import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 import type { AffiliationOutputDTO, CategoryOutputDTO } from "@/server/api/modules/master-data/dto";
 import { api } from "@/trpc/react";
 
-type ClubProfileFormContainerProps = {
-  clubId: string;
+type ClubDashboardProfileManagerProps = {
+  initialProfile: ClubDetailOutputDTO;
   affiliations: AffiliationOutputDTO[];
   categories: CategoryOutputDTO[];
-  existingProfile: ClubDetailOutputDTO;
 };
 
 function requireContentType(file: File): ClubImageContentType {
@@ -27,18 +30,26 @@ function requireContentType(file: File): ClubImageContentType {
   return contentType;
 }
 
-export function ClubProfileFormContainer({
-  clubId,
+function ActiveStatus() {
+  return (
+    <div className="font-ibm-plex text-foreground-muted flex shrink-0 items-center gap-2 pt-1 text-xs leading-5 md:text-sm md:leading-[23px]">
+      <span aria-hidden="true" className="bg-placeholder size-2 rounded-full" />
+      <span>กำลังแก้ไขอยู่</span>
+    </div>
+  );
+}
+
+export function ClubDashboardProfileManager({
+  initialProfile,
   affiliations,
   categories,
-  existingProfile,
-}: ClubProfileFormContainerProps) {
+}: ClubDashboardProfileManagerProps) {
   const router = useRouter();
+  const [profile, setProfile] = useState(initialProfile);
+  const [isEditing, setIsEditing] = useState(false);
   const getLogoUploadUrl = api.clubs.getLogoUploadUrl.useMutation();
   const getImagesUploadUrl = api.clubs.getImagesUploadUrl.useMutation();
-  const saveProfile = api.clubs.saveClubProfileRegistration.useMutation();
-
-  const initialValues = buildClubProfileFormValues(existingProfile);
+  const updateProfile = api.clubs.updateProfile.useMutation();
 
   const handleSubmit = async (values: ClubProfileFormValues) => {
     const affiliation = affiliations.find(({ label }) => label === values.affiliation);
@@ -88,12 +99,7 @@ export function ClubProfileFormContainer({
 
     const uploads: Promise<void>[] = [];
     if (newLogo && logoContentType && logoUpload) {
-      uploads.push(
-        uploadClubImage(newLogo, {
-          url: logoUpload.url,
-          contentType: logoContentType,
-        })
-      );
+      uploads.push(uploadClubImage(newLogo, { url: logoUpload.url, contentType: logoContentType }));
     }
 
     for (const [index, file] of newGalleryFiles.entries()) {
@@ -131,8 +137,7 @@ export function ClubProfileFormContainer({
       ? null
       : contacts;
 
-    const result = await saveProfile.mutateAsync({
-      id: clubId,
+    const updatedProfile = await updateProfile.mutateAsync({
       name: values.name,
       image: logoUrl,
       affiliationId: affiliation.id,
@@ -143,23 +148,42 @@ export function ClubProfileFormContainer({
       contacts: normalizedContacts,
     });
 
-    if (result.registrationStatus !== "INFO_SUBMITTED") {
-      throw new Error("Club profile status did not update");
-    }
-
-    router.push("/register/club/review");
+    setProfile(updatedProfile);
+    setIsEditing(false);
     router.refresh();
   };
 
+  if (isEditing) {
+    return (
+      <ClubProfileForm
+        affiliations={affiliations.map(({ label }) => label)}
+        categories={categories}
+        initialValues={buildClubProfileFormValues(profile)}
+        onSubmit={handleSubmit}
+        onCancel={() => setIsEditing(false)}
+        cancelLabel="ยกเลิก"
+        submitLabel="ยืนยัน"
+        headerAccessory={<ActiveStatus />}
+      />
+    );
+  }
+
   return (
-    <ClubProfileForm
-      affiliations={affiliations.map(({ label }) => label)}
-      categories={categories}
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      onCancel={() => router.back()}
-      cancelLabel="ย้อนกลับ"
-      submitLabel="ถัดไป"
+    <ClubProfileDetails
+      club={profile}
+      title="ข้อมูลทั่วไป"
+      headerAction={
+        <Button
+          type="button"
+          variant="outline"
+          aria-label="แก้ไขโปรไฟล์ชมรม"
+          className="h-9 shrink-0 px-4 text-sm md:text-sm"
+          onClick={() => setIsEditing(true)}
+        >
+          <SquarePen aria-hidden="true" className="size-4" />
+          แก้ไข
+        </Button>
+      }
     />
   );
 }

@@ -28,6 +28,10 @@ export class Club {
     return this.isAwaitingProfileInformation || this.isAwaitingRegistrationReview;
   }
 
+  get canUploadProfileImages() {
+    return this.isAwaitingProfileInformation || this.isPubliclyVisible;
+  }
+
   // Getter function
 
   get id() {

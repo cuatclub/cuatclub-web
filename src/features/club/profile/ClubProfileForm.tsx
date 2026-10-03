@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button, Card, CardContent, Input, Select, TagSelection, Textarea } from "@/components/ui";
-import { ClubGalleryField } from "@/app/(site)/register/club/profile/_components/ClubGalleryField";
-import { ClubLogoField } from "@/app/(site)/register/club/profile/_components/ClubLogoField";
+import { ClubGalleryField } from "@/features/club/profile/ClubGalleryField";
+import { ClubLogoField } from "@/features/club/profile/ClubLogoField";
 import {
   ATMOSPHERE_PHOTOS_MAX_MESSAGE,
   clubProfileSchema,
@@ -15,7 +14,7 @@ import {
   MAX_ATMOSPHERE_PHOTOS,
   type ClubProfileImage,
   type ClubProfileFormValues,
-} from "@/app/(site)/register/club/profile/profile-schema";
+} from "@/features/club/profile/club-profile-schema";
 import type { CategoryOutputDTO } from "@/server/api/modules/master-data/dto";
 
 type ClubProfileFormProps = {
@@ -23,6 +22,10 @@ type ClubProfileFormProps = {
   categories: readonly CategoryOutputDTO[];
   initialValues: ClubProfileFormValues;
   onSubmit: (values: ClubProfileFormValues) => Promise<void>;
+  onCancel: () => void;
+  cancelLabel: string;
+  submitLabel: string;
+  headerAccessory?: ReactNode;
 };
 
 const valueUpdateOptions = {
@@ -36,8 +39,11 @@ export function ClubProfileForm({
   categories,
   initialValues,
   onSubmit,
+  onCancel,
+  cancelLabel,
+  submitLabel,
+  headerAccessory,
 }: ClubProfileFormProps) {
-  const router = useRouter();
   const submitErrorRef = useRef<HTMLParagraphElement>(null);
   const {
     control,
@@ -129,9 +135,12 @@ export function ClubProfileForm({
           className="m-0 flex flex-col gap-6 border-0 p-0 md:gap-8"
         >
           <CardContent className="flex flex-col gap-4 px-0 md:gap-6">
-            <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
-              ข้อมูลทั่วไป
-            </h2>
+            <div className="flex items-start justify-between gap-4">
+              <h2 className="font-ibm-plex text-primary text-lg leading-[30px] font-bold md:text-2xl md:leading-[33px]">
+                ข้อมูลทั่วไป
+              </h2>
+              {headerAccessory}
+            </div>
 
             <ClubLogoField value={logo} errorMessage={errors.logo?.message} onChange={updateLogo} />
 
@@ -264,13 +273,8 @@ export function ClubProfileForm({
             </div>
           </CardContent>
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full sm:w-1/4"
-              onClick={() => router.back()}
-            >
-              ย้อนกลับ
+            <Button type="button" variant="outline" className="w-full sm:w-1/4" onClick={onCancel}>
+              {cancelLabel}
             </Button>
             <Button
               type="submit"
@@ -278,7 +282,7 @@ export function ClubProfileForm({
               disabled={isSubmitting}
               isLoading={isSubmitting}
             >
-              ถัดไป
+              {submitLabel}
             </Button>
           </div>
           {errors.root?.submit?.message && (

@@ -16,14 +16,14 @@ export const getClubImagesUploadUrl = async (
     throw notFound("Club not found for this user");
   }
 
-  if (!club.isAwaitingProfileInformation) {
-    throw validationError("Club profile information cannot be changed at this step.");
+  if (!club.canUploadProfileImages) {
+    throw validationError("Club profile images cannot be changed at this step.");
   }
 
   const presignedUrls = await Promise.all(
     input.files.map(async (file, index) => {
       const key = `clubs/${club.id}/${randomUUID()}${index}.${getExtension(file.contentType)}`;
-      const url = await getSignedUploadUrl(key, file.contentType);
+      const url = await getSignedUploadUrl(key, file.contentType, undefined, file.contentLength);
       return { key, url, publicUrl: getPublicUrl(key) };
     })
   );

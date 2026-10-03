@@ -73,7 +73,7 @@ export function DashboardSidebar({ name, email, image }: DashboardSidebarProps) 
                   itemClass,
                   isActive
                     ? "bg-primary text-white"
-                    : "text-foreground hover:bg-primary-lighter hover:text-primary"
+                    : "text-foreground-muted hover:bg-primary-lighter hover:text-primary"
                 )}
               >
                 <Icon aria-hidden="true" className="size-5 shrink-0" />

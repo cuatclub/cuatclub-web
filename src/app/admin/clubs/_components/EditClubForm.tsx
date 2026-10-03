@@ -5,17 +5,18 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button, Input, Select, TagSelection, Textarea } from "@/components/ui";
-import { ClubGalleryField } from "@/app/(site)/register/club/profile/_components/ClubGalleryField";
-import { ClubLogoField } from "@/app/(site)/register/club/profile/_components/ClubLogoField";
-import { uploadClubImage } from "@/app/(site)/register/club/profile/_lib/club-profile-upload";
 import {
+  buildClubProfileFormValues,
+  ClubGalleryField,
+  ClubLogoField,
   clubProfileSchema,
   getClubImageContentType,
   getImageFileValidationMessage,
+  uploadClubImage,
   type ClubImageContentType,
   type ClubProfileImage,
   type ClubProfileFormValues,
-} from "@/app/(site)/register/club/profile/profile-schema";
+} from "@/features/club/profile";
 import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 import type { AffiliationOutputDTO, CategoryOutputDTO } from "@/server/api/modules/master-data/dto";
 import { api } from "@/trpc/react";
@@ -28,24 +29,6 @@ type EditClubFormProps = {
   onSaved: () => void;
   onCancel: () => void;
 };
-
-function buildInitialValues(existingProfile: ClubDetailOutputDTO): ClubProfileFormValues {
-  return {
-    logo: existingProfile.logoUrl ? { kind: "persisted", url: existingProfile.logoUrl } : null,
-    name: existingProfile.name,
-    affiliation: existingProfile.affiliation?.label ?? "",
-    categories: existingProfile.categories.map(({ label }) => label),
-    shortDescription: existingProfile.shortDescription ?? "",
-    longDescription: existingProfile.longDescription ?? "",
-    atmospherePhotos: existingProfile.imageUrls.map((url) => ({ kind: "persisted", url })),
-    contacts: {
-      instagram: existingProfile.contacts?.instagram ?? "",
-      facebook: existingProfile.contacts?.facebook ?? "",
-      tiktok: existingProfile.contacts?.tiktok ?? "",
-      lineOa: existingProfile.contacts?.line_oa ?? "",
-    },
-  };
-}
 
 function requireContentType(file: File): ClubImageContentType {
   const contentType = getClubImageContentType(file);
@@ -83,7 +66,7 @@ export function EditClubForm({
     formState: { errors, isSubmitting, isValid },
   } = useForm<ClubProfileFormValues>({
     resolver: zodResolver(clubProfileSchema),
-    defaultValues: buildInitialValues(existingProfile),
+    defaultValues: buildClubProfileFormValues(existingProfile),
     mode: "onTouched",
     reValidateMode: "onChange",
   });
