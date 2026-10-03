@@ -32,7 +32,7 @@ const AUDIENCE_LABEL: Record<Activity["audience"], string> = {
 /** Figma sizes the tag by breakpoint and drops the border `Tag` adds around its fill. */
 const MOBILE_TAG_CLASS = "border-0 px-1 py-0.5 text-[10px] leading-[normal] font-medium";
 const DESKTOP_TAG_CLASS =
-  "border-0 px-3 py-1 text-xs leading-[normal] font-bold md:text-xs md:leading-[normal]";
+  "border-0 px-3 py-1 text-xs leading-[normal] font-medium md:text-xs md:leading-[normal]";
 
 /** Mobile rows are a fixed 20px tall with no row gap; desktop spaces them by 6px instead. */
 const FOOTER_ITEM_CLASS =
