@@ -1,6 +1,6 @@
 import { ReviewActions } from "@/app/(site)/register/club/review/_components/ReviewActions";
 import { StepIndicator } from "@/app/(site)/register/club/_components/StepIndicator";
-import { ClubProfileDetails } from "@/features/club-profile";
+import { ClubProfileDetails } from "@/features/club/profile";
 import { clubRegistrationStepGuard } from "@/server/guard";
 import { api } from "@/trpc/server";
 

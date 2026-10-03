@@ -1,4 +1,4 @@
-import type { ClubProfileFormValues } from "@/features/club-profile/club-profile-schema";
+import type { ClubProfileFormValues } from "@/features/club/profile/club-profile-schema";
 import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 
 export function buildClubProfileFormValues(profile: ClubDetailOutputDTO): ClubProfileFormValues {

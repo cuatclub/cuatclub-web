@@ -1,4 +1,4 @@
-import type { ClubImageContentType } from "@/features/club-profile/club-profile-schema";
+import type { ClubImageContentType } from "@/features/club/profile/club-profile-schema";
 
 type ClubImageUploadTarget = {
   url: string;

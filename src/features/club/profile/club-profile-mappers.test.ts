@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildClubProfileFormValues } from "@/features/club-profile/club-profile-mappers";
+import { buildClubProfileFormValues } from "@/features/club/profile/club-profile-mappers";
 import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 
 const completeProfile: ClubDetailOutputDTO = {

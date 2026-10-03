@@ -5,8 +5,8 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button, Card, CardContent, Input, Select, TagSelection, Textarea } from "@/components/ui";
-import { ClubGalleryField } from "@/features/club-profile/ClubGalleryField";
-import { ClubLogoField } from "@/features/club-profile/ClubLogoField";
+import { ClubGalleryField } from "@/features/club/profile/ClubGalleryField";
+import { ClubLogoField } from "@/features/club/profile/ClubLogoField";
 import {
   ATMOSPHERE_PHOTOS_MAX_MESSAGE,
   clubProfileSchema,
@@ -14,7 +14,7 @@ import {
   MAX_ATMOSPHERE_PHOTOS,
   type ClubProfileImage,
   type ClubProfileFormValues,
-} from "@/features/club-profile/club-profile-schema";
+} from "@/features/club/profile/club-profile-schema";
 import type { CategoryOutputDTO } from "@/server/api/modules/master-data/dto";
 
 type ClubProfileFormProps = {

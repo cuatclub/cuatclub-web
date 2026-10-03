@@ -13,7 +13,7 @@ import {
   uploadClubImage,
   type ClubImageContentType,
   type ClubProfileFormValues,
-} from "@/features/club-profile";
+} from "@/features/club/profile";
 import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 import type { AffiliationOutputDTO, CategoryOutputDTO } from "@/server/api/modules/master-data/dto";
 import { api } from "@/trpc/react";
