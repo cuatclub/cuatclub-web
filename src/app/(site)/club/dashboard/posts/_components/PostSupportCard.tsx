@@ -1,20 +1,13 @@
 import { buttonVariants } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
-// Same Instagram handle the public footer (`Footer.tsx`) links as the club's own contact
-// channel, and the one `RegisterForm` already points clubs at for support ("ติดต่อขอรหัสเชิญ
-// จากแอดมินผ่านทางไอจี @cuatclub.chula") — there's no dedicated contact page, so this is the
-// least-surprising destination for "ติดต่อเรา" here too.
+// No contact page exists; this is the Instagram handle the footer and RegisterForm point to.
 const CONTACT_URL = "https://www.instagram.com/cuatclub.chula/";
 
 type PostSupportCardProps = {
   className?: string;
 };
 
-/**
- * The "My Posts" right rail: a static help card pointing clubs at support. Fixed width, hugs
- * its own content height (doesn't stretch to match the list column next to it).
- */
 export function PostSupportCard({ className }: PostSupportCardProps) {
   return (
     <div

@@ -13,18 +13,14 @@ type MyPostsPageProps = {
 export default async function MyPostsPage({ searchParams }: MyPostsPageProps) {
   const params = parsePostListParams(toQueryParamReader(await searchParams));
 
-  // clubDashboardGuard() already ran in layout.tsx and would redirect a second time if reused
-  // here — this only reads the session for the club's own name/avatar (session.user is this
-  // account's identity; the clubs table itself carries neither field). getSessionOnce() is
-  // cache()-memoized, so this reuses the layout's lookup instead of querying again.
+  // Name and avatar come from the session (the clubs table has neither); getSessionOnce() reuses
+  // the layout's lookup.
   const session = await getSessionOnce();
   const clubName = session?.user.name ?? "";
   const clubAvatarUrl = session?.user.image ?? "/svg/user_profile.svg";
 
-  // Awaited, not fire-and-forget: the list should arrive with its results already in the HTML.
-  // The client query below reuses this exact input, so it hydrates instead of refetching — and
-  // the master-data lists are prefetched too because the details dialog's form needs all three
-  // to render, without a second round trip once it opens.
+  // Same input the client query uses, so it hydrates without refetching. The master data is for
+  // the edit dialog's form.
   await Promise.all([
     api.activities.getMine.prefetch(toPostsQueryInput(params)),
     api.masterData.activityTypes.getAll.prefetch({}),
@@ -34,9 +30,7 @@ export default async function MyPostsPage({ searchParams }: MyPostsPageProps) {
 
   return (
     <HydrateClient>
-      {/* useSearchParams needs a boundary so the rest of the page can render without it. The
-          greeting lives inside `PostList`'s left column, not here — Figma's rail top-aligns
-          with the greeting, which only works once both are cells of the same two-column row. */}
+      {/* PostList uses useSearchParams, which needs a Suspense boundary. */}
       <Suspense>
         <PostList clubName={clubName} clubAvatarUrl={clubAvatarUrl} />
       </Suspense>

@@ -26,10 +26,6 @@ type PostSortSelectProps = {
   className?: string;
 };
 
-/**
- * Orders the list by when a post was created. Figma shows the select alone, with no
- * "เรียงจาก" label beside it — the trigger's own text (the current sort) is its accessible name.
- */
 export function PostSortSelect({ value, onValueChange, className }: PostSortSelectProps) {
   return (
     <SelectRoot

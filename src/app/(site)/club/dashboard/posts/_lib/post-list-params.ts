@@ -1,11 +1,6 @@
 import type { ActivitySortOption } from "@/server/api/modules/activities/dto";
 import type { QueryParamReader } from "@/lib/search-params";
 
-/**
- * "My Posts" keeps its whole state in the URL, so a filtered/sorted view can be shared,
- * bookmarked, and stepped through with the back button. These are the query keys it owns —
- * modelled on `clubs/_lib/club-list-params.ts`.
- */
 export const POST_LIST_PARAM = {
   search: "q",
   sort: "sort",
@@ -27,9 +22,8 @@ export function parsePostListParams(searchParams: QueryParamReader): PostListPar
 }
 
 /**
- * The exact input both the server prefetch and the client `useQuery` pass to `activities.getMine`.
- * They must agree field for field, or the two produce different query keys and the prefetched
- * list is thrown away on hydration.
+ * Must match the server prefetch field for field, or the query keys differ and
+ * hydration refetches.
  */
 export function toPostsQueryInput(params: PostListParams) {
   return {

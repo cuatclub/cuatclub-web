@@ -2,9 +2,8 @@
 export type QueryParamReader = { get: (key: string) => string | null };
 
 /**
- * Next hands a server component its query as a plain record; list-param parsers (e.g.
- * `parseClubListParams`, `parsePostListParams`) want a `QueryParamReader` instead, so both the
- * server prefetch and the client `useSearchParams()` can share the same parsing code.
+ * Adapts Next's searchParams record to a `QueryParamReader`, so server and client
+ * share parsers.
  */
 export function toQueryParamReader(
   record: Record<string, string | string[] | undefined>

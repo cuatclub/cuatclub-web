@@ -28,9 +28,7 @@ export const deleteActivity = async (
     throw notFound("Activity post not found for this club");
   }
 
-  // posterUrl is written from client input, so it isn't proof of ownership. Only
-  // clean up an object inside this club's own upload folder — a row pointed at
-  // another club's image is left in R2 rather than deleted along with the post.
+  // posterUrl is client-supplied, so only delete an object inside this club's own folder.
   const posterKey = toR2Key(existing.posterUrl);
   if (isKeyWithinPrefix(posterKey, `clubs/${club.id}/activities/`)) {
     await deleteImages([posterKey]);

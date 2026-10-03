@@ -26,11 +26,7 @@ type PostListProps = {
   clubAvatarUrl: string;
 };
 
-/**
- * The greeting is a block element inside the left column (not the full-width row above it) so
- * it sizes to the 792px list column, and the rail's top edge — a sibling with `items-start` —
- * lines up with the greeting's own top instead of the search row below it.
- */
+/** Inside the list column (not above the row) so the rail's top aligns with the greeting. */
 function Greeting({ clubName }: { clubName: string }) {
   return (
     <div className="flex flex-col gap-1">
@@ -44,11 +40,6 @@ function Greeting({ clubName }: { clubName: string }) {
   );
 }
 
-/**
- * The interactive half of "My Posts". Every control writes to the URL and the list reads back
- * from it, so there is one source of truth and a filtered view is always a shareable link —
- * mirrors `ClubList`'s own approach on the public club listing.
- */
 export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -61,8 +52,6 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
   const params = parsePostListParams(searchParams);
 
   const { data, isPending, isError } = api.activities.getMine.useQuery(toPostsQueryInput(params), {
-    // Keep the previous list on screen while the next one loads, so changing sort or search
-    // doesn't flash the list to empty.
     placeholderData: keepPreviousData,
   });
   const { data: activityTypes } = api.masterData.activityTypes.getAll.useQuery({});
@@ -82,7 +71,6 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
     if (!deleteTarget) return;
     await deleteActivity.mutateAsync({ id: deleteTarget.id });
     await refreshList();
-    // Deleting from inside the details dialog should close it along with the confirmation.
     if (selectedActivity?.id === deleteTarget.id) setSelectedActivity(null);
     setDeleteTarget(null);
   };
@@ -90,19 +78,13 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
   const activities = data?.activities ?? [];
 
   return (
-    // Asymmetric padding (40px left / 100px right at xl+) is applied here rather than in
-    // `DashboardShell`, whose `<main>` already contributes the symmetric 40px both pages share —
-    // this row only adds the extra 60px of right padding "My Posts" needs to land its list
-    // column at 792px, and the other dashboard pages that share the shell stay untouched. The
-    // rail only sits beside the list from `xl` (1280px) up — below that, the 300px card plus this
-    // padding doesn't leave room for a readable post column (crushed as low as ~205px at md).
+    // `xl:pr-[60px]` adds to <main>'s 40px padding to land the list column at 792px. The rail only
+    // sits beside the list from xl; below that it leaves no room for a readable post column.
     <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:gap-6 xl:pr-[60px]">
       <div className="flex min-w-0 flex-1 flex-col gap-6 md:gap-9">
         <Greeting clubName={clubName} />
 
         <div className="flex flex-col gap-6 md:gap-8">
-          {/* One row at every breakpoint — Figma's mobile frame sits search and sort side by
-              side, not stacked; only the sort's width grows at md+ (see PostSortSelect). */}
           <div className="flex flex-row items-center gap-3">
             <PostSearchBar
               // Remounts the field when the applied term changes elsewhere — the back button.
@@ -193,7 +175,6 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
   );
 }
 
-/** Mirrors the card's own shape so the list doesn't resize once the real results arrive. */
 function PostCardSkeleton() {
   return (
     <div
@@ -219,10 +200,6 @@ type PostListMessageProps = {
   subtitle: string;
 };
 
-/**
- * Shared by the "no posts at all" and "search matched nothing" states — same illustration,
- * sizing and layout, only the two lines of text differ, so the two states can't drift apart.
- */
 function PostListMessage({ heading, subtitle }: PostListMessageProps) {
   return (
     <div className="flex flex-col items-center gap-3 py-16 text-center">

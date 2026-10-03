@@ -34,8 +34,7 @@ export function CreatePostFormContainer({
   const handleSubmit = async (values: CreatePostFormValues) => {
     // The schema guarantees these are set by the time submit runs; narrow for TS.
     if (!values.poster) throw new Error("Poster is required");
-    // This page only ever creates a post, so `poster` (widened to also allow an existing
-    // poster's URL for the edit case elsewhere) is always a freshly picked File here.
+    // The upload page only creates posts, so `poster` is never an existing URL here.
     if (typeof values.poster === "string") {
       throw new Error("Poster must be a newly uploaded file");
     }

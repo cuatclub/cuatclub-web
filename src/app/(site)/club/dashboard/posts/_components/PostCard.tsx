@@ -22,9 +22,8 @@ const AUDIENCE_LABEL: Record<Activity["audience"], string> = {
   GENERAL_PUBLIC: "บุคคลทั่วไป",
 };
 
-/** On mobile the name+tags row is only ~170px wide, so a single category is all that fits. */
+// Mobile's content column (~170px) fits one category; md+ fits three.
 const MAX_VISIBLE_CATEGORIES_MOBILE = 1;
-/** At `md`+ the tag list gets its own row below the name, with room for a few tags. */
 const MAX_VISIBLE_CATEGORIES_DESKTOP = 3;
 
 function formatYearLevels(yearLevels: number[]): string {
@@ -33,9 +32,8 @@ function formatYearLevels(yearLevels: number[]): string {
 }
 
 /**
- * `totalFacultyCount` comes from a query and is `?? 0` at the call site while it's still
- * loading — guard explicitly so a not-yet-loaded total of `0` never makes a partial (or even
- * empty) selection read as "all faculties".
+ * `totalFacultyCount` is 0 while master data loads; the guard stops that
+ * reading as "all faculties".
  */
 function formatFaculties(faculties: Activity["faculties"], totalFacultyCount: number): string {
   if (faculties.length === 0) return "-";
@@ -57,7 +55,6 @@ type MetaCellProps = {
   children: React.ReactNode;
 };
 
-/** Every meta cell is uniform muted grey — there's no status coloring on this card. */
 function MetaCell({ icon: Icon, children }: MetaCellProps) {
   return (
     <div className="text-foreground-muted flex min-w-0 items-center gap-2">
@@ -94,13 +91,8 @@ export function PostCard({
   onOpen,
   onDeleteRequest,
 }: PostCardProps) {
-  // The visible-category cap depends on the `md` breakpoint, which a JS media-query hook can
-  // only apply after hydration (and, per `useMediaQuery`'s docstring, not even reliably then —
-  // it only re-evaluates on a `resize`-driven `change` event on the MediaQueryList). That means
-  // first paint can't know the cap from JS. Instead, all categories up to the desktop cap are
-  // always rendered, and CSS alone (`hidden md:list-item` / `md:hidden`) decides which ones —
-  // and which "+N" chip — are actually visible at a given width, so mobile and desktop are each
-  // correct from first paint with no client-side correction step.
+  // The category cap is CSS-only (`hidden md:list-item` / `md:hidden`), not useMediaQuery: that
+  // hook stays false after hydration until a resize event, so desktop would show the mobile cap.
   const visibleCategories = activity.categories.slice(0, MAX_VISIBLE_CATEGORIES_DESKTOP);
   const hiddenCategoryCountMobile = activity.categories.length - MAX_VISIBLE_CATEGORIES_MOBILE;
   const hiddenCategoryCountDesktop = activity.categories.length - MAX_VISIBLE_CATEGORIES_DESKTOP;
@@ -148,8 +140,6 @@ export function PostCard({
       </button>
 
       <div className="relative h-[160px] w-[125px] shrink-0 overflow-hidden rounded-xl md:h-[262px] md:w-[205px]">
-        {/* Without `sizes`, `fill` defaults to 100vw and Next serves a full-viewport-width image
-            into a 205px slot — the widths here match the container above. */}
         <Image
           src={activity.posterUrl}
           alt=""
@@ -188,8 +178,6 @@ export function PostCard({
               height={28}
               className="size-7 shrink-0 rounded-full object-cover"
             />
-            {/* Dark, not muted: in the frame the club name reads as a heading against the muted
-                description below it, the same way the sidebar pairs a dark name with a muted email. */}
             <span className="font-ibm-plex text-foreground truncate text-sm leading-[23px] font-semibold">
               {clubName}
             </span>

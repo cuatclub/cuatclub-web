@@ -44,7 +44,6 @@ export type FacultyOption = { id: number; label: string };
 export type PostFormRenderState = {
   isSubmitting: boolean;
   isValid: boolean;
-  /** Resets every field back to `defaultValues`. */
   reset: () => void;
 };
 
@@ -59,10 +58,7 @@ export type PostFormProps = {
   submitErrorMessage?: string;
   /** Action buttons for the caller to place after the fields — e.g. clear/submit, or delete/save. */
   footer: (state: PostFormRenderState) => ReactNode;
-  /**
-   * Rendered inline beside the "ข้อมูลทั่วไป" heading — e.g. an edit affordance or an
-   * editing-status indicator. Omitted by the upload page, which renders the heading alone.
-   */
+  /** Rendered beside the "ข้อมูลทั่วไป" heading, e.g. the edit dialog's editing indicator. */
   generalSectionAside?: ReactNode;
 };
 
@@ -75,10 +71,8 @@ const valueUpdateOptions = {
 const YEAR_LEVEL_OPTIONS = YEAR_LEVELS.map((year) => ({ value: year, label: `ปี ${year}` }));
 
 /**
- * The activity post field set — poster, general info, and eligibility — shared by the create
- * page's `Card` and the (future) post-details dialog. Owns the `react-hook-form` instance,
- * validation, and submit wiring; the caller only supplies data, a submit handler, and its own
- * footer buttons via the `footer` render prop.
+ * The post form shared by the upload page and the edit dialog; callers supply data,
+ * submit and footer.
  */
 export function PostForm({
   activityTypes,
@@ -104,9 +98,8 @@ export function PostForm({
   } = useForm<CreatePostFormValues>({
     resolver: zodResolver(createPostSchema),
     defaultValues: formDefaultValues,
-    // "onChange" (not "onTouched"): a field the user only tabs through — focus
-    // then blur without typing — stays silent, but `isValid` is kept live so the
-    // submit button can reflect completeness and the first submit still works.
+    // "onChange", not "onTouched": tabbing through a field stays silent, but `isValid` stays live
+    // so the submit button can reflect completeness.
     mode: "onChange",
   });
 

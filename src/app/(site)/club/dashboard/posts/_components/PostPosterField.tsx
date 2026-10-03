@@ -16,9 +16,8 @@ type PostPosterFieldProps = {
 };
 
 /**
- * Resolves a preview URL for either a newly picked `File` (via a revocable object URL) or an
- * already-uploaded poster passed as a URL string. Always calls the same hooks regardless of
- * which case `value` is, so the branch below can vary without breaking the rules of hooks.
+ * Preview URL for a newly picked File (a revocable object URL) or an already-uploaded
+ * poster URL.
  */
 function usePosterPreviewUrl(value: File | string): string | undefined {
   const isFile = value instanceof File;

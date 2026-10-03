@@ -27,9 +27,8 @@ export const updateActivity = async (
     throw notFound("Activity post not found for this club");
   }
 
-  // posterUrl arrives from client input and is only shape-checked by the DTO, so a
-  // caller could point this post at another club's object. Refuse to store one —
-  // otherwise the cleanup below would later delete an image this club never owned.
+  // posterUrl is client-supplied: refuse another club's object, or the cleanup below could
+  // later delete an image this club never owned.
   const allowedPrefix = `clubs/${club.id}/activities/`;
   if (!isKeyWithinPrefix(toR2Key(input.posterUrl), allowedPrefix)) {
     throw validationError("This poster does not belong to your club.");
@@ -54,11 +53,8 @@ export const updateActivity = async (
     return result;
   });
 
-  // Side effect that must not roll back with the DB — runs after the
-  // transaction resolves, same ordering as admin-delete-club.usecase.ts.
-  // The previous value is re-checked rather than trusted: rows written before the
-  // guard above existed may still hold a key outside this club's folder, and those
-  // are left alone rather than deleted.
+  // After the transaction so it can't roll back with it. Re-checks the prefix: older rows may
+  // predate the guard above.
   const previousKey = toR2Key(existing.posterUrl);
   if (existing.posterUrl !== updated.posterUrl && isKeyWithinPrefix(previousKey, allowedPrefix)) {
     await deleteImages([previousKey]);

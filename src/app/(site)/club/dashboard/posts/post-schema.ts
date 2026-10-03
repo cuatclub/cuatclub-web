@@ -25,11 +25,7 @@ export type PosterImageContentType = "image/png" | "image/jpeg";
 
 type ImageFileLike = Pick<File, "name" | "size" | "type">;
 
-/**
- * The poster field's value: a newly picked `File` pending upload, the URL string of an
- * already-uploaded poster (an existing post opened for editing keeps its poster unless the
- * user picks a replacement), or `null` when nothing is selected yet.
- */
+/** A newly picked File, an existing poster's URL (when editing), or null when nothing is picked. */
 export type PosterFieldValue = File | string | null;
 
 const EXTENSION_CONTENT_TYPES: Record<string, PosterImageContentType> = {
@@ -70,9 +66,8 @@ function getPosterFileValidationMessage(value: unknown): string | null {
   return null;
 }
 
-// Newly picked files still get the PNG/JPEG + 10 MB validation; an existing poster URL (a
-// string) is assumed already valid, since it was uploaded and accepted before. `null` is only
-// rejected by the required check below, so it doesn't also get flagged as the wrong type.
+// Only new files get the type/size checks; an existing URL was validated when uploaded.
+// null is left to the required check so it isn't also flagged as the wrong type.
 const posterSchema = z
   .custom<PosterFieldValue>(
     (value) => value === null || isPosterUrl(value) || isImageFileLike(value),

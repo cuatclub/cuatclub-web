@@ -99,9 +99,8 @@ export async function adminGuard(): Promise<AdminSessionUser> {
 }
 
 /**
- * Memoized per request: a dashboard layout's guard and the page inside it both need the
- * session, and a layout can't hand its result down to the page. cache() collapses those
- * into one lookup per render pass.
+ * Per-request memo: the dashboard layout and page both need the session; cache() makes
+ * it one lookup.
  */
 export const getSessionOnce = cache(async () => auth.api.getSession({ headers: await headers() }));
 
