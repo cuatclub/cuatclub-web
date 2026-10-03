@@ -16,6 +16,7 @@
   --color-foreground: var(--foreground);
   --color-foreground-secondary: var(--foreground-secondary);
   --color-foreground-muted: var(--foreground-muted);
+  --color-dark-gray: var(--dark-gray);
 
   --color-placeholder: var(--placeholder);
   --color-border: var(--border);
@@ -54,6 +55,7 @@
   --foreground: #0a0a0a;
   --foreground-secondary: #595959;
   --foreground-muted: #707070;
+  --dark-gray: #8b9096;
 
   --placeholder: #acacac;
   --border: #dbdbdb;

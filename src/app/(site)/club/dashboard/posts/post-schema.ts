@@ -25,6 +25,9 @@ export type PosterImageContentType = "image/png" | "image/jpeg";
 
 type ImageFileLike = Pick<File, "name" | "size" | "type">;
 
+/** A newly picked File, an existing poster's URL (when editing), or null when nothing is picked. */
+export type PosterFieldValue = File | string | null;
+
 const EXTENSION_CONTENT_TYPES: Record<string, PosterImageContentType> = {
   png: "image/png",
   jpg: "image/jpeg",
@@ -43,6 +46,10 @@ function isImageFileLike(value: unknown): value is ImageFileLike {
   );
 }
 
+function isPosterUrl(value: unknown): value is string {
+  return typeof value === "string" && value.length > 0;
+}
+
 export function getPosterContentType(file: ImageFileLike): PosterImageContentType | null {
   if (file.type) {
     const contentType = file.type.toLowerCase();
@@ -59,15 +66,20 @@ function getPosterFileValidationMessage(value: unknown): string | null {
   return null;
 }
 
+// Only new files get the type/size checks; an existing URL was validated when uploaded.
+// null is left to the required check so it isn't also flagged as the wrong type.
 const posterSchema = z
-  .custom<File>(isImageFileLike, POSTER_TYPE_MESSAGE)
-  .superRefine((file, ctx) => {
-    const message = getPosterFileValidationMessage(file);
+  .custom<PosterFieldValue>(
+    (value) => value === null || isPosterUrl(value) || isImageFileLike(value),
+    POSTER_TYPE_MESSAGE
+  )
+  .superRefine((value, ctx) => {
+    if (value === null || typeof value === "string") return;
+    const message = getPosterFileValidationMessage(value);
     if (message) ctx.addIssue({ code: z.ZodIssueCode.custom, message });
   })
-  .nullable()
-  .superRefine((file, ctx) => {
-    if (file === null)
+  .superRefine((value, ctx) => {
+    if (value === null)
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: POSTER_REQUIRED_MESSAGE });
   });
 
@@ -122,3 +134,17 @@ export const createPostSchema = z
   });
 
 export type CreatePostFormValues = z.infer<typeof createPostSchema>;
+
+export const EMPTY_POST_FORM_VALUES: CreatePostFormValues = {
+  poster: null,
+  title: "",
+  applicationFormUrl: "",
+  applicationStartAt: null,
+  applicationEndAt: null,
+  activityType: "",
+  categoryIds: [],
+  description: "",
+  audience: null,
+  yearLevels: [],
+  facultyIds: [],
+};
