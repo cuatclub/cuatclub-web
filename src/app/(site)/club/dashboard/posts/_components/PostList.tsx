@@ -149,13 +149,9 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
         </div>
       </div>
 
-      {/* Figma's mobile frame has no support card at all — hidden below `xl`, not reflowed to
-          the top (there's no tablet frame either, and the 300px rail doesn't leave room for a
-          readable post column before `xl`; see the row's own comment above). From `xl` up it
-          sticks under the navbar (mirrors `DashboardSidebar`'s own `md:sticky md:top-16`) so it
-          stays visible while the list scrolls; `top-20` (80px) adds a 16px gap under the fixed
-          64px navbar instead of sitting flush against it. */}
-      <PostSupportCard className="hidden shrink-0 xl:sticky xl:top-20 xl:block xl:w-[300px]" />
+      {/* Hidden below xl. `top-26` = 64px navbar + 40px <main> padding (its resting position), so
+          it doesn't jump when sticking begins. */}
+      <PostSupportCard className="hidden shrink-0 xl:sticky xl:top-26 xl:flex xl:w-[300px]" />
 
       <PostDetailsDialog
         activity={selectedActivity}
