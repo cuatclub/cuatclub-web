@@ -60,9 +60,13 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
 
   const deleteActivity = api.activities.delete.useMutation();
 
-  const updateParams = (patch: Partial<PostListParams>) => {
+  // Search replaces the history entry — it fires as the visitor types, and a back-button stop per
+  // pause would bury the page they came from. Sort is a deliberate choice, so it pushes.
+  const updateParams = (patch: Partial<PostListParams>, { replace = false } = {}) => {
     const next = { ...params, ...patch };
-    router.push(`${pathname}${buildPostListQuery(next)}`, { scroll: false });
+    const url = `${pathname}${buildPostListQuery(next)}`;
+    if (replace) router.replace(url, { scroll: false });
+    else router.push(url, { scroll: false });
   };
 
   const refreshList = () => utils.activities.getMine.invalidate();
@@ -87,10 +91,8 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
         <div className="flex flex-col gap-6 md:gap-8">
           <div className="flex flex-row items-center gap-3">
             <PostSearchBar
-              // Remounts the field when the applied term changes elsewhere — the back button.
-              key={params.search}
               defaultValue={params.search}
-              onSearch={(search) => updateParams({ search })}
+              onSearch={(search) => updateParams({ search }, { replace: true })}
               className="min-w-0 flex-1"
             />
             <PostSortSelect value={params.sort} onValueChange={(sort) => updateParams({ sort })} />
