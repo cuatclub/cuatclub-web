@@ -135,7 +135,7 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
                   totalFacultyCount={faculties?.length ?? 0}
                   clubName={clubName}
                   clubAvatarUrl={clubAvatarUrl}
-                  onOpen={() => setSelectedActivity(activity)}
+                  onEditRequest={() => setSelectedActivity(activity)}
                   onDeleteRequest={() => setDeleteTarget(activity)}
                 />
               ))}

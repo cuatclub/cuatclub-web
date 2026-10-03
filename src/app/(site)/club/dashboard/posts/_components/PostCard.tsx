@@ -3,6 +3,7 @@ import {
   Building2,
   ClipboardClock,
   Shapes,
+  SquarePen,
   Trash2,
   UsersRound,
   type LucideIcon,
@@ -71,24 +72,19 @@ type PostCardProps = {
   totalFacultyCount: number;
   clubName: string;
   clubAvatarUrl: string;
-  /** Opens the details dialog. Invoked by clicking or keyboard-activating the whole card. */
-  onOpen: () => void;
-  /** Opens the delete confirmation. Must not also trigger `onOpen`. */
+  /** Opens the edit dialog. Invoked by the edit button. */
+  onEditRequest: () => void;
   onDeleteRequest: () => void;
 };
 
-/**
- * A single post in "My Posts". The whole card opens the details dialog (tech lead: "กดทั้งการ์ด
- * เลย") — it's a `div` with `role="button"` rather than a `Link`/`<button>`, because the trash
- * icon is its own control and a `<button>` can't nest another interactive element.
- */
+/** A post in "My Posts". The card isn't clickable — edit and delete have their own buttons. */
 export function PostCard({
   activity,
   activityTypes,
   totalFacultyCount,
   clubName,
   clubAvatarUrl,
-  onOpen,
+  onEditRequest,
   onDeleteRequest,
 }: PostCardProps) {
   // The category cap is CSS-only (`hidden md:list-item` / `md:hidden`), not useMediaQuery: that
@@ -97,48 +93,10 @@ export function PostCard({
   const hiddenCategoryCountMobile = activity.categories.length - MAX_VISIBLE_CATEGORIES_MOBILE;
   const hiddenCategoryCountDesktop = activity.categories.length - MAX_VISIBLE_CATEGORIES_DESKTOP;
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    // A keydown on the trash button bubbles here too (it's a descendant, not a separate
-    // listener) — only the card itself being focused should open the dialog, so the trash
-    // button keeps its own Enter/Space activation for deleting instead.
-    if (event.target !== event.currentTarget) return;
-    if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault();
-    onOpen();
-  };
-
-  const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // Stops the click from bubbling to the card's own onClick, so deleting never also opens
-    // the details dialog.
-    event.stopPropagation();
-    onDeleteRequest();
-  };
-
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={onOpen}
-      onKeyDown={handleKeyDown}
-      // `contain-inline-size` stops this card's content (specifically the `nowrap` tag list
-      // below) from contributing its min-content width to ancestors. Without it, a long
-      // untruncated tag label raises this card's intrinsic width, which propagates up the flex
-      // chain and widens the dashboard shell's `<main>` past the viewport, causing horizontal
-      // page scroll — even though the tag label itself is truncated by CSS.
-      className="hover:border-primary-light focus-visible:ring-primary relative flex cursor-pointer gap-4 rounded-xl border border-white bg-white p-4 shadow-black transition-colors contain-inline-size focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:gap-5 md:p-6"
-    >
-      {/* Figma's mobile variant has no delete control at all — `hidden` (not just visually
-          hidden) below `md` takes it out of the layout and, since `display: none` elements are
-          unfocusable, out of the tab order too, without any manual `tabIndex` juggling. */}
-      <button
-        type="button"
-        onClick={handleDeleteClick}
-        aria-label="ลบโพสต์"
-        className="border-error text-error hover:bg-error/10 focus-visible:ring-error absolute top-4 right-4 hidden size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:top-6 md:right-6 md:flex"
-      >
-        <Trash2 aria-hidden="true" className="size-4" />
-      </button>
-
+    // `contain-inline-size` stops the nowrap tag row's min-content width from widening the
+    // dashboard's <main> into horizontal page scroll.
+    <div className="flex gap-4 rounded-xl border border-white bg-white p-4 shadow-black contain-inline-size md:gap-5 md:p-6">
       <div className="relative h-[160px] w-[125px] shrink-0 overflow-hidden rounded-xl md:h-[262px] md:w-[205px]">
         <Image
           src={activity.posterUrl}
@@ -149,28 +107,10 @@ export function PostCard({
         />
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-3 md:pr-12">
-        {/* Two different shapes, matching the two Figma variants. On mobile the tags sit at the
-            top right of the club-name row (where desktop puts the trash button, which the mobile
-            variant doesn't have) — `ml-auto` pushes them there. At `md`+ the design puts the tags
-            on their own row below the name, left-aligned: `md:w-full md:flex-none` makes the name
-            group claim the whole row so the tag list, the row's other flex child, wraps onto the
-            line below. That yields both shapes from one copy of the tag markup.
-
-            The name group takes `min-w-7` — exactly the 28px avatar width, not an arbitrary pixel
-            floor — so the row can never shrink the group below the avatar itself; the avatar's
-            own `shrink-0` would otherwise let it overflow the group and get painted over by the
-            tag list. The name text still truncates inside that floor.
-
-            The tag `ul` is `shrink-0` with `max-w-[calc(100%-36px)]` (36 = the 28px avatar plus
-            the 8px row gap): it keeps its natural width — short labels never truncate — and is
-            only capped once it would reach into the avatar's space, at which point the first
-            category label truncates instead. The name gives up space before the tags do.
-            `flex-nowrap` keeps a mobile `+N` chip beside its tag instead of wrapping away; at
-            `md`+, `flex-wrap` plus `w-full` and `max-w-full` let extra tags wrap onto more lines
-            inside the column instead of overflowing it. */}
-        <div className="flex min-w-0 items-center gap-x-2 gap-y-3 overflow-hidden md:flex-wrap md:overflow-visible">
-          <div className="flex min-w-7 items-center gap-2 md:w-full md:flex-none">
+      <div className="flex min-w-0 flex-1 flex-col gap-3">
+        {/* `min-w-7` (the avatar's width) keeps the avatar visible while the name truncates. */}
+        <div className="flex items-center gap-2">
+          <div className="flex min-w-7 flex-1 items-center gap-2">
             <Image
               src={clubAvatarUrl}
               alt=""
@@ -183,41 +123,60 @@ export function PostCard({
             </span>
           </div>
 
-          {visibleCategories.length > 0 && (
-            <ul className="ml-auto flex max-w-[calc(100%-36px)] shrink-0 flex-nowrap items-center gap-1.5 md:ml-0 md:w-full md:max-w-full md:flex-wrap">
-              {visibleCategories.map((category, index) => (
-                <li
-                  key={category.id}
-                  // The first `MAX_VISIBLE_CATEGORIES_MOBILE` tags are always shown; the rest,
-                  // up to `MAX_VISIBLE_CATEGORIES_DESKTOP`, only appear at `md`+. `min-w-0` lets
-                  // the label truncate instead of overflowing the row.
-                  className={cn(
-                    "min-w-0",
-                    index >= MAX_VISIBLE_CATEGORIES_MOBILE ? "hidden md:list-item" : undefined
-                  )}
-                >
-                  <Tag
-                    color={category.fontColor}
-                    bgColor={category.backgroundColor}
-                    className="max-w-full"
-                  >
-                    <span className="truncate">{category.label}</span>
-                  </Tag>
-                </li>
-              ))}
-              {hiddenCategoryCountMobile > 0 && (
-                <li className="shrink-0 md:hidden">
-                  <Tag>+{hiddenCategoryCountMobile}</Tag>
-                </li>
-              )}
-              {hiddenCategoryCountDesktop > 0 && (
-                <li className="hidden shrink-0 md:list-item">
-                  <Tag>+{hiddenCategoryCountDesktop}</Tag>
-                </li>
-              )}
-            </ul>
-          )}
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={onEditRequest}
+              aria-label="แก้ไขโพสต์"
+              className="border-primary text-primary hover:bg-primary/10 focus-visible:ring-primary flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            >
+              <SquarePen aria-hidden="true" className="size-4" />
+            </button>
+            {/* No delete button on mobile — delete lives in the edit dialog there. */}
+            <button
+              type="button"
+              onClick={onDeleteRequest}
+              aria-label="ลบโพสต์"
+              className="border-error text-error hover:bg-error/10 focus-visible:ring-error hidden size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:flex"
+            >
+              <Trash2 aria-hidden="true" className="size-4" />
+            </button>
+          </div>
         </div>
+
+        {/* Mobile: one line, the first label truncates and the +N chip stays beside it;
+            md+: wraps. */}
+        {visibleCategories.length > 0 && (
+          <ul className="flex max-w-full flex-nowrap items-center gap-1.5 md:flex-wrap">
+            {visibleCategories.map((category, index) => (
+              <li
+                key={category.id}
+                className={cn(
+                  "min-w-0",
+                  index >= MAX_VISIBLE_CATEGORIES_MOBILE ? "hidden md:list-item" : undefined
+                )}
+              >
+                <Tag
+                  color={category.fontColor}
+                  bgColor={category.backgroundColor}
+                  className="max-w-full"
+                >
+                  <span className="truncate">{category.label}</span>
+                </Tag>
+              </li>
+            ))}
+            {hiddenCategoryCountMobile > 0 && (
+              <li className="shrink-0 md:hidden">
+                <Tag>+{hiddenCategoryCountMobile}</Tag>
+              </li>
+            )}
+            {hiddenCategoryCountDesktop > 0 && (
+              <li className="hidden shrink-0 md:list-item">
+                <Tag>+{hiddenCategoryCountDesktop}</Tag>
+              </li>
+            )}
+          </ul>
+        )}
 
         <h3 className="font-ibm-plex text-foreground line-clamp-2 text-xs leading-5 font-semibold md:text-lg md:leading-[30px]">
           {activity.title}
