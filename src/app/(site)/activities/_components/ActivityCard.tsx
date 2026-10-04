@@ -1,8 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Bookmark, Building2, CalendarPlus, ClipboardClock, Shapes, Users } from "lucide-react";
 
+import {
+  AUDIENCE_LABEL,
+  formatFaculties,
+  formatShortDate,
+  formatYearLevels,
+} from "@/app/(site)/activities/_lib/activity-format";
 import { Tag } from "@/components/ui/Tag";
-import { THAI_MONTHS_SHORT } from "@/lib/date";
 import type { RouterOutputs } from "@/trpc/react";
 
 type Activity = RouterOutputs["activities"]["getAll"]["activities"][number];
@@ -13,6 +19,7 @@ const MOBILE_MAX_VISIBLE_CATEGORIES = 1;
 const DESKTOP_MAX_VISIBLE_CATEGORIES = 2;
 
 type ActivityCardProps = {
+  id: Activity["id"];
   title: Activity["title"];
   description: Activity["description"];
   posterUrl: Activity["posterUrl"];
@@ -21,14 +28,9 @@ type ActivityCardProps = {
   faculties: Activity["faculties"];
   yearLevels: Activity["yearLevels"];
   audience: Activity["audience"];
+  activityType: Activity["activityType"];
   applicationStartAt: Activity["applicationStartAt"];
   applicationEndAt: Activity["applicationEndAt"];
-  isApplicationOpen: Activity["isApplicationOpen"];
-};
-
-const AUDIENCE_LABEL: Record<Activity["audience"], string> = {
-  CHULA_STUDENT: "นิสิตจุฬาฯ",
-  GENERAL_PUBLIC: "บุคคลทั่วไป",
 };
 
 /** Figma sizes the tag by breakpoint and drops the border `Tag` adds around its fill. */
@@ -40,53 +42,13 @@ const DESKTOP_TAG_CLASS =
 const FOOTER_ITEM_CLASS =
   "font-ibm-plex text-foreground-muted flex min-h-5 items-center gap-1 text-[8px] font-medium md:min-h-0 md:gap-2 md:text-xs";
 
-const TOTAL_YEAR_LEVELS = 4;
-
-/** Consecutive years collapse to a range ("ปี 1-3"); gaps stay listed ("ปี 1, 3"). */
-const formatYearLevels = (yearLevels: number[]): string => {
-  const sorted = [...new Set(yearLevels)].sort((a, b) => a - b);
-  if (sorted.length === 0 || sorted.length === TOTAL_YEAR_LEVELS) return "ทุกชั้นปี";
-
-  const runs: { start: number; end: number }[] = [];
-  for (const level of sorted) {
-    const lastRun = runs[runs.length - 1];
-    if (lastRun?.end === level - 1) lastRun.end = level;
-    else runs.push({ start: level, end: level });
-  }
-
-  const parts = runs.map(({ start, end }) => (start === end ? `${start}` : `${start}-${end}`));
-  return `ปี ${parts.join(", ")}`;
-};
-
-const formatFaculties = (faculties: Activity["faculties"]): string => {
-  const [first] = faculties;
-  if (!first) return "ไม่จำกัดคณะ";
-  return faculties.length === 1 ? first.label : `${first.label} และอื่นๆ`;
-};
-
-/** The app's one domain timezone — the server (often UTC) and a visitor's browser otherwise
- *  disagree on which day an `applicationStartAt`/`applicationEndAt` falls on, which would
- *  desync the server-rendered HTML from the client's hydration render. */
-const ACTIVITY_TIME_ZONE = "Asia/Bangkok";
-
-const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
-  timeZone: ACTIVITY_TIME_ZONE,
-  day: "numeric",
-  month: "numeric",
-});
-
-const formatShortDate = (date: Date): string => {
-  const parts = shortDateFormatter.formatToParts(date);
-  const day = parts.find((part) => part.type === "day")?.value ?? "";
-  const month = Number(parts.find((part) => part.type === "month")?.value ?? 1) - 1;
-  return `${day} ${THAI_MONTHS_SHORT[month]}`;
-};
-
 /**
- * A single activity in the activity list. Unlike `ClubCard` this is not a link — there is no
- * `/activities/[id]` detail page yet.
+ * A single activity, in the activity list and in an activity page's related activities. Unlike
+ * `ClubCard` the card can't be one `<Link>` — it holds buttons, which can't nest inside an
+ * anchor — so the title is the link and its `::after` stretches over the whole card instead.
  */
 export function ActivityCard({
+  id,
   title,
   description,
   posterUrl,
@@ -95,9 +57,9 @@ export function ActivityCard({
   faculties,
   yearLevels,
   audience,
+  activityType,
   applicationStartAt,
   applicationEndAt,
-  isApplicationOpen,
 }: ActivityCardProps) {
   const mobileCategories = categories.slice(0, MOBILE_MAX_VISIBLE_CATEGORIES);
   const mobileHiddenCount = categories.length - mobileCategories.length;
@@ -105,7 +67,7 @@ export function ActivityCard({
   const desktopHiddenCount = categories.length - desktopCategories.length;
 
   return (
-    <div className="border-border flex gap-4 rounded-xl border border-white bg-white p-4 shadow-black md:gap-5">
+    <div className="border-border hover:border-primary-light has-[a:focus-visible]:ring-primary relative flex gap-4 rounded-xl border border-white bg-white p-4 shadow-black transition-colors has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-offset-2 md:gap-5">
       <div className="bg-surface relative h-[160px] w-[125px] shrink-0 overflow-hidden rounded-xl md:h-[262px] md:w-[205px]">
         <Image
           src={posterUrl}
@@ -207,7 +169,12 @@ export function ActivityCard({
 
           <div className="flex flex-col gap-1">
             <h3 className="font-ibm-plex text-foreground line-clamp-1 text-xs leading-[normal] font-semibold md:text-lg">
-              {title}
+              <Link
+                href={`/activities/${id}`}
+                className="after:absolute after:inset-0 after:rounded-xl focus-visible:outline-none"
+              >
+                {title}
+              </Link>
             </h3>
             <p className="font-ibm-plex text-foreground-muted line-clamp-4 text-[10px] leading-[1.5] md:text-sm">
               {description}
@@ -228,7 +195,7 @@ export function ActivityCard({
           </p>
           <p className={FOOTER_ITEM_CLASS}>
             <Shapes aria-hidden="true" className="size-2.5 shrink-0 md:size-4" />
-            <span className="truncate">{isApplicationOpen ? "รับสมัคร" : "ปิดรับสมัคร"}</span>
+            <span className="truncate">{activityType.label}</span>
           </p>
           <p className={FOOTER_ITEM_CLASS}>
             <ClipboardClock aria-hidden="true" className="size-2.5 shrink-0 md:size-4" />
