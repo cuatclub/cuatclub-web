@@ -7,8 +7,10 @@ import type { RouterOutputs } from "@/trpc/react";
 
 type Activity = RouterOutputs["activities"]["getAll"]["activities"][number];
 
-/** Cards share a row height, so only the first couple of categories fit beside the poster. */
-const MAX_VISIBLE_CATEGORIES = 2;
+/** Cards share a row height, so only the first few categories fit — one on a phone, where they
+ *  sit beside the club name, and two on desktop, where they get a row of their own. */
+const MOBILE_MAX_VISIBLE_CATEGORIES = 1;
+const DESKTOP_MAX_VISIBLE_CATEGORIES = 2;
 
 type ActivityCardProps = {
   title: Activity["title"];
@@ -97,8 +99,10 @@ export function ActivityCard({
   applicationEndAt,
   isApplicationOpen,
 }: ActivityCardProps) {
-  const visibleCategories = categories.slice(0, MAX_VISIBLE_CATEGORIES);
-  const hiddenCategoryCount = categories.length - visibleCategories.length;
+  const mobileCategories = categories.slice(0, MOBILE_MAX_VISIBLE_CATEGORIES);
+  const mobileHiddenCount = categories.length - mobileCategories.length;
+  const desktopCategories = categories.slice(0, DESKTOP_MAX_VISIBLE_CATEGORIES);
+  const desktopHiddenCount = categories.length - desktopCategories.length;
 
   return (
     <div className="border-border flex gap-4 rounded-xl border border-white bg-white p-4 shadow-black md:gap-5">
@@ -138,9 +142,9 @@ export function ActivityCard({
 
           {/* Mobile puts the categories here instead of a row of their own; desktop keeps the
               deferred add-to-calendar/save actions here and shows categories below the header. */}
-          {visibleCategories.length > 0 && (
+          {mobileCategories.length > 0 && (
             <ul className="flex shrink-0 flex-wrap items-center justify-end gap-1 md:hidden">
-              {visibleCategories.map((category) => (
+              {mobileCategories.map((category) => (
                 <li key={category.id}>
                   <Tag
                     color={category.fontColor}
@@ -151,9 +155,9 @@ export function ActivityCard({
                   </Tag>
                 </li>
               ))}
-              {hiddenCategoryCount > 0 && (
+              {mobileHiddenCount > 0 && (
                 <li>
-                  <Tag className={MOBILE_TAG_CLASS}>+{hiddenCategoryCount}</Tag>
+                  <Tag className={MOBILE_TAG_CLASS}>+{mobileHiddenCount}</Tag>
                 </li>
               )}
             </ul>
@@ -180,9 +184,9 @@ export function ActivityCard({
         </div>
 
         <div className="flex flex-1 flex-col gap-1.5">
-          {visibleCategories.length > 0 && (
+          {desktopCategories.length > 0 && (
             <ul className="hidden flex-wrap items-center gap-1.5 md:flex">
-              {visibleCategories.map((category) => (
+              {desktopCategories.map((category) => (
                 <li key={category.id}>
                   <Tag
                     color={category.fontColor}
@@ -193,9 +197,9 @@ export function ActivityCard({
                   </Tag>
                 </li>
               ))}
-              {hiddenCategoryCount > 0 && (
+              {desktopHiddenCount > 0 && (
                 <li>
-                  <Tag className={DESKTOP_TAG_CLASS}>+{hiddenCategoryCount}</Tag>
+                  <Tag className={DESKTOP_TAG_CLASS}>+{desktopHiddenCount}</Tag>
                 </li>
               )}
             </ul>
