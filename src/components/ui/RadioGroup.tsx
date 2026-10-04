@@ -23,6 +23,7 @@ export interface RadioGroupProps<T extends string | number = string> {
   name?: string;
   className?: string;
   orientation?: "horizontal" | "vertical";
+  size?: "default" | "sm";
 }
 
 /**
@@ -56,6 +57,7 @@ export const RadioGroup = <T extends string | number = string>({
   name,
   className,
   orientation = "horizontal",
+  size = "default",
 }: RadioGroupProps<T>) => {
   const groupName = useId();
   const errorId = useId();
@@ -71,7 +73,14 @@ export const RadioGroup = <T extends string | number = string>({
   return (
     <fieldset className={cn("m-0 flex flex-col gap-2 border-0 p-0", className)}>
       {label && (
-        <legend className="font-ibm-plex text-foreground mb-2 text-sm leading-[23px] font-medium md:text-base md:leading-[26px]">
+        <legend
+          className={cn(
+            "font-ibm-plex text-foreground mb-2 font-medium",
+            size === "sm"
+              ? "text-xs leading-[20px] md:text-sm md:leading-[23px]"
+              : "text-sm leading-[23px] md:text-base md:leading-[26px]"
+          )}
+        >
           {label} {required && <span className="text-error">*</span>}
         </legend>
       )}
@@ -90,7 +99,10 @@ export const RadioGroup = <T extends string | number = string>({
             <label
               key={option.value}
               className={cn(
-                "font-ibm-plex text-foreground flex cursor-pointer items-center gap-2 text-sm leading-[23px] md:text-base",
+                "font-ibm-plex text-foreground flex cursor-pointer items-center gap-2",
+                size === "sm"
+                  ? "text-xs leading-[20px] md:text-sm md:leading-[23px]"
+                  : "text-sm leading-[23px] md:text-base",
                 optionDisabled && "cursor-not-allowed opacity-60"
               )}
             >

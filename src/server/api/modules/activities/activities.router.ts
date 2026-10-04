@@ -4,6 +4,7 @@ import {
   deleteActivityPoster,
   getActivityById,
   getActivityPosterUploadUrl,
+  getAllActivities,
 } from "@/server/api/modules/activities/usecases";
 import {
   CreateActivityInputDTOSchema,
@@ -14,9 +15,16 @@ import {
   GetActivityByIdOutputDTOSchema,
   GetActivityPosterUploadUrlInputDTOSchema,
   GetActivityPosterUploadUrlOutputDTOSchema,
+  GetAllActivitiesInputDTOSchema,
+  GetAllActivitiesOutputDTOSchema,
 } from "@/server/api/modules/activities/dto";
 
 export const activitiesRouter = createTRPCRouter({
+  getAll: publicProcedure
+    .input(GetAllActivitiesInputDTOSchema)
+    .output(GetAllActivitiesOutputDTOSchema)
+    .query(async ({ input }) => getAllActivities(input)),
+
   getById: publicProcedure
     .input(GetActivityByIdInputDTOSchema)
     .output(GetActivityByIdOutputDTOSchema)
