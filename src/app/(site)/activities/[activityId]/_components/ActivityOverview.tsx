@@ -78,7 +78,9 @@ export function ActivityOverview({ activity, status, remainingMs }: ActivityOver
                 {club.name.charAt(0)}
               </div>
             )}
-            <span className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold group-hover:underline md:text-base md:leading-[26px]">
+            {/* IBM Plex Sans Thai's tall ascent rides Latin names ~1.5px above the logo's center at
+                16px — the 1px nudge splits the difference with Thai names, which already sit centered. */}
+            <span className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold group-hover:underline md:translate-y-px md:text-base md:leading-[26px]">
               {club.name}
             </span>
           </Link>
