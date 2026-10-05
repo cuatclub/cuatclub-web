@@ -18,7 +18,7 @@ export const getApplicationStatus = (
 
 const BADGE: Record<ApplicationStatus, { label: string; toneClass: string }> = {
   open: { label: "เปิดอยู่", toneClass: "text-success" },
-  upcoming: { label: "ยังไม่เปิด", toneClass: "text-foreground-muted" },
+  upcoming: { label: "ยังไม่เปิด", toneClass: "text-warning" },
   closed: { label: "ปิดแล้ว", toneClass: "text-error" },
 };
 
