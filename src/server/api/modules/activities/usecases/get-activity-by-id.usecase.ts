@@ -26,10 +26,12 @@ export const getActivityById = async (
         limit: RELATED_ACTIVITIES_LIMIT,
       })
     : [];
+  const shownRelatedActivities =
+    relatedActivities.length < RELATED_ACTIVITIES_LIMIT ? [] : relatedActivities;
 
   return {
     ...activity.toDTO(),
-    relatedActivities: relatedActivities.map((related) => ({
+    relatedActivities: shownRelatedActivities.map((related) => ({
       id: related.id,
       title: related.title,
       description: related.description,
