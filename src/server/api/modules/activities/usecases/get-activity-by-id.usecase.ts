@@ -26,6 +26,8 @@ export const getActivityById = async (
         limit: RELATED_ACTIVITIES_LIMIT,
       })
     : [];
+  const shownRelatedActivities =
+    relatedActivities.length < RELATED_ACTIVITIES_LIMIT ? [] : relatedActivities;
 
   const { activity } = detail;
 
@@ -44,7 +46,7 @@ export const getActivityById = async (
     categories: detail.categories,
     faculties: detail.faculties,
     isApplicationOpen: detail.isApplicationOpen,
-    relatedActivities: relatedActivities.map((related) => ({
+    relatedActivities: shownRelatedActivities.map((related) => ({
       id: related.activity.id,
       title: related.activity.title,
       description: related.activity.description,
