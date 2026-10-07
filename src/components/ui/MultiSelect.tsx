@@ -98,7 +98,7 @@ const MultiSelect = ({
           <DropdownMenuPrimitive.Content
             align="start"
             sideOffset={4}
-            className="border-border data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 w-[var(--radix-dropdown-menu-trigger-width,12.5rem)] rounded-lg border bg-white p-1.5 shadow-black"
+            className="border-border data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 primary-scrollbar max-h-[207px] w-[var(--radix-dropdown-menu-trigger-width,12.5rem)] overflow-y-auto rounded-lg border bg-white p-1.5 shadow-black outline-none md:max-h-[222px]"
           >
             {options.map((option) => {
               const checked = selected.includes(option);

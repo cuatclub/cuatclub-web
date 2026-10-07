@@ -18,7 +18,7 @@ const SelectTrigger = forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "border-border font-ibm-plex text-foreground group flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors",
+      "border-border font-ibm-plex text-foreground group flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors outline-none",
       textSize,
       "hover:border-primary-light data-[state=open]:border-primary",
       "data-[placeholder]:text-placeholder",
@@ -46,7 +46,7 @@ const SelectContent = forwardRef<
       ref={ref}
       position={position}
       className={cn(
-        "border-border relative z-50 overflow-hidden rounded-lg border bg-white p-1.5 shadow-black",
+        "border-border relative z-50 overflow-hidden rounded-lg border bg-white p-1.5 shadow-black outline-none",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper"
           ? "max-h-[var(--radix-select-content-available-height)] w-[var(--radix-select-trigger-width)] translate-y-1"
@@ -55,8 +55,12 @@ const SelectContent = forwardRef<
       )}
       {...props}
     >
-      <SelectPrimitive.Viewport className="no-scrollbar flex flex-col gap-1">
-        {children}
+      <SelectPrimitive.Viewport>
+        {/* Radix injects an unlayered stylesheet that hides the Viewport's own scrollbar, so the
+            scrolling box has to be an inner element. */}
+        <div className="primary-scrollbar flex max-h-[211px] flex-col gap-1 overflow-y-auto md:max-h-[226px]">
+          {children}
+        </div>
       </SelectPrimitive.Viewport>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
