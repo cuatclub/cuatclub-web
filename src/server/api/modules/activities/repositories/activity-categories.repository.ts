@@ -1,8 +1,7 @@
-import { asc, eq, inArray } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db, type DbClient } from "@/server/db";
-import { activityCategories, categories } from "@/server/db/schema";
+import { activityCategories } from "@/server/db/schema";
 import { wrapRepoError } from "@/server/errors";
-import type { CategoryRow } from "@/server/api/modules/master-data/entities/master-data.entity";
 
 export interface IActivityCategoriesRepository {
   createActivityCategoryByActivityId(
@@ -10,10 +9,6 @@ export interface IActivityCategoriesRepository {
     update: number[],
     client?: DbClient
   ): Promise<void>;
-  getCategoriesByActivityIds(
-    activityIds: string[],
-    client?: DbClient
-  ): Promise<Map<string, CategoryRow[]>>;
 }
 
 class ActivityCategoriesRepository implements IActivityCategoriesRepository {
@@ -32,26 +27,6 @@ class ActivityCategoriesRepository implements IActivityCategoriesRepository {
       .catch(wrapRepoError);
 
     return;
-  }
-
-  async getCategoriesByActivityIds(
-    activityIds: string[],
-    client: DbClient = db
-  ): Promise<Map<string, CategoryRow[]>> {
-    const rows = await client
-      .select({ activityId: activityCategories.activityId, category: categories })
-      .from(activityCategories)
-      .innerJoin(categories, eq(activityCategories.categoryId, categories.id))
-      .where(inArray(activityCategories.activityId, activityIds))
-      .orderBy(asc(categories.id))
-      .catch(wrapRepoError);
-
-    const byActivityId = new Map<string, CategoryRow[]>();
-    for (const { activityId, category } of rows) {
-      byActivityId.set(activityId, [...(byActivityId.get(activityId) ?? []), category]);
-    }
-
-    return byActivityId;
   }
 }
 
