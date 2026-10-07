@@ -28,6 +28,9 @@ import {
   Activity,
   type ActivityRow,
 } from "@/server/api/modules/activities/entities/activity.entity";
+import { ActivityDetail } from "@/server/api/modules/activities/entities/activity-detail.entity";
+import { Club, type ClubRow } from "@/server/api/modules/clubs/entities/club.entity";
+import { User, type UserRow } from "@/server/api/modules/users/entities/user.entity";
 import type {
   ActivityTypeRow,
   CategoryRow,
@@ -38,6 +41,16 @@ export type CreateActivityParams = Omit<
   typeof activities.$inferInsert,
   "id" | "createdAt" | "updatedAt"
 >;
+
+export type UpdateActivityParams = Partial<
+  Omit<typeof activities.$inferInsert, "id" | "clubId" | "createdAt" | "updatedAt">
+>;
+
+export type GetMyActivitiesParams = {
+  clubId: string;
+  search?: string;
+  sort: "CREATED_AT_ASC" | "CREATED_AT_DESC";
+};
 
 export type GetPublicActivitiesParams = {
   search?: string;
@@ -51,30 +64,33 @@ export type GetPublicActivitiesParams = {
   pageSize: number;
 };
 
-export type PublicActivityClub = {
-  id: string;
-  name: string;
-  logoUrl: string | null;
-};
-
-/** One activity row joined with everything the public list needs to render it. */
-export type PublicActivityRow = {
-  activity: Activity;
-  club: PublicActivityClub;
-  activityType: ActivityTypeRow;
-  categories: CategoryRow[];
-  faculties: FacultyRow[];
-};
-
 export type PublicActivitiesPage = {
-  activities: PublicActivityRow[];
+  activities: ActivityDetail[];
   total: number;
+};
+
+// Shape of the join used by detail queries. Lives here, not on ActivityDetail — the
+// repository owns persistence shape; the entity only knows about other entities.
+type ActivityDetailRow = {
+  activity: ActivityRow;
+  club: ClubRow;
+  owner: UserRow;
+  activityType: ActivityTypeRow;
 };
 
 export interface IActivitiesRepository {
   create(params: CreateActivityParams, client?: DbClient): Promise<Activity>;
   existsByPosterUrl(posterUrl: string): Promise<boolean>;
-  getAllByFilter(params: GetPublicActivitiesParams): Promise<PublicActivitiesPage>;
+  getAllDetailByClubId(params: GetMyActivitiesParams, client?: DbClient): Promise<ActivityDetail[]>;
+  getByIdAndClubId(id: string, clubId: string, client?: DbClient): Promise<Activity | null>;
+  updateByIdAndClubId(
+    id: string,
+    clubId: string,
+    update: UpdateActivityParams,
+    client?: DbClient
+  ): Promise<Activity | null>;
+  deleteByIdAndClubId(id: string, clubId: string, client?: DbClient): Promise<boolean>;
+  getAllDetailByFilter(params: GetPublicActivitiesParams): Promise<PublicActivitiesPage>;
 }
 
 class ActivitiesRepository implements IActivitiesRepository {
@@ -95,16 +111,82 @@ class ActivitiesRepository implements IActivitiesRepository {
     return !!res;
   }
 
-  async getAllByFilter(params: GetPublicActivitiesParams): Promise<PublicActivitiesPage> {
+  async getAllDetailByClubId(
+    params: GetMyActivitiesParams,
+    client: DbClient = db
+  ): Promise<ActivityDetail[]> {
+    const filter = this.buildFilter(params.clubId, params.search);
+
+    const rows = await this.selectDetailRows(client)
+      .where(filter)
+      .orderBy(
+        params.sort === "CREATED_AT_ASC" ? asc(activities.createdAt) : desc(activities.createdAt),
+        asc(activities.id)
+      )
+      .catch(wrapRepoError);
+
+    return this.toDetails(rows, client);
+  }
+
+  async getByIdAndClubId(
+    id: string,
+    clubId: string,
+    client: DbClient = db
+  ): Promise<Activity | null> {
+    const res = await client.query.activities
+      .findFirst({ where: and(eq(activities.id, id), eq(activities.clubId, clubId)) })
+      .catch(wrapRepoError);
+
+    return res ? Activity.toEntity(res) : null;
+  }
+
+  async updateByIdAndClubId(
+    id: string,
+    clubId: string,
+    update: UpdateActivityParams,
+    client: DbClient = db
+  ): Promise<Activity | null> {
+    const res = await client
+      .update(activities)
+      .set(update)
+      .where(and(eq(activities.id, id), eq(activities.clubId, clubId)))
+      .returning()
+      .catch(wrapRepoError);
+
+    return res[0] ? Activity.toEntity(res[0]) : null;
+  }
+
+  async deleteByIdAndClubId(id: string, clubId: string, client: DbClient = db): Promise<boolean> {
+    const res = await client
+      .delete(activities)
+      .where(and(eq(activities.id, id), eq(activities.clubId, clubId)))
+      .returning({ id: activities.id })
+      .catch(wrapRepoError);
+
+    return res.length > 0;
+  }
+
+  private buildFilter(clubId: string, search?: string): SQL | undefined {
+    const conditions: SQL[] = [eq(activities.clubId, clubId)];
+
+    if (search) {
+      const pattern = `%${search.replace(/[\\%_]/g, "\\$&")}%`;
+      const matchesSearch = or(
+        ilike(activities.title, pattern),
+        ilike(activities.description, pattern),
+        this.hasCategory(ilike(categories.label, pattern))
+      );
+      if (matchesSearch) conditions.push(matchesSearch);
+    }
+
+    return and(...conditions);
+  }
+
+  async getAllDetailByFilter(params: GetPublicActivitiesParams): Promise<PublicActivitiesPage> {
     const filter = this.buildPublicFilter(params);
 
     const [rows, totalRes] = await Promise.all([
-      db
-        .select({ activity: activities, owner: user, club: clubs, activityType: activityTypes })
-        .from(activities)
-        .innerJoin(clubs, eq(activities.clubId, clubs.id))
-        .innerJoin(user, eq(clubs.userId, user.id))
-        .innerJoin(activityTypes, eq(activities.activityTypeId, activityTypes.id))
+      this.selectDetailRows(db)
         .where(filter)
         .orderBy(
           params.sort === "CREATED_AT_ASC" ? asc(activities.createdAt) : desc(activities.createdAt),
@@ -123,25 +205,40 @@ class ActivitiesRepository implements IActivitiesRepository {
         .catch(wrapRepoError),
     ]);
 
-    const total = totalRes[0]?.value ?? 0;
-    if (rows.length === 0) return { activities: [], total };
+    return { activities: await this.toDetails(rows), total: totalRes[0]?.value ?? 0 };
+  }
+
+  private selectDetailRows(client: DbClient) {
+    return client
+      .select({ activity: activities, club: clubs, owner: user, activityType: activityTypes })
+      .from(activities)
+      .innerJoin(clubs, eq(activities.clubId, clubs.id))
+      .innerJoin(user, eq(clubs.userId, user.id))
+      .innerJoin(activityTypes, eq(activities.activityTypeId, activityTypes.id));
+  }
+
+  private async toDetails(
+    rows: ActivityDetailRow[],
+    client: DbClient = db
+  ): Promise<ActivityDetail[]> {
+    if (rows.length === 0) return [];
 
     const activityIds = rows.map(({ activity }) => activity.id);
     const [categoriesByActivityId, facultiesByActivityId] = await Promise.all([
-      this.getCategoriesByActivityIds(activityIds),
-      this.getFacultiesByActivityIds(activityIds),
+      this.getCategoriesByActivityIds(activityIds, client),
+      this.getFacultiesByActivityIds(activityIds, client),
     ]);
 
-    return {
-      activities: rows.map(({ activity, owner, club, activityType }) => ({
+    return rows.map(({ activity, club, owner, activityType }) =>
+      ActivityDetail.compose({
         activity: Activity.toEntity(activity),
-        club: { id: club.id, name: owner.name, logoUrl: owner.image },
+        club: Club.toEntity(club),
+        owner: User.toEntity(owner),
         activityType,
         categories: categoriesByActivityId.get(activity.id) ?? [],
         faculties: facultiesByActivityId.get(activity.id) ?? [],
-      })),
-      total,
-    };
+      })
+    );
   }
 
   private buildPublicFilter(params: GetPublicActivitiesParams): SQL | undefined {
@@ -207,13 +304,15 @@ class ActivitiesRepository implements IActivitiesRepository {
   }
 
   private async getCategoriesByActivityIds(
-    activityIds: string[]
+    activityIds: string[],
+    client: DbClient
   ): Promise<Map<string, CategoryRow[]>> {
-    const rows = await db
+    const rows = await client
       .select({ activityId: activityCategories.activityId, category: categories })
       .from(activityCategories)
       .innerJoin(categories, eq(activityCategories.categoryId, categories.id))
       .where(inArray(activityCategories.activityId, activityIds))
+      .orderBy(asc(categories.id))
       .catch(wrapRepoError);
 
     const byActivityId = new Map<string, CategoryRow[]>();
@@ -225,9 +324,10 @@ class ActivitiesRepository implements IActivitiesRepository {
   }
 
   private async getFacultiesByActivityIds(
-    activityIds: string[]
+    activityIds: string[],
+    client: DbClient
   ): Promise<Map<string, FacultyRow[]>> {
-    const rows = await db
+    const rows = await client
       .select({ activityId: activityFaculties.activityId, faculty: faculties })
       .from(activityFaculties)
       .innerJoin(faculties, eq(activityFaculties.facultyId, faculties.id))

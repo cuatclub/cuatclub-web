@@ -30,6 +30,20 @@ export function getPublicUrl(key: string): string {
   return `${base}/${key}`;
 }
 
+// Inverse of getPublicUrl; returns the input unchanged if it isn't under the public base URL.
+export function toR2Key(url: string): string {
+  const base = env.R2_PUBLIC_BASE_URL.replace(/\/$/, "");
+  return url.startsWith(`${base}/`) ? url.slice(base.length + 1) : url;
+}
+
+/**
+ * Whether `key` is inside `prefix` (e.g. a club's folder); rejects `..` so traversal
+ * can't escape it.
+ */
+export function isKeyWithinPrefix(key: string, prefix: string): boolean {
+  return key.startsWith(prefix) && !key.includes("..");
+}
+
 export async function getSignedUploadUrl(
   key: string,
   contentType: string,
@@ -65,4 +79,21 @@ export async function deleteImages(
     deleted: (response.Deleted ?? []).map((obj) => obj.Key!),
     errors: (response.Errors ?? []).map((err) => `${err.Key}: ${err.Message}`),
   };
+}
+
+/**
+ * Best-effort cleanup of one stored image, for use after the caller's real write has committed:
+ * a failure is logged, never thrown, so it can't turn that success into an error response. The
+ * URL is usually client-supplied, so nothing outside `allowedPrefix` is ever deleted.
+ */
+export async function deleteImageWithinPrefix(url: string, allowedPrefix: string): Promise<void> {
+  const key = toR2Key(url);
+  if (!isKeyWithinPrefix(key, allowedPrefix)) return;
+
+  try {
+    const { errors } = await deleteImages([key]);
+    if (errors.length > 0) console.error("r2: image cleanup returned errors", { key, errors });
+  } catch (error) {
+    console.error("r2: image cleanup failed", { key, error });
+  }
 }
