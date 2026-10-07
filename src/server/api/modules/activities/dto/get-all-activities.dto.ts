@@ -5,11 +5,8 @@ import {
 } from "@/server/api/modules/activities/dto/activity.dto";
 import { CategoryOutputDTOSchema } from "@/server/api/modules/master-data/dto/category.dto";
 import { FacultyOutputDTOSchema } from "@/server/api/modules/master-data/dto/faculty.dto";
+import { ActivitySortOptionSchema } from "@/server/api/modules/activities/dto/get-my-activities.dto";
 import { ActivityTypeOutputDTOSchema } from "@/server/api/modules/master-data/dto/activity-type.dto";
-
-export const ActivitySortOptionSchema = z.enum(["CREATED_AT_DESC", "CREATED_AT_ASC"]);
-
-export type ActivitySortOption = z.infer<typeof ActivitySortOptionSchema>;
 
 export const GetAllActivitiesInputDTOSchema = z.object({
   search: z.string().trim().optional(),
@@ -25,7 +22,7 @@ export const GetAllActivitiesInputDTOSchema = z.object({
 
 export type GetAllActivitiesInputDTO = z.infer<typeof GetAllActivitiesInputDTOSchema>;
 
-export const ActivityListItemDTOSchema = ActivityOutputDTOSchema.pick({
+export const PublicActivityListItemDTOSchema = ActivityOutputDTOSchema.pick({
   id: true,
   title: true,
   description: true,
@@ -47,10 +44,10 @@ export const ActivityListItemDTOSchema = ActivityOutputDTOSchema.pick({
   isApplicationOpen: z.boolean(),
 });
 
-export type ActivityListItemDTO = z.infer<typeof ActivityListItemDTOSchema>;
+export type PublicActivityListItemDTO = z.infer<typeof PublicActivityListItemDTOSchema>;
 
 export const GetAllActivitiesOutputDTOSchema = z.object({
-  activities: z.array(ActivityListItemDTOSchema),
+  activities: z.array(PublicActivityListItemDTOSchema),
   total: z.number(),
   page: z.number(),
   pageSize: z.number(),
