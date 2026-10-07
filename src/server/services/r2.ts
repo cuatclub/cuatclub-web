@@ -80,3 +80,20 @@ export async function deleteImages(
     errors: (response.Errors ?? []).map((err) => `${err.Key}: ${err.Message}`),
   };
 }
+
+/**
+ * Best-effort cleanup of one stored image, for use after the caller's real write has committed:
+ * a failure is logged, never thrown, so it can't turn that success into an error response. The
+ * URL is usually client-supplied, so nothing outside `allowedPrefix` is ever deleted.
+ */
+export async function deleteImageWithinPrefix(url: string, allowedPrefix: string): Promise<void> {
+  const key = toR2Key(url);
+  if (!isKeyWithinPrefix(key, allowedPrefix)) return;
+
+  try {
+    const { errors } = await deleteImages([key]);
+    if (errors.length > 0) console.error("r2: image cleanup returned errors", { key, errors });
+  } catch (error) {
+    console.error("r2: image cleanup failed", { key, error });
+  }
+}

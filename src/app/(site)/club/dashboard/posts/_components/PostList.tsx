@@ -48,6 +48,7 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
 
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Activity | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   // The edit button that opened the details dialog, so closing it can hand focus back there.
   const editTriggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -75,7 +76,13 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
 
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
-    await deleteActivity.mutateAsync({ id: deleteTarget.id });
+    setDeleteError(null);
+    try {
+      await deleteActivity.mutateAsync({ id: deleteTarget.id });
+    } catch {
+      setDeleteError("ไม่สามารถลบโพสต์ได้ กรุณาลองอีกครั้ง");
+      return;
+    }
     await refreshList();
     if (selectedActivity?.id === deleteTarget.id) setSelectedActivity(null);
     setDeleteTarget(null);
@@ -171,14 +178,22 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
           void refreshList();
           setSelectedActivity(null);
         }}
-        onDeleteRequest={(activity) => setDeleteTarget(activity)}
+        onDeleteRequest={(activity) => {
+          setDeleteError(null);
+          setDeleteTarget(activity);
+        }}
       />
 
       <ConfirmModal
         open={deleteTarget !== null}
-        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDeleteError(null);
+            setDeleteTarget(null);
+          }
+        }}
         title="ลบโพสต์"
-        description="คุณต้องการลบโพสต์นี้ใช่หรือไม่"
+        description={deleteError ?? "คุณต้องการลบโพสต์นี้ใช่หรือไม่"}
         isLoading={deleteActivity.isPending}
         onConfirm={() => void handleDeleteConfirm()}
       />

@@ -9,7 +9,7 @@ import { activityFacultiesRepository } from "@/server/api/modules/activities/rep
 import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
 import { unitOfWork } from "@/server/db/unit-of-work";
 import { notFound, validationError } from "@/server/errors";
-import { deleteImages, isKeyWithinPrefix, toR2Key } from "@/server/services/r2";
+import { deleteImageWithinPrefix, isKeyWithinPrefix, toR2Key } from "@/server/services/r2";
 
 export const updateActivity = async (
   userId: string,
@@ -53,11 +53,13 @@ export const updateActivity = async (
     return result;
   });
 
-  // After the transaction so it can't roll back with it. Re-checks the prefix: older rows may
-  // predate the guard above.
-  const previousKey = toR2Key(existing.posterUrl);
-  if (existing.posterUrl !== updated.posterUrl && isKeyWithinPrefix(previousKey, allowedPrefix)) {
-    await deleteImages([previousKey]);
+  // After the transaction so it can't roll back with it. Older rows may predate the prefix guard
+  // above, so the cleanup re-checks it; keep the object while another activity shares it.
+  if (
+    existing.posterUrl !== updated.posterUrl &&
+    !(await activitiesRepository.existsByPosterUrl(existing.posterUrl))
+  ) {
+    await deleteImageWithinPrefix(existing.posterUrl, allowedPrefix);
   }
 
   return UpdateActivityOutputDTOSchema.parse(updated.toDTO());
