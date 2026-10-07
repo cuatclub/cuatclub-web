@@ -19,7 +19,7 @@ export function PostSupportCard({ className }: PostSupportCardProps) {
       <h2 className="font-ibm-plex text-primary text-lg leading-[1.35] font-bold">
         พบปัญหาการใช้งาน
       </h2>
-      <p className="font-ibm-plex text-dark-gray text-sm leading-[27px] font-medium">
+      <p className="font-ibm-plex text-foreground-muted text-sm leading-[27px] font-medium">
         หากพบปัญหาในการใช้งาน หรือต้องการความช่วยเหลือ สามารถติดต่อทีมงานของทาง cuatclub ได้เลย
         เราพร้อมช่วยเหลือและแนะนำการใช้งานให้กับคุณ
       </p>
