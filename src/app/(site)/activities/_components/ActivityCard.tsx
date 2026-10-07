@@ -23,7 +23,7 @@ type ActivityCardProps = {
   audience: Activity["audience"];
   applicationStartAt: Activity["applicationStartAt"];
   applicationEndAt: Activity["applicationEndAt"];
-  isApplicationOpen: Activity["isApplicationOpen"];
+  activityType: Activity["activityType"];
 };
 
 const AUDIENCE_LABEL: Record<Activity["audience"], string> = {
@@ -97,7 +97,7 @@ export function ActivityCard({
   audience,
   applicationStartAt,
   applicationEndAt,
-  isApplicationOpen,
+  activityType,
 }: ActivityCardProps) {
   const mobileCategories = categories.slice(0, MOBILE_MAX_VISIBLE_CATEGORIES);
   const mobileHiddenCount = categories.length - mobileCategories.length;
@@ -168,7 +168,7 @@ export function ActivityCard({
             <button
               type="button"
               aria-label="เพิ่มลงปฏิทิน"
-              className="border-border text-foreground-muted hover:bg-primary-lighter hover:text-primary flex size-8 cursor-pointer items-center justify-center rounded-lg border-[1.5px] transition-colors"
+              className="border-border text-foreground-muted hover:border-primary hover:text-primary flex size-8 cursor-pointer items-center justify-center rounded-lg border-[1.5px] transition-colors"
             >
               <CalendarPlus aria-hidden="true" className="size-4" />
             </button>
@@ -176,7 +176,7 @@ export function ActivityCard({
             <button
               type="button"
               aria-label="บันทึกกิจกรรม"
-              className="border-border text-foreground-muted hover:bg-primary-lighter hover:text-primary flex size-8 cursor-pointer items-center justify-center rounded-lg border-[1.5px] transition-colors"
+              className="border-border text-foreground-muted hover:border-primary hover:text-primary flex size-8 cursor-pointer items-center justify-center rounded-lg border-[1.5px] transition-colors"
             >
               <Bookmark aria-hidden="true" className="size-4" />
             </button>
@@ -228,7 +228,7 @@ export function ActivityCard({
           </p>
           <p className={FOOTER_ITEM_CLASS}>
             <Shapes aria-hidden="true" className="size-2.5 shrink-0 md:size-4" />
-            <span className="truncate">{isApplicationOpen ? "รับสมัคร" : "ปิดรับสมัคร"}</span>
+            <span className="truncate">{activityType.label}</span>
           </p>
           <p className={FOOTER_ITEM_CLASS}>
             <ClipboardClock aria-hidden="true" className="size-2.5 shrink-0 md:size-4" />

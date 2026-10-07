@@ -192,7 +192,7 @@ export function ActivityList() {
                 audience={activity.audience}
                 applicationStartAt={activity.applicationStartAt}
                 applicationEndAt={activity.applicationEndAt}
-                isApplicationOpen={activity.isApplicationOpen}
+                activityType={activity.activityType}
               />
             ))}
 
