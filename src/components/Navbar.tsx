@@ -31,7 +31,7 @@ type NavLink = { label: string; href: string | null };
 
 const NAV_LINKS: NavLink[] = [
   { label: "ชมรม", href: "/clubs" },
-  { label: "กิจกรรม", href: null },
+  { label: "กิจกรรม", href: "/activities" },
   { label: "เกี่ยวกับ", href: null },
 ];
 

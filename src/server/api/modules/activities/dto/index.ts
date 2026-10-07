@@ -6,3 +6,4 @@ export * from "@/server/api/modules/activities/dto/create-activity.dto";
 export * from "@/server/api/modules/activities/dto/get-my-activities.dto";
 export * from "@/server/api/modules/activities/dto/update-activity.dto";
 export * from "@/server/api/modules/activities/dto/delete-activity.dto";
+export * from "@/server/api/modules/activities/dto/get-all-activities.dto";

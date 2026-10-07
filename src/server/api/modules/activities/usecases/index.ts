@@ -4,3 +4,4 @@ export * from "@/server/api/modules/activities/usecases/delete-activity-poster.u
 export * from "@/server/api/modules/activities/usecases/get-my-activities.usecase";
 export * from "@/server/api/modules/activities/usecases/update-activity.usecase";
 export * from "@/server/api/modules/activities/usecases/delete-activity.usecase";
+export * from "@/server/api/modules/activities/usecases/get-all-activities.usecase";
