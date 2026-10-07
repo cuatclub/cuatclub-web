@@ -149,9 +149,16 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
         </div>
       </div>
 
-      {/* Hidden below xl. `top-26` = 64px navbar + 40px <main> padding (its resting position), so
-          it doesn't jump when sticking begins. */}
-      <PostSupportCard className="hidden shrink-0 xl:sticky xl:top-26 xl:flex xl:w-[300px]" />
+      {/* Hidden below xl. The rail stretches the row and `-mb-20` extends it through <main>'s 80px
+          bottom padding, so its bounds match DashboardSidebar's. The inner box sticks at the
+          card's resting spot (`top-26` = 64px navbar + 40px <main> padding) and runs to the
+          viewport's bottom edge, so the card leaves the viewport at the same scroll position as
+          the sidebar instead of staying pinned. */}
+      <div className="hidden shrink-0 xl:-mb-20 xl:block xl:self-stretch">
+        <div className="xl:sticky xl:top-26 xl:h-[calc(100vh-6.5rem)]">
+          <PostSupportCard className="xl:flex xl:w-[300px]" />
+        </div>
+      </div>
 
       <PostDetailsDialog
         activity={selectedActivity}
