@@ -91,9 +91,14 @@ export function Navbar({
 
   const handleSignOut = async () => {
     setIsLoggingOut(true);
-    await signOut();
-    router.push("/");
-    router.refresh();
+    try {
+      await signOut();
+      router.push("/");
+      router.refresh();
+    } finally {
+      setIsLoggingOut(false);
+      setIsLogoutConfirmOpen(false);
+    }
   };
 
   useEffect(() => {
