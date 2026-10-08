@@ -100,9 +100,4 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox*/
   }
-
-  .primary-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) transparent;
-  }
 }

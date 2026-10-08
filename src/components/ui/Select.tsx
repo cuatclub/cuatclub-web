@@ -20,10 +20,11 @@ const SelectTrigger = forwardRef<
     className={cn(
       "border-border font-ibm-plex text-foreground group flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors outline-none",
       textSize,
-      "hover:border-primary-light data-[state=open]:border-primary",
+      "hover:border-primary-light focus-visible:border-primary data-[state=open]:border-primary",
       "data-[placeholder]:text-placeholder",
       "disabled:bg-border disabled:text-placeholder disabled:hover:border-border disabled:cursor-not-allowed",
-      error && "border-error hover:border-error data-[state=open]:border-error",
+      error &&
+        "border-error hover:border-error focus-visible:border-error data-[state=open]:border-error",
       className
     )}
     aria-invalid={error}
@@ -55,12 +56,8 @@ const SelectContent = forwardRef<
       )}
       {...props}
     >
-      <SelectPrimitive.Viewport>
-        {/* Radix injects an unlayered stylesheet that hides the Viewport's own scrollbar, so the
-            scrolling box has to be an inner element. */}
-        <div className="primary-scrollbar flex max-h-[211px] flex-col gap-1 overflow-y-auto md:max-h-[226px]">
-          {children}
-        </div>
+      <SelectPrimitive.Viewport className="no-scrollbar flex max-h-[211px] flex-col gap-1 md:max-h-[226px]">
+        {children}
       </SelectPrimitive.Viewport>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
