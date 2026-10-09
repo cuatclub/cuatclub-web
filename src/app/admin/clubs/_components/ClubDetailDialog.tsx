@@ -17,6 +17,7 @@ import {
   DialogContent,
   DialogRoot,
   DialogTitle,
+  toast,
 } from "@/components";
 import { api } from "@/trpc/react";
 
@@ -28,11 +29,13 @@ type ClubDetailDialogProps = {
 export function ClubDetailDialog({ clubId, onClose }: ClubDetailDialogProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const utils = api.useUtils();
 
   useEffect(() => {
     setIsEditing(false);
     setIsConfirmingDelete(false);
+    setDeleteError(null);
   }, [clubId]);
 
   const {
@@ -54,7 +57,14 @@ export function ClubDetailDialog({ clubId, onClose }: ClubDetailDialogProps) {
 
   const handleDelete = async () => {
     if (!clubId) return;
-    await deleteClub.mutateAsync({ id: clubId });
+    setDeleteError(null);
+    try {
+      await deleteClub.mutateAsync({ id: clubId });
+    } catch {
+      setDeleteError("ไม่สามารถลบชมรมได้ กรุณาลองใหม่อีกครั้ง");
+      return;
+    }
+    toast.success("ลบชมรมเรียบร้อย");
     await utils.clubs.getAllForAdmin.invalidate();
     setIsConfirmingDelete(false);
     onClose();
@@ -155,12 +165,18 @@ export function ClubDetailDialog({ clubId, onClose }: ClubDetailDialogProps) {
 
       <ConfirmModal
         open={isConfirmingDelete}
-        onOpenChange={setIsConfirmingDelete}
+        onOpenChange={(open) => {
+          setIsConfirmingDelete(open);
+          if (!open) setDeleteError(null);
+        }}
         title="ลบชมรม"
-        description={`คุณต้องการลบชมรม${club ? ` "${club.name}"` : ""} ใช่หรือไม่ การลบจะไม่สามารถกู้คืนได้`}
+        description={
+          deleteError ??
+          `คุณต้องการลบชมรม${club ? ` "${club.name}"` : ""} ใช่หรือไม่ การลบจะไม่สามารถกู้คืนได้`
+        }
         confirmLabel="ลบชมรม"
         isLoading={deleteClub.isPending}
-        onConfirm={handleDelete}
+        onConfirm={() => void handleDelete()}
       />
     </DialogRoot>
   );
