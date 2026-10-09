@@ -14,6 +14,7 @@ import {
   DialogRoot,
   DialogTitle,
   Input,
+  toast,
 } from "@/components";
 import {
   editAffiliationSchema,
@@ -55,6 +56,7 @@ export function EditAffiliationDialog({ affiliation, onClose }: EditAffiliationD
     setRootError(null);
     try {
       await mutation.mutateAsync({ id: affiliation.id, ...values });
+      toast.success("บันทึกหน่วยงานสังกัดเรียบร้อย");
       await utils.masterData.affiliations.getAll.invalidate();
       handleClose();
     } catch (cause) {

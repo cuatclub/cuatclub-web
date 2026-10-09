@@ -16,6 +16,7 @@ import {
   DialogTitle,
   Input,
   Tag,
+  toast,
 } from "@/components";
 import { pickRandomColorPreset } from "@/app/admin/master-data/_components/color-presets";
 import { ColorField } from "@/app/admin/master-data/_components/ColorField";
@@ -80,6 +81,7 @@ export function EditCategoryDialog({ category, onClose }: EditCategoryDialogProp
     setRootError(null);
     try {
       await mutation.mutateAsync({ id: category.id, ...values });
+      toast.success("บันทึกหมวดหมู่เรียบร้อย");
       await utils.masterData.categories.getAll.invalidate();
       handleClose();
     } catch (cause) {

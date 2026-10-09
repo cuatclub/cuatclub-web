@@ -16,7 +16,7 @@ import {
   toPostsQueryInput,
   type PostListParams,
 } from "@/app/(site)/club/dashboard/posts/_lib/post-list-params";
-import { ConfirmModal } from "@/components";
+import { ConfirmModal, toast } from "@/components";
 import { api, type RouterOutputs } from "@/trpc/react";
 
 type Activity = RouterOutputs["activities"]["getMine"]["activities"][number];
@@ -83,6 +83,7 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
       setDeleteError("ไม่สามารถลบโพสต์ได้ กรุณาลองอีกครั้ง");
       return;
     }
+    toast.success("ลบโพสต์เรียบร้อย");
     await refreshList();
     if (selectedActivity?.id === deleteTarget.id) setSelectedActivity(null);
     setDeleteTarget(null);

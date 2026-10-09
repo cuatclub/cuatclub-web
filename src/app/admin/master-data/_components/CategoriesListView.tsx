@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
 import { api, type RouterOutputs } from "@/trpc/react";
-import { Card, ConfirmModal, Tag } from "@/components";
+import { Card, ConfirmModal, Tag, toast } from "@/components";
 import { EditCategoryDialog } from "@/app/admin/master-data/_components/EditCategoryDialog";
 
 type Category = RouterOutputs["masterData"]["categories"]["getAll"][number];
@@ -25,6 +25,7 @@ export function CategoriesListView() {
     setDeleteError(null);
     try {
       await deleteCategory.mutateAsync({ id: deleting.id });
+      toast.success("ลบหมวดหมู่เรียบร้อย");
       await utils.masterData.categories.getAll.invalidate();
       setDeleting(null);
     } catch (cause) {
