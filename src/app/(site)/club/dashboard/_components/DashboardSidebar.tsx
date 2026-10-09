@@ -31,9 +31,14 @@ export function DashboardSidebar({ name, email, image }: DashboardSidebarProps) 
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
-    await signOut();
-    router.push("/");
-    router.refresh();
+    try {
+      await signOut();
+      router.push("/");
+      router.refresh();
+    } finally {
+      setIsLoggingOut(false);
+      setIsLogoutConfirmOpen(false);
+    }
   };
 
   return (
