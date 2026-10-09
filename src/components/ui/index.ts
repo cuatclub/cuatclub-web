@@ -10,6 +10,7 @@ export * from "@/components/ui/Pagination";
 export * from "@/components/ui/PasswordInput";
 export * from "@/components/ui/RadioGroup";
 export * from "@/components/ui/Select";
+export * from "@/components/ui/Sonner";
 export * from "@/components/ui/Tag";
 export * from "@/components/ui/TagSelection";
 export * from "@/components/ui/Textarea";
