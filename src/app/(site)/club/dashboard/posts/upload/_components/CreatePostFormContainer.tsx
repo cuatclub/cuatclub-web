@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
+import { toast } from "@/components";
 import { api } from "@/trpc/react";
 import {
   CreatePostForm,
@@ -77,6 +78,7 @@ export function CreatePostFormContainer({
       throw error;
     }
 
+    toast.success("สร้างโพสต์เรียบร้อย");
     router.push("/club/dashboard/posts");
     router.refresh();
   };

@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
   Input,
+  toast,
 } from "@/components";
 import {
   editAffiliationSchema,
@@ -49,6 +50,7 @@ export function CreateAffiliationDialog() {
     setRootError(null);
     try {
       await mutation.mutateAsync(values);
+      toast.success("เพิ่มหน่วยงานสังกัดเรียบร้อย");
       await utils.masterData.affiliations.getAll.invalidate();
       handleOpenChange(false);
     } catch (cause) {

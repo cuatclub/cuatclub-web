@@ -3,7 +3,14 @@
 import type { RefObject } from "react";
 import { X } from "lucide-react";
 
-import { Button, DialogClose, DialogContent, DialogRoot, DialogTitle } from "@/components/ui";
+import {
+  Button,
+  DialogClose,
+  DialogContent,
+  DialogRoot,
+  DialogTitle,
+  toast,
+} from "@/components/ui";
 import {
   PostForm,
   type ActivityTypeOption,
@@ -123,6 +130,7 @@ export function PostDetailsDialog({
       throw error;
     }
 
+    toast.success("บันทึกโพสต์เรียบร้อย");
     onUpdated();
   };
 
