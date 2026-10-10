@@ -182,6 +182,7 @@ export function ActivityList() {
             {activities.map((activity) => (
               <ActivityCard
                 key={activity.id}
+                id={activity.id}
                 title={activity.title}
                 description={activity.description}
                 posterUrl={activity.posterUrl}
@@ -190,9 +191,9 @@ export function ActivityList() {
                 faculties={activity.faculties}
                 yearLevels={activity.yearLevels}
                 audience={activity.audience}
+                activityType={activity.activityType}
                 applicationStartAt={activity.applicationStartAt}
                 applicationEndAt={activity.applicationEndAt}
-                activityType={activity.activityType}
               />
             ))}
 
