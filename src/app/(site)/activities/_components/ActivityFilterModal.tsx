@@ -63,10 +63,12 @@ export function ActivityFilterModal({
 
   return (
     <DialogRoot open={open} onOpenChange={onOpenChange} modal={!isDesktop}>
+      {/* Capped to match the clubs panel, so the footer stays on screen under the search bar of a
+          laptop-height window and the list keeps showing through behind it. */}
       <DialogContent
         placement="anchored"
         aria-describedby={undefined}
-        className="md:max-h-[600px]"
+        className="md:max-h-[467px]"
         onInteractOutside={(event) => {
           const target = event.target;
           if (target instanceof Node && triggerRef.current?.contains(target)) {
