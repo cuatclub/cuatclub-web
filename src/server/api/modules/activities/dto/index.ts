@@ -7,3 +7,5 @@ export * from "@/server/api/modules/activities/dto/get-my-activities.dto";
 export * from "@/server/api/modules/activities/dto/update-activity.dto";
 export * from "@/server/api/modules/activities/dto/delete-activity.dto";
 export * from "@/server/api/modules/activities/dto/get-all-activities.dto";
+export * from "@/server/api/modules/activities/dto/activity-detail.dto";
+export * from "@/server/api/modules/activities/dto/get-activity-by-id.dto";

@@ -1,8 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Building2, ClipboardClock, Shapes, Users } from "lucide-react";
 
 import { Tag } from "@/components/ui/Tag";
 import { THAI_MONTHS_SHORT } from "@/lib/date";
+import { cn } from "@/lib/utils";
 
 /** Cards share a row height, so only the first few categories fit — one on a phone, where they
  *  sit beside the club name, and two on desktop, where they get a row of their own. */
@@ -80,6 +82,10 @@ export type ActivityCardViewProps = {
   /** Buttons at the header's right edge. The slot sits beside the mobile categories, so a
    *  caller that wants it hidden on mobile hides its own element. */
   actions?: React.ReactNode;
+  /** When set, the whole card links here. The card can't be one `<Link>` — it holds buttons,
+   *  which can't nest inside an anchor — so the title is the link and its `::after` stretches
+   *  over the whole card instead. */
+  href?: string;
 };
 
 /**
@@ -99,6 +105,7 @@ export function ActivityCardView({
   applicationStartAt,
   applicationEndAt,
   actions,
+  href,
 }: ActivityCardViewProps) {
   const mobileCategories = categories.slice(0, MOBILE_MAX_VISIBLE_CATEGORIES);
   const mobileHiddenCount = categories.length - mobileCategories.length;
@@ -106,7 +113,13 @@ export function ActivityCardView({
   const desktopHiddenCount = categories.length - desktopCategories.length;
 
   return (
-    <div className="border-border flex gap-4 rounded-xl border border-white bg-white p-4 shadow-black md:gap-5">
+    <div
+      className={cn(
+        "border-border flex gap-4 rounded-xl border border-white bg-white p-4 shadow-black md:gap-5",
+        href &&
+          "hover:border-primary-light has-[a:focus-visible]:ring-primary relative transition-colors has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-offset-2"
+      )}
+    >
       <div className="bg-surface relative h-[160px] w-[125px] shrink-0 overflow-hidden rounded-xl md:h-[262px] md:w-[205px]">
         <Image
           src={posterUrl}
@@ -191,7 +204,16 @@ export function ActivityCardView({
 
           <div className="flex flex-col gap-1">
             <h3 className="font-ibm-plex text-foreground line-clamp-1 text-xs leading-[normal] font-semibold md:text-lg">
-              {title}
+              {href ? (
+                <Link
+                  href={href}
+                  className="after:absolute after:inset-0 after:rounded-xl focus-visible:outline-none"
+                >
+                  {title}
+                </Link>
+              ) : (
+                title
+              )}
             </h3>
             <p className="font-ibm-plex text-foreground-muted line-clamp-4 text-[10px] leading-[1.5] md:text-sm">
               {description}

@@ -9,6 +9,7 @@ import {
   exists,
   ilike,
   inArray,
+  ne,
   or,
   sql,
 } from "drizzle-orm";
@@ -41,6 +42,12 @@ export type CreateActivityParams = Omit<
   typeof activities.$inferInsert,
   "id" | "createdAt" | "updatedAt"
 >;
+
+export type GetRelatedActivitiesParams = {
+  excludeActivityId: string;
+  categoryIds: number[];
+  limit: number;
+};
 
 export type UpdateActivityParams = Partial<
   Omit<typeof activities.$inferInsert, "id" | "clubId" | "createdAt" | "updatedAt">
@@ -80,6 +87,11 @@ type ActivityDetailRow = {
 
 export interface IActivitiesRepository {
   create(params: CreateActivityParams, client?: DbClient): Promise<Activity>;
+  getDetailById(id: string, client?: DbClient): Promise<ActivityDetail | null>;
+  getRelatedByCategoryIds(
+    params: GetRelatedActivitiesParams,
+    client?: DbClient
+  ): Promise<ActivityDetail[]>;
   existsByPosterUrl(posterUrl: string): Promise<boolean>;
   getAllDetailByClubId(params: GetMyActivitiesParams, client?: DbClient): Promise<ActivityDetail[]>;
   getByIdAndClubId(id: string, clubId: string, client?: DbClient): Promise<Activity | null>;
@@ -101,6 +113,37 @@ class ActivitiesRepository implements IActivitiesRepository {
     const row: ActivityRow = res[0]!;
 
     return Activity.toEntity(row);
+  }
+
+  // Returns null when nothing matches — that's a normal result, not a
+  // repository error. The usecase decides whether that's a not-found error.
+  async getDetailById(id: string, client: DbClient = db): Promise<ActivityDetail | null> {
+    const rows = await this.selectDetailRows(client)
+      .where(eq(activities.id, id))
+      .limit(1)
+      .catch(wrapRepoError);
+
+    const [detail] = await this.toDetails(rows, client);
+    return detail ?? null;
+  }
+
+  async getRelatedByCategoryIds(
+    params: GetRelatedActivitiesParams,
+    client: DbClient = db
+  ): Promise<ActivityDetail[]> {
+    const rows = await this.selectDetailRows(client)
+      .where(
+        and(
+          ne(activities.id, params.excludeActivityId),
+          eq(clubs.registrationStatus, Club.PUBLICLY_VISIBLE_STATUS),
+          this.hasCategory(inArray(activityCategories.categoryId, params.categoryIds))
+        )
+      )
+      .orderBy(desc(activities.createdAt), asc(activities.id))
+      .limit(params.limit)
+      .catch(wrapRepoError);
+
+    return this.toDetails(rows, client);
   }
 
   async existsByPosterUrl(posterUrl: string): Promise<boolean> {

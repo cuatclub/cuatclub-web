@@ -1,11 +1,13 @@
 import { Bookmark, CalendarPlus } from "lucide-react";
 
+import { formatFaculties } from "@/app/(site)/activities/_lib/activity-format";
 import { ActivityCardView } from "@/features/activities/card/ActivityCardView";
 import type { RouterOutputs } from "@/trpc/react";
 
 type Activity = RouterOutputs["activities"]["getAll"]["activities"][number];
 
 type ActivityCardProps = {
+  id: Activity["id"];
   title: Activity["title"];
   description: Activity["description"];
   posterUrl: Activity["posterUrl"];
@@ -14,25 +16,20 @@ type ActivityCardProps = {
   faculties: Activity["faculties"];
   yearLevels: Activity["yearLevels"];
   audience: Activity["audience"];
+  activityType: Activity["activityType"];
   applicationStartAt: Activity["applicationStartAt"];
   applicationEndAt: Activity["applicationEndAt"];
-  activityType: Activity["activityType"];
-};
-
-const formatFaculties = (faculties: Activity["faculties"]): string => {
-  const [first] = faculties;
-  if (!first) return "ไม่จำกัดคณะ";
-  return faculties.length === 1 ? first.label : `${first.label} และอื่นๆ`;
 };
 
 /**
- * A single activity in the activity list. Unlike `ClubCard` this is not a link — there is no
- * `/activities/[id]` detail page yet.
+ * A single activity, in the activity list and in an activity page's related activities. The whole
+ * card links to the activity's page.
  */
-export function ActivityCard({ faculties, activityType, ...card }: ActivityCardProps) {
+export function ActivityCard({ id, faculties, activityType, ...card }: ActivityCardProps) {
   return (
     <ActivityCardView
       {...card}
+      href={`/activities/${id}`}
       facultyLabel={formatFaculties(faculties)}
       activityTypeLabel={activityType.label}
       actions={
