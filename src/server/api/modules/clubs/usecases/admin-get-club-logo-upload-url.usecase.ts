@@ -1,3 +1,5 @@
+import { randomUUID } from "crypto";
+
 import {
   AdminGetClubLogoUploadUrlOutputDTOSchema,
   type AdminGetClubLogoUploadUrlInputDTO,
@@ -10,8 +12,8 @@ export const adminGetClubLogoUploadUrl = async (input: AdminGetClubLogoUploadUrl
   const club = await clubsRepository.getById(input.clubId);
   if (!club) throw notFound("Club not found");
 
-  const key = `clubs/${club.id}/logo.${getExtension(input.contentType)}`;
-  const url = await getSignedUploadUrl(key, input.contentType);
+  const key = `clubs/${club.id}/logo-${randomUUID()}.${getExtension(input.contentType)}`;
+  const url = await getSignedUploadUrl(key, input.contentType, undefined, input.contentLength);
 
   return AdminGetClubLogoUploadUrlOutputDTOSchema.parse({ key, url, publicUrl: getPublicUrl(key) });
 };

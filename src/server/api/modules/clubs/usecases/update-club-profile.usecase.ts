@@ -8,6 +8,7 @@ import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.r
 import { usersRepository } from "@/server/api/modules/users/repositories/users.repository";
 import { unitOfWork } from "@/server/db/unit-of-work";
 import { notFound, validationError } from "@/server/errors";
+import { deleteImagesWithinPrefix, isKeyDirectlyWithinPrefix, toR2Key } from "@/server/services/r2";
 
 export const updateClubProfile = async (
   currentUserId: string,
@@ -30,6 +31,16 @@ export const updateClubProfile = async (
     await clubsRepository.updateById(club.id, update, client);
     await clubCategoriesRepository.createCategoryClubByClubId(club.id, categories, client);
   });
+
+  const retainedImageUrls = new Set([image, ...update.imageUrls]);
+  const imagePrefix = `clubs/${club.id}/`;
+  const removedImageUrls = [user.image, ...club.imageUrls].filter(
+    (url): url is string =>
+      url !== null &&
+      !retainedImageUrls.has(url) &&
+      isKeyDirectlyWithinPrefix(toR2Key(url), imagePrefix)
+  );
+  await deleteImagesWithinPrefix(removedImageUrls, imagePrefix);
 
   const detail = await clubsRepository.getDetailByUserId(currentUserId);
   if (!detail) throw notFound("Club profile not found");

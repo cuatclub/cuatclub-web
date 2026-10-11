@@ -53,6 +53,7 @@ export function EditClubForm({
   const utils = api.useUtils();
   const getLogoUploadUrl = api.clubs.getLogoUploadUrlForAdmin.useMutation();
   const getImagesUploadUrl = api.clubs.getImagesUploadUrlForAdmin.useMutation();
+  const deleteProfileImageUploads = api.clubs.deleteProfileImageUploadsForAdmin.useMutation();
   const updateClub = api.clubs.updateForAdmin.useMutation();
 
   const submitErrorRef = useRef<HTMLParagraphElement>(null);
@@ -123,6 +124,7 @@ export function EditClubForm({
 
   const submitForm = handleSubmit(async (values) => {
     clearErrors("root.submit");
+    let uploadKeys: string[] = [];
     try {
       const affiliation = affiliations.find(({ label }) => label === values.affiliation);
       if (!affiliation) throw new Error("Selected affiliation was not found");
@@ -145,12 +147,19 @@ export function EditClubForm({
 
       const [logoUpload, galleryUploads] = await Promise.all([
         newLogo && logoContentType
-          ? getLogoUploadUrl.mutateAsync({ clubId, contentType: logoContentType })
+          ? getLogoUploadUrl.mutateAsync({
+              clubId,
+              contentType: logoContentType,
+              contentLength: newLogo.size,
+            })
           : Promise.resolve(null),
         galleryContentTypes.length > 0
           ? getImagesUploadUrl.mutateAsync({
               clubId,
-              files: galleryContentTypes.map((contentType) => ({ contentType })),
+              files: newGalleryFiles.map((file) => ({
+                contentType: requireContentType(file),
+                contentLength: file.size,
+              })),
             })
           : Promise.resolve(null),
       ]);
@@ -160,6 +169,10 @@ export function EditClubForm({
       }
 
       const presignedGalleryUploads = galleryUploads?.presignedUrls ?? [];
+      uploadKeys = [
+        ...(logoUpload ? [logoUpload.key] : []),
+        ...presignedGalleryUploads.map(({ key }) => key),
+      ];
       if (presignedGalleryUploads.length !== newGalleryFiles.length) {
         throw new Error("Gallery upload target count did not match");
       }
@@ -177,7 +190,10 @@ export function EditClubForm({
         if (!upload || !contentType) throw new Error("Gallery upload target was not created");
         uploads.push(uploadClubImage(file, { url: upload.url, contentType }));
       }
-      await Promise.all(uploads);
+      const uploadResults = await Promise.allSettled(uploads);
+      if (uploadResults.some((result) => result.status === "rejected")) {
+        throw new Error("One or more club image uploads failed");
+      }
 
       const logoUrl = values.logo.kind === "persisted" ? values.logo.url : logoUpload?.publicUrl;
       if (!logoUrl) throw new Error("Club logo URL was not created");
@@ -217,6 +233,7 @@ export function EditClubForm({
         imageUrls,
         contacts: normalizedContacts,
       });
+      uploadKeys = [];
 
       await Promise.all([
         utils.clubs.getById.invalidate({ clubId }),
@@ -225,6 +242,11 @@ export function EditClubForm({
 
       onSaved();
     } catch {
+      if (uploadKeys.length > 0) {
+        await deleteProfileImageUploads
+          .mutateAsync({ clubId, keys: uploadKeys })
+          .catch(() => undefined);
+      }
       setError("root.submit", {
         type: "server",
         message: "ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง",
