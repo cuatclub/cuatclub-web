@@ -6,6 +6,7 @@ export * from "@/server/api/modules/clubs/usecases/get-club-registration-details
 export * from "@/server/api/modules/clubs/usecases/get-club-dashboard-profile.usecase";
 export * from "@/server/api/modules/clubs/usecases/get-club-logo-upload-url.usecase";
 export * from "@/server/api/modules/clubs/usecases/get-club-images-upload-url.usecase";
+export * from "@/server/api/modules/clubs/usecases/delete-club-profile-image-uploads.usecase";
 export * from "@/server/api/modules/clubs/usecases/save-club-profile-registration.usecase";
 export * from "@/server/api/modules/clubs/usecases/update-club-profile.usecase";
 export * from "@/server/api/modules/clubs/usecases/submit-club-profile-registration.usecase";
@@ -15,3 +16,4 @@ export * from "@/server/api/modules/clubs/usecases/admin-update-club.usecase";
 export * from "@/server/api/modules/clubs/usecases/admin-delete-club.usecase";
 export * from "@/server/api/modules/clubs/usecases/admin-get-club-logo-upload-url.usecase";
 export * from "@/server/api/modules/clubs/usecases/admin-get-club-images-upload-url.usecase";
+export * from "@/server/api/modules/clubs/usecases/admin-delete-club-profile-image-uploads.usecase";
