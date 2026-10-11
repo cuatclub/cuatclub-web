@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button, Input, Select, TagSelection, Textarea } from "@/components/ui";
+import { Button, Input, Select, TagSelection, Textarea, toast } from "@/components/ui";
 import {
   buildClubProfileFormValues,
   ClubGalleryField,
@@ -223,6 +223,7 @@ export function EditClubForm({
         utils.clubs.getAllForAdmin.invalidate(),
       ]);
 
+      toast.success("บันทึกข้อมูลชมรมเรียบร้อย");
       onSaved();
     } catch {
       setError("root.submit", {

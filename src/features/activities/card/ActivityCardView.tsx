@@ -23,7 +23,7 @@ const DESKTOP_TAG_CLASS =
 
 /** Mobile rows are a fixed 20px tall with no row gap; desktop spaces them by 6px instead. */
 const FOOTER_ITEM_CLASS =
-  "font-ibm-plex text-foreground-muted flex min-h-5 items-center gap-1 text-[8px] font-medium md:min-h-0 md:gap-2 md:text-xs";
+  "font-ibm-plex text-foreground-muted flex min-h-5 min-w-0 items-center gap-1 text-[8px] font-medium md:min-h-0 md:gap-2 md:text-xs";
 
 const TOTAL_YEAR_LEVELS = 4;
 
@@ -79,6 +79,8 @@ export type ActivityCardViewProps = {
   activityTypeLabel: string;
   applicationStartAt: Date;
   applicationEndAt: Date;
+  /** Drops the category tags from the phone layout, where the header has no room for them. */
+  hideCategoriesOnMobile?: boolean;
   /** Buttons at the header's right edge. The slot sits beside the mobile categories, so a
    *  caller that wants it hidden on mobile hides its own element. */
   actions?: React.ReactNode;
@@ -104,11 +106,14 @@ export function ActivityCardView({
   activityTypeLabel,
   applicationStartAt,
   applicationEndAt,
+  hideCategoriesOnMobile = false,
   actions,
   href,
 }: ActivityCardViewProps) {
-  const mobileCategories = categories.slice(0, MOBILE_MAX_VISIBLE_CATEGORIES);
-  const mobileHiddenCount = categories.length - mobileCategories.length;
+  const mobileCategories = hideCategoriesOnMobile
+    ? []
+    : categories.slice(0, MOBILE_MAX_VISIBLE_CATEGORIES);
+  const mobileHiddenCount = Math.max(categories.length - mobileCategories.length, 0);
   const desktopCategories = categories.slice(0, DESKTOP_MAX_VISIBLE_CATEGORIES);
   const desktopHiddenCount = categories.length - desktopCategories.length;
 

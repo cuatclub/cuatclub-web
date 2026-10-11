@@ -16,7 +16,7 @@ import {
   toPostsQueryInput,
   type PostListParams,
 } from "@/app/(site)/club/dashboard/posts/_lib/post-list-params";
-import { ConfirmModal } from "@/components";
+import { ConfirmModal, toast } from "@/components";
 import { api, type RouterOutputs } from "@/trpc/react";
 
 type Activity = RouterOutputs["activities"]["getMine"]["activities"][number];
@@ -29,11 +29,11 @@ type PostListProps = {
 /** Inside the list column (not above the row) so the rail's top aligns with the greeting. */
 function Greeting({ clubName }: { clubName: string }) {
   return (
-    <div className="flex flex-col gap-1">
-      <h1 className="font-ibm-plex text-primary text-[28px] leading-[38px] font-bold">
+    <div className="flex flex-col">
+      <h1 className="font-ibm-plex text-primary text-[24px] leading-[46px] font-bold md:text-[28px] md:leading-[38px]">
         👋 ยินดีต้อนรับ {clubName}
       </h1>
-      <p className="font-ibm-plex text-foreground-secondary text-base font-medium">
+      <p className="font-ibm-plex text-foreground-secondary text-sm leading-[23px] font-medium md:text-base md:leading-[normal]">
         จัดการและติดตามโพสต์ทั้งหมดของคุณได้ที่นี่
       </p>
     </div>
@@ -83,6 +83,7 @@ export function PostList({ clubName, clubAvatarUrl }: PostListProps) {
       setDeleteError("ไม่สามารถลบโพสต์ได้ กรุณาลองอีกครั้ง");
       return;
     }
+    toast.success("ลบโพสต์เรียบร้อย");
     await refreshList();
     if (selectedActivity?.id === deleteTarget.id) setSelectedActivity(null);
     setDeleteTarget(null);

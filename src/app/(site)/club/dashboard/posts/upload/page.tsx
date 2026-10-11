@@ -10,11 +10,11 @@ export default async function UploadPostPage() {
 
   return (
     <div className="flex w-full flex-col gap-6 md:gap-9">
-      <div className="flex flex-col gap-1">
-        <h1 className="font-ibm-plex text-primary text-[28px] leading-[38px] font-bold">
+      <div className="flex flex-col">
+        <h1 className="font-ibm-plex text-primary text-[24px] leading-[46px] font-bold md:text-[28px] md:leading-[38px]">
           สร้างโพสต์
         </h1>
-        <p className="font-ibm-plex text-foreground-secondary text-base font-medium">
+        <p className="font-ibm-plex text-foreground-secondary text-sm leading-[23px] font-medium md:text-base md:leading-[normal]">
           อัพโหลดกิจกรรมใหม่ของคุณได้ที่นี่
         </p>
       </div>

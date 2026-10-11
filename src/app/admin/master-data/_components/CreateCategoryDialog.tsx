@@ -17,6 +17,7 @@ import {
   DialogTrigger,
   Input,
   Tag,
+  toast,
 } from "@/components";
 import { pickRandomColorPreset } from "@/app/admin/master-data/_components/color-presets";
 import { ColorField } from "@/app/admin/master-data/_components/ColorField";
@@ -71,6 +72,7 @@ export function CreateCategoryDialog() {
     setRootError(null);
     try {
       await mutation.mutateAsync(values);
+      toast.success("เพิ่มหมวดหมู่เรียบร้อย");
       await utils.masterData.categories.getAll.invalidate();
       handleOpenChange(false);
     } catch (cause) {

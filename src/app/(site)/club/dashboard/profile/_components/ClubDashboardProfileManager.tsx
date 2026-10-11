@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SquarePen } from "lucide-react";
 
-import { Button } from "@/components/ui";
+import { Button, toast } from "@/components/ui";
 import {
   buildClubProfileFormValues,
   ClubProfileDetails,
@@ -148,6 +148,7 @@ export function ClubDashboardProfileManager({
       contacts: normalizedContacts,
     });
 
+    toast.success("บันทึกข้อมูลชมรมเรียบร้อย");
     setProfile(updatedProfile);
     setIsEditing(false);
     router.refresh();
