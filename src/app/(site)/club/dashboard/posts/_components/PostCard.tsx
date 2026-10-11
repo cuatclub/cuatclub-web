@@ -54,6 +54,7 @@ export function PostCard({
       posterUrl={activity.posterUrl}
       club={{ name: clubName, logoUrl: clubAvatarUrl }}
       categories={activity.categories}
+      hideCategoriesOnMobile
       audience={activity.audience}
       yearLevels={activity.yearLevels}
       facultyLabel={formatFaculties(activity.faculties, totalFacultyCount)}

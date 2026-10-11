@@ -14,7 +14,7 @@ export function DashboardShell({ name, email, image, children }: DashboardShellP
   return (
     <div className="flex w-full flex-1">
       <DashboardSidebar name={name} email={email} image={image} />
-      <main className="flex-1 px-4 py-4 sm:px-5 sm:py-6 md:px-10 md:py-10 md:pb-20">
+      <main className="min-w-0 flex-1 px-4 py-4 sm:px-5 sm:py-6 md:px-10 md:py-10 md:pb-20">
         {children}
       </main>
     </div>

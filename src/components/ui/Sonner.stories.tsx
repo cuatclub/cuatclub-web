@@ -14,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Confirms a save. Top-right from `md` up, bottom-center below it — resize the canvas to see it move. */
+/** Confirms a save. Bottom-right from `md` up, bottom-center below it — resize the canvas to see it move. */
 export const Success: Story = {
   render: (args) => (
     <>
