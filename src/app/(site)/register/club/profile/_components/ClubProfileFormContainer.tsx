@@ -36,6 +36,7 @@ export function ClubProfileFormContainer({
   const router = useRouter();
   const getLogoUploadUrl = api.clubs.getLogoUploadUrl.useMutation();
   const getImagesUploadUrl = api.clubs.getImagesUploadUrl.useMutation();
+  const deleteProfileImageUploads = api.clubs.deleteProfileImageUploads.useMutation();
   const saveProfile = api.clubs.saveClubProfileRegistration.useMutation();
 
   const initialValues = buildClubProfileFormValues(existingProfile);
@@ -82,69 +83,84 @@ export function ClubProfileFormContainer({
     }
 
     const presignedGalleryUploads = galleryUploads?.presignedUrls ?? [];
-    if (presignedGalleryUploads.length !== newGalleryFiles.length) {
-      throw new Error("Gallery upload target count did not match");
-    }
+    const uploadKeys = [
+      ...(logoUpload ? [logoUpload.key] : []),
+      ...presignedGalleryUploads.map(({ key }) => key),
+    ];
 
-    const uploads: Promise<void>[] = [];
-    if (newLogo && logoContentType && logoUpload) {
-      uploads.push(
-        uploadClubImage(newLogo, {
-          url: logoUpload.url,
-          contentType: logoContentType,
-        })
-      );
-    }
-
-    for (const [index, file] of newGalleryFiles.entries()) {
-      const upload = presignedGalleryUploads[index];
-      const contentType = galleryContentTypes[index];
-      if (!upload || !contentType) throw new Error("Gallery upload target was not created");
-      uploads.push(uploadClubImage(file, { url: upload.url, contentType }));
-    }
-    await Promise.all(uploads);
-
-    const logoUrl = values.logo.kind === "persisted" ? values.logo.url : logoUpload?.publicUrl;
-    if (!logoUrl) throw new Error("Club logo URL was not created");
-
-    const imageUrls: string[] = [];
-    let newGalleryIndex = 0;
-    for (const image of values.atmospherePhotos) {
-      if (image.kind === "persisted") {
-        imageUrls.push(image.url);
-        continue;
+    try {
+      if (presignedGalleryUploads.length !== newGalleryFiles.length) {
+        throw new Error("Gallery upload target count did not match");
       }
 
-      const upload = presignedGalleryUploads[newGalleryIndex];
-      if (!upload) throw new Error("Gallery URL was not created");
-      imageUrls.push(upload.publicUrl);
-      newGalleryIndex += 1;
-    }
+      const uploads: Promise<void>[] = [];
+      if (newLogo && logoContentType && logoUpload) {
+        uploads.push(
+          uploadClubImage(newLogo, {
+            url: logoUpload.url,
+            contentType: logoContentType,
+          })
+        );
+      }
 
-    const contacts = {
-      instagram: values.contacts.instagram.trim(),
-      facebook: values.contacts.facebook.trim(),
-      tiktok: values.contacts.tiktok.trim(),
-      line_oa: values.contacts.lineOa.trim(),
-    };
-    const normalizedContacts = Object.values(contacts).every((value) => value === "")
-      ? null
-      : contacts;
+      for (const [index, file] of newGalleryFiles.entries()) {
+        const upload = presignedGalleryUploads[index];
+        const contentType = galleryContentTypes[index];
+        if (!upload || !contentType) throw new Error("Gallery upload target was not created");
+        uploads.push(uploadClubImage(file, { url: upload.url, contentType }));
+      }
+      const uploadResults = await Promise.allSettled(uploads);
+      if (uploadResults.some((result) => result.status === "rejected")) {
+        throw new Error("One or more club image uploads failed");
+      }
 
-    const result = await saveProfile.mutateAsync({
-      id: clubId,
-      name: values.name,
-      image: logoUrl,
-      affiliationId: affiliation.id,
-      categories: categoryIds,
-      shortDescription: values.shortDescription,
-      longDescription: values.longDescription,
-      imageUrls,
-      contacts: normalizedContacts,
-    });
+      const logoUrl = values.logo.kind === "persisted" ? values.logo.url : logoUpload?.publicUrl;
+      if (!logoUrl) throw new Error("Club logo URL was not created");
 
-    if (result.registrationStatus !== "INFO_SUBMITTED") {
-      throw new Error("Club profile status did not update");
+      const imageUrls: string[] = [];
+      let newGalleryIndex = 0;
+      for (const image of values.atmospherePhotos) {
+        if (image.kind === "persisted") {
+          imageUrls.push(image.url);
+          continue;
+        }
+
+        const upload = presignedGalleryUploads[newGalleryIndex];
+        if (!upload) throw new Error("Gallery URL was not created");
+        imageUrls.push(upload.publicUrl);
+        newGalleryIndex += 1;
+      }
+
+      const contacts = {
+        instagram: values.contacts.instagram.trim(),
+        facebook: values.contacts.facebook.trim(),
+        tiktok: values.contacts.tiktok.trim(),
+        line_oa: values.contacts.lineOa.trim(),
+      };
+      const normalizedContacts = Object.values(contacts).every((value) => value === "")
+        ? null
+        : contacts;
+
+      const result = await saveProfile.mutateAsync({
+        id: clubId,
+        name: values.name,
+        image: logoUrl,
+        affiliationId: affiliation.id,
+        categories: categoryIds,
+        shortDescription: values.shortDescription,
+        longDescription: values.longDescription,
+        imageUrls,
+        contacts: normalizedContacts,
+      });
+
+      if (result.registrationStatus !== "INFO_SUBMITTED") {
+        throw new Error("Club profile status did not update");
+      }
+    } catch (error) {
+      if (uploadKeys.length > 0) {
+        await deleteProfileImageUploads.mutateAsync({ keys: uploadKeys }).catch(() => undefined);
+      }
+      throw error;
     }
 
     router.push("/register/club/review");

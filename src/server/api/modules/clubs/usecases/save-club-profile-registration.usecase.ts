@@ -8,6 +8,7 @@ import {
 import { notFound, validationError } from "@/server/errors";
 import { unitOfWork } from "@/server/db/unit-of-work";
 import { clubCategoriesRepository } from "@/server/api/modules/clubs/repositories/club-categories.repository";
+import { deleteImagesWithinPrefix, isKeyDirectlyWithinPrefix, toR2Key } from "@/server/services/r2";
 
 export const saveProfileRegistration = async (
   userId: string,
@@ -39,6 +40,16 @@ export const saveProfileRegistration = async (
 
     await clubCategoriesRepository.createCategoryClubByClubId(id, categories, client);
   });
+
+  const retainedImageUrls = new Set([image, ...update.imageUrls]);
+  const imagePrefix = `clubs/${club.id}/`;
+  const removedImageUrls = [user.image, ...club.imageUrls].filter(
+    (url): url is string =>
+      url !== null &&
+      !retainedImageUrls.has(url) &&
+      isKeyDirectlyWithinPrefix(toR2Key(url), imagePrefix)
+  );
+  await deleteImagesWithinPrefix(removedImageUrls, imagePrefix);
 
   return SaveClubProfileRegistrationOutputDTOSchema.parse({
     registrationStatus: "INFO_SUBMITTED",

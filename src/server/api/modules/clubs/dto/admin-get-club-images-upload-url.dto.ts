@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  ContentLengthSchema,
   ContentTypeSchema,
   PresignedUploadUrlSchema,
 } from "@/server/api/modules/clubs/dto/upload-file-meta.dto";
@@ -8,7 +9,7 @@ import { MAX_CLUB_IMAGES } from "@/server/api/modules/clubs/dto/get-club-images-
 export const AdminGetClubImagesUploadUrlInputDTOSchema = z.object({
   clubId: z.string().uuid(),
   files: z
-    .array(z.object({ contentType: ContentTypeSchema }))
+    .array(z.object({ contentType: ContentTypeSchema, contentLength: ContentLengthSchema }))
     .min(1, "You must select at least one image to upload")
     .max(MAX_CLUB_IMAGES, `You can upload at most ${MAX_CLUB_IMAGES} images`),
 });

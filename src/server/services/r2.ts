@@ -44,6 +44,11 @@ export function isKeyWithinPrefix(key: string, prefix: string): boolean {
   return key.startsWith(prefix) && !key.includes("..");
 }
 
+/** Whether `key` is an immediate object inside `prefix`, excluding nested feature folders. */
+export function isKeyDirectlyWithinPrefix(key: string, prefix: string): boolean {
+  return isKeyWithinPrefix(key, prefix) && !key.slice(prefix.length).includes("/");
+}
+
 export async function getSignedUploadUrl(
   key: string,
   contentType: string,
@@ -82,18 +87,32 @@ export async function deleteImages(
 }
 
 /**
+ * Best-effort cleanup of stored images after the caller's database write has committed.
+ * Client-controlled URLs are converted back to keys and restricted to the supplied prefix,
+ * so a profile update can never delete objects outside its own club folder.
+ */
+export async function deleteImagesWithinPrefix(
+  urls: string[],
+  allowedPrefix: string
+): Promise<void> {
+  const keys = [
+    ...new Set(urls.map(toR2Key).filter((key) => isKeyWithinPrefix(key, allowedPrefix))),
+  ];
+  if (keys.length === 0) return;
+
+  try {
+    const { errors } = await deleteImages(keys);
+    if (errors.length > 0) console.error("r2: image cleanup returned errors", { keys, errors });
+  } catch (error) {
+    console.error("r2: image cleanup failed", { keys, error });
+  }
+}
+
+/**
  * Best-effort cleanup of one stored image, for use after the caller's real write has committed:
  * a failure is logged, never thrown, so it can't turn that success into an error response. The
  * URL is usually client-supplied, so nothing outside `allowedPrefix` is ever deleted.
  */
 export async function deleteImageWithinPrefix(url: string, allowedPrefix: string): Promise<void> {
-  const key = toR2Key(url);
-  if (!isKeyWithinPrefix(key, allowedPrefix)) return;
-
-  try {
-    const { errors } = await deleteImages([key]);
-    if (errors.length > 0) console.error("r2: image cleanup returned errors", { key, errors });
-  } catch (error) {
-    console.error("r2: image cleanup failed", { key, error });
-  }
+  await deleteImagesWithinPrefix([url], allowedPrefix);
 }

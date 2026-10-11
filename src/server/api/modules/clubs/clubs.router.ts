@@ -13,6 +13,7 @@ import {
   getClubDashboardProfile,
   getClubLogoUploadUrl,
   getClubImagesUploadUrl,
+  deleteClubProfileImageUploads,
   saveProfileRegistration,
   updateClubProfile,
   submitClubProfileRegistration,
@@ -22,6 +23,7 @@ import {
   adminDeleteClub,
   adminGetClubLogoUploadUrl,
   adminGetClubImagesUploadUrl,
+  adminDeleteClubProfileImageUploads,
 } from "@/server/api/modules/clubs/usecases";
 import {
   GetAllClubsInputDTOSchema,
@@ -40,6 +42,8 @@ import {
   GetClubLogoUploadUrlOutputDTOSchema,
   GetClubImagesUploadUrlInputDTOSchema,
   GetClubImagesUploadUrlOutputDTOSchema,
+  DeleteClubProfileImageUploadsInputDTOSchema,
+  DeleteClubProfileImageUploadsOutputDTOSchema,
   SaveClubProfileRegistrationInputDTOSchema,
   SaveClubProfileRegistrationOutputDTOSchema,
   UpdateClubProfileInputDTOSchema,
@@ -58,6 +62,8 @@ import {
   AdminGetClubLogoUploadUrlOutputDTOSchema,
   AdminGetClubImagesUploadUrlInputDTOSchema,
   AdminGetClubImagesUploadUrlOutputDTOSchema,
+  AdminDeleteClubProfileImageUploadsInputDTOSchema,
+  AdminDeleteClubProfileImageUploadsOutputDTOSchema,
 } from "@/server/api/modules/clubs/dto";
 
 export const clubsRouter = createTRPCRouter({
@@ -121,6 +127,11 @@ export const clubsRouter = createTRPCRouter({
     .output(GetClubImagesUploadUrlOutputDTOSchema)
     .mutation(async ({ input, ctx }) => getClubImagesUploadUrl(ctx.session.user.id, input)),
 
+  deleteProfileImageUploads: protectedProcedure
+    .input(DeleteClubProfileImageUploadsInputDTOSchema)
+    .output(DeleteClubProfileImageUploadsOutputDTOSchema)
+    .mutation(async ({ input, ctx }) => deleteClubProfileImageUploads(ctx.session.user.id, input)),
+
   updateProfile: protectedProcedure
     .input(UpdateClubProfileInputDTOSchema)
     .output(UpdateClubProfileOutputDTOSchema)
@@ -145,4 +156,9 @@ export const clubsRouter = createTRPCRouter({
     .input(AdminGetClubImagesUploadUrlInputDTOSchema)
     .output(AdminGetClubImagesUploadUrlOutputDTOSchema)
     .mutation(async ({ input }) => adminGetClubImagesUploadUrl(input)),
+
+  deleteProfileImageUploadsForAdmin: adminProcedure
+    .input(AdminDeleteClubProfileImageUploadsInputDTOSchema)
+    .output(AdminDeleteClubProfileImageUploadsOutputDTOSchema)
+    .mutation(async ({ input }) => adminDeleteClubProfileImageUploads(input)),
 });
