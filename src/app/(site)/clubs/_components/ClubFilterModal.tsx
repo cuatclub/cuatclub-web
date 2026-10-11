@@ -54,12 +54,12 @@ export function ClubFilterModal({
 
   return (
     <DialogRoot open={open} onOpenChange={onOpenChange} modal={!isDesktop}>
-      {/* Held to the height of the Figma frame, so the panel stays a panel and the list it is
-          filtering keeps showing through behind it. */}
+      {/* Held two affiliation rows short of the Figma frame, so the footer stays on screen under
+          the search bar of a laptop-height window and the list keeps showing through behind it. */}
       <DialogContent
         placement="anchored"
         aria-describedby={undefined}
-        className="md:max-h-[537px]"
+        className="md:max-h-[467px]"
         onInteractOutside={(event) => {
           // Without a scrim the filter button is reachable while the panel is open, so let the
           // button own the toggle rather than dismissing here and reopening on its click.
