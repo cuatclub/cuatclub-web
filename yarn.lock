@@ -3141,6 +3141,11 @@
   resolved "https://registry.npmjs.org/@valibot/to-json-schema/-/to-json-schema-1.7.1.tgz"
   integrity sha512-3qkmU6KXWh8GIThEAW3kuRHPQBMjWkKy+Ppz3WkUucx53DTpOa6siMn4xDGSOhlVyMrDaJTCTMLYPZVAIk1P0A==
 
+"@vercel/analytics@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@vercel/analytics/-/analytics-2.0.1.tgz#d7d7bd37af7cfbeea95db5f132ae4889f4d26407"
+  integrity sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g==
+
 "@vitest/browser-playwright@^4.1.10":
   version "4.1.10"
   resolved "https://registry.npmjs.org/@vitest/browser-playwright/-/browser-playwright-4.1.10.tgz"
