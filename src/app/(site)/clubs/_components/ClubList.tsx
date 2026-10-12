@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { SearchX } from "lucide-react";
+import { SearchX, Users } from "lucide-react";
 
 import { CategoryFilterRow } from "@/app/(site)/clubs/_components/CategoryFilterRow";
 import { ClubCard } from "@/app/(site)/clubs/_components/ClubCard";
@@ -185,7 +185,13 @@ export function ClubList() {
             ))}
           </ClubGrid>
         ) : clubs.length === 0 ? (
-          <EmptyState />
+          <EmptyState
+            hasActiveQuery={
+              params.search.length > 0 ||
+              params.categoryIds.length > 0 ||
+              params.affiliationIds.length > 0
+            }
+          />
         ) : (
           <ClubGrid>
             {clubs.map((club) => (
@@ -231,15 +237,21 @@ export function ClubList() {
   );
 }
 
-function EmptyState() {
+function EmptyState({ hasActiveQuery }: { hasActiveQuery: boolean }) {
+  // A search/filter that matches nothing is a different situation from there being no clubs at
+  // all yet — the former suggests loosening the query, the latter has nothing to suggest.
+  const Icon = hasActiveQuery ? SearchX : Users;
+
   return (
     <div className="flex flex-col items-center gap-3 py-16 text-center">
-      <SearchX aria-hidden="true" className="text-placeholder size-10" />
+      <Icon aria-hidden="true" className="text-placeholder size-10" />
       <p className="font-ibm-plex text-foreground text-base leading-[26px] font-semibold md:text-lg md:leading-[30px]">
-        ไม่พบชมรมที่ตรงกับเงื่อนไข
+        {hasActiveQuery ? "ไม่พบชมรมที่ตรงกับเงื่อนไข" : "ยังไม่มีชมรมในขณะนี้"}
       </p>
       <p className="font-ibm-plex text-foreground-muted text-sm leading-[23px] md:text-base md:leading-[26px]">
-        ลองใช้คำค้นหาอื่น หรือเอาตัวกรองบางส่วนออก
+        {hasActiveQuery
+          ? "ลองใช้คำค้นหาอื่น หรือเอาตัวกรองบางส่วนออก"
+          : "กลับมาดูใหม่เร็ว ๆ นี้ ชมรมต่าง ๆ จะแสดงที่นี่"}
       </p>
     </div>
   );

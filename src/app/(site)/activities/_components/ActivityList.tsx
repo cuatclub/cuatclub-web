@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { SearchX } from "lucide-react";
+import { CalendarX, SearchX } from "lucide-react";
 
 import { ActivityCard } from "@/app/(site)/activities/_components/ActivityCard";
 import { ActivityCardSkeleton } from "@/app/(site)/activities/_components/ActivityCardSkeleton";
@@ -240,17 +240,19 @@ export function ActivityList() {
 
 function EmptyState({ hasActiveQuery }: { hasActiveQuery: boolean }) {
   // A search/filter that matches nothing is a different situation from there being no activities
-  // at all yet — the former suggests loosening the query, the latter has nothing to say.
-  if (!hasActiveQuery) return <div className="py-16" />;
+  // at all yet — the former suggests loosening the query, the latter has nothing to suggest.
+  const Icon = hasActiveQuery ? SearchX : CalendarX;
 
   return (
     <div className="flex flex-col items-center gap-3 py-16 text-center">
-      <SearchX aria-hidden="true" className="text-placeholder size-10" />
+      <Icon aria-hidden="true" className="text-placeholder size-10" />
       <p className="font-ibm-plex text-foreground text-base leading-[26px] font-semibold md:text-lg md:leading-[30px]">
-        ไม่พบกิจกรรมที่ตรงกับเงื่อนไข
+        {hasActiveQuery ? "ไม่พบกิจกรรมที่ตรงกับเงื่อนไข" : "ยังไม่มีกิจกรรมในขณะนี้"}
       </p>
       <p className="font-ibm-plex text-foreground-muted text-sm leading-[23px] md:text-base md:leading-[26px]">
-        ลองใช้คำค้นหาอื่น หรือเอาตัวกรองบางส่วนออก
+        {hasActiveQuery
+          ? "ลองใช้คำค้นหาอื่น หรือเอาตัวกรองบางส่วนออก"
+          : "กลับมาดูใหม่เร็ว ๆ นี้ กิจกรรมจากชมรมต่าง ๆ จะแสดงที่นี่"}
       </p>
     </div>
   );
