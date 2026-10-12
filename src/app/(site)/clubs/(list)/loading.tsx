@@ -1,4 +1,9 @@
-import { ClubCardSkeleton, ClubGrid, ClubListShell } from "@/app/(site)/clubs/_components";
+import {
+  ClubCardSkeleton,
+  ClubGrid,
+  ClubListShell,
+  ClubSearchBar,
+} from "@/app/(site)/clubs/_components";
 import { CLUBS_PER_PAGE } from "@/app/(site)/clubs/_lib";
 
 /**
@@ -16,10 +21,10 @@ export default function ClubListLoading() {
   return (
     <ClubListShell>
       <div aria-busy="true" className="flex flex-col gap-8 md:gap-12">
-        <div
-          aria-hidden="true"
-          className="bg-surface mx-auto h-[50px] w-full max-w-[680px] animate-pulse rounded-full"
-        />
+        {/* The real bar, not a skeleton: it needs nothing from the results, so it can be used at once. */}
+        <div className="mx-auto w-full max-w-[680px]">
+          <ClubSearchBar defaultValue="" isFilterOpen={false} activeFilterCount={0} />
+        </div>
 
         {/* The category row's collapsed chips and the sort select — desktop only, as in the list. */}
         <div aria-hidden="true" className="hidden items-start justify-between gap-6 md:flex">
