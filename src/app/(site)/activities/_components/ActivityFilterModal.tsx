@@ -11,9 +11,8 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { DialogClose, DialogContent, DialogRoot, DialogTitle } from "@/components/ui/Dialog";
 import { RadioGroup } from "@/components/ui/RadioGroup";
 import { cn } from "@/lib/utils";
-import { api, type RouterOutputs } from "@/trpc/react";
+import { api } from "@/trpc/react";
 
-type Category = RouterOutputs["masterData"]["categories"]["getAll"][number];
 type Audience = NonNullable<ActivityListParams["audience"]>;
 
 const AUDIENCE_OPTIONS: { id: Audience; label: string }[] = [
@@ -40,8 +39,6 @@ type ActivityFilterModalProps = {
   onOpenChange: (open: boolean) => void;
   /** The button that opens the panel, so a click on it can toggle instead of dismiss-then-reopen. */
   triggerRef: RefObject<HTMLButtonElement | null>;
-  /** Already loaded by the list, so the panel opens with its categories in place. */
-  categories: Category[];
   selection: ActivityFilterSelection;
   onApply: (selection: ActivityFilterSelection) => void;
 };
@@ -55,7 +52,6 @@ export function ActivityFilterModal({
   open,
   onOpenChange,
   triggerRef,
-  categories,
   selection,
   onApply,
 }: ActivityFilterModalProps) {
@@ -77,7 +73,6 @@ export function ActivityFilterModal({
         }}
       >
         <ActivityFilterForm
-          categories={categories}
           selection={selection}
           onApply={(next) => {
             onApply(next);
@@ -90,7 +85,6 @@ export function ActivityFilterModal({
 }
 
 type ActivityFilterFormProps = {
-  categories: Category[];
   selection: ActivityFilterSelection;
   onApply: (selection: ActivityFilterSelection) => void;
 };
@@ -99,13 +93,19 @@ type ActivityFilterFormProps = {
  * Choices are staged rather than applied as they are made: ticking several faculties should cost
  * one query, and the list behind the panel shouldn't reshuffle underneath a half-made decision.
  */
-function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFormProps) {
+function ActivityFilterForm({ selection, onApply }: ActivityFilterFormProps) {
   const [draft, setDraft] = useState<ActivityFilterSelection>(selection);
 
+  // Categories are the same query the list behind the panel runs, so they're normally answered
+  // from the cache. Every section shows its skeleton while any of the three is still pending, so
+  // the panel fills in at once rather than a section at a time.
+  const { data: categories, isPending: isCategoriesPending } =
+    api.masterData.categories.getAll.useQuery({});
   const { data: activityTypes, isPending: isActivityTypesPending } =
     api.masterData.activityTypes.getAll.useQuery({});
   const { data: faculties, isPending: isFacultiesPending } =
     api.masterData.faculties.getAll.useQuery({});
+  const isPending = isCategoriesPending || isActivityTypesPending || isFacultiesPending;
 
   const toggle = (key: "categoryIds" | "activityTypeIds" | "facultyIds", id: number) =>
     setDraft((current) => ({
@@ -137,7 +137,9 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
 
       <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-5 md:px-6 md:py-4">
         <FilterSection title="หมวดหมู่">
-          {categories.length === 0 ? (
+          {isPending ? (
+            <FilterOptionsSkeleton />
+          ) : !categories?.length ? (
             <p className="font-ibm-plex text-foreground-muted text-sm leading-[23px]">
               ยังไม่มีหมวดหมู่ให้เลือก
             </p>
@@ -153,7 +155,7 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
         <hr className="border-border" />
 
         <FilterSection title="ประเภทกิจกรรม">
-          {isActivityTypesPending ? (
+          {isPending ? (
             <FilterOptionsSkeleton />
           ) : (
             <OptionCheckboxes
@@ -202,7 +204,7 @@ function ActivityFilterForm({ categories, selection, onApply }: ActivityFilterFo
               <h4 className="font-ibm-plex text-foreground text-xs leading-[20px] font-semibold md:text-sm md:leading-[23px]">
                 คณะ
               </h4>
-              {isFacultiesPending ? (
+              {isPending ? (
                 <FilterOptionsSkeleton />
               ) : (
                 <div className="max-h-64 overflow-y-auto pr-1">
@@ -320,11 +322,27 @@ function OptionCheckboxes({ options, selectedIds, onToggle }: OptionCheckboxesPr
   );
 }
 
+/** Uneven, like the labels they stand in for, so the rows wrap the way a loaded list does. */
+const SKELETON_LABEL_WIDTHS = ["w-24", "w-12", "w-20", "w-22", "w-16", "w-28", "w-8", "w-22"];
+
+/**
+ * Stands in for `OptionCheckboxes` while the panel's lists load — the same rows, gaps and wrap,
+ * and enough of them that the desktop card already stands at its full height, so it doesn't grow
+ * when the real options land.
+ */
 function FilterOptionsSkeleton() {
   return (
-    <div className="flex flex-wrap gap-x-4 gap-y-2">
-      {Array.from({ length: 8 }, (_, index) => (
-        <div key={index} className="bg-surface h-5 w-24 animate-pulse rounded" />
+    <div aria-hidden="true" className="flex flex-wrap gap-x-4 gap-y-2">
+      {Array.from({ length: 16 }, (_, index) => (
+        <div key={index} className="flex h-5 items-center gap-2 md:h-[23px]">
+          <div className="bg-surface size-4 animate-pulse rounded-[2px]" />
+          <div
+            className={cn(
+              "bg-surface h-3 animate-pulse rounded md:h-3.5",
+              SKELETON_LABEL_WIDTHS[index % SKELETON_LABEL_WIDTHS.length]
+            )}
+          />
+        </div>
       ))}
     </div>
   );

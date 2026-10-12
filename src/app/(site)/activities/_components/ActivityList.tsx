@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { keepPreviousData } from "@tanstack/react-query";
 import { SearchX } from "lucide-react";
 
 import { ActivityCard } from "@/app/(site)/activities/_components/ActivityCard";
+import { ActivityCardSkeleton } from "@/app/(site)/activities/_components/ActivityCardSkeleton";
 import { ActivityFilterModal } from "@/app/(site)/activities/_components/ActivityFilterModal";
+import { ActivityGrid } from "@/app/(site)/activities/_components/ActivityGrid";
 import { ActivitySearchBar } from "@/app/(site)/activities/_components/ActivitySearchBar";
 import { ActivitySortSelect } from "@/app/(site)/activities/_components/ActivitySortSelect";
 import { CategoryFilterRow } from "@/app/(site)/activities/_components/CategoryFilterRow";
@@ -30,6 +31,7 @@ export function ActivityList() {
   const searchParams = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [extraPages, setExtraPages] = useState(0);
+  const [isNavigating, startTransition] = useTransition();
   const resultsRef = useRef<HTMLDivElement>(null);
   const filterButtonRef = useRef<HTMLButtonElement>(null);
   const listFootRef = useRef<HTMLParagraphElement>(null);
@@ -46,18 +48,19 @@ export function ActivityList() {
   const pageNumbers = Array.from({ length: extraPages + 1 }, (_, index) => params.page + index);
 
   const results = api.useQueries((t) =>
-    pageNumbers.map((page) =>
-      t.activities.getAll(toActivitiesQueryInput({ ...params, page }), {
-        placeholderData: keepPreviousData,
-      })
-    )
+    pageNumbers.map((page) => t.activities.getAll(toActivitiesQueryInput({ ...params, page })))
   );
   const { data: categories } = api.masterData.categories.getAll.useQuery({});
 
   /** Any change other than paging sends the visitor back to the first page of results. */
   const updateParams = (patch: Partial<ActivityListParams>) => {
     const next = { ...params, page: 1, ...patch };
-    router.push(`${pathname}${buildActivityListQuery(next)}`, { scroll: false });
+    // The page prefetches the new results on the server and they land together with the new URL,
+    // so the query never pends on its own. The transition does, until the navigation finishes —
+    // that is what puts the skeletons up in the meantime.
+    startTransition(() => {
+      router.push(`${pathname}${buildActivityListQuery(next)}`, { scroll: false });
+    });
   };
 
   const toggleCategory = (categoryId: number) => {
@@ -85,6 +88,10 @@ export function ActivityList() {
   const totalPages = Math.ceil(total / pageSize);
 
   const isPending = results[0]?.isPending ?? true;
+  /** Past the last page of a list that has results — see the clamp below. */
+  const isPageOutOfRange = !isPending && total > 0 && params.page > totalPages;
+  /** The whole list is being replaced: a first load, a new query on its way, or the clamp. */
+  const isLoadingResults = isPending || isNavigating || isPageOutOfRange;
   const lastPage = params.page + extraPages;
   const hasMore = lastPage < totalPages;
   const isLoadingMore = extraPages > 0 && (results.at(-1)?.isPending ?? false);
@@ -120,14 +127,15 @@ export function ActivityList() {
 
   // A `?page=` past the last real page (e.g. a filter applied while further along than it now
   // has room for) would otherwise render the empty state even though matches exist — clamp back
-  // to the last page instead. Genuinely zero results (`total === 0`) are left to the empty state.
+  // to the last page instead, showing skeletons until it lands. Genuinely zero results
+  // (`total === 0`) are left to the empty state.
   useEffect(() => {
-    if (isPending || total === 0 || params.page <= totalPages) return;
+    if (!isPageOutOfRange) return;
 
     router.replace(`${pathname}${buildActivityListQuery({ ...params, page: totalPages })}`, {
       scroll: false,
     });
-  }, [isPending, total, totalPages, params, pathname, router]);
+  }, [isPageOutOfRange, totalPages, params, pathname, router]);
 
   return (
     <div className="flex flex-col gap-8 md:gap-12">
@@ -146,7 +154,6 @@ export function ActivityList() {
           open={isFilterOpen}
           onOpenChange={setIsFilterOpen}
           triggerRef={filterButtonRef}
-          categories={categories ?? []}
           selection={{
             categoryIds: params.categoryIds,
             activityTypeIds: params.activityTypeIds,
@@ -168,8 +175,14 @@ export function ActivityList() {
         <ActivitySortSelect value={params.sort} onValueChange={(sort) => updateParams({ sort })} />
       </div>
 
-      <div ref={resultsRef} className="flex scroll-mt-6 flex-col gap-8 md:gap-12">
-        {isPending ? (
+      {/* The skeletons are `aria-hidden`, so `aria-busy` is what tells assistive tech the results
+          are being replaced. */}
+      <div
+        ref={resultsRef}
+        aria-busy={isLoadingResults}
+        className="flex scroll-mt-6 flex-col gap-8 md:gap-12"
+      >
+        {isLoadingResults ? (
           <ActivityGrid>
             {Array.from({ length: ACTIVITIES_PER_PAGE }, (_, index) => (
               <ActivityCardSkeleton key={index} />
@@ -220,32 +233,6 @@ export function ActivityList() {
           onPageChange={goToPage}
           className="hidden md:flex"
         />
-      </div>
-    </div>
-  );
-}
-
-function ActivityGrid({ children }: { children: React.ReactNode }) {
-  return <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">{children}</div>;
-}
-
-/** Mirrors the card's own shape so the grid doesn't resize once the real results arrive. */
-function ActivityCardSkeleton() {
-  return (
-    <div
-      aria-hidden="true"
-      className="border-border flex gap-4 rounded-xl border bg-white p-4 md:h-[294px] md:gap-5"
-    >
-      <div className="bg-surface h-[160px] w-[125px] shrink-0 animate-pulse rounded-xl md:h-full md:w-[205px]" />
-      <div className="flex flex-1 flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <div className="bg-surface size-6 shrink-0 animate-pulse rounded-full md:size-8" />
-          <div className="bg-surface h-4 w-20 animate-pulse rounded" />
-        </div>
-        <div className="bg-surface h-6 w-2/5 animate-pulse rounded" />
-        <div className="bg-surface h-4 w-full animate-pulse rounded" />
-        <div className="bg-surface h-4 w-full animate-pulse rounded" />
-        <div className="bg-surface h-4 w-3/4 animate-pulse rounded" />
       </div>
     </div>
   );
