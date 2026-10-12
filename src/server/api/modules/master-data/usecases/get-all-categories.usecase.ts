@@ -1,4 +1,4 @@
-import { masterDataRepository } from "@/server/api/modules/master-data/master-data.repository";
+import { masterDataRepository } from "@/server/api/modules/master-data/repositories/master-data.repository";
 import type { GetAllCategoriesOutputDTO } from "@/server/api/modules/master-data/dto";
 
 export const getAllCategories = async (): Promise<GetAllCategoriesOutputDTO> => {

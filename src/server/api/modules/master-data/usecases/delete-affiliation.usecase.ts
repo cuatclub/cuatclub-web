@@ -1,5 +1,5 @@
-import { masterDataRepository } from "@/server/api/modules/master-data/master-data.repository";
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
+import { masterDataRepository } from "@/server/api/modules/master-data/repositories/master-data.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
 import type {
   DeleteAffiliationInputDTO,
   DeleteAffiliationOutputDTO,

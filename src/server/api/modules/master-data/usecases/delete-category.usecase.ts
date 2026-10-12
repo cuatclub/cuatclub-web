@@ -1,5 +1,5 @@
-import { masterDataRepository } from "@/server/api/modules/master-data/master-data.repository";
-import { clubCategoriesRepository } from "@/server/api/modules/clubs/club-categories.repository";
+import { masterDataRepository } from "@/server/api/modules/master-data/repositories/master-data.repository";
+import { clubCategoriesRepository } from "@/server/api/modules/clubs/repositories/club-categories.repository";
 import type {
   DeleteCategoryInputDTO,
   DeleteCategoryOutputDTO,

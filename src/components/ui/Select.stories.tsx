@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { Select } from "./Select";
 
-const options = ["ตัวเลือก 1", "ตัวเลือก 2", "ตัวเลือก 3", "ตัวเลือก 4"];
+const options = Array.from({ length: 10 }, (_, i) => `ตัวเลือก ${i + 1}`);
 
 const meta = {
   title: "UI/Select",

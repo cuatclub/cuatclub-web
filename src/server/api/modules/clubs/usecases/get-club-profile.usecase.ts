@@ -1,5 +1,5 @@
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
-import { usersRepository } from "@/server/api/modules/users/users.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
+import { usersRepository } from "@/server/api/modules/users/repositories/users.repository";
 import type { GetClubProfileOutputDTO } from "@/server/api/modules/clubs/dto";
 import { notFound, internalError } from "@/server/errors";
 

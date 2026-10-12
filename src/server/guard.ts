@@ -1,5 +1,6 @@
 import "server-only";
 import { headers } from "next/headers";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { TRPCError } from "@trpc/server";
 import { api } from "@/trpc/server";
@@ -95,4 +96,49 @@ export async function adminGuard(): Promise<AdminSessionUser> {
   if (session.user.role !== "ADMIN") redirect("/");
 
   return { name: session.user.name, email: session.user.email };
+}
+
+/**
+ * Per-request memo: the dashboard layout and page both need the session; cache() makes
+ * it one lookup.
+ */
+export const getSessionOnce = cache(async () => auth.api.getSession({ headers: await headers() }));
+
+export interface ClubDashboardSessionUser {
+  name: string;
+  email: string;
+  image: string | null;
+}
+
+/**
+ * Guards /dashboard/**: anonymous visitors go to /login, and a signed-in
+ * non-CLUB user (STUDENT or ADMIN) goes home — mirrors adminGuard's own
+ * upfront role check rather than relying solely on the club-row lookup
+ * below to reject them. A club still mid-registration is sent to whichever
+ * step page matches its registrationStatus — mirrors clubRegistrationStepGuard
+ * so the dashboard never renders for a club that hasn't finished onboarding
+ * yet.
+ *
+ * Returns the signed-in user so the dashboard shell's sidebar can show the
+ * club's name/email/avatar without a second session lookup.
+ */
+export async function clubDashboardGuard(): Promise<ClubDashboardSessionUser> {
+  const session = await getSessionOnce();
+  if (!session) redirect("/login");
+  if (session.user.role !== "CLUB") redirect("/");
+
+  let club: GetClubProfileOutputDTO;
+  try {
+    club = await api.clubs.getClubProfile({});
+  } catch (err) {
+    if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
+    if (err instanceof TRPCError && err.code === "NOT_FOUND") redirect("/");
+    throw err;
+  }
+
+  if (club.registrationStatus !== "COMPLETED") {
+    redirect(STEP_PATH[club.registrationStatus]);
+  }
+
+  return { name: session.user.name, email: session.user.email, image: session.user.image ?? null };
 }

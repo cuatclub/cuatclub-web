@@ -82,9 +82,10 @@ const MultiSelect = ({
               "border-border font-ibm-plex group flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors outline-none",
               textSize,
               selected.length > 0 ? "text-foreground" : "text-placeholder",
-              "hover:border-primary-light data-[state=open]:border-primary",
+              "hover:border-primary-light focus-visible:border-primary data-[state=open]:border-primary",
               "disabled:bg-border disabled:text-placeholder disabled:hover:border-border disabled:cursor-not-allowed",
-              error && "border-error hover:border-error data-[state=open]:border-error",
+              error &&
+                "border-error hover:border-error focus-visible:border-error data-[state=open]:border-error",
               triggerClassName
             )}
           >
@@ -98,7 +99,7 @@ const MultiSelect = ({
           <DropdownMenuPrimitive.Content
             align="start"
             sideOffset={4}
-            className="border-border data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 w-[var(--radix-dropdown-menu-trigger-width,12.5rem)] rounded-lg border bg-white p-1.5 shadow-black"
+            className="border-border data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 no-scrollbar max-h-[min(207px,var(--radix-dropdown-menu-content-available-height))] w-[var(--radix-dropdown-menu-trigger-width,12.5rem)] overflow-y-auto rounded-lg border bg-white p-1.5 shadow-black outline-none md:max-h-[min(222px,var(--radix-dropdown-menu-content-available-height))]"
           >
             {options.map((option) => {
               const checked = selected.includes(option);

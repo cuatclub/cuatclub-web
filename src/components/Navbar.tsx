@@ -4,9 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Bookmark, LogOut, Menu, Settings, X } from "lucide-react";
+import {
+  Bookmark,
+  LogOut,
+  Menu,
+  Settings,
+  X,
+  FilePlus2,
+  List,
+  UserRoundCog,
+  type LucideIcon,
+} from "lucide-react";
 
-import { buttonVariants } from "@/components/ui/Button";
+import { buttonVariants, ConfirmModal } from "@/components";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,9 +31,33 @@ type NavLink = { label: string; href: string | null };
 
 const NAV_LINKS: NavLink[] = [
   { label: "ชมรม", href: "/clubs" },
-  { label: "กิจกรรม", href: null },
+  { label: "กิจกรรม", href: "/activities" },
   { label: "เกี่ยวกับ", href: null },
 ];
+
+export const CLUB_DASHBOARD_NAV_ITEMS: ReadonlyArray<{
+  href: string;
+  label: string;
+  icon: LucideIcon;
+}> = [
+  { href: "/club/dashboard/posts", label: "โพสต์ของฉัน", icon: List },
+  { href: "/club/dashboard/posts/upload", label: "สร้างโพสต์", icon: FilePlus2 },
+  { href: "/club/dashboard/profile", label: "จัดการโปรไฟล์", icon: UserRoundCog },
+];
+
+/**
+ * "/club/dashboard/posts" is a prefix of "/club/dashboard/posts/upload", so any item that's a
+ * prefix of a sibling needs an exact match — a bare `startsWith` would keep "My Posts"
+ * highlighted while on "Create Post" too.
+ */
+export function isClubDashboardNavActive(pathname: string, href: string): boolean {
+  const isPrefixOfSibling = CLUB_DASHBOARD_NAV_ITEMS.some(
+    (item) => item.href !== href && item.href.startsWith(`${href}/`)
+  );
+  return isPrefixOfSibling
+    ? pathname === href
+    : pathname === href || pathname.startsWith(`${href}/`);
+}
 
 const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -45,6 +79,8 @@ export function Navbar({
 }: NavbarProps) {
   const profileImageSrc = userImage ?? "/svg/user_profile.svg";
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -54,9 +90,15 @@ export function Navbar({
   const isAdmin = isLoggedIn && userRole === "ADMIN";
 
   const handleSignOut = async () => {
-    await signOut();
-    router.push("/");
-    router.refresh();
+    setIsLoggingOut(true);
+    try {
+      await signOut();
+      router.push("/");
+      router.refresh();
+    } finally {
+      setIsLoggingOut(false);
+      setIsLogoutConfirmOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -147,7 +189,7 @@ export function Navbar({
         {isLoggedIn ? (
           <>
             {isClub && (
-              <Link href="/dashboard" className={buttonVariants({ variant: "outline" })}>
+              <Link href="/club/dashboard" className={buttonVariants({ variant: "outline" })}>
                 แดชบอร์ด
               </Link>
             )}
@@ -194,7 +236,7 @@ export function Navbar({
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onSelect={handleSignOut}
+                  onSelect={() => setIsLogoutConfirmOpen(true)}
                   className="text-foreground-secondary bg-text-error hover:text-error focus:text-error data-[highlighted]:text-error data-[highlighted]:bg-tag-red-light"
                 >
                   <LogOut className="h-4 w-4" />
@@ -247,7 +289,7 @@ export function Navbar({
               </button>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
               {NAV_LINKS.map(({ label, href }) => {
                 const isActive = href !== null && pathname === href;
 
@@ -256,9 +298,12 @@ export function Navbar({
                     key={label}
                     href={href}
                     onClick={closeSidebar}
+                    aria-current={isActive ? "page" : undefined}
                     className={cn(
-                      "font-ibm-plex py-1 text-left text-sm font-medium",
-                      isActive ? "text-primary" : "text-foreground"
+                      "font-ibm-plex rounded-lg p-2 text-left text-sm font-medium",
+                      isActive
+                        ? "bg-primary text-white"
+                        : "text-foreground hover:bg-primary-lighter hover:text-primary"
                     )}
                   >
                     {label}
@@ -269,7 +314,7 @@ export function Navbar({
                     type="button"
                     disabled
                     aria-disabled="true"
-                    className="font-ibm-plex text-placeholder cursor-not-allowed py-1 text-left text-sm font-medium"
+                    className="font-ibm-plex text-placeholder cursor-not-allowed rounded-lg p-2 text-left text-sm font-medium"
                   >
                     {label}
                   </button>
@@ -282,6 +327,28 @@ export function Navbar({
             {isLoggedIn ? (
               <>
                 <div className="flex flex-col gap-1">
+                  {isClub &&
+                    CLUB_DASHBOARD_NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+                      const isActive = isClubDashboardNavActive(pathname, href);
+
+                      return (
+                        <Link
+                          key={href}
+                          href={href}
+                          onClick={closeSidebar}
+                          aria-current={isActive ? "page" : undefined}
+                          className={cn(
+                            "font-ibm-plex flex items-center gap-2 rounded-lg p-2 text-sm font-medium",
+                            isActive
+                              ? "bg-primary text-white"
+                              : "text-foreground hover:bg-primary-lighter hover:text-primary"
+                          )}
+                        >
+                          <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />
+                          {label}
+                        </Link>
+                      );
+                    })}
                   <button
                     type="button"
                     disabled
@@ -329,7 +396,7 @@ export function Navbar({
                     </div>
                     <button
                       type="button"
-                      onClick={handleSignOut}
+                      onClick={() => setIsLogoutConfirmOpen(true)}
                       className="font-ibm-plex text-foreground-secondary hover:text-error text-[10px]"
                     >
                       ออกจากระบบ
@@ -337,15 +404,6 @@ export function Navbar({
                   </div>
                 )}
 
-                {isClub && (
-                  <Link
-                    href="/dashboard"
-                    onClick={closeSidebar}
-                    className={cn(buttonVariants({ variant: "outline" }), "mt-6 w-full")}
-                  >
-                    แดชบอร์ด
-                  </Link>
-                )}
                 {isAdmin && (
                   <Link
                     href="/admin"
@@ -377,6 +435,17 @@ export function Navbar({
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={isLogoutConfirmOpen}
+        onOpenChange={setIsLogoutConfirmOpen}
+        title="ออกจากระบบ"
+        description="คุณต้องการออกจากระบบใช่หรือไม่"
+        confirmLabel="ยืนยัน"
+        cancelLabel="ยกเลิก"
+        isLoading={isLoggingOut}
+        onConfirm={() => void handleSignOut()}
+      />
     </nav>
   );
 }

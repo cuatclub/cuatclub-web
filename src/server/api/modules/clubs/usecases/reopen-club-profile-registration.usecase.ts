@@ -1,4 +1,4 @@
-import { clubsRepository } from "@/server/api/modules/clubs/clubs.repository";
+import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
 import {
   ReopenClubProfileRegistrationOutputDTOSchema,
   type ReopenClubProfileRegistrationOutputDTO,

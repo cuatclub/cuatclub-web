@@ -9,9 +9,8 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { DialogClose, DialogContent, DialogRoot, DialogTitle } from "@/components/ui/Dialog";
-import { api, type RouterOutputs } from "@/trpc/react";
-
-type Category = RouterOutputs["masterData"]["categories"]["getAll"][number];
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
 
 /** The slice of the list's state this panel edits. */
 export type ClubFilterSelection = Pick<ClubListParams, "categoryIds" | "affiliationIds" | "sort">;
@@ -27,8 +26,6 @@ type ClubFilterModalProps = {
   onOpenChange: (open: boolean) => void;
   /** The button that opens the panel, so a click on it can toggle instead of dismiss-then-reopen. */
   triggerRef: RefObject<HTMLButtonElement | null>;
-  /** Already loaded by the list, so the panel opens with its categories in place. */
-  categories: Category[];
   selection: ClubFilterSelection;
   onApply: (selection: ClubFilterSelection) => void;
 };
@@ -46,7 +43,6 @@ export function ClubFilterModal({
   open,
   onOpenChange,
   triggerRef,
-  categories,
   selection,
   onApply,
 }: ClubFilterModalProps) {
@@ -54,12 +50,12 @@ export function ClubFilterModal({
 
   return (
     <DialogRoot open={open} onOpenChange={onOpenChange} modal={!isDesktop}>
-      {/* Held to the height of the Figma frame, so the panel stays a panel and the list it is
-          filtering keeps showing through behind it. */}
+      {/* Held two affiliation rows short of the Figma frame, so the footer stays on screen under
+          the search bar of a laptop-height window and the list keeps showing through behind it. */}
       <DialogContent
         placement="anchored"
         aria-describedby={undefined}
-        className="md:max-h-[537px]"
+        className="md:max-h-[467px]"
         onInteractOutside={(event) => {
           // Without a scrim the filter button is reachable while the panel is open, so let the
           // button own the toggle rather than dismissing here and reopening on its click.
@@ -71,7 +67,6 @@ export function ClubFilterModal({
       >
         {/* Mounted only while open, so the draft below starts from the applied filters every time. */}
         <ClubFilterForm
-          categories={categories}
           selection={selection}
           onApply={(next) => {
             onApply(next);
@@ -84,7 +79,6 @@ export function ClubFilterModal({
 }
 
 type ClubFilterFormProps = {
-  categories: Category[];
   selection: ClubFilterSelection;
   onApply: (selection: ClubFilterSelection) => void;
 };
@@ -93,10 +87,18 @@ type ClubFilterFormProps = {
  * Choices are staged rather than applied as they are made: ticking six affiliations should cost
  * one query, and the list behind the panel shouldn't reshuffle underneath a half-made decision.
  */
-function ClubFilterForm({ categories, selection, onApply }: ClubFilterFormProps) {
+function ClubFilterForm({ selection, onApply }: ClubFilterFormProps) {
   const [draft, setDraft] = useState<ClubFilterSelection>(selection);
 
-  const { data: affiliations, isPending } = api.masterData.affiliations.getAll.useQuery({});
+  // Categories are the same query the list behind the panel runs, so they're normally answered
+  // from the cache — affiliations, though, wait for the panel's first open. Every section shows
+  // its skeleton while either is still pending, so the panel fills in at once rather than a
+  // section at a time.
+  const { data: categories, isPending: isCategoriesPending } =
+    api.masterData.categories.getAll.useQuery({});
+  const { data: affiliations, isPending: isAffiliationsPending } =
+    api.masterData.affiliations.getAll.useQuery({});
+  const isPending = isCategoriesPending || isAffiliationsPending;
 
   const toggle = (key: "categoryIds" | "affiliationIds", id: number) =>
     setDraft((current) => ({
@@ -121,7 +123,9 @@ function ClubFilterForm({ categories, selection, onApply }: ClubFilterFormProps)
       <div className="flex flex-1 flex-col overflow-y-auto px-5 md:px-6">
         <section className="flex flex-col gap-3 pb-4">
           <h3 className={sectionTitleClass}>หมวดหมู่</h3>
-          {categories.length === 0 ? (
+          {isPending ? (
+            <FilterOptionsSkeleton />
+          ) : !categories?.length ? (
             <p className="font-ibm-plex text-foreground-muted text-sm leading-[23px]">
               ยังไม่มีหมวดหมู่ให้เลือก
             </p>
@@ -137,11 +141,7 @@ function ClubFilterForm({ categories, selection, onApply }: ClubFilterFormProps)
         <section className="border-border flex flex-col gap-3 border-t py-5">
           <h3 className={sectionTitleClass}>คณะ/สังกัด</h3>
           {isPending ? (
-            <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-y-3">
-              {Array.from({ length: 12 }, (_, index) => (
-                <div key={index} className="bg-surface h-5 w-32 animate-pulse rounded" />
-              ))}
-            </div>
+            <FilterOptionsSkeleton />
           ) : (
             <OptionCheckboxes
               options={affiliations ?? []}
@@ -203,6 +203,32 @@ function OptionCheckboxes({ options, selectedIds, onToggle }: OptionCheckboxesPr
             {option.label}
           </span>
         </label>
+      ))}
+    </div>
+  );
+}
+
+/** Uneven, like the labels they stand in for, so the rows wrap the way a loaded list does. */
+const SKELETON_LABEL_WIDTHS = ["w-24", "w-12", "w-20", "w-22", "w-16", "w-28", "w-8", "w-22"];
+
+/**
+ * Stands in for `OptionCheckboxes` while the panel's lists load — the same rows, gaps and wrap,
+ * and enough of them that the desktop card already stands at its full height, so it doesn't grow
+ * when the real options land.
+ */
+function FilterOptionsSkeleton() {
+  return (
+    <div aria-hidden="true" className="flex flex-wrap gap-x-4 gap-y-2 md:gap-y-3">
+      {Array.from({ length: 16 }, (_, index) => (
+        <div key={index} className="flex h-5 items-center gap-2 md:h-[23px]">
+          <div className="bg-surface size-4 animate-pulse rounded-[2px]" />
+          <div
+            className={cn(
+              "bg-surface h-3 animate-pulse rounded md:h-3.5",
+              SKELETON_LABEL_WIDTHS[index % SKELETON_LABEL_WIDTHS.length]
+            )}
+          />
+        </div>
       ))}
     </div>
   );

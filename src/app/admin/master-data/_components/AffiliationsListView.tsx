@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
 import { api, type RouterOutputs } from "@/trpc/react";
-import { Card, ConfirmModal } from "@/components";
+import { Card, ConfirmModal, toast } from "@/components";
 import { EditAffiliationDialog } from "@/app/admin/master-data/_components/EditAffiliationDialog";
 
 type Affiliation = RouterOutputs["masterData"]["affiliations"]["getAll"][number];
@@ -25,6 +25,7 @@ export function AffiliationsListView() {
     setDeleteError(null);
     try {
       await deleteAffiliation.mutateAsync({ id: deleting.id });
+      toast.success("ลบหน่วยงานสังกัดเรียบร้อย");
       await utils.masterData.affiliations.getAll.invalidate();
       setDeleting(null);
     } catch (cause) {

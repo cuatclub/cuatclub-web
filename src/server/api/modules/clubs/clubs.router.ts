@@ -10,9 +10,11 @@ import {
   getClubById,
   getClubProfile,
   getClubRegistrationDetails,
+  getClubDashboardProfile,
   getClubLogoUploadUrl,
   getClubImagesUploadUrl,
   saveProfileRegistration,
+  updateClubProfile,
   submitClubProfileRegistration,
   reopenClubProfileRegistration,
   registerClub,
@@ -32,12 +34,16 @@ import {
   GetClubProfileOutputDTOSchema,
   GetClubRegistrationDetailsInputDTOSchema,
   GetClubRegistrationDetailsOutputDTOSchema,
+  GetClubDashboardProfileInputDTOSchema,
+  GetClubDashboardProfileOutputDTOSchema,
   GetClubLogoUploadUrlInputDTOSchema,
   GetClubLogoUploadUrlOutputDTOSchema,
   GetClubImagesUploadUrlInputDTOSchema,
   GetClubImagesUploadUrlOutputDTOSchema,
   SaveClubProfileRegistrationInputDTOSchema,
   SaveClubProfileRegistrationOutputDTOSchema,
+  UpdateClubProfileInputDTOSchema,
+  UpdateClubProfileOutputDTOSchema,
   SubmitClubProfileRegistrationInputDTOSchema,
   SubmitClubProfileRegistrationOutputDTOSchema,
   ReopenClubProfileRegistrationInputDTOSchema,
@@ -100,6 +106,11 @@ export const clubsRouter = createTRPCRouter({
     .output(GetClubRegistrationDetailsOutputDTOSchema)
     .query(async ({ ctx }) => getClubRegistrationDetails(ctx.session.user.id)),
 
+  getDashboardProfile: protectedProcedure
+    .input(GetClubDashboardProfileInputDTOSchema)
+    .output(GetClubDashboardProfileOutputDTOSchema)
+    .query(async ({ ctx }) => getClubDashboardProfile(ctx.session.user.id)),
+
   getLogoUploadUrl: protectedProcedure
     .input(GetClubLogoUploadUrlInputDTOSchema)
     .output(GetClubLogoUploadUrlOutputDTOSchema)
@@ -109,6 +120,11 @@ export const clubsRouter = createTRPCRouter({
     .input(GetClubImagesUploadUrlInputDTOSchema)
     .output(GetClubImagesUploadUrlOutputDTOSchema)
     .mutation(async ({ input, ctx }) => getClubImagesUploadUrl(ctx.session.user.id, input)),
+
+  updateProfile: protectedProcedure
+    .input(UpdateClubProfileInputDTOSchema)
+    .output(UpdateClubProfileOutputDTOSchema)
+    .mutation(async ({ ctx, input }) => updateClubProfile(ctx.session.user.id, input)),
 
   updateForAdmin: adminProcedure
     .input(AdminUpdateClubInputDTOSchema)

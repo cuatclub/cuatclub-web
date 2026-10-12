@@ -16,7 +16,7 @@ export default async function SiteLayout({ children }: Readonly<{ children: Reac
         userRole={session?.user.role}
         userImage={session?.user.image}
       />
-      <div className="flex-1">{children}</div>
+      <div className="flex flex-1 flex-col">{children}</div>
       <Footer />
     </div>
   );

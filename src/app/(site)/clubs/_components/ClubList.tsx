@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { keepPreviousData } from "@tanstack/react-query";
-import { SearchX } from "lucide-react";
+import { SearchX, Users } from "lucide-react";
 
 import { CategoryFilterRow } from "@/app/(site)/clubs/_components/CategoryFilterRow";
 import { ClubCard } from "@/app/(site)/clubs/_components/ClubCard";
+import { ClubCardSkeleton } from "@/app/(site)/clubs/_components/ClubCardSkeleton";
 import { ClubFilterModal } from "@/app/(site)/clubs/_components/ClubFilterModal";
+import { ClubGrid } from "@/app/(site)/clubs/_components/ClubGrid";
 import { ClubSearchBar } from "@/app/(site)/clubs/_components/ClubSearchBar";
 import { ClubSortSelect } from "@/app/(site)/clubs/_components/ClubSortSelect";
 import {
@@ -30,6 +31,7 @@ export function ClubList() {
   const searchParams = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [extraPages, setExtraPages] = useState(0);
+  const [isNavigating, startTransition] = useTransition();
   const resultsRef = useRef<HTMLDivElement>(null);
   const filterButtonRef = useRef<HTMLButtonElement>(null);
   const listFootRef = useRef<HTMLParagraphElement>(null);
@@ -53,20 +55,19 @@ export function ClubList() {
   const pageNumbers = Array.from({ length: extraPages + 1 }, (_, index) => params.page + index);
 
   const results = api.useQueries((t) =>
-    pageNumbers.map((page) =>
-      t.clubs.getAll(toClubsQueryInput({ ...params, page }), {
-        // Keep the previous page on screen while the next one loads, so adjusting a filter
-        // doesn't flash the grid to empty and jump the page around.
-        placeholderData: keepPreviousData,
-      })
-    )
+    pageNumbers.map((page) => t.clubs.getAll(toClubsQueryInput({ ...params, page })))
   );
   const { data: categories } = api.masterData.categories.getAll.useQuery({});
 
   /** Any change other than paging sends the visitor back to the first page of results. */
   const updateParams = (patch: Partial<ClubListParams>) => {
     const next = { ...params, page: 1, ...patch };
-    router.push(`${pathname}${buildClubListQuery(next)}`, { scroll: false });
+    // The page prefetches the new results on the server and they land together with the new URL,
+    // so the query never pends on its own. The transition does, until the navigation finishes —
+    // that is what puts the skeletons up in the meantime.
+    startTransition(() => {
+      router.push(`${pathname}${buildClubListQuery(next)}`, { scroll: false });
+    });
   };
 
   const toggleCategory = (categoryId: number) => {
@@ -95,6 +96,8 @@ export function ClubList() {
   const totalPages = Math.ceil(total / pageSize);
 
   const isPending = results[0]?.isPending ?? true;
+  /** The whole list is being replaced: a first load, or a new query on its way. */
+  const isLoadingResults = isPending || isNavigating;
   const lastPage = params.page + extraPages;
   const hasMore = lastPage < totalPages;
   const isLoadingMore = extraPages > 0 && (results.at(-1)?.isPending ?? false);
@@ -149,7 +152,6 @@ export function ClubList() {
           open={isFilterOpen}
           onOpenChange={setIsFilterOpen}
           triggerRef={filterButtonRef}
-          categories={categories ?? []}
           selection={{
             categoryIds: params.categoryIds,
             affiliationIds: params.affiliationIds,
@@ -169,15 +171,27 @@ export function ClubList() {
         <ClubSortSelect value={params.sort} onValueChange={(sort) => updateParams({ sort })} />
       </div>
 
-      <div ref={resultsRef} className="flex scroll-mt-6 flex-col gap-8 md:gap-12">
-        {isPending ? (
+      {/* The skeletons are `aria-hidden`, so `aria-busy` is what tells assistive tech the results
+          are being replaced. */}
+      <div
+        ref={resultsRef}
+        aria-busy={isLoadingResults}
+        className="flex scroll-mt-6 flex-col gap-8 md:gap-12"
+      >
+        {isLoadingResults ? (
           <ClubGrid>
             {Array.from({ length: CLUBS_PER_PAGE }, (_, index) => (
               <ClubCardSkeleton key={index} />
             ))}
           </ClubGrid>
         ) : clubs.length === 0 ? (
-          <EmptyState />
+          <EmptyState
+            hasActiveQuery={
+              params.search.length > 0 ||
+              params.categoryIds.length > 0 ||
+              params.affiliationIds.length > 0
+            }
+          />
         ) : (
           <ClubGrid>
             {clubs.map((club) => (
@@ -223,42 +237,21 @@ export function ClubList() {
   );
 }
 
-function ClubGrid({ children }: { children: React.ReactNode }) {
-  return <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">{children}</div>;
-}
+function EmptyState({ hasActiveQuery }: { hasActiveQuery: boolean }) {
+  // A search/filter that matches nothing is a different situation from there being no clubs at
+  // all yet — the former suggests loosening the query, the latter has nothing to suggest.
+  const Icon = hasActiveQuery ? SearchX : Users;
 
-/** Mirrors the card's own shape so the grid doesn't resize once the real results arrive. */
-function ClubCardSkeleton() {
-  return (
-    <div
-      aria-hidden="true"
-      className="border-border flex h-[253px] flex-col gap-4 rounded-xl border bg-white p-4 md:h-[311px] md:p-6"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="bg-surface size-12 shrink-0 animate-pulse rounded-full md:size-14" />
-        <div className="bg-surface h-7 w-24 animate-pulse rounded-full" />
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="bg-surface h-6 w-2/5 animate-pulse rounded" />
-        <div className="bg-surface h-4 w-full animate-pulse rounded" />
-        <div className="bg-surface h-4 w-full animate-pulse rounded" />
-        <div className="bg-surface h-4 w-3/4 animate-pulse rounded" />
-      </div>
-      <div className="border-border mt-auto border-t" />
-      <div className="bg-surface h-5 w-1/3 animate-pulse rounded" />
-    </div>
-  );
-}
-
-function EmptyState() {
   return (
     <div className="flex flex-col items-center gap-3 py-16 text-center">
-      <SearchX aria-hidden="true" className="text-placeholder size-10" />
+      <Icon aria-hidden="true" className="text-placeholder size-10" />
       <p className="font-ibm-plex text-foreground text-base leading-[26px] font-semibold md:text-lg md:leading-[30px]">
-        ไม่พบชมรมที่ตรงกับเงื่อนไข
+        {hasActiveQuery ? "ไม่พบชมรมที่ตรงกับเงื่อนไข" : "ยังไม่มีชมรมในขณะนี้"}
       </p>
       <p className="font-ibm-plex text-foreground-muted text-sm leading-[23px] md:text-base md:leading-[26px]">
-        ลองใช้คำค้นหาอื่น หรือเอาตัวกรองบางส่วนออก
+        {hasActiveQuery
+          ? "ลองใช้คำค้นหาอื่น หรือเอาตัวกรองบางส่วนออก"
+          : "กลับมาดูใหม่เร็ว ๆ นี้ ชมรมต่าง ๆ จะแสดงที่นี่"}
       </p>
     </div>
   );

@@ -13,7 +13,7 @@ export default async function RegisterClubInfoPage() {
 
   return (
     <div className="flex w-full flex-col bg-white">
-      <main className="w-full px-5 py-5 md:py-10">
+      <main className="w-full px-5 pt-5 pb-8 md:pt-10 md:pb-16">
         <div className="mx-auto flex w-full flex-col items-center gap-8 md:gap-10">
           <div className="flex w-full flex-col items-center gap-6 md:gap-8">
             <div className="flex flex-col items-center gap-2 text-center">

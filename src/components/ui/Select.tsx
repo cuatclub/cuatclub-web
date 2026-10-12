@@ -18,12 +18,13 @@ const SelectTrigger = forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "border-border font-ibm-plex text-foreground group flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors",
+      "border-border font-ibm-plex text-foreground group flex h-10 w-full cursor-pointer items-center justify-between gap-2.5 rounded-lg border bg-white px-3 py-0 transition-colors outline-none",
       textSize,
-      "hover:border-primary-light data-[state=open]:border-primary",
+      "hover:border-primary-light focus-visible:border-primary data-[state=open]:border-primary",
       "data-[placeholder]:text-placeholder",
       "disabled:bg-border disabled:text-placeholder disabled:hover:border-border disabled:cursor-not-allowed",
-      error && "border-error hover:border-error data-[state=open]:border-error",
+      error &&
+        "border-error hover:border-error focus-visible:border-error data-[state=open]:border-error",
       className
     )}
     aria-invalid={error}
@@ -46,7 +47,7 @@ const SelectContent = forwardRef<
       ref={ref}
       position={position}
       className={cn(
-        "border-border relative z-50 overflow-hidden rounded-lg border bg-white p-1.5 shadow-black",
+        "border-border relative z-50 overflow-hidden rounded-lg border bg-white p-1.5 shadow-black outline-none",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper"
           ? "max-h-[var(--radix-select-content-available-height)] w-[var(--radix-select-trigger-width)] translate-y-1"
@@ -55,7 +56,7 @@ const SelectContent = forwardRef<
       )}
       {...props}
     >
-      <SelectPrimitive.Viewport className="no-scrollbar flex flex-col gap-1">
+      <SelectPrimitive.Viewport className="no-scrollbar flex max-h-[211px] flex-col gap-1 md:max-h-[226px]">
         {children}
       </SelectPrimitive.Viewport>
     </SelectPrimitive.Content>

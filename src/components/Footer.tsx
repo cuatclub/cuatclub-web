@@ -19,7 +19,7 @@ const SOCIAL_LINKS: SocialLink[] = [
 
 export function Footer() {
   return (
-    <footer className="bg-primary mt-8 flex flex-col gap-8 px-5 py-16 md:mt-16 md:gap-12 md:p-16">
+    <footer className="bg-primary flex flex-col gap-8 px-5 py-16 md:gap-12 md:p-16">
       {/* Below md the whole block stacks and centers; from md the brand sits
           left and the social row is pushed to the right edge. */}
       <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">

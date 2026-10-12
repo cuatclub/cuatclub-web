@@ -8,11 +8,12 @@ const PLACEHOLDER = "ค้นหาชื่อ หมวดหมู่ หร
 type ClubSearchBarProps = {
   /** The search term currently applied to the list. */
   defaultValue: string;
-  onSearch: (search: string) => void;
-  onToggleFilters: () => void;
+  /** Omitted by `loading.tsx`, which shows the bar before the list that handles these exists. */
+  onSearch?: (search: string) => void;
+  onToggleFilters?: () => void;
   /** The filter panel drops out of this bar, so the button announces itself as its trigger. */
   isFilterOpen: boolean;
-  filterButtonRef: RefObject<HTMLButtonElement | null>;
+  filterButtonRef?: RefObject<HTMLButtonElement | null>;
   /** Drawn on the filter button, because a closed panel hides what it is filtering by. */
   activeFilterCount: number;
 };
@@ -37,7 +38,7 @@ export function ClubSearchBar({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSearch(draft.trim());
+    onSearch?.(draft.trim());
   };
 
   /** Empties the field and hands focus back, like the browser's own clear button — no re-query. */
