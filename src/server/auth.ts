@@ -1,8 +1,10 @@
 import { env } from "@/config/env";
+import { LINE_PROVIDER_ID } from "@/lib/line";
 import { db, type DbClient } from "@/server/db";
 import * as schema from "@/server/db/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { genericOAuth, line } from "better-auth/plugins";
 
 // Shared by every instance below so a request-scoped and a transaction-scoped one can never
 // drift apart on session/password/field config.
@@ -25,17 +27,39 @@ const buildAuthOptions = (client: DbClient) => ({
       },
     },
   },
+  account: {
+    accountLinking: { allowDifferentEmails: true },
+  },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
     autoSignIn: true,
   },
   trustedOrigins: [new URL(env.BETTER_AUTH_URL).origin],
+  onAPIError: { errorURL: "/auth/error" },
   advanced: {
     database: {
       generateId: () => crypto.randomUUID(),
     },
   },
+  plugins: [
+    genericOAuth({
+      config: [
+        {
+          ...line({
+            providerId: LINE_PROVIDER_ID,
+            clientId: env.LINE_LOGIN_CHANNEL_ID,
+            clientSecret: env.LINE_LOGIN_CHANNEL_SECRET,
+            scopes: ["openid", "profile"],
+            pkce: true,
+            disableSignUp: true,
+          }),
+          authorizationUrlParams: { bot_prompt: "aggressive" },
+          mapProfileToUser: (profile) => ({ email: `${String(profile.id)}@line.invalid` }),
+        },
+      ],
+    }),
+  ],
 });
 
 export const auth = betterAuth(buildAuthOptions(db));
