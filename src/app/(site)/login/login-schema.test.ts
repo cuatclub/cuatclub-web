@@ -4,9 +4,11 @@ import {
   classifyAuthError,
   EMAIL_INVALID_MESSAGE,
   EMAIL_REQUIRED_MESSAGE,
+  GOOGLE_CALLBACK_PATH,
   loginSchema,
   PASSWORD_FORMAT_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,
+  postLoginPath,
 } from "./login-schema";
 
 const firstMessage = (result: ReturnType<typeof loginSchema.safeParse>) => {
@@ -79,5 +81,27 @@ describe("classifyAuthError", () => {
 
   it("falls back to generic when there's no code at all", () => {
     expect(classifyAuthError({})).toBe("generic");
+  });
+});
+
+describe("postLoginPath", () => {
+  it("sends club users to their registration step", () => {
+    expect(postLoginPath("CLUB")).toBe("/register/club/profile");
+  });
+
+  it("sends students to the student registration entry point", () => {
+    expect(postLoginPath("STUDENT")).toBe("/register/student");
+  });
+
+  it("sends everyone else home, including a missing role", () => {
+    expect(postLoginPath("ADMIN")).toBe("/");
+    expect(postLoginPath(undefined)).toBe("/");
+    expect(postLoginPath(null)).toBe("/");
+  });
+});
+
+describe("GOOGLE_CALLBACK_PATH", () => {
+  it("lands on the same entry point a student gets after password sign-in", () => {
+    expect(GOOGLE_CALLBACK_PATH).toBe(postLoginPath("STUDENT"));
   });
 });

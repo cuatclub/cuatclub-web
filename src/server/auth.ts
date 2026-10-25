@@ -30,6 +30,14 @@ const buildAuthOptions = (client: DbClient) => ({
     minPasswordLength: 8,
     autoSignIn: true,
   },
+  // Google sign-ups get the DB-default STUDENT role; their `students` row is created lazily
+  // by getStudentRegistration.
+  socialProviders: {
+    google: {
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    },
+  },
   trustedOrigins: [new URL(env.BETTER_AUTH_URL).origin],
   advanced: {
     database: {
