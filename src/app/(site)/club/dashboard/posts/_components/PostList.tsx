@@ -7,7 +7,6 @@ import { keepPreviousData } from "@tanstack/react-query";
 
 import { PostCard } from "@/app/(site)/club/dashboard/posts/_components/PostCard";
 import { PostDetailsDialog } from "@/app/(site)/club/dashboard/posts/_components/PostDetailsDialog";
-import { PostSearchBar } from "@/app/(site)/club/dashboard/posts/_components/PostSearchBar";
 import { PostSortSelect } from "@/app/(site)/club/dashboard/posts/_components/PostSortSelect";
 import { PostSupportCard } from "@/app/(site)/club/dashboard/posts/_components/PostSupportCard";
 import {
@@ -17,6 +16,7 @@ import {
   type PostListParams,
 } from "@/app/(site)/club/dashboard/posts/_lib/post-list-params";
 import { ConfirmModal, toast } from "@/components";
+import { PostSearchBar } from "@/features/activities/search/PostSearchBar";
 import { api, type RouterOutputs } from "@/trpc/react";
 
 type Activity = RouterOutputs["activities"]["getMine"]["activities"][number];
