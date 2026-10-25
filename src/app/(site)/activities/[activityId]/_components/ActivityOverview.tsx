@@ -48,6 +48,7 @@ export function ActivityOverview({ activity, status, remainingMs }: ActivityOver
 
         {/* Mobile gets these in the bar pinned to the bottom of the screen instead. */}
         <ActivityActions
+          activityId={activity.id}
           title={activity.title}
           applicationFormUrl={activity.applicationFormUrl}
           isApplicationOpen={status === "open"}

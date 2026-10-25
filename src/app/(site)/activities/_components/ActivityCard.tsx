@@ -1,7 +1,8 @@
-import { Bookmark, CalendarPlus } from "lucide-react";
+import { CalendarPlus } from "lucide-react";
 
 import { formatFaculties } from "@/app/(site)/activities/_lib/activity-format";
 import { ActivityCardView } from "@/features/activities/card/ActivityCardView";
+import { SaveActivityButton } from "@/features/activities/save/SaveActivityButton";
 import type { RouterOutputs } from "@/trpc/react";
 
 type Activity = RouterOutputs["activities"]["getAll"]["activities"][number];
@@ -42,14 +43,7 @@ export function ActivityCard({ id, faculties, activityType, ...card }: ActivityC
           >
             <CalendarPlus aria-hidden="true" className="size-4" />
           </button>
-          {/* TODO: wire up once save/bookmark backend support exists (deferred to a future phase). */}
-          <button
-            type="button"
-            aria-label="บันทึกกิจกรรม"
-            className="border-border text-foreground-muted hover:border-primary hover:text-primary flex size-8 cursor-pointer items-center justify-center rounded-lg border-[1.5px] transition-colors"
-          >
-            <Bookmark aria-hidden="true" className="size-4" />
-          </button>
+          <SaveActivityButton activityId={id} />
         </div>
       }
     />
