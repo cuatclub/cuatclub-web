@@ -104,6 +104,16 @@ export async function adminGuard(): Promise<AdminSessionUser> {
  */
 export const getSessionOnce = cache(async () => auth.api.getSession({ headers: await headers() }));
 
+/**
+ * Guards pages that only make sense for a signed-in user (e.g. /saved): anonymous visitors go to
+ * /login. Unlike adminGuard and clubDashboardGuard, any role may pass.
+ */
+export async function signedInGuard(): Promise<void> {
+  const session = await getSessionOnce();
+
+  if (!session) redirect("/login");
+}
+
 export interface ClubDashboardSessionUser {
   name: string;
   email: string;
