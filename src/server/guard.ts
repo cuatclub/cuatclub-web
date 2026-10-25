@@ -6,6 +6,8 @@ import { TRPCError } from "@trpc/server";
 import { api } from "@/trpc/server";
 import { auth } from "@/server/auth";
 import type { GetClubProfileOutputDTO } from "@/server/api/modules/clubs/dto";
+import type { GetStudentRegistrationOutputDTO } from "@/server/api/modules/students/dto";
+import { STUDENT_REGISTRATION_STEPS } from "@/server/api/modules/students/entities/student.entity";
 
 type RegistrationStep = "PENDING" | "INFO_SUBMITTED" | "COMPLETED";
 
@@ -73,6 +75,61 @@ export async function clubRegistrationStepGuard(
   }
 
   return club;
+}
+
+const STUDENT_STEP_PATH: Record<GetStudentRegistrationOutputDTO["registrationStatus"], string> = {
+  PENDING: "/register/student/general",
+  GENERAL_SUBMITTED: "/register/student/preference",
+  PREFERENCES_SUBMITTED: "/register/student/source",
+  COMPLETED: "/register/student/line",
+};
+
+/**
+ * Guards /register/student/**: sends a STUDENT user back to the furthest
+ * step they've actually reached if they open a later one. Anonymous visitors go to
+ * /login; authenticated non-STUDENT users have nothing to register, so
+ * they go home.
+ */
+export async function studentRegistrationStepGuard(
+  currentStep: GetStudentRegistrationOutputDTO["registrationStatus"]
+): Promise<GetStudentRegistrationOutputDTO> {
+  let student: GetStudentRegistrationOutputDTO;
+  try {
+    student = await api.students.getRegistration({});
+  } catch (err) {
+    if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
+    if (err instanceof TRPCError && err.code === "NOT_FOUND") redirect("/");
+    throw err;
+  }
+
+  // Only steps the student hasn't reached yet are off limits — earlier ones stay open for the
+  // back link.
+  const stepIndex = (step: typeof currentStep) => STUDENT_REGISTRATION_STEPS.indexOf(step);
+  if (stepIndex(student.registrationStatus) < stepIndex(currentStep)) {
+    redirect(STUDENT_STEP_PATH[student.registrationStatus]);
+  }
+
+  return student;
+}
+
+/**
+ * Entry point for /register/student: sends a student to the first step they haven't finished,
+ * or home if they already have. Login and Google sign-in both land here because neither knows
+ * how far the student got.
+ */
+export async function studentRegistrationResumeGuard(): Promise<never> {
+  try {
+    const student = await api.students.getRegistration({});
+    redirect(
+      student.registrationStatus === "COMPLETED"
+        ? "/"
+        : STUDENT_STEP_PATH[student.registrationStatus]
+    );
+  } catch (err) {
+    if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
+    if (err instanceof TRPCError && err.code === "NOT_FOUND") redirect("/");
+    throw err;
+  }
 }
 
 export interface AdminSessionUser {
