@@ -53,6 +53,12 @@ describe("registerStudentSchema", () => {
     );
   });
 
+  it("rejects a password containing a space, which the server also rejects", () => {
+    expect(
+      messages({ ...validInput, password: "pass word1", confirmPassword: "pass word1" })
+    ).toEqual([PASSWORD_FORMAT_MESSAGE]);
+  });
+
   it("rejects mismatched passwords", () => {
     expect(messages({ ...validInput, confirmPassword: "password2" })).toEqual([
       CONFIRM_PASSWORD_MISMATCH_MESSAGE,

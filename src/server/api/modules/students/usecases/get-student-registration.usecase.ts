@@ -13,7 +13,12 @@ export const getStudentRegistration = async (
   // student row is created lazily the first time the registration flow looks for it.
   let student = await studentsRepository.getByUserId(currentUserId);
   if (!student) {
-    await studentsRepository.create({ userId: currentUserId, registrationStatus: "PENDING" });
+    // Several server components can hit the guard at once on a first visit, so this must not
+    // fail when another request inserts the row first.
+    await studentsRepository.createIfMissing({
+      userId: currentUserId,
+      registrationStatus: "PENDING",
+    });
     student = await studentsRepository.getByUserId(currentUserId);
   }
   if (!student) {

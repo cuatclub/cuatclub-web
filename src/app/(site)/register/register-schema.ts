@@ -4,7 +4,10 @@ import { z } from "zod";
 // own `minPasswordLength` is 8, and the printable-ASCII check keeps out
 // Thai/other non-English input the form can't guarantee round-trips
 // cleanly. Message copy intentionally matches login's for consistency.
-const PRINTABLE_ASCII_ONLY = /^[\x20-\x7E]*$/;
+// Unlike login, spaces are excluded too: the server's register DTOs
+// (users/dto/register-credentials.dto.ts) reject them, and a mismatch here would surface as an
+// unexplained generic error instead of a field message.
+const PRINTABLE_ASCII_ONLY = /^[\x21-\x7E]*$/;
 
 export const INVITATION_CODE_REQUIRED_MESSAGE = "กรุณากรอกรหัสเชิญ";
 // Matches the server's exact-length check (RegisterClubInputDTOSchema) — codes

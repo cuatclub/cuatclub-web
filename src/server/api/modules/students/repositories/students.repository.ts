@@ -16,8 +16,9 @@ export type UpdateStudentParams = Partial<
 
 export interface IStudentsRepository {
   create(req: CreateStudentParams, client?: DbClient): Promise<string>;
-  getByUserId(userId: string): Promise<Student | null>;
-  getByUsername(username: string): Promise<Student | null>;
+  createIfMissing(req: CreateStudentParams, client?: DbClient): Promise<void>;
+  getByUserId(userId: string, client?: DbClient): Promise<Student | null>;
+  getByUsername(username: string, client?: DbClient): Promise<Student | null>;
   updateById(id: string, update: UpdateStudentParams, client?: DbClient): Promise<void>;
 }
 
@@ -35,20 +36,30 @@ class StudentsRepository implements IStudentsRepository {
     return res[0]!.id;
   }
 
-  async getByUserId(userId: string): Promise<Student | null> {
-    return this.getOneByFilter(eq(students.userId, userId));
+  // For rows that may be created concurrently (see getStudentRegistration): a second insert for
+  // the same user is a no-op instead of a unique-constraint failure.
+  async createIfMissing(req: CreateStudentParams, client: DbClient = db): Promise<void> {
+    await client
+      .insert(students)
+      .values({ ...req, id: randomUUID() })
+      .onConflictDoNothing({ target: students.userId })
+      .catch(wrapRepoError);
   }
 
-  async getByUsername(username: string): Promise<Student | null> {
-    return this.getOneByFilter(eq(students.username, username));
+  async getByUserId(userId: string, client: DbClient = db): Promise<Student | null> {
+    return this.getOneByFilter(eq(students.userId, userId), client);
+  }
+
+  async getByUsername(username: string, client: DbClient = db): Promise<Student | null> {
+    return this.getOneByFilter(eq(students.username, username), client);
   }
 
   async updateById(id: string, update: UpdateStudentParams, client: DbClient = db): Promise<void> {
     await client.update(students).set(update).where(eq(students.id, id)).catch(wrapRepoError);
   }
 
-  private async getOneByFilter(filter: SQL): Promise<Student | null> {
-    const res = await db.query.students.findFirst({ where: filter }).catch(wrapRepoError);
+  private async getOneByFilter(filter: SQL, client: DbClient = db): Promise<Student | null> {
+    const res = await client.query.students.findFirst({ where: filter }).catch(wrapRepoError);
 
     return res ? Student.toEntity(res) : null;
   }

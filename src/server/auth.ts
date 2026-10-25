@@ -30,6 +30,13 @@ const buildAuthOptions = (client: DbClient) => ({
     minPasswordLength: 8,
     autoSignIn: true,
   },
+  // Off on purpose: email/password sign-up here has no email verification, so by default a
+  // Google login would be linked into an existing unverified password account with the same
+  // email — letting whoever registered that email first keep access after the real owner signs
+  // in with Google. A clash now fails the Google sign-in instead.
+  account: {
+    accountLinking: { enabled: false },
+  },
   // Google sign-ups get the DB-default STUDENT role; their `students` row is created lazily
   // by getStudentRegistration.
   socialProviders: {
