@@ -118,7 +118,7 @@ export function AdminSidebar({ mobileOpen, onMobileClose, menuButtonRef }: Admin
           <Link href="/admin/clubs" className="flex items-center gap-2">
             <Image
               src="/svg/logo.svg"
-              alt="CUatClub"
+              alt="CUAtClub"
               width={100}
               height={100}
               priority
@@ -151,7 +151,7 @@ export function AdminSidebar({ mobileOpen, onMobileClose, menuButtonRef }: Admin
               <Link href="/admin/clubs" onClick={onMobileClose} className="flex items-center gap-2">
                 <Image
                   src="/svg/logo.svg"
-                  alt="CUatClub"
+                  alt="CUAtClub"
                   width={76}
                   height={40}
                   className="h-7 w-[53px]"

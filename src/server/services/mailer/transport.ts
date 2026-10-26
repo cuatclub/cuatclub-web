@@ -27,7 +27,7 @@ export interface SendViaResendResult {
 export async function sendViaResend(params: SendViaResendParams): Promise<SendViaResendResult> {
   try {
     const res = await resend.emails.send({
-      from: `CUatClub <${env.EMAIL_FROM}>`,
+      from: `CUAtClub <${env.EMAIL_FROM}>`,
       to: params.to,
       subject: params.subject,
       html: params.html,
