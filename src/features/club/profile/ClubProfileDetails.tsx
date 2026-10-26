@@ -58,7 +58,7 @@ export function ClubProfileDetails({
             </div>
           )}
 
-          <dl className="grid min-w-0 gap-3 md:h-40 md:grid-rows-3 md:gap-0 md:self-stretch">
+          <dl className="grid min-w-0 gap-3 md:min-h-40 md:grid-rows-4 md:gap-0 md:self-stretch">
             <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[112px_minmax(0,1fr)] md:gap-4">
               <dt className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold md:text-base md:leading-[26px]">
                 ชื่อชมรม

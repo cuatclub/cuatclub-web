@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Building2, LucideUsersRound, Users } from "lucide-react";
+import { Building2, Users } from "lucide-react";
 
 import { Tag } from "@/components/ui/Tag";
 import { MEMBER_SCOPE_LABEL } from "@/features/club/profile";
