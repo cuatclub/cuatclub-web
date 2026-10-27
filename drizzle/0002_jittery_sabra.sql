@@ -1,0 +1,2 @@
+CREATE TYPE "public"."club_member_scope" AS ENUM('AFFILIATION_ONLY', 'ALL_FACULTIES');--> statement-breakpoint
+ALTER TABLE "clubs" ADD COLUMN "member_scope" "club_member_scope" DEFAULT 'ALL_FACULTIES' NOT NULL;

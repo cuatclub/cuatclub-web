@@ -47,6 +47,10 @@ export class ClubDetail {
     return this.affiliationRow;
   }
 
+  get memberScope() {
+    return this.club.memberScope;
+  }
+
   get categories() {
     return this.categoryRows;
   }
@@ -85,6 +89,7 @@ export class ClubDetail {
       name: this.name,
       logoUrl: this.logoUrl,
       affiliation: this.affiliation,
+      memberScope: this.memberScope,
       categories: this.categories,
       shortDescription: this.shortDescription,
       longDescription: this.longDescription,
