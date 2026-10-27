@@ -1,7 +1,6 @@
-import { CalendarPlus } from "lucide-react";
-
 import { formatFaculties } from "@/app/(site)/activities/_lib/activity-format";
 import { ActivityCardView } from "@/features/activities/card/ActivityCardView";
+import { AddToCalendarButton } from "@/features/activities/calendar/AddToCalendarButton";
 import { SaveActivityButton } from "@/features/activities/save/SaveActivityButton";
 import type { RouterOutputs } from "@/trpc/react";
 
@@ -20,13 +19,22 @@ type ActivityCardProps = {
   activityType: Activity["activityType"];
   applicationStartAt: Activity["applicationStartAt"];
   applicationEndAt: Activity["applicationEndAt"];
+  /** Decided by the server — comparing against the clock here could disagree between the
+   *  server render and hydration. */
+  isApplicationClosed: Activity["isApplicationClosed"];
 };
 
 /**
  * A single activity, in the activity list and in an activity page's related activities. The whole
  * card links to the activity's page.
  */
-export function ActivityCard({ id, faculties, activityType, ...card }: ActivityCardProps) {
+export function ActivityCard({
+  id,
+  faculties,
+  activityType,
+  isApplicationClosed,
+  ...card
+}: ActivityCardProps) {
   return (
     <ActivityCardView
       {...card}
@@ -35,14 +43,14 @@ export function ActivityCard({ id, faculties, activityType, ...card }: ActivityC
       activityTypeLabel={activityType.label}
       actions={
         <div className="hidden shrink-0 items-center gap-1.5 md:flex">
-          {/* TODO: wire up once add-to-calendar backend support exists (deferred to a future phase). */}
-          <button
-            type="button"
-            aria-label="เพิ่มลงปฏิทิน"
-            className="border-border text-foreground-muted hover:border-primary hover:text-primary flex size-8 cursor-pointer items-center justify-center rounded-lg border-[1.5px] transition-colors"
-          >
-            <CalendarPlus aria-hidden="true" className="size-4" />
-          </button>
+          {/* A deadline that has passed is nothing to put in a calendar. */}
+          {!isApplicationClosed && (
+            <AddToCalendarButton
+              activityId={id}
+              title={card.title}
+              applicationEndAt={card.applicationEndAt}
+            />
+          )}
           <SaveActivityButton activityId={id} />
         </div>
       }
