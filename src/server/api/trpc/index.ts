@@ -1,2 +1,7 @@
 export { createTRPCContext, createTRPCRouter, createCallerFactory } from "@/server/api/trpc/init";
-export { publicProcedure, protectedProcedure, adminProcedure } from "@/server/api/trpc/procedures";
+export {
+  publicProcedure,
+  protectedProcedure,
+  studentProcedure,
+  adminProcedure,
+} from "@/server/api/trpc/procedures";

@@ -3,6 +3,7 @@ import {
   adminProcedure,
   protectedProcedure,
   publicProcedure,
+  studentProcedure,
 } from "@/server/api/trpc";
 import {
   getAllClubs,
@@ -22,6 +23,9 @@ import {
   adminDeleteClub,
   adminGetClubLogoUploadUrl,
   adminGetClubImagesUploadUrl,
+  followClub,
+  unfollowClub,
+  getClubFollowStatus,
 } from "@/server/api/modules/clubs/usecases";
 import {
   GetAllClubsInputDTOSchema,
@@ -58,6 +62,12 @@ import {
   AdminGetClubLogoUploadUrlOutputDTOSchema,
   AdminGetClubImagesUploadUrlInputDTOSchema,
   AdminGetClubImagesUploadUrlOutputDTOSchema,
+  FollowClubInputDTOSchema,
+  FollowClubOutputDTOSchema,
+  UnfollowClubInputDTOSchema,
+  UnfollowClubOutputDTOSchema,
+  GetClubFollowStatusInputDTOSchema,
+  GetClubFollowStatusOutputDTOSchema,
 } from "@/server/api/modules/clubs/dto";
 
 export const clubsRouter = createTRPCRouter({
@@ -75,6 +85,21 @@ export const clubsRouter = createTRPCRouter({
     .input(GetClubByIdInputDTOSchema)
     .output(GetClubByIdOutputDTOSchema)
     .query(async ({ input }) => getClubById(input)),
+
+  getFollowStatus: studentProcedure
+    .input(GetClubFollowStatusInputDTOSchema)
+    .output(GetClubFollowStatusOutputDTOSchema)
+    .query(async ({ ctx, input }) => getClubFollowStatus(ctx.session.user.id, input)),
+
+  follow: studentProcedure
+    .input(FollowClubInputDTOSchema)
+    .output(FollowClubOutputDTOSchema)
+    .mutation(async ({ ctx, input }) => followClub(ctx.session.user.id, input)),
+
+  unfollow: studentProcedure
+    .input(UnfollowClubInputDTOSchema)
+    .output(UnfollowClubOutputDTOSchema)
+    .mutation(async ({ ctx, input }) => unfollowClub(ctx.session.user.id, input)),
 
   register: publicProcedure
     .input(RegisterClubInputDTOSchema)
