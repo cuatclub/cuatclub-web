@@ -125,6 +125,7 @@ export function SavedList() {
                 activityType={activity.activityType}
                 applicationStartAt={activity.applicationStartAt}
                 applicationEndAt={activity.applicationEndAt}
+                isApplicationClosed={activity.isApplicationClosed}
               />
             ))}
           </ActivityGrid>
