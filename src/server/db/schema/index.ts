@@ -11,6 +11,7 @@ export * from "./club-categories";
 export * from "./students";
 export * from "./student-categories";
 export * from "./student-activity-types";
+export * from "./student-club";
 export * from "./activity-types";
 export * from "./activities";
 export * from "./activity-categories";

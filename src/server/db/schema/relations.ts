@@ -7,6 +7,7 @@ import { clubCategories } from "./club-categories";
 import { students } from "./students";
 import { studentCategories } from "./student-categories";
 import { studentActivityTypes } from "./student-activity-types";
+import { studentClub } from "./student-club";
 import { faculties } from "./faculties";
 import { activities } from "./activities";
 import { activityTypes } from "./activity-types";
@@ -33,6 +34,7 @@ export const clubsRelations = relations(clubs, ({ one, many }) => ({
   }),
   categories: many(clubCategories),
   activities: many(activities),
+  followers: many(studentClub),
 }));
 
 export const clubCategoriesRelations = relations(clubCategories, ({ one }) => ({
@@ -100,6 +102,18 @@ export const studentsRelations = relations(students, ({ one, many }) => ({
   }),
   categories: many(studentCategories),
   activityTypes: many(studentActivityTypes),
+  followedClubs: many(studentClub),
+}));
+
+export const studentClubRelations = relations(studentClub, ({ one }) => ({
+  student: one(students, {
+    fields: [studentClub.studentId],
+    references: [students.id],
+  }),
+  club: one(clubs, {
+    fields: [studentClub.clubId],
+    references: [clubs.id],
+  }),
 }));
 
 export const studentCategoriesRelations = relations(studentCategories, ({ one }) => ({
