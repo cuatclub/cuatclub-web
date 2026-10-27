@@ -4,7 +4,10 @@ import { z } from "zod";
 // own `minPasswordLength` is 8, and the printable-ASCII check keeps out
 // Thai/other non-English input the form can't guarantee round-trips
 // cleanly. Message copy intentionally matches login's for consistency.
-const PRINTABLE_ASCII_ONLY = /^[\x20-\x7E]*$/;
+// Unlike login, spaces are excluded too: the server's register DTOs
+// (users/dto/register-credentials.dto.ts) reject them, and a mismatch here would surface as an
+// unexplained generic error instead of a field message.
+const PRINTABLE_ASCII_ONLY = /^[\x21-\x7E]*$/;
 
 export const INVITATION_CODE_REQUIRED_MESSAGE = "กรุณากรอกรหัสเชิญ";
 // Matches the server's exact-length check (RegisterClubInputDTOSchema) — codes
@@ -27,6 +30,31 @@ export const CODE_EMAIL_MISMATCH_MESSAGE = "อีเมลหรือรหั
 export const EMAIL_NOT_INVITED_MESSAGE = "อีเมลนี้ยังไม่ได้รับคำเชิญ";
 export const EMAIL_ALREADY_USED_MESSAGE = "อีเมลนี้ถูกใช้ไปแล้ว";
 
+// Shared with the student account step (register-student-schema.ts).
+export const emailField = z
+  .string()
+  .trim()
+  .min(1, EMAIL_REQUIRED_MESSAGE)
+  .email(EMAIL_INVALID_MESSAGE);
+
+export const passwordField = z
+  .string()
+  .min(1, PASSWORD_REQUIRED_MESSAGE)
+  .refine(
+    (value) => value.length >= 8 && PRINTABLE_ASCII_ONLY.test(value),
+    PASSWORD_FORMAT_MESSAGE
+  );
+
+export const confirmPasswordField = z.string().min(1, CONFIRM_PASSWORD_REQUIRED_MESSAGE);
+
+export const passwordsMatch = (data: { password: string; confirmPassword: string }) =>
+  data.password === data.confirmPassword;
+
+export const PASSWORDS_MISMATCH_ISSUE = {
+  message: CONFIRM_PASSWORD_MISMATCH_MESSAGE,
+  path: ["confirmPassword"],
+};
+
 export const registerClubSchema = z
   .object({
     invitationCode: z
@@ -34,20 +62,11 @@ export const registerClubSchema = z
       .trim()
       .min(1, INVITATION_CODE_REQUIRED_MESSAGE)
       .refine((value) => value.length === 6, INVITATION_CODE_FORMAT_MESSAGE),
-    email: z.string().trim().min(1, EMAIL_REQUIRED_MESSAGE).email(EMAIL_INVALID_MESSAGE),
-    password: z
-      .string()
-      .min(1, PASSWORD_REQUIRED_MESSAGE)
-      .refine(
-        (value) => value.length >= 8 && PRINTABLE_ASCII_ONLY.test(value),
-        PASSWORD_FORMAT_MESSAGE
-      ),
-    confirmPassword: z.string().min(1, CONFIRM_PASSWORD_REQUIRED_MESSAGE),
+    email: emailField,
+    password: passwordField,
+    confirmPassword: confirmPasswordField,
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: CONFIRM_PASSWORD_MISMATCH_MESSAGE,
-    path: ["confirmPassword"],
-  });
+  .refine(passwordsMatch, PASSWORDS_MISMATCH_ISSUE);
 
 export type RegisterClubFormValues = z.infer<typeof registerClubSchema>;
 

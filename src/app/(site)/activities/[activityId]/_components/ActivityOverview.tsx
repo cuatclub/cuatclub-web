@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { ActivityActions } from "@/app/(site)/activities/[activityId]/_components/ActivityActions";
 import { ActivityMeta } from "@/app/(site)/activities/[activityId]/_components/ActivityMeta";
+import { FollowClubButton } from "@/app/(site)/clubs/_components";
 import {
   ApplicationStatusBadge,
   ApplicationStatusMessage,
@@ -57,33 +58,36 @@ export function ActivityOverview({ activity, status, remainingMs }: ActivityOver
 
       <div className="contents md:flex md:min-w-0 md:flex-1 md:flex-col md:gap-6">
         <div className="contents md:flex md:flex-col md:gap-2">
-          <Link
-            href={`/clubs/${club.id}`}
-            className="group focus-visible:ring-primary order-1 flex w-fit items-center gap-2 rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:order-none"
-          >
-            {club.logoUrl ? (
-              <Image
-                src={club.logoUrl}
-                alt=""
-                width={32}
-                height={32}
-                className="size-8 shrink-0 rounded-full object-cover"
-              />
-            ) : (
-              // No logo uploaded — stand in with the club's initial rather than a broken frame.
-              <div
-                aria-hidden="true"
-                className="bg-primary-lighter text-primary font-ibm-plex flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-bold"
-              >
-                {club.name.charAt(0)}
-              </div>
-            )}
-            {/* IBM Plex Sans Thai's tall ascent rides Latin names ~1.5px above the logo's center at
-                16px — the 1px nudge splits the difference with Thai names, which already sit centered. */}
-            <span className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold group-hover:underline md:translate-y-px md:text-base md:leading-[26px]">
-              {club.name}
-            </span>
-          </Link>
+          <div className="order-1 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 md:order-none">
+            <Link
+              href={`/clubs/${club.id}`}
+              className="group focus-visible:ring-primary flex min-w-0 items-center gap-2 rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            >
+              {club.logoUrl ? (
+                <Image
+                  src={club.logoUrl}
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="size-8 shrink-0 rounded-full object-cover"
+                />
+              ) : (
+                // No logo uploaded — stand in with the club's initial rather than a broken frame.
+                <div
+                  aria-hidden="true"
+                  className="bg-primary-lighter text-primary font-ibm-plex flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-bold"
+                >
+                  {club.name.charAt(0)}
+                </div>
+              )}
+              {/* IBM Plex Sans Thai's tall ascent rides Latin names ~1.5px above the logo's center at
+                  16px — the 1px nudge splits the difference with Thai names, which already sit centered. */}
+              <span className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold break-words group-hover:underline md:translate-y-px md:text-base md:leading-[26px]">
+                {club.name}
+              </span>
+            </Link>
+            <FollowClubButton clubId={club.id} clubName={club.name} />
+          </div>
 
           <div className="order-2 flex items-center gap-4 md:order-none">
             <h1 className="font-ibm-plex text-foreground min-w-0 text-2xl leading-[40px] font-semibold break-words md:text-[28px] md:leading-[46px]">

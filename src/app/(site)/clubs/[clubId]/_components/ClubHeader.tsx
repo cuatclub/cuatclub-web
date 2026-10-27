@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Building2 } from "lucide-react";
 
+import { FollowClubButton } from "@/app/(site)/clubs/_components";
 import { Tag } from "@/components/ui/Tag";
 import type { RouterOutputs } from "@/trpc/react";
 
@@ -11,9 +12,16 @@ type ClubHeaderProps = {
   logoUrl: Club["logoUrl"];
   affiliation: Club["affiliation"];
   categories: Club["categories"];
+  followClubId?: string;
 };
 
-export function ClubHeader({ name, logoUrl, affiliation, categories }: ClubHeaderProps) {
+export function ClubHeader({
+  name,
+  logoUrl,
+  affiliation,
+  categories,
+  followClubId,
+}: ClubHeaderProps) {
   return (
     <header className="flex items-start gap-4">
       {logoUrl ? (
@@ -38,9 +46,12 @@ export function ClubHeader({ name, logoUrl, affiliation, categories }: ClubHeade
       {/* Matches the logo's height so the three rows spread across it, but grows if the
           name wraps onto a second line. */}
       <div className="flex min-h-24 flex-col justify-between gap-2 md:min-h-32">
-        <h1 className="font-ibm-plex text-foreground text-xl leading-[33px] font-semibold md:text-2xl md:leading-[40px]">
-          {name}
-        </h1>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <h1 className="font-ibm-plex text-foreground text-xl leading-[33px] font-semibold md:text-2xl md:leading-[40px]">
+            {name}
+          </h1>
+          {followClubId && <FollowClubButton clubId={followClubId} clubName={name} />}
+        </div>
 
         {affiliation && (
           <p className="font-ibm-plex text-foreground-muted flex items-center gap-2 text-sm leading-[23px] font-medium md:text-base md:leading-[26px]">

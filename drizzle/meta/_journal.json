@@ -15,6 +15,20 @@
       "when": 1788430803581,
       "tag": "0001_premium_cargill",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792901713742,
+      "tag": "0002_wakeful_blue_marvel",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793084736674,
+      "tag": "0003_heavy_darkstar",
+      "breakpoints": true
     }
   ]
 }

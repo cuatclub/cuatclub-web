@@ -16,8 +16,8 @@ type ActivityActionsProps = {
  * Apply and share. Rendered twice by the page — under the poster on desktop and in a bar pinned
  * to the bottom of the screen on mobile — and only one of the two is ever visible.
  *
- * Follow, add-to-calendar, and save sit beside share in the design but are deferred to a later
- * phase, so they're left out rather than shown as buttons that do nothing.
+ * The follow button sits beside the club name in ActivityOverview. Add-to-calendar and save
+ * are deferred to a later phase.
  */
 export function ActivityActions({
   title,

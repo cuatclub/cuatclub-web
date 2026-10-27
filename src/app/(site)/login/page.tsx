@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -13,15 +14,18 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  GoogleSignInSection,
   Input,
   PasswordInput,
 } from "@/components";
 import {
   classifyAuthError,
   GENERIC_ERROR_MESSAGE,
+  GOOGLE_CALLBACK_PATH,
   INVALID_CREDENTIALS_MESSAGE,
   type LoginFormValues,
   loginSchema,
+  postLoginPath,
 } from "./login-schema";
 
 export default function Login() {
@@ -76,13 +80,9 @@ export default function Login() {
     const classification = classifyAuthError(error);
 
     if (classification === null) {
-      // /register/club/profile is guarded by clubRegistrationStepGuard, which
-      // routes CLUB users to whichever step actually matches their
-      // registrationStatus. Other roles have no club row to gate on, so
-      // they'd just get bounced home by the guard — send them there directly.
       try {
         const { data } = await getSession();
-        router.push(data?.user.role === "CLUB" ? "/register/club/profile" : "/");
+        router.push(postLoginPath(data?.user.role));
       } catch (cause) {
         console.error("[login] session lookup failed", cause);
         router.push("/");
@@ -189,6 +189,20 @@ export default function Login() {
                 <Button type="submit" className="w-full" isLoading={isSubmitting}>
                   เข้าสู่ระบบ
                 </Button>
+
+                <GoogleSignInSection
+                  callbackURL={GOOGLE_CALLBACK_PATH}
+                  onError={() =>
+                    setError("root", { type: "manual", message: GENERIC_ERROR_MESSAGE })
+                  }
+                />
+
+                <p className="text-foreground-secondary text-center text-sm font-medium">
+                  ยังไม่มีบัญชี?{" "}
+                  <Link href="/register" className="text-primary font-medium">
+                    ลงทะเบียน
+                  </Link>
+                </p>
               </fieldset>
             </form>
           </CardContent>
