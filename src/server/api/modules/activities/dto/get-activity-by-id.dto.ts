@@ -7,7 +7,8 @@ export const GetActivityByIdInputDTOSchema = z.object({ activityId: z.string().u
 export type GetActivityByIdInputDTO = z.infer<typeof GetActivityByIdInputDTOSchema>;
 
 // A related-activity card shows everything the detail header does except the apply link and
-// the open/closed badge, plus the posting club — but not its contact channels.
+// the open/closed badge, plus the posting club — but not its contact channels. It does need to
+// know whether the deadline has passed, to stop offering it for a calendar.
 export const RelatedActivityDTOSchema = ActivityDetailOutputDTOSchema.pick({
   id: true,
   title: true,
@@ -22,6 +23,7 @@ export const RelatedActivityDTOSchema = ActivityDetailOutputDTOSchema.pick({
   applicationEndAt: true,
 }).extend({
   club: ClubDetailOutputDTOSchema.pick({ id: true, name: true, logoUrl: true }),
+  isApplicationClosed: z.boolean(),
 });
 
 export type RelatedActivityDTO = z.infer<typeof RelatedActivityDTOSchema>;
