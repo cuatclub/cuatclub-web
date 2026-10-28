@@ -1,5 +1,5 @@
 {
-  "id": "c820a346-d8b7-4065-aaac-8a8f920bad55",
+  "id": "9f58c12f-4948-4075-a5ea-f5fafde38bba",
   "prevId": "aef30905-85c0-4c3e-b350-be2d9c1c0498",
   "version": "7",
   "dialect": "postgresql",
@@ -618,6 +618,14 @@
           "primaryKey": false,
           "notNull": false
         },
+        "member_scope": {
+          "name": "member_scope",
+          "type": "club_member_scope",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ALL_FACULTIES'"
+        },
         "short_description": {
           "name": "short_description",
           "type": "text",
@@ -996,78 +1004,6 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
-    },
-    "public.saved_activities": {
-      "name": "saved_activities",
-      "schema": "",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "activity_id": {
-          "name": "activity_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "saved_activities_activity_id_idx": {
-          "name": "saved_activities_activity_id_idx",
-          "columns": [
-            {
-              "expression": "activity_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "saved_activities_user_id_user_id_fk": {
-          "name": "saved_activities_user_id_user_id_fk",
-          "tableFrom": "saved_activities",
-          "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "saved_activities_activity_id_activities_id_fk": {
-          "name": "saved_activities_activity_id_activities_id_fk",
-          "tableFrom": "saved_activities",
-          "tableTo": "activities",
-          "columnsFrom": ["activity_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "saved_activities_user_id_activity_id_pk": {
-          "name": "saved_activities_user_id_activity_id_pk",
-          "columns": ["user_id", "activity_id"]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -1075,6 +1011,11 @@
       "name": "activity_audience",
       "schema": "public",
       "values": ["CHULA_STUDENT", "GENERAL_PUBLIC"]
+    },
+    "public.club_member_scope": {
+      "name": "club_member_scope",
+      "schema": "public",
+      "values": ["AFFILIATION_ONLY", "ALL_FACULTIES"]
     },
     "public.club_registration_status": {
       "name": "club_registration_status",

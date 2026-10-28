@@ -146,10 +146,10 @@ export function Navbar({
   return (
     <nav className="sticky top-0 z-30 flex items-center justify-between bg-white px-4 py-3 shadow-black md:px-16">
       <div className="md:flex md:items-center">
-        <Link href="/" aria-label="CUatClub หน้าแรก">
+        <Link href="/" aria-label="CUAtClub หน้าแรก">
           <Image
             src="/svg/logo.svg"
-            alt="CUatClub"
+            alt="CUAtClub"
             width={76}
             height={40}
             priority

@@ -7,6 +7,7 @@ export const LOGO_REQUIRED_MESSAGE = "กรุณาอัปโหลดรู
 export const CLUB_NAME_REQUIRED_MESSAGE = "กรุณากรอกชื่อชมรม";
 export const CLUB_NAME_MAX_MESSAGE = "ชื่อชมรมต้องมีความยาวไม่เกิน 100 ตัวอักษร";
 export const AFFILIATION_REQUIRED_MESSAGE = "กรุณาเลือกคณะ/สังกัด";
+export const MEMBER_SCOPE_REQUIRED_MESSAGE = "กรุณาเลือกขอบเขตการรับสมาชิก";
 export const CATEGORIES_REQUIRED_MESSAGE = "กรุณาเลือกอย่างน้อย 1 หมวดหมู่";
 export const CATEGORIES_UNIQUE_MESSAGE = "หมวดหมู่ต้องไม่ซ้ำกัน";
 export const SHORT_DESCRIPTION_REQUIRED_MESSAGE = "กรุณากรอกคำอธิบายแบบย่อ";
@@ -16,6 +17,15 @@ export const IMAGE_TYPE_MESSAGE = "รองรับเฉพาะไฟล์
 export const IMAGE_SIZE_MESSAGE = "ขนาดไฟล์ต้องไม่เกิน 10 MB";
 export const ATMOSPHERE_PHOTOS_MAX_MESSAGE = "อัปโหลดรูปบรรยากาศได้สูงสุด 5 รูป";
 export const CONTACT_MAX_MESSAGE = "ข้อมูลติดต่อแต่ละช่องต้องมีความยาวไม่เกิน 255 ตัวอักษร";
+
+export const MEMBER_SCOPE_VALUES = ["AFFILIATION_ONLY", "ALL_FACULTIES"] as const;
+
+export type ClubMemberScope = (typeof MEMBER_SCOPE_VALUES)[number];
+
+export const MEMBER_SCOPE_LABEL: Record<ClubMemberScope, string> = {
+  AFFILIATION_ONLY: "รับเฉพาะนิสิตในคณะ/สังกัด",
+  ALL_FACULTIES: "รับนิสิตจากทุกคณะ",
+};
 
 type ImageFileLike = Pick<File, "name" | "size" | "type">;
 
@@ -93,6 +103,7 @@ export const clubProfileSchema = z.object({
   logo: logoSchema,
   name: z.string().trim().min(1, CLUB_NAME_REQUIRED_MESSAGE).max(100, CLUB_NAME_MAX_MESSAGE),
   affiliation: z.string().trim().min(1, AFFILIATION_REQUIRED_MESSAGE),
+  memberScope: z.enum(MEMBER_SCOPE_VALUES, { required_error: MEMBER_SCOPE_REQUIRED_MESSAGE }),
   categories: z
     .array(z.string())
     .min(1, CATEGORIES_REQUIRED_MESSAGE)

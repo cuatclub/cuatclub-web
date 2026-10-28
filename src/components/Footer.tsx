@@ -28,7 +28,7 @@ export function Footer() {
               one the Navbar needs on a white background. */}
           <Image
             src="/svg/logo-white.svg"
-            alt="CUatClub"
+            alt="CUAtClub"
             width={96}
             height={48}
             className="h-12 w-24"
@@ -47,7 +47,7 @@ export function Footer() {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`CUatClub บน ${label}`}
+              aria-label={`CUAtClub บน ${label}`}
               className="focus-visible:ring-offset-primary hover:bg-primary-lighter flex h-10 w-10 items-center justify-center rounded-full bg-white transition-colors focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               <Icon className="text-primary h-4 w-4" />

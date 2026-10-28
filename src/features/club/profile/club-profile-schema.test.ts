@@ -23,6 +23,7 @@ const validInput = {
   logo: { kind: "new" as const, file: makeFileMetadata("logo.png", "image/png") },
   name: "ชมรมตัวอย่าง",
   affiliation: "วิศวกรรมศาสตร์",
+  memberScope: "ALL_FACULTIES" as const,
   categories: ["เทคโนโลยี"],
   shortDescription: "คำอธิบายชมรมแบบย่อ",
   longDescription: "คำอธิบายชมรมแบบละเอียด",

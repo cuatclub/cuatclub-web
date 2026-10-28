@@ -9,6 +9,8 @@ export {
   getClubImageContentType,
   getImageFileValidationMessage,
   MAX_ATMOSPHERE_PHOTOS,
+  MEMBER_SCOPE_LABEL,
+  MEMBER_SCOPE_VALUES,
 } from "@/features/club/profile/club-profile-schema";
 export type {
   ClubImageContentType,
