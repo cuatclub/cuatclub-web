@@ -4,6 +4,7 @@ import { db, type DbClient } from "@/server/db";
 import * as schema from "@/server/db/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/api";
 import { genericOAuth, line } from "better-auth/plugins";
 
 // Shared by every instance below so a request-scoped and a transaction-scoped one can never
@@ -37,6 +38,15 @@ const buildAuthOptions = (client: DbClient) => ({
   },
   trustedOrigins: [new URL(env.BETTER_AUTH_URL).origin],
   onAPIError: { errorURL: "/auth/error" },
+  hooks: {
+    // `/oauth2/link` accepts any session, so refuse non-students here.
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path !== "/oauth2/link") return;
+
+      const session = await getSessionFromCtx<{ role: string }>(ctx);
+      if (session && session.user.role !== "STUDENT") throw new APIError("FORBIDDEN");
+    }),
+  },
   advanced: {
     database: {
       generateId: () => crypto.randomUUID(),
