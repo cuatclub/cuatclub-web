@@ -60,15 +60,19 @@ export function ConnectLineActions({
     // left on until the page unloads. Errors raised on LINE's side (e.g. Cancel)
     // come back as a full redirect to this page's `?error=` instead of here — this
     // only catches the request itself failing, such as an expired session.
-    const { error } = await oauth2.link({
-      providerId: LINE_PROVIDER_ID,
-      callbackURL: LINE_CONNECT_PATH,
-      errorCallbackURL: LINE_CONNECT_PATH,
-    });
-    if (error) {
-      setErrorMessage(LINE_CONNECT_FAILED_MESSAGE);
-      setIsLinking(false);
+    try {
+      const { error } = await oauth2.link({
+        providerId: LINE_PROVIDER_ID,
+        callbackURL: LINE_CONNECT_PATH,
+        errorCallbackURL: LINE_CONNECT_PATH,
+      });
+      if (!error) return;
+    } catch (cause) {
+      // A network-level failure (offline, DNS) rejects instead of resolving to `{ error }`.
+      console.error("[line] link request failed", cause);
     }
+    setErrorMessage(LINE_CONNECT_FAILED_MESSAGE);
+    setIsLinking(false);
   };
 
   return (
