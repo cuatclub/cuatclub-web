@@ -26,10 +26,11 @@ const toIdSet = (data: { activityIds: string[] }) => new Set(data.activityIds);
  * reads the same single `getSavedIds` query rather than asking per card.
  *
  * Flips optimistically: the id list is patched at once and put back, with a toast, if the server
- * refuses. A signed-out visitor is sent to sign in instead; so is one the server turns away with
- * UNAUTHORIZED (an expired session), after a quiet rollback. Whether the visitor is signed in comes
- * from the server-rendered layout, not a lookup in the browser. Clicks are ignored while a save or
- * unsave of the same activity is in flight, even one started from another component using this hook.
+ * refuses; a success toast confirms it once the server agrees. A signed-out visitor is sent to sign
+ * in instead; so is one the server turns away with UNAUTHORIZED (an expired session), after a quiet
+ * rollback. Whether the visitor is signed in comes from the server-rendered layout, not a lookup in
+ * the browser. Clicks are ignored while a save or unsave of the same activity is in flight, even
+ * one started from another component using this hook.
  */
 export function useSavedActivity(activityId: string) {
   const router = useRouter();
@@ -94,6 +95,7 @@ export function useSavedActivity(activityId: string) {
 
   const save = api.activities.save.useMutation({
     onMutate: () => applyOptimistically(true),
+    onSuccess: () => toast.success("บันทึกกิจกรรมเรียบร้อย"),
     onError: (error, _input, context) =>
       handleError(error, context?.previous, "บันทึกกิจกรรมไม่สำเร็จ กรุณาลองอีกครั้ง"),
     onSettled: refresh,
@@ -101,6 +103,7 @@ export function useSavedActivity(activityId: string) {
 
   const unsave = api.activities.unsave.useMutation({
     onMutate: () => applyOptimistically(false),
+    onSuccess: () => toast.success("ยกเลิกการบันทึกกิจกรรมเรียบร้อย"),
     onError: (error, _input, context) =>
       handleError(error, context?.previous, "ยกเลิกการบันทึกไม่สำเร็จ กรุณาลองอีกครั้ง"),
     onSettled: refresh,
