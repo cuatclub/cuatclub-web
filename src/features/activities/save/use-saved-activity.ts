@@ -1,5 +1,7 @@
 "use client";
 
+import { partialMatchKey, useQueryClient } from "@tanstack/react-query";
+import { getMutationKey } from "@trpc/react-query";
 import { useRouter } from "next/navigation";
 
 import { toast } from "@/components/ui";
@@ -7,6 +9,14 @@ import { useIsSignedIn } from "@/features/auth/ViewerProvider";
 import { api, type RouterOutputs } from "@/trpc/react";
 
 const LOGIN_PATH = "/login";
+
+const SAVE_MUTATION_KEYS = [
+  getMutationKey(api.activities.save),
+  getMutationKey(api.activities.unsave),
+];
+
+const isActivityInput = (value: unknown): value is { activityId: unknown } =>
+  typeof value === "object" && value !== null && "activityId" in value;
 
 /** One `Set` per fetch, shared by every card — the select function's identity keeps it memoized. */
 const toIdSet = (data: { activityIds: string[] }) => new Set(data.activityIds);
@@ -18,10 +28,12 @@ const toIdSet = (data: { activityIds: string[] }) => new Set(data.activityIds);
  * Flips optimistically: the id list is patched at once and put back, with a toast, if the server
  * refuses. A signed-out visitor is sent to sign in instead; so is one the server turns away with
  * UNAUTHORIZED (an expired session), after a quiet rollback. Whether the visitor is signed in comes
- * from the server-rendered layout, not a lookup in the browser.
+ * from the server-rendered layout, not a lookup in the browser. Clicks are ignored while a save or
+ * unsave of the same activity is in flight, even one started from another component using this hook.
  */
 export function useSavedActivity(activityId: string) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const utils = api.useUtils();
   const isSignedIn = useIsSignedIn();
 
@@ -65,6 +77,21 @@ export function useSavedActivity(activityId: string) {
     else toast.error(message);
   };
 
+  /** Read from the cache at click time, so it also sees flips started by other users of this hook. */
+  const isFlipPending = () =>
+    queryClient.isMutating({
+      predicate: (mutation) => {
+        const { mutationKey } = mutation.options;
+        const variables: unknown = mutation.state.variables;
+        return (
+          mutationKey !== undefined &&
+          SAVE_MUTATION_KEYS.some((key) => partialMatchKey(mutationKey, key)) &&
+          isActivityInput(variables) &&
+          variables.activityId === activityId
+        );
+      },
+    }) > 0;
+
   const save = api.activities.save.useMutation({
     onMutate: () => applyOptimistically(true),
     onError: (error, _input, context) =>
@@ -84,7 +111,7 @@ export function useSavedActivity(activityId: string) {
       router.push(LOGIN_PATH);
       return;
     }
-    if (save.isPending || unsave.isPending) return;
+    if (isFlipPending()) return;
 
     if (isSaved) unsave.mutate({ activityId });
     else save.mutate({ activityId });
