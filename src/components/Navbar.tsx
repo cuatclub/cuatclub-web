@@ -236,7 +236,11 @@ export function Navbar({
                     )}
                   </div>
                 </div>
-                <DropdownMenuItem asChild>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  asChild
+                  className="text-foreground-secondary data-[highlighted]:text-primary"
+                >
                   <Link href={SAVED_PATH}>
                     <Bookmark aria-hidden="true" className="h-4 w-4" />
                     ที่บันทึกไว้
