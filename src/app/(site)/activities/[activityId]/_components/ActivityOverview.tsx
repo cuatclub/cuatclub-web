@@ -51,7 +51,8 @@ export function ActivityOverview({ activity, status, remainingMs }: ActivityOver
           activityId={activity.id}
           title={activity.title}
           applicationFormUrl={activity.applicationFormUrl}
-          isApplicationOpen={status === "open"}
+          applicationEndAt={activity.applicationEndAt}
+          status={status}
           className="hidden md:flex"
         />
       </div>

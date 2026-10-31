@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 type SaveActivityButtonProps = {
   activityId: string;
-  /** `icon` is the small square on an activity card; `labelled` is the full-width action on an
-   *  activity's own page, sized to sit beside the share button. */
-  variant?: "icon" | "labelled";
+  /** `icon` is the small square on an activity card; `wide` fills its column in the button row on
+   *  an activity's own page. Both show only the icon, as in the design. */
+  variant?: "icon" | "wide";
   className?: string;
 };
 
@@ -35,17 +35,19 @@ export function SaveActivityButton({
     />
   );
 
-  if (variant === "labelled") {
+  const label = isSaved ? "ยกเลิกการบันทึก" : "บันทึกกิจกรรม";
+
+  if (variant === "wide") {
     return (
       <Button
         type="button"
         variant="outline"
+        aria-label={label}
         aria-pressed={isSaved}
         onClick={toggle}
         className={cn("h-9 w-full md:h-10", isSaved && "bg-primary-lighter", className)}
       >
         {icon}
-        {isSaved ? "บันทึกแล้ว" : "บันทึก"}
       </Button>
     );
   }
@@ -53,7 +55,7 @@ export function SaveActivityButton({
   return (
     <button
       type="button"
-      aria-label={isSaved ? "ยกเลิกการบันทึก" : "บันทึกกิจกรรม"}
+      aria-label={label}
       aria-pressed={isSaved}
       onClick={toggle}
       className={cn(

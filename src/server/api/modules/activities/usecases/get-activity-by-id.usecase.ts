@@ -59,6 +59,7 @@ export const getActivityById = async (
       applicationStartAt: related.activity.applicationStartAt,
       applicationEndAt: related.activity.applicationEndAt,
       club: related.clubSummary,
+      isApplicationClosed: related.isApplicationClosed,
     })),
   };
 };

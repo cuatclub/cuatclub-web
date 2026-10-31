@@ -1,5 +1,7 @@
+import type { ApplicationStatus } from "@/app/(site)/activities/[activityId]/_components/ApplicationStatus";
 import { ShareButton } from "@/app/(site)/activities/[activityId]/_components/ShareButton";
 import { Button, buttonVariants } from "@/components/ui/Button";
+import { AddToCalendarButton } from "@/features/activities/calendar/AddToCalendarButton";
 import { SaveActivityButton } from "@/features/activities/save/SaveActivityButton";
 import { cn } from "@/lib/utils";
 
@@ -10,27 +12,33 @@ type ActivityActionsProps = {
   activityId: string;
   title: string;
   applicationFormUrl: string;
-  isApplicationOpen: boolean;
+  applicationEndAt: Date;
+  status: ApplicationStatus;
   className?: string;
 };
 
 /**
- * Apply, save and share. Rendered twice by the page — under the poster on desktop and in a bar
- * pinned to the bottom of the screen on mobile — and only one of the two is ever visible.
+ * Apply, add to calendar, save and share. Rendered twice by the page — under the poster on
+ * desktop and in a bar pinned to the bottom of the screen on mobile — and only one of the two is
+ * ever visible. Once applications have closed the deadline has passed, so there's nothing left to
+ * put in a calendar and that button goes.
  *
- * Follow and add-to-calendar sit beside save and share in the design but are deferred to a later
- * phase, so they're left out rather than shown as buttons that do nothing.
+ * Follow sits beside them in the design but is deferred to a later phase, so it's left out rather
+ * than shown as a button that does nothing.
  */
 export function ActivityActions({
   activityId,
   title,
   applicationFormUrl,
-  isApplicationOpen,
+  applicationEndAt,
+  status,
   className,
 }: ActivityActionsProps) {
+  const canAddToCalendar = status !== "closed";
+
   return (
     <div className={cn("flex flex-col gap-3", className)}>
-      {isApplicationOpen ? (
+      {status === "open" ? (
         <a
           href={applicationFormUrl}
           target="_blank"
@@ -47,8 +55,16 @@ export function ActivityActions({
         </Button>
       )}
 
-      <div className="grid grid-cols-2 gap-3">
-        <SaveActivityButton activityId={activityId} variant="labelled" />
+      <div className={cn("grid gap-3", canAddToCalendar ? "grid-cols-3" : "grid-cols-2")}>
+        {canAddToCalendar && (
+          <AddToCalendarButton
+            activityId={activityId}
+            title={title}
+            applicationEndAt={applicationEndAt}
+            variant="wide"
+          />
+        )}
+        <SaveActivityButton activityId={activityId} variant="wide" />
         <ShareButton title={title} />
       </div>
     </div>
