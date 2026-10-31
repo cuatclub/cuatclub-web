@@ -20,9 +20,9 @@ type AddToCalendarButtonProps = {
   activityId: string;
   title: string;
   applicationEndAt: Date;
-  /** `icon` is the small square on an activity card; `labelled` is the full-width action on an
-   *  activity's own page, sized to sit beside the save and share buttons. */
-  variant?: "icon" | "labelled";
+  /** `icon` is the small square on an activity card; `wide` fills its column in the button row on
+   *  an activity's own page, beside save and share. Both show only the icon, as in the design. */
+  variant?: "icon" | "wide";
   className?: string;
 };
 
@@ -47,10 +47,14 @@ export function AddToCalendarButton({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {variant === "labelled" ? (
-          <Button type="button" variant="outline" className={cn("h-9 w-full md:h-10", className)}>
+        {variant === "wide" ? (
+          <Button
+            type="button"
+            variant="outline"
+            aria-label="เพิ่มลงปฏิทิน"
+            className={cn("h-9 w-full md:h-10", className)}
+          >
             {icon}
-            ปฏิทิน
           </Button>
         ) : (
           <button
@@ -68,7 +72,7 @@ export function AddToCalendarButton({
         )}
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align={variant === "labelled" ? "start" : "end"}>
+      <DropdownMenuContent align={variant === "wide" ? "start" : "end"}>
         <CalendarMenuItems
           activityId={activityId}
           title={title}
