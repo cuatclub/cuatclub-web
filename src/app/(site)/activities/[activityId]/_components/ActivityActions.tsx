@@ -61,10 +61,10 @@ export function ActivityActions({
             activityId={activityId}
             title={title}
             applicationEndAt={applicationEndAt}
-            variant="labelled"
+            variant="wide"
           />
         )}
-        <SaveActivityButton activityId={activityId} variant="labelled" />
+        <SaveActivityButton activityId={activityId} variant="wide" />
         <ShareButton title={title} />
       </div>
     </div>

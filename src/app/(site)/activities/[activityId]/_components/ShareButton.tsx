@@ -13,7 +13,8 @@ type ShareButtonProps = {
 
 /**
  * Opens the device's share sheet where there is one (phones, Safari). Elsewhere it copies the
- * page link and confirms in place for a moment — the app has no toast to announce it with.
+ * page link and confirms in place for a moment: the icon turns into a check, and screen readers
+ * hear "คัดลอกลิงก์แล้ว". The design shows the icon only, so there's no visible text.
  */
 export function ShareButton({ title }: ShareButtonProps) {
   const [isCopied, setIsCopied] = useState(false);
@@ -44,9 +45,17 @@ export function ShareButton({ title }: ShareButtonProps) {
   const Icon = isCopied ? Check : Share2;
 
   return (
-    <Button type="button" variant="outline" onClick={handleClick} className="h-9 w-full md:h-10">
+    <Button
+      type="button"
+      variant="outline"
+      aria-label="แชร์"
+      onClick={handleClick}
+      className="h-9 w-full md:h-10"
+    >
       <Icon aria-hidden="true" className="size-4 shrink-0 md:size-5" />
-      <span aria-live="polite">{isCopied ? "คัดลอกลิงก์แล้ว" : "แชร์"}</span>
+      <span aria-live="polite" className="sr-only">
+        {isCopied ? "คัดลอกลิงก์แล้ว" : ""}
+      </span>
     </Button>
   );
 }
