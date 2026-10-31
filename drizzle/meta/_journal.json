@@ -22,6 +22,13 @@
       "when": 1792995197312,
       "tag": "0002_jittery_sabra",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793114497673,
+      "tag": "0003_slim_jimmy_woo",
+      "breakpoints": true
     }
   ]
 }

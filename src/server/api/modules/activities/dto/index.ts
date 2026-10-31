@@ -9,3 +9,7 @@ export * from "@/server/api/modules/activities/dto/delete-activity.dto";
 export * from "@/server/api/modules/activities/dto/get-all-activities.dto";
 export * from "@/server/api/modules/activities/dto/activity-detail.dto";
 export * from "@/server/api/modules/activities/dto/get-activity-by-id.dto";
+export * from "@/server/api/modules/activities/dto/save-activity.dto";
+export * from "@/server/api/modules/activities/dto/unsave-activity.dto";
+export * from "@/server/api/modules/activities/dto/get-saved-activities.dto";
+export * from "@/server/api/modules/activities/dto/get-saved-activity-ids.dto";

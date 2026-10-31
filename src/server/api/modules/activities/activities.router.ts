@@ -8,6 +8,10 @@ import {
   getMyActivities,
   updateActivity,
   getAllActivities,
+  getSavedActivities,
+  getSavedActivityIds,
+  saveActivity,
+  unsaveActivity,
 } from "@/server/api/modules/activities/usecases";
 import {
   CreateActivityInputDTOSchema,
@@ -26,6 +30,14 @@ import {
   UpdateActivityOutputDTOSchema,
   GetAllActivitiesInputDTOSchema,
   GetAllActivitiesOutputDTOSchema,
+  GetSavedActivitiesInputDTOSchema,
+  GetSavedActivitiesOutputDTOSchema,
+  GetSavedActivityIdsInputDTOSchema,
+  GetSavedActivityIdsOutputDTOSchema,
+  SaveActivityInputDTOSchema,
+  SaveActivityOutputDTOSchema,
+  UnsaveActivityInputDTOSchema,
+  UnsaveActivityOutputDTOSchema,
 } from "@/server/api/modules/activities/dto";
 
 export const activitiesRouter = createTRPCRouter({
@@ -68,4 +80,24 @@ export const activitiesRouter = createTRPCRouter({
     .input(DeleteActivityInputDTOSchema)
     .output(DeleteActivityOutputDTOSchema)
     .mutation(async ({ ctx, input }) => deleteActivity(ctx.session.user.id, input)),
+
+  save: protectedProcedure
+    .input(SaveActivityInputDTOSchema)
+    .output(SaveActivityOutputDTOSchema)
+    .mutation(async ({ ctx, input }) => saveActivity(ctx.session.user.id, input)),
+
+  unsave: protectedProcedure
+    .input(UnsaveActivityInputDTOSchema)
+    .output(UnsaveActivityOutputDTOSchema)
+    .mutation(async ({ ctx, input }) => unsaveActivity(ctx.session.user.id, input)),
+
+  getSaved: protectedProcedure
+    .input(GetSavedActivitiesInputDTOSchema)
+    .output(GetSavedActivitiesOutputDTOSchema)
+    .query(async ({ ctx, input }) => getSavedActivities(ctx.session.user.id, input)),
+
+  getSavedIds: protectedProcedure
+    .input(GetSavedActivityIdsInputDTOSchema)
+    .output(GetSavedActivityIdsOutputDTOSchema)
+    .query(async ({ ctx }) => getSavedActivityIds(ctx.session.user.id)),
 });
