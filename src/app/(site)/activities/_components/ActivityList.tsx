@@ -207,6 +207,7 @@ export function ActivityList() {
                 activityType={activity.activityType}
                 applicationStartAt={activity.applicationStartAt}
                 applicationEndAt={activity.applicationEndAt}
+                isApplicationClosed={activity.isApplicationClosed}
               />
             ))}
 

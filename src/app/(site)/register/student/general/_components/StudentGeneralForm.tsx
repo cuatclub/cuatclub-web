@@ -9,10 +9,13 @@ import { Controller, useForm } from "react-hook-form";
 import { type AppRouter } from "@/server/api/root";
 import { api } from "@/trpc/react";
 import { Button, Input, RadioGroup, Select } from "@/components";
+import { StudentAvatarField } from "@/app/(site)/register/student/general/_components/StudentAvatarField";
+import { uploadProfileImage } from "@/app/(site)/register/student/_lib/upload-profile-image";
 import {
   classifyStudentGeneralError,
   FACULTY_REQUIRED_MESSAGE,
   GENERIC_ERROR_MESSAGE,
+  getProfileImageContentType,
   parseYearLabel,
   STUDENT_STATUS_OPTIONS,
   studentGeneralSchema,
@@ -30,6 +33,7 @@ interface StudentGeneralFormProps {
     facultyId: number | null;
     yearLevel: number | null;
     university: string | null;
+    image: string | null;
   };
 }
 
@@ -39,6 +43,7 @@ const labelClass =
 export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormProps) {
   const router = useRouter();
   const saveMutation = api.students.saveGeneralInfo.useMutation();
+  const getImageUploadUrl = api.students.getProfileImageUploadUrl.useMutation();
   const rootErrorRef = useRef<HTMLParagraphElement>(null);
 
   const {
@@ -57,6 +62,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
       faculty: faculties.find((faculty) => faculty.id === existing.facultyId)?.label ?? "",
       year: existing.yearLevel ? yearLabel(existing.yearLevel) : "",
       university: existing.university ?? "",
+      image: null,
     },
   });
 
@@ -77,7 +83,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
     }
   }, [isSubmitting, errors.username?.type, setFocus]);
 
-  const onSubmit = handleSubmit(async ({ status, username, faculty, year, university }) => {
+  const onSubmit = handleSubmit(async ({ status, username, faculty, year, university, image }) => {
     const facultyId = faculties.find((item) => item.label === faculty)?.id;
     if (facultyId === undefined) {
       setError("faculty", { type: "manual", message: FACULTY_REQUIRED_MESSAGE });
@@ -85,12 +91,25 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
     }
 
     try {
+      let imageUrl: string | undefined;
+      if (image) {
+        const contentType = getProfileImageContentType(image);
+        if (!contentType) throw new Error("Unsupported profile image type");
+        const target = await getImageUploadUrl.mutateAsync({
+          contentType,
+          contentLength: image.size,
+        });
+        await uploadProfileImage(image, { url: target.url, contentType });
+        imageUrl = target.publicUrl;
+      }
+
       await saveMutation.mutateAsync({
         status,
         username,
         facultyId,
         yearLevel: parseYearLabel(year),
         university: status === "OTHER_UNIVERSITY" ? university : undefined,
+        image: imageUrl,
       });
     } catch (cause) {
       const classification = classifyStudentGeneralError(
@@ -113,9 +132,22 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
   });
 
   return (
-    <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
+    <form className="flex flex-col gap-8" onSubmit={onSubmit} noValidate>
       <fieldset inert={isSubmitting || undefined} aria-busy={isSubmitting} className="contents">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
+          <Controller
+            control={control}
+            name="image"
+            render={({ field }) => (
+              <StudentAvatarField
+                file={field.value ?? null}
+                currentUrl={existing.image}
+                errorMessage={errors.image?.message}
+                onChange={field.onChange}
+              />
+            )}
+          />
+
           <Controller
             control={control}
             name="status"
@@ -133,7 +165,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
             )}
           />
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <label htmlFor="username" className={labelClass}>
               ชื่อผู้ใช้ <span className="text-error">*</span>
             </label>
@@ -148,7 +180,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
           </div>
 
           {status === "OTHER_UNIVERSITY" && (
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-2">
               <label htmlFor="university" className={labelClass}>
                 มหาลัย <span className="text-error">*</span>
               </label>
@@ -168,6 +200,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
             name="faculty"
             render={({ field }) => (
               <Select
+                className="gap-2"
                 label="คณะ"
                 required
                 placeholder="เลือกคณะ"
@@ -186,6 +219,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
             name="year"
             render={({ field }) => (
               <Select
+                className="gap-2"
                 label="ชั้นปี"
                 required
                 placeholder="เลือกชั้นปี"

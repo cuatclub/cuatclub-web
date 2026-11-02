@@ -6,6 +6,7 @@ export function buildClubProfileFormValues(profile: ClubDetailOutputDTO): ClubPr
     logo: profile.logoUrl ? { kind: "persisted", url: profile.logoUrl } : null,
     name: profile.name,
     affiliation: profile.affiliation?.label ?? "",
+    memberScope: profile.memberScope,
     categories: profile.categories.map(({ label }) => label),
     shortDescription: profile.shortDescription ?? "",
     longDescription: profile.longDescription ?? "",

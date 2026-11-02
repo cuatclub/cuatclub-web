@@ -136,6 +136,7 @@ export function ClubProfileFormContainer({
       name: values.name,
       image: logoUrl,
       affiliationId: affiliation.id,
+      memberScope: values.memberScope,
       categories: categoryIds,
       shortDescription: values.shortDescription,
       longDescription: values.longDescription,

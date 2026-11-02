@@ -9,6 +9,11 @@ export const clubRegistrationStatusEnum = pgEnum("club_registration_status", [
   "COMPLETED",
 ]);
 
+export const clubMemberScopeEnum = pgEnum("club_member_scope", [
+  "AFFILIATION_ONLY",
+  "ALL_FACULTIES",
+]);
+
 export const clubs = pgTable("clubs", {
   id: uuid("id")
     .primaryKey()
@@ -21,6 +26,7 @@ export const clubs = pgTable("clubs", {
     .notNull()
     .default("PENDING"),
   affiliationId: smallint("affiliation_id").references(() => affiliations.id),
+  memberScope: clubMemberScopeEnum("member_scope").notNull().default("ALL_FACULTIES"),
   shortDescription: text("short_description"),
   longDescription: text("long_description"),
   imageUrls: text("image_urls").array().default([]).notNull(),

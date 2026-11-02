@@ -35,6 +35,8 @@ const NAV_LINKS: NavLink[] = [
   { label: "เกี่ยวกับ", href: null },
 ];
 
+const SAVED_PATH = "/saved";
+
 export const CLUB_DASHBOARD_NAV_ITEMS: ReadonlyArray<{
   href: string;
   label: string;
@@ -144,10 +146,10 @@ export function Navbar({
   return (
     <nav className="sticky top-0 z-30 flex items-center justify-between bg-white px-4 py-3 shadow-black md:px-16">
       <div className="md:flex md:items-center">
-        <Link href="/" aria-label="CUatClub หน้าแรก">
+        <Link href="/" aria-label="CUAtClub หน้าแรก">
           <Image
             src="/svg/logo.svg"
-            alt="CUatClub"
+            alt="CUAtClub"
             width={76}
             height={40}
             priority
@@ -234,6 +236,16 @@ export function Navbar({
                     )}
                   </div>
                 </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  asChild
+                  className="text-foreground-secondary data-[highlighted]:text-primary"
+                >
+                  <Link href={SAVED_PATH}>
+                    <Bookmark aria-hidden="true" className="h-4 w-4" />
+                    ที่บันทึกไว้
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onSelect={() => setIsLogoutConfirmOpen(true)}
@@ -349,15 +361,20 @@ export function Navbar({
                         </Link>
                       );
                     })}
-                  <button
-                    type="button"
-                    disabled
-                    aria-disabled="true"
-                    className="font-ibm-plex text-placeholder flex cursor-not-allowed items-center gap-2 rounded-lg p-2 text-sm font-medium"
+                  <Link
+                    href={SAVED_PATH}
+                    onClick={closeSidebar}
+                    aria-current={pathname === SAVED_PATH ? "page" : undefined}
+                    className={cn(
+                      "font-ibm-plex flex items-center gap-2 rounded-lg p-2 text-sm font-medium",
+                      pathname === SAVED_PATH
+                        ? "bg-primary text-white"
+                        : "text-foreground hover:bg-primary-lighter hover:text-primary"
+                    )}
                   >
-                    <Bookmark className="h-4 w-4" />
+                    <Bookmark aria-hidden="true" className="h-4 w-4 shrink-0" />
                     ที่บันทึกไว้
-                  </button>
+                  </Link>
                   <button
                     type="button"
                     disabled

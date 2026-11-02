@@ -28,5 +28,5 @@ export const getStudentRegistration = async (
     });
   }
 
-  return { ...student.toDTO(), email: user.email };
+  return { ...student.toDTO(), email: user.email, image: user.image };
 };

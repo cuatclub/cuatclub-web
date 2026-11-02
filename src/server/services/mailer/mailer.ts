@@ -6,7 +6,7 @@ export async function sendClubInviteCodeEmail(params: {
   to: string;
   inviteCode: string;
 }): Promise<{ messageId: string }> {
-  const SUBJECT = "รหัสเชิญเข้าร่วม CUatClub ของคุณ";
+  const SUBJECT = "รหัสเชิญเข้าร่วม CUAtClub ของคุณ";
   const { to, inviteCode } = params;
 
   const registerUrl = `${env.APP_BASE_URL}/register`;

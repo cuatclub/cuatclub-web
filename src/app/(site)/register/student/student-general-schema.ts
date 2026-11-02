@@ -8,6 +8,27 @@ export const YEAR_REQUIRED_MESSAGE = "กรุณาเลือกชั้น
 export const UNIVERSITY_REQUIRED_MESSAGE = "กรุณากรอกมหาวิทยาลัย";
 export const GENERIC_ERROR_MESSAGE = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง";
 
+export const IMAGE_TYPE_MESSAGE = "รองรับเฉพาะไฟล์ JPG, PNG, WEBP และ GIF";
+export const IMAGE_SIZE_MESSAGE = "ขนาดไฟล์ต้องไม่เกิน 5 MB";
+
+export const PROFILE_IMAGE_CONTENT_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+] as const;
+export type ProfileImageContentType = (typeof PROFILE_IMAGE_CONTENT_TYPES)[number];
+export const MAX_PROFILE_IMAGE_BYTES = 5 * 1024 * 1024;
+
+export const getProfileImageContentType = (file: File): ProfileImageContentType | null =>
+  PROFILE_IMAGE_CONTENT_TYPES.find((type) => type === file.type) ?? null;
+
+export const getProfileImageValidationMessage = (file: File): string | null => {
+  if (!getProfileImageContentType(file)) return IMAGE_TYPE_MESSAGE;
+  if (file.size > MAX_PROFILE_IMAGE_BYTES) return IMAGE_SIZE_MESSAGE;
+  return null;
+};
+
 export const STUDENT_STATUS_OPTIONS = [
   { value: "CHULA", label: "นิสิตจุฬาฯ" },
   { value: "OTHER_UNIVERSITY", label: "นิสิตมหาลัยอื่น" },
@@ -30,6 +51,15 @@ export const studentGeneralSchema = z
     faculty: z.string().min(1, FACULTY_REQUIRED_MESSAGE),
     year: z.string().min(1, YEAR_REQUIRED_MESSAGE),
     university: z.string().trim().max(200).optional(),
+    // A newly picked file; null/undefined keeps whatever image the account already has.
+    image: z
+      .instanceof(File)
+      .nullable()
+      .optional()
+      .superRefine((file, ctx) => {
+        const message = file ? getProfileImageValidationMessage(file) : null;
+        if (message) ctx.addIssue({ code: z.ZodIssueCode.custom, message });
+      }),
   })
   .refine((data) => data.status !== "OTHER_UNIVERSITY" || !!data.university, {
     message: UNIVERSITY_REQUIRED_MESSAGE,

@@ -1,8 +1,9 @@
 import Image from "next/image";
-import { Building2 } from "lucide-react";
+import { Building2, Users } from "lucide-react";
 
 import { FollowClubButton } from "@/app/(site)/clubs/_components";
 import { Tag } from "@/components/ui/Tag";
+import { MEMBER_SCOPE_LABEL } from "@/features/club/profile";
 import type { RouterOutputs } from "@/trpc/react";
 
 type Club = RouterOutputs["clubs"]["getById"];
@@ -11,6 +12,7 @@ type ClubHeaderProps = {
   name: Club["name"];
   logoUrl: Club["logoUrl"];
   affiliation: Club["affiliation"];
+  memberScope: Club["memberScope"];
   categories: Club["categories"];
   followClubId?: string;
 };
@@ -19,6 +21,7 @@ export function ClubHeader({
   name,
   logoUrl,
   affiliation,
+  memberScope,
   categories,
   followClubId,
 }: ClubHeaderProps) {
@@ -53,12 +56,18 @@ export function ClubHeader({
           {followClubId && <FollowClubButton clubId={followClubId} clubName={name} />}
         </div>
 
-        {affiliation && (
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-6">
+          {affiliation && (
+            <p className="font-ibm-plex text-foreground-muted flex items-center gap-2 text-sm leading-[23px] font-medium md:text-base md:leading-[26px]">
+              <Building2 aria-hidden="true" className="size-4 shrink-0 md:size-5" />
+              {affiliation.label}
+            </p>
+          )}
           <p className="font-ibm-plex text-foreground-muted flex items-center gap-2 text-sm leading-[23px] font-medium md:text-base md:leading-[26px]">
-            <Building2 aria-hidden="true" className="size-4 shrink-0 md:size-5" />
-            {affiliation.label}
+            <Users aria-hidden="true" className="size-4 shrink-0 md:size-5" />
+            {MEMBER_SCOPE_LABEL[memberScope]}
           </p>
-        )}
+        </div>
 
         {categories.length > 0 && (
           <ul className="flex flex-wrap items-center gap-2">

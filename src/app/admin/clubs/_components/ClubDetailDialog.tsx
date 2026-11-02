@@ -148,6 +148,7 @@ export function ClubDetailDialog({ clubId, onClose }: ClubDetailDialogProps) {
                 name={club.name}
                 logoUrl={club.logoUrl}
                 affiliation={club.affiliation}
+                memberScope={club.memberScope}
                 categories={club.categories}
               />
 

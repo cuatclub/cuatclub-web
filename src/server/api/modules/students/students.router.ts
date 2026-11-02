@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
 import {
+  getStudentProfileImageUploadUrl,
   getStudentRegistration,
   registerStudent,
   saveStudentGeneralInfo,
@@ -7,6 +8,8 @@ import {
   saveStudentReferralSource,
 } from "@/server/api/modules/students/usecases";
 import {
+  GetStudentProfileImageUploadUrlInputDTOSchema,
+  GetStudentProfileImageUploadUrlOutputDTOSchema,
   GetStudentRegistrationInputDTOSchema,
   GetStudentRegistrationOutputDTOSchema,
   RegisterStudentInputDTOSchema,
@@ -29,6 +32,13 @@ export const studentsRouter = createTRPCRouter({
     .input(GetStudentRegistrationInputDTOSchema)
     .output(GetStudentRegistrationOutputDTOSchema)
     .query(async ({ ctx }) => getStudentRegistration(ctx.session.user.id)),
+
+  getProfileImageUploadUrl: protectedProcedure
+    .input(GetStudentProfileImageUploadUrlInputDTOSchema)
+    .output(GetStudentProfileImageUploadUrlOutputDTOSchema)
+    .mutation(async ({ ctx, input }) =>
+      getStudentProfileImageUploadUrl(ctx.session.user.id, input)
+    ),
 
   saveGeneralInfo: protectedProcedure
     .input(SaveStudentGeneralInfoInputDTOSchema)

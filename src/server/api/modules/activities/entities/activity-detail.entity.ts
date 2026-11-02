@@ -48,6 +48,10 @@ export class ActivityDetail {
     return this.activityEntity.isApplicationOpen;
   }
 
+  get isApplicationClosed() {
+    return this.activityEntity.isApplicationClosed;
+  }
+
   get clubSummary() {
     return { id: this.club.id, name: this.owner.name, logoUrl: this.owner.image };
   }
@@ -84,6 +88,7 @@ export class ActivityDetail {
       applicationEndAt: this.activityEntity.applicationEndAt,
       createdAt: this.activityEntity.createdAt,
       isApplicationOpen: this.isApplicationOpen,
+      isApplicationClosed: this.isApplicationClosed,
       club: this.clubSummary,
       categories: this.categoryRows,
       faculties: this.facultyRows,
