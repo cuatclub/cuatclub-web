@@ -8,6 +8,8 @@ export const SaveStudentGeneralInfoInputDTOSchema = z
     facultyId: z.number().int().positive(),
     yearLevel: z.number().int().min(1).max(4),
     university: z.string().trim().max(200).optional(),
+    // Public URL of an image already uploaded via getProfileImageUploadUrl; omit to keep the current one.
+    image: z.string().url().optional(),
   })
   .refine((data) => data.status !== "OTHER_UNIVERSITY" || !!data.university, {
     message: "University is required for students from other universities.",

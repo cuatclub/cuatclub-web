@@ -16,6 +16,9 @@ export const STUDENT_REGISTRATION_STEPS: readonly StudentRegistrationStatus[] = 
 
 const stepIndex = (step: StudentRegistrationStatus) => STUDENT_REGISTRATION_STEPS.indexOf(step);
 
+/** Storage folder holding every profile image a student uploads. */
+export const studentProfileImagePrefix = (userId: string) => `students/${userId}/`;
+
 export class Student {
   private constructor(private row: StudentRow) {}
 
