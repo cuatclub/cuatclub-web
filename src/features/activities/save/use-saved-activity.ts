@@ -9,6 +9,7 @@ import { useIsSignedIn } from "@/features/auth/ViewerProvider";
 import { api, type RouterOutputs } from "@/trpc/react";
 
 const LOGIN_PATH = "/login";
+const SAVED_PATH = "/saved";
 
 const SAVE_MUTATION_KEYS = [
   getMutationKey(api.activities.save),
@@ -95,7 +96,10 @@ export function useSavedActivity(activityId: string) {
 
   const save = api.activities.save.useMutation({
     onMutate: () => applyOptimistically(true),
-    onSuccess: () => toast.success("บันทึกกิจกรรมเรียบร้อย"),
+    onSuccess: () =>
+      toast.success("บันทึกกิจกรรมเรียบร้อย", {
+        action: { label: "ดูกิจกรรมที่บันทึกไว้", onClick: () => router.push(SAVED_PATH) },
+      }),
     onError: (error, _input, context) =>
       handleError(error, context?.previous, "บันทึกกิจกรรมไม่สำเร็จ กรุณาลองอีกครั้ง"),
     onSettled: refresh,

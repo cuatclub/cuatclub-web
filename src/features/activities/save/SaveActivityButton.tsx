@@ -45,7 +45,7 @@ export function SaveActivityButton({
         aria-label={label}
         aria-pressed={isSaved}
         onClick={toggle}
-        className={cn("h-9 w-full md:h-10", isSaved && "bg-primary-lighter", className)}
+        className={cn("h-9 w-full md:h-10", isSaved && "text-primary", className)}
       >
         {icon}
       </Button>
