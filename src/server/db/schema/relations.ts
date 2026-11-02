@@ -12,6 +12,7 @@ import { activities } from "./activities";
 import { activityTypes } from "./activity-types";
 import { activityCategories } from "./activity-categories";
 import { activityFaculties } from "./activity-faculties";
+import { savedActivities } from "./saved-activities";
 
 export const affiliationsRelations = relations(affiliations, ({ many }) => ({
   clubs: many(clubs),
@@ -121,5 +122,16 @@ export const studentActivityTypesRelations = relations(studentActivityTypes, ({ 
   activityType: one(activityTypes, {
     fields: [studentActivityTypes.activityTypeId],
     references: [activityTypes.id],
+  }),
+}));
+
+export const savedActivitiesRelations = relations(savedActivities, ({ one }) => ({
+  user: one(user, {
+    fields: [savedActivities.userId],
+    references: [user.id],
+  }),
+  activity: one(activities, {
+    fields: [savedActivities.activityId],
+    references: [activities.id],
   }),
 }));

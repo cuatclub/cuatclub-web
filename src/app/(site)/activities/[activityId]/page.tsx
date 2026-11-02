@@ -68,9 +68,11 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
       {/* Sticks to the bottom of the screen while scrolling, then settles above the footer. */}
       <div className="sticky bottom-0 z-10 bg-white p-4 shadow-black md:hidden">
         <ActivityActions
+          activityId={activity.id}
           title={activity.title}
           applicationFormUrl={activity.applicationFormUrl}
-          isApplicationOpen={status === "open"}
+          applicationEndAt={activity.applicationEndAt}
+          status={status}
         />
       </div>
     </>

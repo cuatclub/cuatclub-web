@@ -35,6 +35,8 @@ const NAV_LINKS: NavLink[] = [
   { label: "เกี่ยวกับ", href: null },
 ];
 
+const SAVED_PATH = "/saved";
+
 export const CLUB_DASHBOARD_NAV_ITEMS: ReadonlyArray<{
   href: string;
   label: string;
@@ -236,6 +238,16 @@ export function Navbar({
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
+                  asChild
+                  className="text-foreground-secondary data-[highlighted]:text-primary"
+                >
+                  <Link href={SAVED_PATH}>
+                    <Bookmark aria-hidden="true" className="h-4 w-4" />
+                    ที่บันทึกไว้
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
                   onSelect={() => setIsLogoutConfirmOpen(true)}
                   className="text-foreground-secondary bg-text-error hover:text-error focus:text-error data-[highlighted]:text-error data-[highlighted]:bg-tag-red-light"
                 >
@@ -349,15 +361,20 @@ export function Navbar({
                         </Link>
                       );
                     })}
-                  <button
-                    type="button"
-                    disabled
-                    aria-disabled="true"
-                    className="font-ibm-plex text-placeholder flex cursor-not-allowed items-center gap-2 rounded-lg p-2 text-sm font-medium"
+                  <Link
+                    href={SAVED_PATH}
+                    onClick={closeSidebar}
+                    aria-current={pathname === SAVED_PATH ? "page" : undefined}
+                    className={cn(
+                      "font-ibm-plex flex items-center gap-2 rounded-lg p-2 text-sm font-medium",
+                      pathname === SAVED_PATH
+                        ? "bg-primary text-white"
+                        : "text-foreground hover:bg-primary-lighter hover:text-primary"
+                    )}
                   >
-                    <Bookmark className="h-4 w-4" />
+                    <Bookmark aria-hidden="true" className="h-4 w-4 shrink-0" />
                     ที่บันทึกไว้
-                  </button>
+                  </Link>
                   <button
                     type="button"
                     disabled

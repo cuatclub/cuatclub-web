@@ -1,5 +1,5 @@
 {
-  "id": "d0163df3-9732-42ec-af78-1a195f3bb32d",
+  "id": "20db7d35-2205-4b76-bd5f-32155aad85e6",
   "prevId": "9f58c12f-4948-4075-a5ea-f5fafde38bba",
   "version": "7",
   "dialect": "postgresql",
@@ -1005,74 +1005,21 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.students": {
-      "name": "students",
+    "public.saved_activities": {
+      "name": "saved_activities",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
         "user_id": {
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "registration_status": {
-          "name": "registration_status",
-          "type": "student_registration_status",
-          "typeSchema": "public",
+        "activity_id": {
+          "name": "activity_id",
+          "type": "uuid",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'PENDING'"
-        },
-        "status": {
-          "name": "status",
-          "type": "student_status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "username": {
-          "name": "username",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "faculty_id": {
-          "name": "faculty_id",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "year_level": {
-          "name": "year_level",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "university": {
-          "name": "university",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "referral_source": {
-          "name": "referral_source",
-          "type": "referral_source",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "referral_other": {
-          "name": "referral_other",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -1080,176 +1027,49 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "saved_activities_activity_id_idx": {
+          "name": "saved_activities_activity_id_idx",
+          "columns": [
+            {
+              "expression": "activity_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
-        "students_user_id_user_id_fk": {
-          "name": "students_user_id_user_id_fk",
-          "tableFrom": "students",
+        "saved_activities_user_id_user_id_fk": {
+          "name": "saved_activities_user_id_user_id_fk",
+          "tableFrom": "saved_activities",
           "tableTo": "user",
           "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "students_faculty_id_faculties_id_fk": {
-          "name": "students_faculty_id_faculties_id_fk",
-          "tableFrom": "students",
-          "tableTo": "faculties",
-          "columnsFrom": ["faculty_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "students_user_id_unique": {
-          "name": "students_user_id_unique",
-          "nullsNotDistinct": false,
-          "columns": ["user_id"]
-        },
-        "students_username_unique": {
-          "name": "students_username_unique",
-          "nullsNotDistinct": false,
-          "columns": ["username"]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.student_categories": {
-      "name": "student_categories",
-      "schema": "",
-      "columns": {
-        "student_id": {
-          "name": "student_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "category_id": {
-          "name": "category_id",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {
-        "student_categories_category_id_idx": {
-          "name": "student_categories_category_id_idx",
-          "columns": [
-            {
-              "expression": "category_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "student_categories_student_id_students_id_fk": {
-          "name": "student_categories_student_id_students_id_fk",
-          "tableFrom": "student_categories",
-          "tableTo": "students",
-          "columnsFrom": ["student_id"],
+        "saved_activities_activity_id_activities_id_fk": {
+          "name": "saved_activities_activity_id_activities_id_fk",
+          "tableFrom": "saved_activities",
+          "tableTo": "activities",
+          "columnsFrom": ["activity_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "student_categories_category_id_categories_id_fk": {
-          "name": "student_categories_category_id_categories_id_fk",
-          "tableFrom": "student_categories",
-          "tableTo": "categories",
-          "columnsFrom": ["category_id"],
-          "columnsTo": ["id"],
-          "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
-        "student_categories_student_id_category_id_pk": {
-          "name": "student_categories_student_id_category_id_pk",
-          "columns": ["student_id", "category_id"]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.student_activity_types": {
-      "name": "student_activity_types",
-      "schema": "",
-      "columns": {
-        "student_id": {
-          "name": "student_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "activity_type_id": {
-          "name": "activity_type_id",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {
-        "student_activity_types_activity_type_id_idx": {
-          "name": "student_activity_types_activity_type_id_idx",
-          "columns": [
-            {
-              "expression": "activity_type_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "student_activity_types_student_id_students_id_fk": {
-          "name": "student_activity_types_student_id_students_id_fk",
-          "tableFrom": "student_activity_types",
-          "tableTo": "students",
-          "columnsFrom": ["student_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "student_activity_types_activity_type_id_activity_types_id_fk": {
-          "name": "student_activity_types_activity_type_id_activity_types_id_fk",
-          "tableFrom": "student_activity_types",
-          "tableTo": "activity_types",
-          "columnsFrom": ["activity_type_id"],
-          "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "student_activity_types_student_id_activity_type_id_pk": {
-          "name": "student_activity_types_student_id_activity_type_id_pk",
-          "columns": ["student_id", "activity_type_id"]
+        "saved_activities_user_id_activity_id_pk": {
+          "name": "saved_activities_user_id_activity_id_pk",
+          "columns": ["user_id", "activity_id"]
         }
       },
       "uniqueConstraints": {},
@@ -1278,21 +1098,6 @@
       "name": "role",
       "schema": "public",
       "values": ["STUDENT", "CLUB", "ADMIN"]
-    },
-    "public.referral_source": {
-      "name": "referral_source",
-      "schema": "public",
-      "values": ["FRIEND", "UNIVERSITY_EVENT", "INSTAGRAM", "TIKTOK", "LINE", "OTHER"]
-    },
-    "public.student_registration_status": {
-      "name": "student_registration_status",
-      "schema": "public",
-      "values": ["PENDING", "GENERAL_SUBMITTED", "PREFERENCES_SUBMITTED", "COMPLETED"]
-    },
-    "public.student_status": {
-      "name": "student_status",
-      "schema": "public",
-      "values": ["CHULA", "OTHER_UNIVERSITY"]
     }
   },
   "schemas": {},
