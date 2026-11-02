@@ -1,9 +1,11 @@
 import { z } from "zod";
+import { ClubOutputDTOSchema } from "@/server/api/modules/clubs/dto/club.dto";
 
 export const ClubProfileFieldsInputDTOSchema = z.object({
   name: z.string().trim().min(1).max(100),
   image: z.string().url(),
   affiliationId: z.number().int().positive(),
+  memberScope: ClubOutputDTOSchema.shape.memberScope,
   categories: z
     .array(z.number().int().positive())
     .min(1, "At least one category must be selected.")

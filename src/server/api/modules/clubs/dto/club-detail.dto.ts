@@ -7,6 +7,7 @@ import {
 
 export const ClubDetailOutputDTOSchema = ClubOutputDTOSchema.pick({
   id: true,
+  memberScope: true,
   shortDescription: true,
   longDescription: true,
   imageUrls: true,

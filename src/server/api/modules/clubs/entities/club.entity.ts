@@ -50,6 +50,10 @@ export class Club {
     return this.row.affiliationId;
   }
 
+  get memberScope() {
+    return this.row.memberScope;
+  }
+
   get shortDescription() {
     return this.row.shortDescription;
   }

@@ -12,6 +12,8 @@ import {
   clubProfileSchema,
   getClubImageContentType,
   getImageFileValidationMessage,
+  MEMBER_SCOPE_LABEL,
+  MEMBER_SCOPE_VALUES,
   uploadClubImage,
   type ClubImageContentType,
   type ClubProfileImage,
@@ -211,6 +213,7 @@ export function EditClubForm({
         name: values.name,
         image: logoUrl,
         affiliationId: affiliation.id,
+        memberScope: values.memberScope,
         categories: categoryIds,
         shortDescription: values.shortDescription,
         longDescription: values.longDescription,
@@ -277,6 +280,31 @@ export function EditClubForm({
             )}
           />
         </div>
+
+        <Controller
+          control={control}
+          name="memberScope"
+          render={({ field, fieldState }) => (
+            <Select
+              label="ขอบเขตการรับสมาชิก"
+              required
+              name={field.name}
+              options={MEMBER_SCOPE_VALUES.map((scope) => MEMBER_SCOPE_LABEL[scope])}
+              value={field.value ? MEMBER_SCOPE_LABEL[field.value] : undefined}
+              placeholder="เลือกขอบเขตการรับสมาชิก"
+              triggerClassName="outline-none"
+              className="min-w-0"
+              error={!!fieldState.error}
+              errorMessage={fieldState.error?.message}
+              onValueChange={(label) => {
+                field.onChange(
+                  MEMBER_SCOPE_VALUES.find((scope) => MEMBER_SCOPE_LABEL[scope] === label)
+                );
+                field.onBlur();
+              }}
+            />
+          )}
+        />
 
         <Controller
           control={control}
