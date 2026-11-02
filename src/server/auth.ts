@@ -28,9 +28,6 @@ const buildAuthOptions = (client: DbClient) => ({
       },
     },
   },
-  account: {
-    accountLinking: { allowDifferentEmails: true },
-  },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
@@ -39,9 +36,10 @@ const buildAuthOptions = (client: DbClient) => ({
   // Off on purpose: email/password sign-up here has no email verification, so by default a
   // Google login would be linked into an existing unverified password account with the same
   // email — letting whoever registered that email first keep access after the real owner signs
-  // in with Google. A clash now fails the Google sign-in instead.
+  // in with Google. A clash now fails the Google sign-in instead. `allowDifferentEmails` is for
+  // the explicit LINE link (/oauth2/link), whose LINE email never matches the account's.
   account: {
-    accountLinking: { enabled: false },
+    accountLinking: { enabled: false, allowDifferentEmails: true },
   },
   // Google sign-ups get the DB-default STUDENT role; their `students` row is created lazily
   // by getStudentRegistration.
