@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import { LINE_CONNECT_FAILED_MESSAGE } from "@/app/(site)/register/student/line/_lib/line-connect-error";
@@ -31,6 +31,16 @@ export function ConnectLineActions({
 }: ConnectLineActionsProps) {
   const [errorMessage, setErrorMessage] = useState(initialErrorMessage);
   const [isLinking, setIsLinking] = useState(false);
+
+  // Coming back from LINE with the browser's back button can restore this page from the
+  // back/forward cache with `isLinking` still on, leaving the button disabled.
+  useEffect(() => {
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) setIsLinking(false);
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, []);
 
   // Linking a LINE account doesn't make the student a friend of the OA — they can
   // decline (or later block) it on LINE's consent screen, and LINE then delivers
