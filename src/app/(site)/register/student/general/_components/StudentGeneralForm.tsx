@@ -113,9 +113,9 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
   });
 
   return (
-    <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
+    <form className="flex flex-col gap-8" onSubmit={onSubmit} noValidate>
       <fieldset inert={isSubmitting || undefined} aria-busy={isSubmitting} className="contents">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
           <Controller
             control={control}
             name="status"
@@ -133,7 +133,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
             )}
           />
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <label htmlFor="username" className={labelClass}>
               ชื่อผู้ใช้ <span className="text-error">*</span>
             </label>
@@ -148,7 +148,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
           </div>
 
           {status === "OTHER_UNIVERSITY" && (
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-2">
               <label htmlFor="university" className={labelClass}>
                 มหาลัย <span className="text-error">*</span>
               </label>
@@ -168,6 +168,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
             name="faculty"
             render={({ field }) => (
               <Select
+                className="gap-2"
                 label="คณะ"
                 required
                 placeholder="เลือกคณะ"
@@ -186,6 +187,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
             name="year"
             render={({ field }) => (
               <Select
+                className="gap-2"
                 label="ชั้นปี"
                 required
                 placeholder="เลือกชั้นปี"

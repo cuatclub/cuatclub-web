@@ -54,9 +54,9 @@ export function StudentPreferenceForm({ categories, activityTypes }: StudentPref
   });
 
   return (
-    <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
+    <form className="flex flex-col gap-8" onSubmit={onSubmit} noValidate>
       <fieldset inert={isSubmitting || undefined} aria-busy={isSubmitting} className="contents">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
           <Controller
             control={control}
             name="categoryIds"

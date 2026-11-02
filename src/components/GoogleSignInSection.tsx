@@ -50,7 +50,7 @@ export function GoogleSignInSection({ callbackURL, onError }: GoogleSignInSectio
       <Button
         type="button"
         variant="outline"
-        className="border-border text-foreground-secondary hover:bg-border/30 w-full"
+        className="border-border text-foreground-muted hover:bg-border/30 disabled:border-border disabled:text-foreground-muted w-full font-medium"
         isLoading={isLoading}
         onClick={handleClick}
       >
