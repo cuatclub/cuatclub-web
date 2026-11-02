@@ -4,6 +4,7 @@ import { ImageIcon } from "lucide-react";
 
 import { Card } from "@/components/ui/Card";
 import { Tag } from "@/components/ui/Tag";
+import { MEMBER_SCOPE_LABEL } from "@/features/club/profile/club-profile-schema";
 import type { ClubDetailOutputDTO } from "@/server/api/modules/clubs/dto";
 
 type ClubProfileDetailsProps = {
@@ -57,7 +58,7 @@ export function ClubProfileDetails({
             </div>
           )}
 
-          <dl className="grid min-w-0 gap-3 md:h-40 md:grid-rows-3 md:gap-0 md:self-stretch">
+          <dl className="grid min-w-0 gap-3 md:min-h-40 md:grid-rows-4 md:gap-0 md:self-stretch">
             <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[112px_minmax(0,1fr)] md:gap-4">
               <dt className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold md:text-base md:leading-[26px]">
                 ชื่อชมรม
@@ -72,6 +73,14 @@ export function ClubProfileDetails({
               </dt>
               <dd className="font-ibm-plex text-foreground-secondary min-w-0 text-sm leading-[23px] md:text-base md:leading-[26px]">
                 {club.affiliation?.label ?? "—"}
+              </dd>
+            </div>
+            <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[112px_minmax(0,1fr)] md:gap-4">
+              <dt className="font-ibm-plex text-foreground text-sm leading-[23px] font-semibold md:text-base md:leading-[26px]">
+                การรับสมาชิก
+              </dt>
+              <dd className="font-ibm-plex text-foreground-secondary min-w-0 text-sm leading-[23px] md:text-base md:leading-[26px]">
+                {MEMBER_SCOPE_LABEL[club.memberScope]}
               </dd>
             </div>
             <div className="grid min-w-0 grid-cols-[125px_minmax(0,1fr)] items-center gap-3 md:grid-cols-[112px_minmax(0,1fr)] md:gap-4">

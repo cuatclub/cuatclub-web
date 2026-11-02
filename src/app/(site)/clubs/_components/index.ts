@@ -7,3 +7,4 @@ export * from "@/app/(site)/clubs/_components/ClubList";
 export * from "@/app/(site)/clubs/_components/ClubListShell";
 export * from "@/app/(site)/clubs/_components/ClubSearchBar";
 export * from "@/app/(site)/clubs/_components/ClubSortSelect";
+export * from "@/app/(site)/clubs/_components/FollowClubButton";

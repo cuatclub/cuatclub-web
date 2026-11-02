@@ -6,6 +6,7 @@ import { affiliations } from "@/server/db/schema/affiliations";
 import { categories } from "@/server/db/schema/categories";
 import { clubCategories } from "@/server/db/schema/club-categories";
 import { clubs } from "@/server/db/schema/clubs";
+import { students } from "@/server/db/schema/students";
 import { user } from "@/server/db/schema/user";
 
 /**
@@ -815,11 +816,23 @@ async function main() {
   }
 
   console.log("Student");
-  const { created } = await ensureUser({
+  const { created, userId: studentUserId } = await ensureUser({
     email: student.email,
     name: student.name,
     role: "STUDENT",
   });
+  const studentProfile = {
+    registrationStatus: "COMPLETED" as const,
+    status: "OTHER_UNIVERSITY" as const,
+    username: "demo_student",
+    yearLevel: 2,
+    university: "Demo University",
+    referralSource: "FRIEND" as const,
+  };
+  await db
+    .insert(students)
+    .values({ userId: studentUserId, ...studentProfile })
+    .onConflictDoUpdate({ target: students.userId, set: studentProfile });
   console.log(`  ${created ? "+" : "~"} ${student.name} — ${student.email}\n`);
 
   console.log("Clubs");
