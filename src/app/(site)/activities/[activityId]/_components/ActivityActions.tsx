@@ -23,8 +23,7 @@ type ActivityActionsProps = {
  * ever visible. Once applications have closed the deadline has passed, so there's nothing left to
  * put in a calendar and that button goes.
  *
- * Follow sits beside them in the design but is deferred to a later phase, so it's left out rather
- * than shown as a button that does nothing.
+ * The follow button sits beside the club name in ActivityOverview, not here.
  */
 export function ActivityActions({
   activityId,

@@ -32,6 +32,7 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
           affiliation={club.affiliation}
           memberScope={club.memberScope}
           categories={club.categories}
+          followClubId={club.id}
         />
 
         {about && <ClubAbout description={about} />}

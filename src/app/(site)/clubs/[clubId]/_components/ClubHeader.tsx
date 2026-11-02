@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Building2, Users } from "lucide-react";
 
+import { FollowClubButton } from "@/app/(site)/clubs/_components";
 import { Tag } from "@/components/ui/Tag";
 import { MEMBER_SCOPE_LABEL } from "@/features/club/profile";
 import type { RouterOutputs } from "@/trpc/react";
@@ -13,6 +14,7 @@ type ClubHeaderProps = {
   affiliation: Club["affiliation"];
   memberScope: Club["memberScope"];
   categories: Club["categories"];
+  followClubId?: string;
 };
 
 export function ClubHeader({
@@ -21,6 +23,7 @@ export function ClubHeader({
   affiliation,
   memberScope,
   categories,
+  followClubId,
 }: ClubHeaderProps) {
   return (
     <header className="flex items-start gap-4">
@@ -46,9 +49,12 @@ export function ClubHeader({
       {/* Matches the logo's height so the three rows spread across it, but grows if the
           name wraps onto a second line. */}
       <div className="flex min-h-24 flex-col justify-between gap-2 md:min-h-32">
-        <h1 className="font-ibm-plex text-foreground text-xl leading-[33px] font-semibold md:text-2xl md:leading-[40px]">
-          {name}
-        </h1>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <h1 className="font-ibm-plex text-foreground text-xl leading-[33px] font-semibold md:text-2xl md:leading-[40px]">
+            {name}
+          </h1>
+          {followClubId && <FollowClubButton clubId={followClubId} clubName={name} />}
+        </div>
 
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-6">
           {affiliation && (

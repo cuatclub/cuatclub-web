@@ -19,3 +19,7 @@ export * from "@/server/api/modules/clubs/dto/admin-update-club.dto";
 export * from "@/server/api/modules/clubs/dto/admin-delete-club.dto";
 export * from "@/server/api/modules/clubs/dto/admin-get-club-logo-upload-url.dto";
 export * from "@/server/api/modules/clubs/dto/admin-get-club-images-upload-url.dto";
+export * from "@/server/api/modules/clubs/dto/club-follow.dto";
+export * from "@/server/api/modules/clubs/dto/follow-club.dto";
+export * from "@/server/api/modules/clubs/dto/unfollow-club.dto";
+export * from "@/server/api/modules/clubs/dto/get-club-follow-status.dto";
