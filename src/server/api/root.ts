@@ -2,6 +2,7 @@ import { clubsRouter } from "@/server/api/modules/clubs/clubs.router";
 import { activitiesRouter } from "@/server/api/modules/activities/activities.router";
 import { masterDataRouter } from "@/server/api/modules/master-data/master-data.router";
 import { invitationsRouter } from "@/server/api/modules/invitations/invitations.router";
+import { studentsRouter } from "@/server/api/modules/students/students.router";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 export const appRouter = createTRPCRouter({
@@ -9,6 +10,7 @@ export const appRouter = createTRPCRouter({
   activities: activitiesRouter,
   masterData: masterDataRouter,
   invitations: invitationsRouter,
+  students: studentsRouter,
 });
 
 // export type definition of API
