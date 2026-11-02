@@ -26,6 +26,9 @@ type AddToCalendarButtonProps = {
   className?: string;
 };
 
+/** Option styling matches the select's items. */
+const menuItemClass = "py-2 data-[highlighted]:text-primary";
+
 /**
  * Opens a menu of calendars to add the activity's application deadline to. Activities have no
  * date of their own, so the entry is an all-day one on the closing day.
@@ -72,7 +75,11 @@ export function AddToCalendarButton({
         )}
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align={variant === "wide" ? "start" : "end"}>
+      <DropdownMenuContent
+        align={variant === "wide" ? "start" : "end"}
+        sideOffset={4}
+        className="border-border w-auto min-w-[200px] gap-1 rounded-lg border p-1.5"
+      >
         <CalendarMenuItems
           activityId={activityId}
           title={title}
@@ -105,14 +112,14 @@ function CalendarMenuItems({
   return (
     <>
       {webCalendars.map(({ label, href }) => (
-        <DropdownMenuItem key={label} asChild>
+        <DropdownMenuItem key={label} asChild className={menuItemClass}>
           <a href={href} target="_blank" rel="noopener noreferrer">
             {label}
             <span className="sr-only"> (เปิดในแท็บใหม่)</span>
           </a>
         </DropdownMenuItem>
       ))}
-      <DropdownMenuItem asChild>
+      <DropdownMenuItem asChild className={menuItemClass}>
         <a href={`/activities/${activityId}/calendar.ics`}>Apple Calendar / อื่นๆ (.ics)</a>
       </DropdownMenuItem>
     </>
