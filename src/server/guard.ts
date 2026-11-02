@@ -6,6 +6,7 @@ import { TRPCError } from "@trpc/server";
 import { api } from "@/trpc/server";
 import { auth } from "@/server/auth";
 import type { GetClubProfileOutputDTO } from "@/server/api/modules/clubs/dto";
+import { LINE_PROVIDER_ID } from "@/lib/line";
 import type { GetStudentRegistrationOutputDTO } from "@/server/api/modules/students/dto";
 import { STUDENT_REGISTRATION_STEPS } from "@/server/api/modules/students/entities/student.entity";
 
@@ -208,4 +209,24 @@ export async function clubDashboardGuard(): Promise<ClubDashboardSessionUser> {
   }
 
   return { name: session.user.name, email: session.user.email, image: session.user.image ?? null };
+}
+
+/**
+ * Guards /register/student/line: anonymous visitors go to /login, and a
+ * signed-in non-STUDENT (CLUB or ADMIN) goes home — only students receive
+ * LINE notifications, so nobody else has an account to link. A student who hasn't
+ * finished the earlier registration steps is sent back to the furthest one reached.
+ *
+ * Returns whether the student already has a LINE `account` row, so the page
+ * can show the connected state (including straight after LINE redirects back
+ * from a successful link) instead of offering to connect again.
+ */
+export async function studentLineConnectGuard(): Promise<{ isLineConnected: boolean }> {
+  const session = await getSessionOnce();
+  if (!session) redirect("/login");
+  if (session.user.role !== "STUDENT") redirect("/");
+  await studentRegistrationStepGuard("COMPLETED");
+
+  const accounts = await auth.api.listUserAccounts({ headers: await headers() });
+  return { isLineConnected: accounts.some((a) => a.providerId === LINE_PROVIDER_ID) };
 }

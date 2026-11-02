@@ -1,8 +1,11 @@
 import { env } from "@/config/env";
+import { LINE_PROVIDER_ID } from "@/lib/line";
 import { db, type DbClient } from "@/server/db";
 import * as schema from "@/server/db/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/api";
+import { genericOAuth, line } from "better-auth/plugins";
 
 // Shared by every instance below so a request-scoped and a transaction-scoped one can never
 // drift apart on session/password/field config.
@@ -33,9 +36,10 @@ const buildAuthOptions = (client: DbClient) => ({
   // Off on purpose: email/password sign-up here has no email verification, so by default a
   // Google login would be linked into an existing unverified password account with the same
   // email — letting whoever registered that email first keep access after the real owner signs
-  // in with Google. A clash now fails the Google sign-in instead.
+  // in with Google. A clash now fails the Google sign-in instead. `allowDifferentEmails` is for
+  // the explicit LINE link (/oauth2/link), whose LINE email never matches the account's.
   account: {
-    accountLinking: { enabled: false },
+    accountLinking: { enabled: false, allowDifferentEmails: true },
   },
   // Google sign-ups get the DB-default STUDENT role; their `students` row is created lazily
   // by getStudentRegistration.
@@ -46,11 +50,39 @@ const buildAuthOptions = (client: DbClient) => ({
     },
   },
   trustedOrigins: [new URL(env.BETTER_AUTH_URL).origin],
+  onAPIError: { errorURL: "/auth/error" },
+  hooks: {
+    // `/oauth2/link` accepts any session, so refuse non-students here.
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path !== "/oauth2/link") return;
+
+      const session = await getSessionFromCtx<{ role: string }>(ctx);
+      if (session && session.user.role !== "STUDENT") throw new APIError("FORBIDDEN");
+    }),
+  },
   advanced: {
     database: {
       generateId: () => crypto.randomUUID(),
     },
   },
+  plugins: [
+    genericOAuth({
+      config: [
+        {
+          ...line({
+            providerId: LINE_PROVIDER_ID,
+            clientId: env.LINE_LOGIN_CHANNEL_ID,
+            clientSecret: env.LINE_LOGIN_CHANNEL_SECRET,
+            scopes: ["openid", "profile"],
+            pkce: true,
+            disableSignUp: true,
+          }),
+          authorizationUrlParams: { bot_prompt: "aggressive" },
+          mapProfileToUser: (profile) => ({ email: `${String(profile.id)}@line.invalid` }),
+        },
+      ],
+    }),
+  ],
 });
 
 export const auth = betterAuth(buildAuthOptions(db));
