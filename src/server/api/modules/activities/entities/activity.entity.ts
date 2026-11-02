@@ -13,6 +13,11 @@ export class Activity {
     return now >= this.row.applicationStartAt && now <= this.row.applicationEndAt;
   }
 
+  /** Past the deadline — unlike `!isApplicationOpen`, which is also true before applications open. */
+  get isApplicationClosed() {
+    return new Date() > this.row.applicationEndAt;
+  }
+
   // Getter function
 
   get id() {

@@ -88,6 +88,8 @@ type ActivityDetailRow = {
 export interface IActivitiesRepository {
   create(params: CreateActivityParams, client?: DbClient): Promise<Activity>;
   getDetailById(id: string, client?: DbClient): Promise<ActivityDetail | null>;
+  getDetailsByIds(ids: string[], client?: DbClient): Promise<ActivityDetail[]>;
+  existsPubliclyVisibleById(id: string, client?: DbClient): Promise<boolean>;
   getRelatedByCategoryIds(
     params: GetRelatedActivitiesParams,
     client?: DbClient
@@ -125,6 +127,30 @@ class ActivitiesRepository implements IActivitiesRepository {
 
     const [detail] = await this.toDetails(rows, client);
     return detail ?? null;
+  }
+
+  // Order is not preserved — callers that care re-sort by their own list of ids.
+  async getDetailsByIds(ids: string[], client: DbClient = db): Promise<ActivityDetail[]> {
+    if (ids.length === 0) return [];
+
+    const rows = await this.selectDetailRows(client)
+      .where(inArray(activities.id, ids))
+      .catch(wrapRepoError);
+
+    return this.toDetails(rows, client);
+  }
+
+  // The same rule `getActivityById` applies: an activity is only public while its club is.
+  async existsPubliclyVisibleById(id: string, client: DbClient = db): Promise<boolean> {
+    const rows = await client
+      .select({ id: activities.id })
+      .from(activities)
+      .innerJoin(clubs, eq(activities.clubId, clubs.id))
+      .where(and(eq(activities.id, id), eq(clubs.registrationStatus, Club.PUBLICLY_VISIBLE_STATUS)))
+      .limit(1)
+      .catch(wrapRepoError);
+
+    return rows.length > 0;
   }
 
   async getRelatedByCategoryIds(

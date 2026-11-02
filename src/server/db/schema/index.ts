@@ -12,4 +12,5 @@ export * from "./activity-types";
 export * from "./activities";
 export * from "./activity-categories";
 export * from "./activity-faculties";
+export * from "./saved-activities";
 export * from "./relations";
