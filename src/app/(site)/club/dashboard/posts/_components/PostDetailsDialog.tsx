@@ -22,6 +22,7 @@ import {
   getPosterContentType,
   type CreatePostFormValues,
 } from "@/app/(site)/club/dashboard/posts/post-schema";
+import { endOfBangkokDay, getBangkokDay, startOfBangkokDay } from "@/lib/date";
 import { api, type RouterOutputs } from "@/trpc/react";
 
 type Activity = RouterOutputs["activities"]["getMine"]["activities"][number];
@@ -38,8 +39,8 @@ function toDefaultValues(
     poster: activity.posterUrl,
     title: activity.title,
     applicationFormUrl: activity.applicationFormUrl,
-    applicationStartAt: activity.applicationStartAt,
-    applicationEndAt: activity.applicationEndAt,
+    applicationStartAt: getBangkokDay(activity.applicationStartAt),
+    applicationEndAt: getBangkokDay(activity.applicationEndAt),
     activityType: activityType?.label ?? "",
     categoryIds: activity.categories.map((category) => category.id),
     description: activity.description,
@@ -118,8 +119,8 @@ export function PostDetailsDialog({
         categoryIds: values.categoryIds,
         facultyIds: values.facultyIds,
         yearLevels: values.yearLevels,
-        applicationStartAt: values.applicationStartAt,
-        applicationEndAt: values.applicationEndAt,
+        applicationStartAt: startOfBangkokDay(values.applicationStartAt),
+        applicationEndAt: endOfBangkokDay(values.applicationEndAt),
       });
     } catch (error) {
       // The new poster is already in R2 but unreferenced — delete it so a failed save
