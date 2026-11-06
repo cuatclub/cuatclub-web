@@ -409,12 +409,13 @@ shouldn't roll back with the DB (sending an email, calling R2) happens **outside
 ## External integrations — `src/server/services/`
 
 This is the single place third-party/external-service clients live — anything that isn't the
-app's own Postgres database goes here, not inside a feature module. Currently two:
+app's own Postgres database goes here, not inside a feature module. Currently three:
 
 | File | Wraps | Exports |
 |---|---|---|
 | `r2.ts` | Cloudflare R2 (S3-compatible) via `@aws-sdk/client-s3` | `uploadImage(buffer, contentType, key?)`, `getPublicUrl(key)` |
 | `mailer.ts` | Resend | `sendMail(params)`, `bulkSendMail(items)` |
+| `line/` | LINE Messaging API (multicast) via `fetch` — no SDK | `send*Message(params)` (one per notification kind), `LINE_MULTICAST_MAX_RECIPIENTS` |
 
 Shared shape both follow:
 ```ts

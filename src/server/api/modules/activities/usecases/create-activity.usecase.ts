@@ -7,6 +7,7 @@ import { activitiesRepository } from "@/server/api/modules/activities/repositori
 import { activityCategoriesRepository } from "@/server/api/modules/activities/repositories/activity-categories.repository";
 import { activityFacultiesRepository } from "@/server/api/modules/activities/repositories/activity-faculties.repository";
 import { clubsRepository } from "@/server/api/modules/clubs/repositories/clubs.repository";
+import { notifyNewActivity } from "@/server/api/modules/notifications/usecases";
 import { notFound, validationError } from "@/server/errors";
 import { unitOfWork } from "@/server/db/unit-of-work";
 
@@ -42,6 +43,8 @@ export const createActivity = async (
     );
     return created;
   });
+
+  await notifyNewActivity(activity.id);
 
   return CreateActivityOutputDTOSchema.parse(activity.toDTO());
 };
