@@ -1,9 +1,11 @@
 import { type Metadata } from "next";
 import { IBM_Plex_Sans_Thai, Sarabun } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import "@/styles/globals.css";
 
 import { Toaster } from "@/components/ui";
+import { env } from "@/config/env";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
@@ -44,6 +46,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <TRPCReactProvider>{children}</TRPCReactProvider>
         <Toaster />
         <Analytics />
+        {env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <GoogleAnalytics gaId={env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+        )}
       </body>
     </html>
   );
