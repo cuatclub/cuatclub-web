@@ -200,6 +200,16 @@ export function Navbar({
                 แดชบอร์ด
               </Link>
             )}
+            <Link
+              href={SAVED_PATH}
+              aria-label="ที่บันทึกไว้"
+              className={cn(
+                "hover:text-primary rounded-full p-2 transition-colors",
+                pathname === SAVED_PATH ? "text-primary" : "text-foreground"
+              )}
+            >
+              <Bookmark aria-hidden="true" className="h-6 w-6" />
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger
                 type="button"
@@ -221,22 +231,22 @@ export function Navbar({
                     alt="Profile"
                     width={36}
                     height={36}
-                    className="h-9 w-9 rounded-full"
+                    className="h-9 w-9 shrink-0 rounded-full"
                   />
-                  <div className="flex flex-col">
+                  <div className="flex min-w-0 flex-col">
                     {userName && (
-                      <span className="font-ibm-plex text-foreground text-sm font-semibold">
+                      <span className="font-ibm-plex text-foreground truncate text-sm font-semibold">
                         {userName}
                       </span>
                     )}
                     {userEmail && (
-                      <span className="font-ibm-plex text-foreground-secondary text-xs">
+                      <span className="font-ibm-plex text-foreground-secondary truncate text-xs">
                         {userEmail}
                       </span>
                     )}
                   </div>
                 </div>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="mx-0" />
                 <DropdownMenuItem
                   asChild
                   className="text-foreground-secondary data-[highlighted]:text-primary"
@@ -246,7 +256,7 @@ export function Navbar({
                     ที่บันทึกไว้
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="mx-0" />
                 <DropdownMenuItem
                   onSelect={() => setIsLogoutConfirmOpen(true)}
                   className="text-foreground-secondary bg-text-error hover:text-error focus:text-error data-[highlighted]:text-error data-[highlighted]:bg-tag-red-light"

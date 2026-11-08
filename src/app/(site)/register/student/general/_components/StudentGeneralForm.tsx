@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { type AppRouter } from "@/server/api/root";
 import { api } from "@/trpc/react";
+import { getSession } from "@/lib/auth-client";
 import { Button, Input, RadioGroup, Select } from "@/components";
 import { StudentAvatarField } from "@/app/(site)/register/student/general/_components/StudentAvatarField";
 import { uploadProfileImage } from "@/app/(site)/register/student/_lib/upload-profile-image";
@@ -126,6 +127,8 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
       return;
     }
 
+    // the navbar reads the cookie-cached session; bypass the cache so the new avatar shows up
+    await getSession({ query: { disableCookieCache: true } }).catch(() => null);
     router.push("/register/student/preference");
     // force server components to re-render with fresh registration status
     router.refresh();
@@ -172,7 +175,7 @@ export function StudentGeneralForm({ faculties, existing }: StudentGeneralFormPr
             <Input
               id="username"
               autoComplete="username"
-              placeholder="john.doe"
+              placeholder="กรอกชื่อผู้ใช้"
               error={!!errors.username}
               errorMessage={errors.username?.message}
               {...register("username")}
