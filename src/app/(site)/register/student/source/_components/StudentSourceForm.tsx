@@ -64,7 +64,9 @@ export function StudentSourceForm({ existing }: StudentSourceFormProps) {
       return;
     }
 
-    router.push("/register/student/line");
+    // LINE connect step paused until its issue is fixed; restore this to bring it back.
+    // router.push("/register/student/line");
+    router.push("/");
     // force server components to re-render with fresh registration status
     router.refresh();
   });

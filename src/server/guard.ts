@@ -133,6 +133,19 @@ export async function studentRegistrationResumeGuard(): Promise<never> {
   }
 }
 
+/**
+ * Guards the browse pages (clubs, activities, saved): a STUDENT who hasn't finished registration
+ * is sent back to the step they're on. Anonymous visitors and other roles pass — this only
+ * stops a half-registered student from exploring.
+ */
+export async function studentRegistrationCompleteGuard(): Promise<void> {
+  const session = await getSessionOnce();
+  if (session?.user.role !== "STUDENT") return;
+
+  const { registrationStatus } = await api.students.getRegistration({});
+  if (registrationStatus !== "COMPLETED") redirect(STUDENT_STEP_PATH[registrationStatus]);
+}
+
 export interface AdminSessionUser {
   name: string;
   email: string;

@@ -9,6 +9,7 @@ import {
   getApplicationStatus,
 } from "@/app/(site)/activities/[activityId]/_components";
 import { ClubContacts } from "@/app/(site)/clubs/[clubId]/_components";
+import { studentRegistrationCompleteGuard } from "@/server/guard";
 import { api } from "@/trpc/server";
 
 type ActivityDetailPageProps = {
@@ -35,6 +36,7 @@ const getActivity = async (activityId: string) => {
 };
 
 export default async function ActivityDetailPage({ params }: ActivityDetailPageProps) {
+  await studentRegistrationCompleteGuard();
   const { activityId } = await params;
   const activity = await getActivity(activityId);
 
