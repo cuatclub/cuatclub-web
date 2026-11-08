@@ -142,8 +142,17 @@ export async function studentRegistrationCompleteGuard(): Promise<void> {
   const session = await getSessionOnce();
   if (session?.user.role !== "STUDENT") return;
 
-  const { registrationStatus } = await api.students.getRegistration({});
-  if (registrationStatus !== "COMPLETED") redirect(STUDENT_STEP_PATH[registrationStatus]);
+  let student: GetStudentRegistrationOutputDTO;
+  try {
+    student = await api.students.getRegistration({});
+  } catch (err) {
+    if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
+    throw err;
+  }
+
+  if (student.registrationStatus !== "COMPLETED") {
+    redirect(STUDENT_STEP_PATH[student.registrationStatus]);
+  }
 }
 
 export interface AdminSessionUser {
