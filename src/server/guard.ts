@@ -133,6 +133,31 @@ export async function studentRegistrationResumeGuard(): Promise<never> {
   }
 }
 
+/**
+ * Guards the browse pages (clubs, activities, saved): a STUDENT who hasn't finished registration
+ * is sent back to the step they're on. Anonymous visitors and other roles pass — this only
+ * stops a half-registered student from exploring.
+ */
+export async function studentRegistrationCompleteGuard(): Promise<void> {
+  const session = await getSessionOnce();
+  if (!session) return;
+
+  // The session's role can be up to 5 minutes stale (cookie cache), so getRegistration's DB role
+  // check decides: NOT_FOUND means the account isn't a student and has nothing to finish.
+  let student: GetStudentRegistrationOutputDTO;
+  try {
+    student = await api.students.getRegistration({});
+  } catch (err) {
+    if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
+    if (err instanceof TRPCError && err.code === "NOT_FOUND") return;
+    throw err;
+  }
+
+  if (student.registrationStatus !== "COMPLETED") {
+    redirect(STUDENT_STEP_PATH[student.registrationStatus]);
+  }
+}
+
 export interface AdminSessionUser {
   name: string;
   email: string;

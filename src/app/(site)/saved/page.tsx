@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { SavedList, SavedShell } from "@/app/(site)/saved/_components";
 import { parseSavedListParams, toSavedQueryInput } from "@/app/(site)/saved/_lib";
 import { toQueryParamReader } from "@/lib/search-params";
-import { signedInGuard } from "@/server/guard";
+import { signedInGuard, studentRegistrationCompleteGuard } from "@/server/guard";
 import { api, HydrateClient } from "@/trpc/server";
 
 export const metadata: Metadata = {
@@ -16,6 +16,7 @@ type SavedPageProps = {
 };
 
 export default async function SavedPage({ searchParams }: SavedPageProps) {
+  await studentRegistrationCompleteGuard();
   await signedInGuard();
 
   const params = parseSavedListParams(toQueryParamReader(await searchParams));

@@ -6,6 +6,7 @@ import {
   toActivitiesQueryInput,
   toQueryParamReader,
 } from "@/app/(site)/activities/_lib";
+import { studentRegistrationCompleteGuard } from "@/server/guard";
 import { api, HydrateClient } from "@/trpc/server";
 
 type ActivityListPageProps = {
@@ -13,6 +14,7 @@ type ActivityListPageProps = {
 };
 
 export default async function ActivityListPage({ searchParams }: ActivityListPageProps) {
+  await studentRegistrationCompleteGuard();
   const params = parseActivityListParams(toQueryParamReader(await searchParams));
 
   // Awaited, not fire-and-forget: a shared or crawled link should arrive with its results already

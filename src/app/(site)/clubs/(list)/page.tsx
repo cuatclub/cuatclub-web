@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { ClubList, ClubListShell } from "@/app/(site)/clubs/_components";
 import { parseClubListParams, toClubsQueryInput } from "@/app/(site)/clubs/_lib";
 import { toQueryParamReader } from "@/lib/search-params";
+import { studentRegistrationCompleteGuard } from "@/server/guard";
 import { api, HydrateClient } from "@/trpc/server";
 
 type ClubListPageProps = {
@@ -10,6 +11,7 @@ type ClubListPageProps = {
 };
 
 export default async function ClubListPage({ searchParams }: ClubListPageProps) {
+  await studentRegistrationCompleteGuard();
   const params = parseClubListParams(toQueryParamReader(await searchParams));
 
   // Awaited, not fire-and-forget: a shared or crawled link should arrive with its results already
