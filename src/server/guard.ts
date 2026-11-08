@@ -140,13 +140,16 @@ export async function studentRegistrationResumeGuard(): Promise<never> {
  */
 export async function studentRegistrationCompleteGuard(): Promise<void> {
   const session = await getSessionOnce();
-  if (session?.user.role !== "STUDENT") return;
+  if (!session) return;
 
+  // The session's role can be up to 5 minutes stale (cookie cache), so getRegistration's DB role
+  // check decides: NOT_FOUND means the account isn't a student and has nothing to finish.
   let student: GetStudentRegistrationOutputDTO;
   try {
     student = await api.students.getRegistration({});
   } catch (err) {
     if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
+    if (err instanceof TRPCError && err.code === "NOT_FOUND") return;
     throw err;
   }
 
