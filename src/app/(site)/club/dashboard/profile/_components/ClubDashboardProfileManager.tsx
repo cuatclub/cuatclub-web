@@ -141,6 +141,7 @@ export function ClubDashboardProfileManager({
       name: values.name,
       image: logoUrl,
       affiliationId: affiliation.id,
+      memberScope: values.memberScope,
       categories: categoryIds,
       shortDescription: values.shortDescription,
       longDescription: values.longDescription,

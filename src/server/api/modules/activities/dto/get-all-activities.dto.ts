@@ -42,6 +42,7 @@ export const PublicActivityListItemDTOSchema = ActivityOutputDTOSchema.pick({
   faculties: z.array(FacultyOutputDTOSchema),
   activityType: ActivityTypeOutputDTOSchema,
   isApplicationOpen: z.boolean(),
+  isApplicationClosed: z.boolean(),
 });
 
 export type PublicActivityListItemDTO = z.infer<typeof PublicActivityListItemDTOSchema>;

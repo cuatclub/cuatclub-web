@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { toast } from "@/components";
+import { endOfBangkokDay, startOfBangkokDay } from "@/lib/date";
 import { api } from "@/trpc/react";
 import {
   CreatePostForm,
@@ -67,8 +68,8 @@ export function CreatePostFormContainer({
         categoryIds: values.categoryIds,
         facultyIds: values.facultyIds,
         yearLevels: values.yearLevels,
-        applicationStartAt: values.applicationStartAt,
-        applicationEndAt: values.applicationEndAt,
+        applicationStartAt: startOfBangkokDay(values.applicationStartAt),
+        applicationEndAt: endOfBangkokDay(values.applicationEndAt),
       });
     } catch (error) {
       // The poster is already in R2 but no activity references it — clean it up

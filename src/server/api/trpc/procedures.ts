@@ -19,6 +19,14 @@ export const protectedProcedure = baseProcedure.use(({ ctx, next }) => {
   });
 });
 
+// Protected (student-only) procedure
+export const studentProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.session.user.role !== "STUDENT") {
+    throw forbidden("Only students can follow clubs");
+  }
+  return next({ ctx });
+});
+
 // Protected (admin-only) procedure
 export const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
   if (ctx.session?.user?.role !== "ADMIN") {

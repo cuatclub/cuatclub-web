@@ -1,15 +1,17 @@
 import { type Metadata } from "next";
 import { IBM_Plex_Sans_Thai, Sarabun } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import "@/styles/globals.css";
 
 import { Toaster } from "@/components/ui";
+import { env } from "@/config/env";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
   title: {
-    default: "CUatClub | รวมชมรม และกิจกรรม ในจุฬาฯไว้ในที่เดียว",
-    template: "%s | CUatClub",
+    default: "CUAtClub | รวมชมรม และกิจกรรม ในจุฬาฯไว้ในที่เดียว",
+    template: "%s | CUAtClub",
   },
   description:
     "ค้นหาชมรมและกิจกรรมในจุฬาลงกรณ์มหาวิทยาลัยที่ใช่สำหรับคุณ รวบรวมข้อมูลชมรม กิจกรรม และการรับสมัครสมาชิกจากทุกชมรมไว้ในแพลตฟอร์มเดียว",
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
     "CU club",
     "รับสมัครสมาชิกชมรม",
   ],
-  authors: [{ name: "CUatClub" }],
+  authors: [{ name: "CUAtClub" }],
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
@@ -44,6 +46,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <TRPCReactProvider>{children}</TRPCReactProvider>
         <Toaster />
         <Analytics />
+        {env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <GoogleAnalytics gaId={env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+        )}
       </body>
     </html>
   );

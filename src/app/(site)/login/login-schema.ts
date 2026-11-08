@@ -46,3 +46,22 @@ export function classifyAuthError(
   if (!error) return null;
   return error.code === INVALID_CREDENTIALS_CODE ? "invalid-credentials" : "generic";
 }
+
+/**
+ * Where to send a user right after a successful email/password sign-in.
+ *
+ * /register/club/profile is guarded by clubRegistrationStepGuard, which routes CLUB users to
+ * whichever step matches their registrationStatus; /register/student does the same for students
+ * (and sends a finished one home). Other roles have no registration row to gate on, so they'd just
+ * get bounced home by a guard — send them there directly.
+ */
+export function postLoginPath(role: string | null | undefined): string {
+  if (role === "CLUB") return "/register/club/profile";
+  if (role === "STUDENT") return "/register/student";
+  return "/";
+}
+
+// Google sign-in can't read the role before the redirect, so it always lands on the student entry
+// point: it resumes an unfinished registration, and sends everyone else (finished students, club
+// and admin accounts) home.
+export const GOOGLE_CALLBACK_PATH = "/register/student";

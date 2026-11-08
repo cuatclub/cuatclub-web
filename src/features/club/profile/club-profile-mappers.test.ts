@@ -8,6 +8,7 @@ const completeProfile: ClubDetailOutputDTO = {
   name: "ชมรมตัวอย่าง",
   logoUrl: "https://cdn.example.com/logo.png",
   affiliation: { id: 1, label: "วิศวกรรมศาสตร์" },
+  memberScope: "AFFILIATION_ONLY",
   categories: [
     { id: 2, label: "กีฬา", fontColor: "#111111", backgroundColor: "#eeeeee" },
     { id: 1, label: "ดนตรี", fontColor: "#222222", backgroundColor: "#dddddd" },
@@ -29,6 +30,7 @@ describe("buildClubProfileFormValues", () => {
       logo: { kind: "persisted", url: "https://cdn.example.com/logo.png" },
       name: "ชมรมตัวอย่าง",
       affiliation: "วิศวกรรมศาสตร์",
+      memberScope: "AFFILIATION_ONLY",
       categories: ["กีฬา", "ดนตรี"],
       shortDescription: "คำอธิบายแบบย่อ",
       longDescription: "คำอธิบายแบบละเอียด",
@@ -61,6 +63,7 @@ describe("buildClubProfileFormValues", () => {
       logo: null,
       name: "ชมรมตัวอย่าง",
       affiliation: "",
+      memberScope: "AFFILIATION_ONLY",
       categories: [],
       shortDescription: "",
       longDescription: "",

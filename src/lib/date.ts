@@ -52,6 +52,35 @@ export function isBetween(day: Date, start: Date, end: Date): boolean {
   return time > startOfDay(start).getTime() && time < startOfDay(end).getTime();
 }
 
+/** Asia/Bangkok, the app's one domain timezone, is a fixed UTC+7 with no daylight saving. */
+const BANGKOK_UTC_OFFSET_MS = 7 * 60 * 60 * 1000;
+
+/**
+ * The instant the calendar day of `day` (as picked in the browser) starts in Bangkok, whatever
+ * the browser's own timezone: e.g. a picked 27 Oct -> 2026-10-27 00:00:00.000+07:00.
+ */
+export function startOfBangkokDay(day: Date): Date {
+  return new Date(
+    Date.UTC(day.getFullYear(), day.getMonth(), day.getDate()) - BANGKOK_UTC_OFFSET_MS
+  );
+}
+
+/** Same as {@link startOfBangkokDay} but the last millisecond of that day: 23:59:59.999+07:00. */
+export function endOfBangkokDay(day: Date): Date {
+  return new Date(
+    Date.UTC(day.getFullYear(), day.getMonth(), day.getDate() + 1) - BANGKOK_UTC_OFFSET_MS - 1
+  );
+}
+
+/**
+ * The Bangkok calendar day `instant` falls on, as local midnight for a date picker — the
+ * inverse of {@link startOfBangkokDay} / {@link endOfBangkokDay}.
+ */
+export function getBangkokDay(instant: Date): Date {
+  const bangkok = new Date(instant.getTime() + BANGKOK_UTC_OFFSET_MS);
+  return new Date(bangkok.getUTCFullYear(), bangkok.getUTCMonth(), bangkok.getUTCDate());
+}
+
 /** ISO calendar date (`YYYY-MM-DD`) at the local day boundary. */
 export function toISODate(date: Date): string {
   return startOfDay(date).toISOString().slice(0, 10);

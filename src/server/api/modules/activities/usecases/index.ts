@@ -6,3 +6,7 @@ export * from "@/server/api/modules/activities/usecases/update-activity.usecase"
 export * from "@/server/api/modules/activities/usecases/delete-activity.usecase";
 export * from "@/server/api/modules/activities/usecases/get-all-activities.usecase";
 export * from "@/server/api/modules/activities/usecases/get-activity-by-id.usecase";
+export * from "@/server/api/modules/activities/usecases/save-activity.usecase";
+export * from "@/server/api/modules/activities/usecases/unsave-activity.usecase";
+export * from "@/server/api/modules/activities/usecases/get-saved-activities.usecase";
+export * from "@/server/api/modules/activities/usecases/get-saved-activity-ids.usecase";

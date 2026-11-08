@@ -35,6 +35,8 @@ const NAV_LINKS: NavLink[] = [
   { label: "เกี่ยวกับ", href: null },
 ];
 
+const SAVED_PATH = "/saved";
+
 export const CLUB_DASHBOARD_NAV_ITEMS: ReadonlyArray<{
   href: string;
   label: string;
@@ -144,10 +146,10 @@ export function Navbar({
   return (
     <nav className="sticky top-0 z-30 flex items-center justify-between bg-white px-4 py-3 shadow-black md:px-16">
       <div className="md:flex md:items-center">
-        <Link href="/" aria-label="CUatClub หน้าแรก">
+        <Link href="/" aria-label="CUAtClub หน้าแรก">
           <Image
             src="/svg/logo.svg"
-            alt="CUatClub"
+            alt="CUAtClub"
             width={76}
             height={40}
             priority
@@ -198,6 +200,16 @@ export function Navbar({
                 แดชบอร์ด
               </Link>
             )}
+            <Link
+              href={SAVED_PATH}
+              aria-label="ที่บันทึกไว้"
+              className={cn(
+                "hover:text-primary rounded-full p-2 transition-colors",
+                pathname === SAVED_PATH ? "text-primary" : "text-foreground"
+              )}
+            >
+              <Bookmark aria-hidden="true" className="h-6 w-6" />
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger
                 type="button"
@@ -219,22 +231,32 @@ export function Navbar({
                     alt="Profile"
                     width={36}
                     height={36}
-                    className="h-9 w-9 rounded-full"
+                    className="h-9 w-9 shrink-0 rounded-full"
                   />
-                  <div className="flex flex-col">
+                  <div className="flex min-w-0 flex-col">
                     {userName && (
-                      <span className="font-ibm-plex text-foreground text-sm font-semibold">
+                      <span className="font-ibm-plex text-foreground truncate text-sm font-semibold">
                         {userName}
                       </span>
                     )}
                     {userEmail && (
-                      <span className="font-ibm-plex text-foreground-secondary text-xs">
+                      <span className="font-ibm-plex text-foreground-secondary truncate text-xs">
                         {userEmail}
                       </span>
                     )}
                   </div>
                 </div>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="mx-0" />
+                <DropdownMenuItem
+                  asChild
+                  className="text-foreground-secondary data-[highlighted]:text-primary"
+                >
+                  <Link href={SAVED_PATH}>
+                    <Bookmark aria-hidden="true" className="h-4 w-4" />
+                    ที่บันทึกไว้
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="mx-0" />
                 <DropdownMenuItem
                   onSelect={() => setIsLogoutConfirmOpen(true)}
                   className="text-foreground-secondary bg-text-error hover:text-error focus:text-error data-[highlighted]:text-error data-[highlighted]:bg-tag-red-light"
@@ -349,15 +371,20 @@ export function Navbar({
                         </Link>
                       );
                     })}
-                  <button
-                    type="button"
-                    disabled
-                    aria-disabled="true"
-                    className="font-ibm-plex text-placeholder flex cursor-not-allowed items-center gap-2 rounded-lg p-2 text-sm font-medium"
+                  <Link
+                    href={SAVED_PATH}
+                    onClick={closeSidebar}
+                    aria-current={pathname === SAVED_PATH ? "page" : undefined}
+                    className={cn(
+                      "font-ibm-plex flex items-center gap-2 rounded-lg p-2 text-sm font-medium",
+                      pathname === SAVED_PATH
+                        ? "bg-primary text-white"
+                        : "text-foreground hover:bg-primary-lighter hover:text-primary"
+                    )}
                   >
-                    <Bookmark className="h-4 w-4" />
+                    <Bookmark aria-hidden="true" className="h-4 w-4 shrink-0" />
                     ที่บันทึกไว้
-                  </button>
+                  </Link>
                   <button
                     type="button"
                     disabled

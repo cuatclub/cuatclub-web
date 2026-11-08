@@ -36,6 +36,9 @@ function Toaster(props: ToasterProps) {
           icon: "!size-5 !m-0",
           title: "font-semibold",
           description: "text-foreground-muted font-normal",
+          // `!` beats sonner's default dark button; a text link keeps the toast to one quiet row.
+          actionButton:
+            "!ml-auto !h-auto !shrink-0 !rounded-md !bg-transparent !px-2 !py-1 !text-sm !font-semibold !text-primary hover:!underline",
         },
       }}
       style={

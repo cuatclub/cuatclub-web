@@ -9,6 +9,7 @@ import {
   getApplicationStatus,
 } from "@/app/(site)/activities/[activityId]/_components";
 import { ClubContacts } from "@/app/(site)/clubs/[clubId]/_components";
+import { studentRegistrationCompleteGuard } from "@/server/guard";
 import { api } from "@/trpc/server";
 
 type ActivityDetailPageProps = {
@@ -35,6 +36,7 @@ const getActivity = async (activityId: string) => {
 };
 
 export default async function ActivityDetailPage({ params }: ActivityDetailPageProps) {
+  await studentRegistrationCompleteGuard();
   const { activityId } = await params;
   const activity = await getActivity(activityId);
 
@@ -68,9 +70,11 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
       {/* Sticks to the bottom of the screen while scrolling, then settles above the footer. */}
       <div className="sticky bottom-0 z-10 bg-white p-4 shadow-black md:hidden">
         <ActivityActions
+          activityId={activity.id}
           title={activity.title}
           applicationFormUrl={activity.applicationFormUrl}
-          isApplicationOpen={status === "open"}
+          applicationEndAt={activity.applicationEndAt}
+          status={status}
         />
       </div>
     </>

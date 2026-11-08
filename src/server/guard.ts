@@ -6,6 +6,9 @@ import { TRPCError } from "@trpc/server";
 import { api } from "@/trpc/server";
 import { auth } from "@/server/auth";
 import type { GetClubProfileOutputDTO } from "@/server/api/modules/clubs/dto";
+import { LINE_PROVIDER_ID } from "@/lib/line";
+import type { GetStudentRegistrationOutputDTO } from "@/server/api/modules/students/dto";
+import { STUDENT_REGISTRATION_STEPS } from "@/server/api/modules/students/entities/student.entity";
 
 type RegistrationStep = "PENDING" | "INFO_SUBMITTED" | "COMPLETED";
 
@@ -75,6 +78,86 @@ export async function clubRegistrationStepGuard(
   return club;
 }
 
+const STUDENT_STEP_PATH: Record<GetStudentRegistrationOutputDTO["registrationStatus"], string> = {
+  PENDING: "/register/student/general",
+  GENERAL_SUBMITTED: "/register/student/preference",
+  PREFERENCES_SUBMITTED: "/register/student/source",
+  COMPLETED: "/register/student/line",
+};
+
+/**
+ * Guards /register/student/**: sends a STUDENT user back to the furthest
+ * step they've actually reached if they open a later one. Anonymous visitors go to
+ * /login; authenticated non-STUDENT users have nothing to register, so
+ * they go home.
+ */
+export async function studentRegistrationStepGuard(
+  currentStep: GetStudentRegistrationOutputDTO["registrationStatus"]
+): Promise<GetStudentRegistrationOutputDTO> {
+  let student: GetStudentRegistrationOutputDTO;
+  try {
+    student = await api.students.getRegistration({});
+  } catch (err) {
+    if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
+    if (err instanceof TRPCError && err.code === "NOT_FOUND") redirect("/");
+    throw err;
+  }
+
+  // Only steps the student hasn't reached yet are off limits — earlier ones stay open for the
+  // back link.
+  const stepIndex = (step: typeof currentStep) => STUDENT_REGISTRATION_STEPS.indexOf(step);
+  if (stepIndex(student.registrationStatus) < stepIndex(currentStep)) {
+    redirect(STUDENT_STEP_PATH[student.registrationStatus]);
+  }
+
+  return student;
+}
+
+/**
+ * Entry point for /register/student: sends a student to the first step they haven't finished,
+ * or home if they already have. Login and Google sign-in both land here because neither knows
+ * how far the student got.
+ */
+export async function studentRegistrationResumeGuard(): Promise<never> {
+  try {
+    const student = await api.students.getRegistration({});
+    redirect(
+      student.registrationStatus === "COMPLETED"
+        ? "/"
+        : STUDENT_STEP_PATH[student.registrationStatus]
+    );
+  } catch (err) {
+    if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
+    if (err instanceof TRPCError && err.code === "NOT_FOUND") redirect("/");
+    throw err;
+  }
+}
+
+/**
+ * Guards the browse pages (clubs, activities, saved): a STUDENT who hasn't finished registration
+ * is sent back to the step they're on. Anonymous visitors and other roles pass — this only
+ * stops a half-registered student from exploring.
+ */
+export async function studentRegistrationCompleteGuard(): Promise<void> {
+  const session = await getSessionOnce();
+  if (!session) return;
+
+  // The session's role can be up to 5 minutes stale (cookie cache), so getRegistration's DB role
+  // check decides: NOT_FOUND means the account isn't a student and has nothing to finish.
+  let student: GetStudentRegistrationOutputDTO;
+  try {
+    student = await api.students.getRegistration({});
+  } catch (err) {
+    if (err instanceof TRPCError && err.code === "UNAUTHORIZED") redirect("/login");
+    if (err instanceof TRPCError && err.code === "NOT_FOUND") return;
+    throw err;
+  }
+
+  if (student.registrationStatus !== "COMPLETED") {
+    redirect(STUDENT_STEP_PATH[student.registrationStatus]);
+  }
+}
+
 export interface AdminSessionUser {
   name: string;
   email: string;
@@ -103,6 +186,16 @@ export async function adminGuard(): Promise<AdminSessionUser> {
  * it one lookup.
  */
 export const getSessionOnce = cache(async () => auth.api.getSession({ headers: await headers() }));
+
+/**
+ * Guards pages that only make sense for a signed-in user (e.g. /saved): anonymous visitors go to
+ * /login. Unlike adminGuard and clubDashboardGuard, any role may pass.
+ */
+export async function signedInGuard(): Promise<void> {
+  const session = await getSessionOnce();
+
+  if (!session) redirect("/login");
+}
 
 export interface ClubDashboardSessionUser {
   name: string;
@@ -141,4 +234,24 @@ export async function clubDashboardGuard(): Promise<ClubDashboardSessionUser> {
   }
 
   return { name: session.user.name, email: session.user.email, image: session.user.image ?? null };
+}
+
+/**
+ * Guards /register/student/line: anonymous visitors go to /login, and a
+ * signed-in non-STUDENT (CLUB or ADMIN) goes home — only students receive
+ * LINE notifications, so nobody else has an account to link. A student who hasn't
+ * finished the earlier registration steps is sent back to the furthest one reached.
+ *
+ * Returns whether the student already has a LINE `account` row, so the page
+ * can show the connected state (including straight after LINE redirects back
+ * from a successful link) instead of offering to connect again.
+ */
+export async function studentLineConnectGuard(): Promise<{ isLineConnected: boolean }> {
+  const session = await getSessionOnce();
+  if (!session) redirect("/login");
+  if (session.user.role !== "STUDENT") redirect("/");
+  await studentRegistrationStepGuard("COMPLETED");
+
+  const accounts = await auth.api.listUserAccounts({ headers: await headers() });
+  return { isLineConnected: accounts.some((a) => a.providerId === LINE_PROVIDER_ID) };
 }

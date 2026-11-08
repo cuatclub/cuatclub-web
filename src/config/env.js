@@ -14,6 +14,9 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
+    LINE_LOGIN_CHANNEL_ID: z.string().min(1),
+    LINE_LOGIN_CHANNEL_SECRET: z.string().min(1),
+    LINE_OA_ADD_FRIEND_URL: z.string().url(),
     R2_ACCESS_KEY_ID: z.string(),
     R2_SECRET_ACCESS_KEY: z.string(),
     R2_ENDPOINT: z.string(),
@@ -34,6 +37,8 @@ export const env = createEnv({
   client: {
     /** Inlined for browser; omit in .env and it falls back to BETTER_AUTH_URL. */
     NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url(),
+    /** GA4 only loads where this is set. */
+    NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().startsWith("G-").optional(),
   },
 
   /**
@@ -48,9 +53,13 @@ export const env = createEnv({
     APP_BASE_URL: process.env.APP_BASE_URL || process.env.BETTER_AUTH_URL,
     NEXT_PUBLIC_BETTER_AUTH_URL:
       process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? process.env.BETTER_AUTH_URL,
+    NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
     DATABASE_URL: process.env.DATABASE_URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    LINE_LOGIN_CHANNEL_ID: process.env.LINE_LOGIN_CHANNEL_ID,
+    LINE_LOGIN_CHANNEL_SECRET: process.env.LINE_LOGIN_CHANNEL_SECRET,
+    LINE_OA_ADD_FRIEND_URL: process.env.LINE_OA_ADD_FRIEND_URL,
     R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
     R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
     R2_ENDPOINT: process.env.R2_ENDPOINT,

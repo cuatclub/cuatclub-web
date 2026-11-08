@@ -6,6 +6,7 @@ import {
   ClubGallery,
   ClubHeader,
 } from "@/app/(site)/clubs/[clubId]/_components";
+import { studentRegistrationCompleteGuard } from "@/server/guard";
 import { api } from "@/trpc/server";
 
 type ClubDetailPageProps = {
@@ -13,6 +14,7 @@ type ClubDetailPageProps = {
 };
 
 export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
+  await studentRegistrationCompleteGuard();
   const { clubId } = await params;
   const club = await api.clubs.getById({ clubId });
 
@@ -30,7 +32,9 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
           name={club.name}
           logoUrl={club.logoUrl}
           affiliation={club.affiliation}
+          memberScope={club.memberScope}
           categories={club.categories}
+          followClubId={club.id}
         />
 
         {about && <ClubAbout description={about} />}
