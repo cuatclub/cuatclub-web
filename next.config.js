@@ -43,6 +43,11 @@ const config = {
         hostname: "cdn.cuatclub.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.staging.cuatclub.com",
+        pathname: "/**",
+      },
     ],
   },
 };
