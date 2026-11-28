@@ -13,6 +13,7 @@ import { GENERIC_ERROR_MESSAGE } from "@/app/(site)/login/login-schema";
 import {
   INVALID_LINK_MESSAGE,
   INVALID_TOKEN_CODE,
+  RESET_PASSWORD_PATH,
   resetPasswordSchema,
   type ResetPasswordFormValues,
 } from "@/app/(site)/reset-password/reset-password-schema";
@@ -20,6 +21,8 @@ import { PasswordCard } from "@/app/(site)/forgot-password/_components/PasswordC
 
 export function ResetPasswordForm({ token }: { token: string | undefined }) {
   const router = useRouter();
+  // Held in state because the effect below takes it out of the URL.
+  const [resetToken] = useState(token);
   const [isLinkInvalid, setIsLinkInvalid] = useState(!token);
   const rootErrorRef = useRef<HTMLParagraphElement>(null);
 
@@ -30,6 +33,12 @@ export function ResetPasswordForm({ token }: { token: string | undefined }) {
     formState: { errors, isSubmitting },
   } = useForm<ResetPasswordFormValues>({ resolver: zodResolver(resetPasswordSchema) });
 
+  // Analytics loaded by a later page keeps running, and would report this URL — token included —
+  // if the user navigated back to it.
+  useEffect(() => {
+    if (resetToken) window.history.replaceState(null, "", RESET_PASSWORD_PATH);
+  }, [resetToken]);
+
   useEffect(() => {
     if (!isSubmitting && errors.root?.message) {
       rootErrorRef.current?.focus();
@@ -39,7 +48,7 @@ export function ResetPasswordForm({ token }: { token: string | undefined }) {
   const onSubmit = handleSubmit(async ({ password }) => {
     let error: { code?: string } | null;
     try {
-      ({ error } = await authClient.resetPassword({ newPassword: password, token }));
+      ({ error } = await authClient.resetPassword({ newPassword: password, token: resetToken }));
     } catch (cause) {
       console.error("[reset-password] request failed", cause);
       setError("root", { type: "manual", message: GENERIC_ERROR_MESSAGE });
@@ -84,6 +93,7 @@ export function ResetPasswordForm({ token }: { token: string | undefined }) {
           <PasswordInput
             label="รหัสผ่านใหม่"
             autoComplete="new-password"
+            aria-required
             placeholder="กรอกรหัสผ่านใหม่"
             error={!!errors.password}
             errorMessage={errors.password?.message}
@@ -92,6 +102,7 @@ export function ResetPasswordForm({ token }: { token: string | undefined }) {
           <PasswordInput
             label="ยืนยันรหัสผ่านใหม่"
             autoComplete="new-password"
+            aria-required
             placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"
             error={!!errors.confirmPassword}
             errorMessage={errors.confirmPassword?.message}
