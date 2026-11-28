@@ -1,13 +1,6 @@
-const FONT_STACK = "'IBM Plex Sans Thai', 'Sarabun', Tahoma, Arial, sans-serif";
+import { escapeHtml } from "./escape-html";
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
+const FONT_STACK = "'IBM Plex Sans Thai', 'Sarabun', Tahoma, Arial, sans-serif";
 
 export interface RenderClubInviteCodeEmailHtmlParams {
   inviteCode: string;
