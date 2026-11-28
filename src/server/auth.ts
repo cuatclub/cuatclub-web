@@ -1,11 +1,20 @@
 import { env } from "@/config/env";
 import { LINE_PROVIDER_ID } from "@/lib/line";
+import { EMAIL_SEND_FAILED_CODE, USER_NOT_FOUND_CODE } from "@/lib/password-reset";
 import { db, type DbClient } from "@/server/db";
 import * as schema from "@/server/db/schema";
+import { sendPasswordResetEmail } from "@/server/services/mailer";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/api";
 import { genericOAuth, line } from "better-auth/plugins";
+
+const PASSWORD_RESET_TTL_SECONDS = 60 * 60;
+const REQUEST_PASSWORD_RESET_PATH = "/request-password-reset";
+
+// better-auth only logs what `sendResetPassword` throws and still answers 200, so the failure is
+// noted per request here and turned into an error by the `after` hook.
+const failedResetEmails = new WeakSet<Request>();
 
 // Shared by every instance below so a request-scoped and a transaction-scoped one can never
 // drift apart on session/password/field config.
@@ -32,6 +41,24 @@ const buildAuthOptions = (client: DbClient) => ({
     enabled: true,
     minPasswordLength: 8,
     autoSignIn: true,
+    resetPasswordTokenExpiresIn: PASSWORD_RESET_TTL_SECONDS,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async (
+      { user, url }: { user: { email: string }; url: string },
+      request?: Request
+    ) => {
+      try {
+        await sendPasswordResetEmail({ to: user.email, resetUrl: url });
+      } catch (err) {
+        if (request) failedResetEmails.add(request);
+        throw err;
+      }
+    },
+  },
+  rateLimit: {
+    customRules: {
+      [REQUEST_PASSWORD_RESET_PATH]: { window: 60, max: 3 },
+    },
   },
   // Off on purpose: email/password sign-up here has no email verification, so by default a
   // Google login would be linked into an existing unverified password account with the same
@@ -52,12 +79,30 @@ const buildAuthOptions = (client: DbClient) => ({
   trustedOrigins: [new URL(env.BETTER_AUTH_URL).origin],
   onAPIError: { errorURL: "/auth/error" },
   hooks: {
-    // `/oauth2/link` accepts any session, so refuse non-students here.
     before: createAuthMiddleware(async (ctx) => {
+      // Deliberately reveals whether an email has an account, so the form can say so instead of
+      // claiming an email was sent. Hooks run before body validation, hence the type check.
+      if (ctx.path === REQUEST_PASSWORD_RESET_PATH) {
+        const { email } = (ctx.body ?? {}) as { email?: unknown };
+        if (typeof email !== "string") return;
+        if (await ctx.context.internalAdapter.findUserByEmail(email)) return;
+        throw new APIError("NOT_FOUND", { code: USER_NOT_FOUND_CODE, message: "User not found" });
+      }
+
+      // `/oauth2/link` accepts any session, so refuse non-students here.
       if (ctx.path !== "/oauth2/link") return;
 
       const session = await getSessionFromCtx<{ role: string }>(ctx);
       if (session && session.user.role !== "STUDENT") throw new APIError("FORBIDDEN");
+    }),
+    after: createAuthMiddleware(async (ctx) => {
+      if (ctx.path !== REQUEST_PASSWORD_RESET_PATH) return;
+      if (!ctx.request || !failedResetEmails.has(ctx.request)) return;
+
+      throw new APIError("BAD_GATEWAY", {
+        code: EMAIL_SEND_FAILED_CODE,
+        message: "Unable to send email",
+      });
     }),
   },
   advanced: {
@@ -96,12 +141,10 @@ export const auth = betterAuth(buildAuthOptions(db));
  * transaction, and the cookie that makes it useful can't be set from a tRPC usecase anyway —
  * callers sign in over better-auth's own route afterwards.
  */
-export const createTransactionAuth = (client: DbClient) =>
-  betterAuth({
-    ...buildAuthOptions(client),
-    emailAndPassword: {
-      enabled: true,
-      minPasswordLength: 8,
-      autoSignIn: false,
-    },
+export const createTransactionAuth = (client: DbClient) => {
+  const options = buildAuthOptions(client);
+  return betterAuth({
+    ...options,
+    emailAndPassword: { ...options.emailAndPassword, autoSignIn: false },
   });
+};

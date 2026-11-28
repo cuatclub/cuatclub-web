@@ -1,1 +1,1 @@
-export { sendClubInviteCodeEmail } from "./mailer";
+export { sendClubInviteCodeEmail, sendPasswordResetEmail } from "./mailer";
