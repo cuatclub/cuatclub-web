@@ -168,11 +168,12 @@ export default function Login() {
                     checked={rememberMe}
                     onCheckedChange={(checked) => setRememberMe(checked === true)}
                   />
-                  {/* Forgot-password flow is out of scope (see #84) — a real
-                      link here would be keyboard-focusable and navigate to
-                      "#" for nothing, so keep it a plain label until the
-                      route exists. */}
-                  {/* <span className="text-foreground-muted text-sm">ลืมรหัสผ่าน</span> */}
+                  <Link
+                    href="/forgot-password"
+                    className="text-primary text-sm font-medium hover:underline"
+                  >
+                    ลืมรหัสผ่าน
+                  </Link>
                 </div>
 
                 {errors.root?.message && (
